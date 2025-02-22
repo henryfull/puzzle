@@ -1,0 +1,46 @@
+{
+  "packs": [
+    {
+      "id": "pack1",
+      "name": "Paisajes",
+      "description": "Puzzles basados en escenarios naturales y paisajes impresionantes.",
+      "puzzles": [
+        {
+          "id": "puzzle1",
+          "name": "Amanecer",
+          "difficulty": "easy",
+          "pieces": 16,
+          "image": "res://Assets/Images/paisaje1.jpg"
+        },
+        {
+          "id": "puzzle2",
+          "name": "Atardecer",
+          "difficulty": "medium",
+          "pieces": 25,
+          "image": "res://Assets/Images/paisaje2.jpg"
+        }
+      ]
+    },
+    {
+      "id": "pack2",
+      "name": "Arte Moderno",
+      "description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+      "puzzles": [
+        {
+          "id": "puzzle3",
+          "name": "Abstracto",
+          "difficulty": "easy",
+          "pieces": 9,
+          "image": "res://Assets/Images/arte1.jpg"
+        },
+        {
+          "id": "puzzle4",
+          "name": "Expresionista",
+          "difficulty": "hard",
+          "pieces": 36,
+          "image": "res://Assets/Images/arte2.jpg"
+        }
+      ]
+    }
+  ]
+} 

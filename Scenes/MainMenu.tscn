@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://dh7t7utu076oi"]
+
+[ext_resource type="Script" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_pl40w")
+
+[node name="BTN_play" type="Button" parent="."]
+offset_left = 544.0
+offset_top = 318.0
+offset_right = 644.0
+offset_bottom = 349.0
+text = "Jugar"
+
+[node name="BTN_options" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 545.0
+offset_top = 363.0
+offset_right = 645.0
+offset_bottom = 394.0
+grow_horizontal = 2
+text = "Opciones"
+
+[connection signal="pressed" from="BTN_play" to="." method="_on_btn_play_pressed"]
+[connection signal="pressed" from="BTN_play" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="BTN_options" to="." method="_on_OptionsButton_pressed"]

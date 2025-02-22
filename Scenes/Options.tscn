@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3 uid="uid://by6tdey6sc6uw"]
+
+[ext_resource type="Script" path="res://Scripts/Options.gd" id="1_7s1ry"]
+
+[node name="Options" type="Node2D"]
+script = ExtResource("1_7s1ry")
+
+[node name="HSlider_Volumen_General" type="HSlider" parent="."]
+custom_minimum_size = Vector2(100, 0)
+offset_left = 540.0
+offset_top = 177.0
+offset_right = 640.0
+offset_bottom = 193.0
+script = ExtResource("1_7s1ry")
+
+[node name="HSlider_Volumen_Musica" type="HSlider" parent="."]
+custom_minimum_size = Vector2(100, 0)
+offset_left = 540.0
+offset_top = 208.0
+offset_right = 640.0
+offset_bottom = 224.0
+script = ExtResource("1_7s1ry")
+
+[node name="HSlider_Volumen_VFX" type="HSlider" parent="."]
+custom_minimum_size = Vector2(100, 0)
+offset_left = 540.0
+offset_top = 238.0
+offset_right = 640.0
+offset_bottom = 254.0
+script = ExtResource("1_7s1ry")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 481.0
+offset_top = 285.0
+offset_right = 584.0
+offset_bottom = 316.0
+text = "Volver"
+
+[node name="Label_general" type="Label" parent="."]
+offset_left = 439.0
+offset_top = 172.0
+offset_right = 500.0
+offset_bottom = 195.0
+text = "General"
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 439.0
+offset_top = 204.0
+offset_right = 500.0
+offset_bottom = 227.0
+text = "Música"
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 439.0
+offset_top = 234.0
+offset_right = 500.0
+offset_bottom = 257.0
+text = "Efectos"
+
+[connection signal="pressed" from="Button" to="." method="_on_BackButton_pressed"]
