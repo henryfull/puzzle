@@ -5,25 +5,31 @@
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_pl40w")
 
-[node name="BTN_play" type="Button" parent="."]
-offset_left = 544.0
-offset_top = 318.0
-offset_right = 644.0
-offset_bottom = 349.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_direction = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 537.0
+offset_top = 231.0
+offset_right = 637.0
+offset_bottom = 297.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="BTN_play" type="Button" parent="VBoxContainer"]
+layout_mode = 2
 text = "Jugar"
 
-[node name="BTN_options" type="Button" parent="."]
+[node name="BTN_options" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 545.0
-offset_top = 363.0
-offset_right = 645.0
-offset_bottom = 394.0
-grow_horizontal = 2
+layout_mode = 2
 text = "Opciones"
 
-[connection signal="pressed" from="BTN_play" to="." method="_on_btn_play_pressed"]
-[connection signal="pressed" from="BTN_play" to="." method="_on_PlayButton_pressed"]
-[connection signal="pressed" from="BTN_options" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/BTN_play" to="." method="_on_btn_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]

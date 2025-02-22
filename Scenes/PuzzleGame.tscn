@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://smtnj5lnqhfa"]
 
 [ext_resource type="Script" path="res://Scripts/PuzzleGame.gd" id="1_sm22t"]
-[ext_resource type="Script" path="res://Scripts/PuzzlePiece.gd" id="2_vtc10"]
+[ext_resource type="Script" path="res://Scripts/Utils.gd" id="2_u0hmx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b4g35"]
 size = Vector2(73, 112)
@@ -14,7 +14,7 @@ offset_left = 502.0
 offset_top = 226.0
 offset_right = 600.0
 offset_bottom = 352.0
-script = ExtResource("2_vtc10")
+script = ExtResource("2_u0hmx")
 
 [node name="AnimatableBody2D" type="AnimatableBody2D" parent="Container"]
 
