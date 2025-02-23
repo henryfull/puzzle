@@ -12,6 +12,10 @@ var pieces_group: Array = []
 var dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 
+var puzzle_front: Texture2D
+var puzzle_back: Texture2D
+var flipped: bool = false
+
 var only_vertical: bool = false  # Si true, el grupo solo se mueve verticalmente
 
 func _ready():
@@ -20,20 +24,25 @@ func _ready():
 	area2d.input_pickable = true
 	pieces_group = [self]
 
-func set_piece_data(image: Texture2D, region: Rect2, grid_pos: Vector2, _cell_size: Vector2):
-	puzzle_image = image
+func set_piece_data(front_tex: Texture2D, back_tex: Texture2D, region: Rect2):
+	puzzle_front = front_tex
+	puzzle_back = back_tex
 	fragment_region = region
-	original_grid_position = grid_pos
-	cell_size = _cell_size
-
 	update_visual()
 
 func update_visual():
-	# Crear un AtlasTexture para mostrar solo la región adecuada
 	var atlas_tex = AtlasTexture.new()
-	atlas_tex.atlas = puzzle_image
+	# Si la pieza está volteada, usamos la textura trasera
+	if flipped:
+		atlas_tex.atlas = puzzle_back
+	else:
+		atlas_tex.atlas = puzzle_front
 	atlas_tex.region = fragment_region
 	sprite.texture = atlas_tex
+
+func flip_piece():
+	flipped = !flipped
+	update_visual()
 
 #
 # EVENTOS DE ENTRADA

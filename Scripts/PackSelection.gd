@@ -23,7 +23,7 @@ func load_json(path: String) -> Array:
 		return []
 
 func _on_PackSelected(pack):
-	GLOBAL.selected_pack = pack
+	GLOBAL.selected_pack = pack	
 	# Función llamada al seleccionar un pack
 	print("Pack seleccionado: " + pack["name"])
 	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn") 

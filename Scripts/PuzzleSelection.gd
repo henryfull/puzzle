@@ -19,4 +19,4 @@ func _on_PuzzleSelected(puzzle):
 	get_tree().change_scene_to_file("res://Scenes/PuzzleGame.tscn") 
 
 func _on_BackButton_pressed():
-	get_tree().quit_on_go_back
+	get_tree().change_scene_to_file("res://Scenes/PackSelection.tscn")

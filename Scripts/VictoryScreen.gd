@@ -3,6 +3,17 @@ extends Node2D
 func _ready():
 	# Aquí se puede actualizar la UI para mostrar la puntuación final y logros desbloqueados
 	print("¡Victoria! Puzzle completado. Mostrando resumen y logros.")
+	var tex
+	# Si hay un puzzle seleccionado, se carga su imagen
+	if GLOBAL.selected_puzzle != null:
+		tex = load(GLOBAL.selected_puzzle.image)
+	
+	if has_node("CanvasLayer/VBoxContainer/Sprite2D"):
+		var sprite: Sprite2D = get_node("CanvasLayer/VBoxContainer/Sprite2D")
+		$CanvasLayer/VBoxContainer/Sprite2D.texture = tex
+	# Actualizar la etiqueta FinalScore si existe
+
+
 	
 	# Ejemplo: actualizar una etiqueta llamada 'FinalScore' si existe
 	if has_node("FinalScore"):

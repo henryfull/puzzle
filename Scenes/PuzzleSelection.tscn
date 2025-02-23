@@ -21,9 +21,11 @@ offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Button" type="Button" parent="CanvasLayer"]
+[node name="Volver" type="Button" parent="CanvasLayer"]
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 123.0
 offset_bottom = 51.0
 text = "Volver"
+
+[connection signal="pressed" from="CanvasLayer/Volver" to="." method="_on_BackButton_pressed"]

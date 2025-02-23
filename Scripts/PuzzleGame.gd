@@ -8,9 +8,10 @@ class_name PuzzleGame
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
 @export var image_path: String = "res://Assets/Images/arte1.jpg"
-@export var columns: int = 2
-@export var rows: int = 6
+@export var columns: int = 1
+@export var rows: int = 10
 @export var max_scale_percentage: float = 0.8
+@export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
 
 #
 # === VARIABLES INTERNAS ===
@@ -55,12 +56,57 @@ class Piece:
 # === FUNCIÓN _ready(): se llama al iniciar la escena ===
 #
 func _ready():
-	load_and_create_pieces()
+	# Si hay un puzzle seleccionado en global, usar su imagen
+	if GLOBAL.selected_puzzle != null:
+		image_path = GLOBAL.selected_puzzle.image
+	
+	# Primero, obtenemos la textura trasera usando la escena del Viewport y esperando un frame
+	var puzzle_back = await generate_back_texture_from_viewport(viewport_scene_path)
+	# Luego cargamos y creamos las piezas con la parte frontal normal
+	load_and_create_pieces(puzzle_back)
+
+func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
+	# 1) Cargar la escena del viewport
+	var vp_scene = load(viewport_scene_path)
+	if not vp_scene:
+		push_warning("No se pudo cargar la escena de Viewport: %s" % viewport_scene_path)
+		return null
+
+	# 2) Instanciarla y añadirla temporalmente; el nodo raíz debe ser de tipo Viewport
+	var vp_instance = vp_scene.instantiate() as SubViewport
+	add_child(vp_instance)
+
+	# Asignar la descripción al Label del TextViewport usando GLOBAL.selected_puzzle
+	if GLOBAL.selected_puzzle != null:
+		var puzzle_data = GLOBAL.selected_puzzle
+		var label = vp_instance.get_node("Label")
+		if label:
+			label.text = puzzle_data.description
+
+	await get_tree().process_frame # Esperar un frame para que el viewport se inicialice
+
+	# 3) Esperar un frame para que Godot dibuje el texto en el Viewport
+	await get_tree().process_frame
+
+	# 4) Asegurarnos de que el viewport tenga una textura válida
+	var viewport_texture = vp_instance.get_texture()
+	if not viewport_texture:
+		push_warning("No se pudo obtener la textura del viewport")
+		vp_instance.queue_free()
+		return null
+		
+	var vp_image: Image = viewport_texture.get_image()
+	var back_texture = ImageTexture.create_from_image(vp_image)
+
+	# 5) Quitar el viewport de la escena (ya no lo necesitamos)
+	vp_instance.queue_free()
+
+	return back_texture
 
 #
 # === CARGA DE IMAGEN Y CREACIÓN DE PIEZAS ===
 #
-func load_and_create_pieces():
+func load_and_create_pieces(puzzle_back: Texture2D):
 	# 1) Cargar la textura
 	puzzle_texture = load(image_path) if load(image_path) else null
 	if puzzle_texture == null:
@@ -98,17 +144,18 @@ func load_and_create_pieces():
 	cell_list.shuffle()
 
 	# 6) Crear cada pieza (rows x columns)
+	var piece_scene = load("res://Scenes/PuzzlePiece.tscn")
+	if piece_scene == null:
+		push_warning("No se pudo cargar PuzzlePiece.tscn")
+		return
+	
 	var index = 0
 	for row_i in range(rows):
 		for col_i in range(columns):
-			# Crear un nodo2D para la pieza
-			var piece_node = Node2D.new()
+			# Instanciar PuzzlePiece.tscn
+			var piece_node = piece_scene.instantiate()
 			add_child(piece_node)
-
-			# Añadir un Sprite2D como hijo
-			var sprite = Sprite2D.new()
-			piece_node.add_child(sprite)
-
+			
 			# Definir la región original (SIN escalado) para la parte de la textura
 			var piece_orig_w = original_w / columns
 			var piece_orig_h = original_h / rows
@@ -118,39 +165,37 @@ func load_and_create_pieces():
 				piece_orig_w,
 				piece_orig_h
 			)
-
-			# Crear un AtlasTexture para mostrar solo esa porción
-			var atlas_tex = AtlasTexture.new()
-			atlas_tex.atlas = puzzle_texture
-			atlas_tex.region = region_rect
-			sprite.texture = atlas_tex
-
+			
+			# Configurar la pieza con la textura frontal y la trasera (puzzle_back)
+			piece_node.set_piece_data(puzzle_texture, puzzle_back, region_rect)
+			
 			# Calcular y aplicar la escala para que la pieza se ajuste a la celda
 			var scale_x = cell_size.x / piece_orig_w
 			var scale_y = cell_size.y / piece_orig_h
-			sprite.scale = Vector2(scale_x, scale_y)
+			piece_node.get_node("Sprite2D").scale = Vector2(scale_x, scale_y)
 			
 			# Centrar el sprite en su nodo padre
-			sprite.position = cell_size * 0.5
-
-			# Crear la clase "Piece"
-			var piece_obj = Piece.new(piece_node, sprite, Vector2(col_i, row_i))
+			piece_node.get_node("Sprite2D").position = cell_size * 0.5
+			
+			# Crear la instancia de la clase "Piece" para el manejo de grid
+			var piece_obj = Piece.new(piece_node, piece_node.get_node("Sprite2D"), Vector2(col_i, row_i))
 			pieces.append(piece_obj)
-
+			
 			# Posición inicial: la celda "desordenada"
 			var random_cell = cell_list[index]
 			index += 1
-
+			
 			# Ubicar la pieza en pantalla
 			var piece_pos = puzzle_offset + random_cell * cell_size
 			piece_node.position = piece_pos
-
+			
 			# Registrar en grid
 			set_piece_at(random_cell, piece_obj)
 
 	# Activar la captura de eventos de mouse a nivel global
 	# (Podrías usar _input() o unhandled_input(), en este ejemplo iremos con _unhandled_input)
 	set_process_unhandled_input(true)
+	check_all_groups()
 
 #
 # === GESTIÓN DE EVENTOS DE RATÓN / TECLADO ===
@@ -390,6 +435,9 @@ func place_group(piece: Piece):
 			if merged:
 				break
 
+	# Al final del place_group, verificar si se pueden formar más grupos
+	check_all_groups()
+
 func check_victory():
 	for piece_obj in pieces:
 		if piece_obj.current_cell != piece_obj.original_pos:
@@ -407,3 +455,21 @@ func get_group_leader(piece: Piece) -> Piece:
 				leader = p
 		return leader
 	return piece
+
+func check_all_groups() -> void:
+	# Recorrer una copia de la lista de piezas
+	for piece_obj in pieces.duplicate():
+		var adjacents = find_adjacent_pieces(piece_obj, piece_obj.current_cell)
+		for adj in adjacents:
+			if are_pieces_mergeable(piece_obj, adj):
+				merge_pieces(piece_obj, adj)
+
+func on_flip_button_pressed() -> void:
+	# Ciclo por cada pieza y, si el nodo de la pieza soporta flip_piece, lo invoco
+	for piece_obj in pieces:
+		if piece_obj.node.has_method("flip_piece"):
+			piece_obj.node.flip_piece()
+
+func _on_PuzzleSelected() -> void:
+	# Función llamada al seleccionar un puzzle
+	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn") 

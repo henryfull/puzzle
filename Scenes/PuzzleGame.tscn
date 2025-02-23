@@ -7,13 +7,19 @@ script = ExtResource("1_sm22t")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Button" type="Button" parent="CanvasLayer"]
-anchors_preset = 1
-anchor_left = 1.0
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 10
 anchor_right = 1.0
-offset_left = -47.0
-offset_top = 11.0
-offset_right = -11.0
-offset_bottom = 42.0
-grow_horizontal = 0
+grow_horizontal = 2
+
+[node name="Volver" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Volver"
+
+[node name="Flip" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
 text = "Flip"
+
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/Volver" to="." method="_on_PuzzleSelected"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/Flip" to="." method="on_flip_button_pressed"]
