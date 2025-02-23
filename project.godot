@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 AchievementsManager="*res://Scripts/AchievementsManager.gd"
 GLOBAL="*res://Scripts/global.gd"
 
+[display]
+
+window/size/viewport_width=720
+window/size/viewport_height=1280
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
