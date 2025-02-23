@@ -9,15 +9,17 @@ size = Vector2(73, 112)
 [node name="PuzzleGame" type="Node2D"]
 script = ExtResource("1_sm22t")
 
-[node name="Container" type="Container" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Container" type="Container" parent="CanvasLayer"]
 offset_left = 502.0
 offset_top = 226.0
 offset_right = 600.0
 offset_bottom = 352.0
 script = ExtResource("2_u0hmx")
 
-[node name="AnimatableBody2D" type="AnimatableBody2D" parent="Container"]
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="CanvasLayer/Container"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Container/AnimatableBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/Container/AnimatableBody2D"]
 position = Vector2(26.5, 46)
 shape = SubResource("RectangleShape2D_b4g35")

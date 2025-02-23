@@ -12,7 +12,7 @@ func load_packs():
 		var button = Button.new() # Crear un nuevo botón
 		button.text = pack["name"] # Asignar el nombre del pack al botón
 		button.pressed.connect(Callable(self, "_on_PackSelected").bind(pack))
-		$VBoxContainer.add_child(button) # Añadir el botón al VBoxContainer
+		$CanvasLayer/VBoxContainer.add_child(button) # Añadir el botón al VBoxContainer
 
 func load_json(path: String) -> Array:
 	var data = AchievementsManager.loadFile(path)

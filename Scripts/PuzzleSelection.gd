@@ -9,7 +9,7 @@ func load_puzzles():
 		var button = Button.new() # Crear un nuevo botón
 		button.text = pack["name"] # Asignar el nombre del pack al botón
 		button.pressed.connect(Callable(self, "_on_PuzzleSelected").bind(pack))
-		$VBoxContainer.add_child(button) # Añadir el botón al VBoxContainer
+		$CanvasLayer/VBoxContainer.add_child(button) # Añadir el botón al VBoxContainer
 
 
 func _on_PuzzleSelected(puzzle):
