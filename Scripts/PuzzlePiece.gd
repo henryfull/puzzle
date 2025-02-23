@@ -38,32 +38,30 @@ func update_visual():
 #
 # EVENTOS DE ENTRADA
 #
-func _input_event(viewport, event, shape_idx):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			# Iniciar drag
-			dragging = true
-			drag_offset = global_position - event.position
-			bring_to_front()
-		else:
-			if dragging:
-				dragging = false
-				# Al soltar, avisar a PuzzleGame
-				if get_parent().has_method("place_piece"):
-					get_parent().place_piece(self)
-				if get_parent().has_method("on_piece_moved"):
-					get_parent().on_piece_moved()
-
-	elif event is InputEventMouseMotion and dragging:
-		# Mover el grupo entero (todas las piezas fusionadas)
-		var delta = event.relative
-		for p in pieces_group:
-			if only_vertical:
-				# Solo mover en Y si la restricción es vertical
-				p.global_position.y += delta.y
-			else:
-				# Movimiento libre
-				p.global_position += delta
+# func _input_event(viewport, event, shape_idx):
+#	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+#		if event.pressed:
+#			# Iniciar drag
+#			dragging = true
+#			drag_offset = global_position - event.position
+#			bring_to_front()
+#		else:
+#			if dragging:
+#				dragging = false
+#				# Al soltar, avisar a PuzzleGame
+#				if get_parent().has_method("place_piece"):
+#					get_parent().place_piece(self)
+#				if get_parent().has_method("on_piece_moved"):
+#					get_parent().on_piece_moved()
+#
+#	elif event is InputEventMouseMotion and dragging:
+#		# Mover el grupo entero (todas las piezas fusionadas)
+#		var delta = event.relative
+#		for p in pieces_group:
+#			if only_vertical:
+#				p.global_position.y += delta.y
+#			else:
+#				p.global_position += delta
 
 #
 # FUNCIONES DE APOYO

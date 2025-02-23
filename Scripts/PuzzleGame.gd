@@ -8,8 +8,8 @@ class_name PuzzleGame
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
 @export var image_path: String = "res://Assets/Images/arte1.jpg"
-@export var columns: int = 4
-@export var rows: int = 8
+@export var columns: int = 2
+@export var rows: int = 6
 @export var max_scale_percentage: float = 0.8
 
 #
@@ -159,14 +159,23 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			var mouse_pos = event.position
+			var clicked_piece = null
+			
+			# Encontrar la pieza clickeada
 			for piece_obj in pieces:
 				if is_mouse_over_piece(piece_obj, mouse_pos):
-					# Mover todo el grupo
-					for p in piece_obj.group:
-						p.dragging = true
-						p.drag_offset = p.node.global_position - mouse_pos
-						p.node.z_index = 9999
+					clicked_piece = piece_obj
 					break
+			
+			if clicked_piece:
+				# Obtener el líder del grupo
+				var group_leader = get_group_leader(clicked_piece)
+				
+				# Mover todo el grupo desde cualquier pieza
+				for p in group_leader.group:
+					p.dragging = true
+					p.drag_offset = p.node.global_position - mouse_pos
+					p.node.z_index = 9999
 		else:
 			# Al soltar, colocar todo el grupo
 			var dragging_piece = null
@@ -176,10 +185,11 @@ func _unhandled_input(event):
 					break
 			
 			if dragging_piece:
-				for p in dragging_piece.group:
+				var group_leader = get_group_leader(dragging_piece)
+				for p in group_leader.group:
 					p.dragging = false
 					p.node.z_index = 0
-				place_group(dragging_piece)
+				place_group(group_leader)
 				total_moves += 1
 				check_victory()
 
@@ -187,8 +197,9 @@ func _unhandled_input(event):
 		# Mover todo el grupo junto
 		for piece_obj in pieces:
 			if piece_obj.dragging:
+				var group_leader = get_group_leader(piece_obj)
 				var delta = event.relative
-				for p in piece_obj.group:
+				for p in group_leader.group:
 					p.node.global_position += delta
 				break
 
@@ -237,6 +248,12 @@ func place_piece(piece_obj: Piece):
 	set_piece_at(new_cell, piece_obj)
 	piece_obj.node.position = puzzle_offset + new_cell * cell_size
 
+	# 4) Fusionar con piezas adyacentes, si es posible
+	var adjacent = find_adjacent_pieces(piece_obj, new_cell)
+	for adj in adjacent:
+		if are_pieces_mergeable(piece_obj, adj):
+			merge_pieces(piece_obj, adj)
+
 func find_adjacent_pieces(piece: Piece, cell: Vector2) -> Array:
 	var adjacent = []
 	var directions = [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]
@@ -256,10 +273,10 @@ func are_pieces_mergeable(piece1: Piece, piece2: Piece) -> bool:
 	var diff = piece2.original_pos - piece1.original_pos
 	var are_adjacent = (abs(diff.x) == 1 and diff.y == 0) or (abs(diff.y) == 1 and diff.x == 0)
 	
-	# También verificar que sus posiciones actuales coincidan con la diferencia original
+	# También verificar que sus posiciones actuales coincidan aproximadamente con la diferencia original
 	if are_adjacent:
 		var current_diff = get_cell_of_piece(piece2) - get_cell_of_piece(piece1)
-		return current_diff == diff
+		return abs(current_diff.x - diff.x) < 0.1 and abs(current_diff.y - diff.y) < 0.1
 	return false
 
 #
@@ -358,9 +375,35 @@ func place_group(piece: Piece):
 		else:
 			set_piece_at(p_target, p)
 			p.node.position = puzzle_offset + p_target * cell_size
+	
+	# Intentar fusionar el grupo con piezas adyacentes fuera del grupo
+	var merged = true
+	while merged:
+		merged = false
+		for p in piece.group.duplicate():
+			var adjacent = find_adjacent_pieces(p, p.current_cell)
+			for adj in adjacent:
+				if are_pieces_mergeable(p, adj):
+					merge_pieces(p, adj)
+					merged = true
+					break
+			if merged:
+				break
 
 func check_victory():
 	for piece_obj in pieces:
 		if piece_obj.current_cell != piece_obj.original_pos:
 			return
 	get_tree().change_scene_to_file("res://Scenes/VictoryScreen.tscn")
+
+# Agregar una nueva función para obtener el líder del grupo
+func get_group_leader(piece: Piece) -> Piece:
+	if piece.group.size() > 0:
+		# Devolver la pieza con la posición original más baja (arriba-izquierda)
+		var leader = piece.group[0]
+		for p in piece.group:
+			if p.original_pos.y < leader.original_pos.y or \
+			   (p.original_pos.y == leader.original_pos.y and p.original_pos.x < leader.original_pos.x):
+				leader = p
+		return leader
+	return piece
