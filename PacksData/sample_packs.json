@@ -1,51 +1,51 @@
 {
   "packs": [
-    {
-      "id": "pack1",
-      "name": "Paisajes",
-      "description": "Puzzles basados en escenarios naturales y paisajes impresionantes.",
-      "puzzles": [
-        {
-          "id": "puzzle1",
-          "name": "Amanecer",
-          "difficulty": "easy",
-          "pieces": 16,
-          "image": "res://Assets/Images/paisaje1.jpg",
-          "description": "Un hermoso amanecer sobre las montañas nevadas, con tonos cálidos que pintan el cielo. Los rayos del sol atraviesan suavemente las nubes, creando un espectáculo visual único y sereno."
+	{
+	  "id": "pack1",
+	  "name": "Paisajes",
+	  "description": "Puzzles basados en escenarios naturales y paisajes impresionantes.",
+	  "puzzles": [
+		{
+		  "id": "puzzle1",
+		  "name": "Amanecer",
+		  "difficulty": "easy",
+		  "pieces": 16,
+		  "image": "res://Assets/Images/paisaje1.jpg",
+		  "description": "Un hermoso amanecer sobre las montañas nevadas, con tonos cálidos que pintan el cielo. Los rayos del sol atraviesan suavemente las nubes, creando un espectáculo visual único y sereno."
 
-        },
-        {
-          "id": "puzzle2",
-          "name": "Atardecer",
-          "difficulty": "medium",
-          "pieces": 25,
-          "image": "res://Assets/Images/paisaje2.jpg",
-          "description": "Un atardecer en el mar, con el cielo cubierto de nubes rojizas y doradas. El sol se posa sobre el horizonte, creando un espectáculo visual de colores intensos y vibrantes."
-        }
-      ]
-    },
-    {
-      "id": "pack2",
-      "name": "Arte Moderno",
-      "description": "Puzzles inspirados en obras de arte moderno y abstracto.",
-      "puzzles": [
-        {
-          "id": "puzzle3",
-          "name": "Abstracto",
-          "difficulty": "easy",
-          "pieces": 9,
-          "image": "res://Assets/Images/arte1.jpg",
-          "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
-        },
-        {
-          "id": "puzzle4",
-          "name": "Expresionista",
-          "difficulty": "hard",
-          "pieces": 36,
-          "image": "res://Assets/Images/arte2.jpg",
-          "description": "Un cuadro expresionista con figuras humanas y colores intensos que crean un efecto visual impactante y emocional."
-        }
-      ]
-    }
+		},
+		{
+		  "id": "puzzle2",
+		  "name": "Atardecer",
+		  "difficulty": "medium",
+		  "pieces": 25,
+		  "image": "res://Assets/Images/paisaje2.jpg",
+		  "description": "Un atardecer en el mar, con el cielo cubierto de nubes rojizas y doradas. El sol se posa sobre el horizonte, creando un espectáculo visual de colores intensos y vibrantes."
+		}
+	  ]
+	},
+	{
+	  "id": "pack2",
+	  "name": "Arte Moderno",
+	  "description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+	  "puzzles": [
+		{
+		  "id": "puzzle3",
+		  "name": "Abstracto",
+		  "difficulty": "easy",
+		  "pieces": 9,
+		  "image": "res://Assets/Images/arte1.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle4",
+		  "name": "Expresionista",
+		  "difficulty": "hard",
+		  "pieces": 36,
+		  "image": "res://Assets/Images/arte2.jpg",
+		  "description": "Un cuadro expresionista con figuras humanas y colores intensos que crean un efecto visual impactante y emocional."
+		}
+	  ]
+	}
   ]
 } 

@@ -1,6 +1,7 @@
 extends Node
 
 # Diccionario que contiene los logros del juego
+var languagesAvaibles = [{'field': 'es', 'label': 'Español'}, {'field': 'en', 'label': 'English'},{'field': 'ca', 'label': 'Catala'}]
 var achievements = {
 	"primer_paso": {
 		"name": "Primer Paso",

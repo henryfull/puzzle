@@ -1,0 +1,15 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bcndws3lob4sp"
+valid=false
+
+[deps]
+
+source_file="res://PacksData/translation.csv"
+
+[params]
+
+compress=true
+delimiter=0

@@ -26,6 +26,7 @@ buses/General=0.0
 AchievementsManager="*res://Scripts/AchievementsManager.gd"
 GLOBAL="*res://Scripts/global.gd"
 AudioManager="*res://Scripts/AudioManager.gd"
+TranslationLoader="*res://Scripts/TranslationLoader.gd"
 
 [display]
 
@@ -37,6 +38,10 @@ window/size/viewport_height=1280
 General=0
 Music=false
 SFX=false
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://PacksData/translation.csv")
 
 [rendering]
 
