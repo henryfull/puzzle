@@ -15,15 +15,28 @@ run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/Music=0.0
+buses/SFX=0.0
+buses/General=0.0
+
 [autoload]
 
 AchievementsManager="*res://Scripts/AchievementsManager.gd"
 GLOBAL="*res://Scripts/global.gd"
+AudioManager="*res://Scripts/AudioManager.gd"
 
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
+
+[global]
+
+General=0
+Music=false
+SFX=false
 
 [rendering]
 

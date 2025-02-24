@@ -8,8 +8,8 @@ class_name PuzzleGame
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
 @export var image_path: String = "res://Assets/Images/arte1.jpg"
-@export var columns: int = 1
-@export var rows: int = 10
+@export var columns: int = 2
+@export var rows: int = 8
 @export var max_scale_percentage: float = 0.8
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
 
@@ -31,6 +31,9 @@ var pieces := []
 
 # Para contar movimientos o verificar victoria
 var total_moves: int = 0
+
+var audio_move: AudioStreamPlayer
+var audio_merge: AudioStreamPlayer
 
 #
 # === SUBCLASE: Piece ===
@@ -60,10 +63,24 @@ func _ready():
 	if GLOBAL.selected_puzzle != null:
 		image_path = GLOBAL.selected_puzzle.image
 	
+	make_sounds_game()
+
 	# Primero, obtenemos la textura trasera usando la escena del Viewport y esperando un frame
 	var puzzle_back = await generate_back_texture_from_viewport(viewport_scene_path)
 	# Luego cargamos y creamos las piezas con la parte frontal normal
 	load_and_create_pieces(puzzle_back)
+
+
+func make_sounds_game():
+	audio_move = AudioStreamPlayer.new()
+	audio_move.stream = load("res://Assets/Sounds/FX/bubble.wav")
+	audio_move.bus = "SFX"
+	add_child(audio_move)
+	
+	audio_merge = AudioStreamPlayer.new()
+	audio_merge.stream = load("res://Assets/Sounds/FX/plop.mp3")
+	audio_merge.bus = "SFX"
+	add_child(audio_merge)
 
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
 	# 1) Cargar la escena del viewport
@@ -221,6 +238,8 @@ func _unhandled_input(event):
 					p.dragging = true
 					p.drag_offset = p.node.global_position - mouse_pos
 					p.node.z_index = 9999
+					if p.node.get_parent() != null:
+						p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
 		else:
 			# Al soltar, colocar todo el grupo
 			var dragging_piece = null
@@ -236,6 +255,7 @@ func _unhandled_input(event):
 					p.node.z_index = 0
 				place_group(group_leader)
 				total_moves += 1
+				AudioManager.play_sfx("res://Assets/Sounds/FX/bubble.wav")
 				check_victory()
 
 	elif event is InputEventMouseMotion:
@@ -391,6 +411,9 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 		var target_cell = piece1.current_cell + offset
 		p.node.position = puzzle_offset + target_cell * cell_size
 		set_piece_at(target_cell, p)
+	
+	# Reproducir sonido de fusión
+	AudioManager.play_sfx("res://Assets/Sounds/FX/plop.mp3")
 
 func place_group(piece: Piece):
 	# Calcular la celda destino para la pieza principal (líder)

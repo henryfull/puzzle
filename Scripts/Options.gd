@@ -7,7 +7,7 @@ func _ready():
 
 	$CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer2/HSlider_Volumen_Musica.set_value_no_signal(GLOBAL.settings.volume.music)
 	
-	$CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer3/HSlider_Volumen_VFX.set_value_no_signal(GLOBAL.settings.volume.vfx)
+	$CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer3/HSlider_Volumen_VFX.set_value_no_signal(GLOBAL.settings.volume.sfx)
 
 func _on_BackButton_pressed():
 	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
@@ -15,11 +15,13 @@ func _on_BackButton_pressed():
 func _on_HSlider_Volumen_General_value_changed(value: float) -> void:
 	GLOBAL.settings.volume.general = value
 	AchievementsManager.updateVolume("general", value)
+	AudioManager.update_volumes()
 
 func _on_HSlider_Volumen_Musica_value_changed(value: float) -> void:
 	GLOBAL.settings.volume.music = value
 	AchievementsManager.updateVolume("music", value)
-
+	AudioManager.update_volumes()
 func _on_HSlider_Volumen_VFX_value_changed(value: float) -> void:
-	GLOBAL.settings.volume.vfx = value
-	AchievementsManager.updateVolume("vfx", value)
+	GLOBAL.settings.volume.sfx = value
+	AchievementsManager.updateVolume("sfx", value)
+	AudioManager.update_volumes()

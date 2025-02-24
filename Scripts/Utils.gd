@@ -9,5 +9,5 @@ func _on_HSlider_Volumen_Musica_value_changed(value: float) -> void:
 	AchievementsManager.updateVolume("music", value)
 
 func _on_HSlider_Volumen_VFX_value_changed(value: float) -> void:
-	GLOBAL.settings.volume.vfx = value
-	AchievementsManager.updateVolume("vfx", value)
+	GLOBAL.settings.volume.sfx = value
+	AchievementsManager.updateVolume("sfx", value)

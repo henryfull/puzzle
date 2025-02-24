@@ -5,9 +5,9 @@ var settings = {
 	"language": "es",
 	"font_size" : 14,
 	"volume" : {
-		"general": 90,
-		"music": 50,
-		"vfx": 60,
+		"general": 50,
+		"music": 10,
+		"sfx": 30,
 		"voices": 30
 	}
 }
