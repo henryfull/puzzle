@@ -1,4 +1,4 @@
-# key;es;en;ca
+key;es;en;ca
 common_yes;Sí;Yes;Sí
 common_no;No;No;No
 common_cancel;Cancelar;Cancel;Cancel·lar
@@ -28,8 +28,8 @@ common_dice_six;Seis;Six;Sis
 common_tutorial_move;Usa las teclas de flecha para moverte.;Use the arrow keys to move.;Utilitza les tecles de fletxa per moure't.
 common_tutorial_attack;"Presiona ""A"" para atacar.";"Press ""A"" to attack.";"Prem ""A"" per atacar."
 common_tutorial_dice;Lanza los dados para determinar el poder del ataque.;Roll the dice to determine the attack power.;Llança els daus per determinar el poder de l'atac.
-common_music;Música;Music;Musica
-common_sfx;Efectos de sonido;Sounds Effect;Efectes de so
+common_music;Música;Music;Música
+common_sfx;Efectos de sonido;Sound Effects;Efectes de so
 common_general;General;General;General
 common_repeat;Repetir;Repeat;Repetir
 common_play;Jugar;Play;Jugar
@@ -72,10 +72,10 @@ scene_gameover_main_menu;Menú Principal;Main Menu;Menú Principal
 ;;;
 scene_character_name;Nombre;Name;Nom
 scene_character_nationality;Nacionalidad;Nationality;Nacionalitat
-scene_character_heigth;Altura;Heigth;Altura
+scene_character_height;Altura;Height;Altura
 scene_character_weight;Peso;Weight;Pes
 scene_character_age;Edad;Age;Edat
-scene_character_kos;KO’s;KO’s;KO’s
+scene_character_kos;KO's;KO's;KO's
 scene_character_championships;Campeonatos;Championships;Campeonats
 scene_character_wins;Victorias;Victories;Victories
 scene_character_defeats;Derrotas;Defeats;Derrotes

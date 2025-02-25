@@ -1,12 +1,13 @@
 extends Node
 
 var translations = {}  # Diccionario donde guardamos las traducciones
-var current_language = "es"  # Idioma por defecto (puedes cambiarlo dinámicamente)
+var current_language = "en"  # Idioma por defecto (puedes cambiarlo dinámicamente)
 
 # Cargar el archivo CSV al iniciar
 func _ready():
 	load_csv("res://PacksData/translation.csv")
-	print(current_language)
+	load_language_from_config()
+	print("Idioma actual cargado: ", current_language)
 
 # Función para leer el CSV y almacenar los textos
 func load_csv(path):
@@ -29,8 +30,19 @@ func load_csv(path):
 		for j in range(1, row.size()):
 			var lang_code = headers[j]  # Código del idioma (es, en, fr, etc.)
 			translations[key][lang_code] = row[j]  # Guardamos la traducción
-	set_language(GLOBAL.settings.language)
-	current_language = GLOBAL.settings.language
+
+# Cargar el idioma desde el archivo de configuración
+func load_language_from_config():
+	var config = ConfigFile.new()
+	var err = config.load("user://settings.cfg")
+	
+	if err == OK:
+		var locale_code = config.get_value("settings", "language", "es")  # Predeterminado: español
+		set_language(locale_code)
+		GLOBAL.settings.language = locale_code
+	else:
+		# Si no hay configuración, usar el idioma predeterminado
+		set_language(GLOBAL.settings.language)
 
 # Función para obtener un texto en el idioma actual
 func get_translation(key):
@@ -40,5 +52,7 @@ func get_translation(key):
 
 # Cambiar el idioma en tiempo real
 func set_language(lang):
-	if lang in translations.values()[0]:  # Verificar si el idioma existe
+	if translations.size() > 0 and translations.values()[0].has(lang):  # Verificar si el idioma existe
 		current_language = lang
+		GLOBAL.settings.language = lang
+		print("Idioma establecido a: ", lang)

@@ -41,7 +41,7 @@ SFX=false
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://PacksData/translation.csv")
+locale/translations=PackedStringArray("res://PacksData/translation.csv", "res://PacksData/translation.ca.translation", "res://PacksData/translation.en.translation", "res://PacksData/translation.es.translation")
 
 [rendering]
 

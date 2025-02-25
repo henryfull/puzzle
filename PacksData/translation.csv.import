@@ -2,14 +2,16 @@
 
 importer="csv_translation"
 type="Translation"
-uid="uid://bcndws3lob4sp"
-valid=false
+uid="uid://cv5q2ybk7vis6"
 
 [deps]
 
+files=["res://PacksData/translation.es.translation", "res://PacksData/translation.en.translation", "res://PacksData/translation.ca.translation"]
+
 source_file="res://PacksData/translation.csv"
+dest_files=["res://PacksData/translation.es.translation", "res://PacksData/translation.en.translation", "res://PacksData/translation.ca.translation"]
 
 [params]
 
 compress=true
-delimiter=0
+delimiter=1

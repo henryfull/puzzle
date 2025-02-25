@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://by6tdey6sc6uw"]
+[gd_scene load_steps=5 format=3 uid="uid://by6tdey6sc6uw"]
 
 [ext_resource type="Script" path="res://Scripts/Options.gd" id="1_7s1ry"]
+[ext_resource type="Script" path="res://Scripts/LangSelector.gd" id="2_kgki5"]
 [ext_resource type="Script" path="res://Scripts/Utils.gd" id="2_qqjs0"]
+[ext_resource type="Script" path="res://Scripts/ResolutionButton.gd" id="3_p0ibv"]
 
 [node name="Options" type="Node2D"]
 script = ExtResource("1_7s1ry")
@@ -33,22 +35,37 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="BoxContainer" type="BoxContainer" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer"]
+[node name="BoxContainerResolución" type="BoxContainer" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label_general" type="Label" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer"]
+[node name="Label_resolution" type="Label" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainerResolución"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Idioma"
 language = "es"
 
-[node name="HSlider_Volumen_General" type="HSlider" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+[node name="ResolutionButton" type="OptionButton" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainerResolución"]
+layout_mode = 2
+script = ExtResource("3_p0ibv")
+
+[node name="BoxContainerIdioma" type="BoxContainer" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label idioma" type="Label" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainerIdioma"]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-value = 80.0
-script = ExtResource("2_qqjs0")
+text = "Idioma"
+language = "es"
+
+[node name="LangSelector" type="OptionButton" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainerIdioma"]
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "es"
+popup/item_1/text = "en"
+popup/item_1/id = 1
+popup/item_2/text = "ca"
+popup/item_2/id = 2
+script = ExtResource("2_kgki5")
 
 [node name="BoxContainer4" type="BoxContainer" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -69,7 +86,7 @@ script = ExtResource("2_qqjs0")
 [node name="BoxContainer2" type="BoxContainer" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer2"]
+[node name="label music" type="Label" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Música"
@@ -85,7 +102,7 @@ script = ExtResource("2_qqjs0")
 [node name="BoxContainer3" type="BoxContainer" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer3"]
+[node name="label sfx" type="Label" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Efectos"
@@ -102,7 +119,6 @@ script = ExtResource("2_qqjs0")
 layout_mode = 2
 text = "Volver"
 
-[connection signal="value_changed" from="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer/HSlider_Volumen_General" to="." method="_on_HSlider_Volumen_General_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer4/HSlider_Volumen_General" to="." method="_on_HSlider_Volumen_General_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer2/HSlider_Volumen_Musica" to="." method="_on_HSlider_Volumen_Musica_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer3/HSlider_Volumen_VFX" to="." method="_on_HSlider_Volumen_VFX_value_changed"]
