@@ -2,7 +2,7 @@ extends Node2D
 
 func _ready():
 	# Inicialización del menú principal
-	pass
+	$CanvasLayer/VBoxContainer/BTN_options.text = tr("common_options")
 
 func _on_PlayButton_pressed():
 	get_tree().change_scene_to_file("res://Scenes/PackSelection.tscn")

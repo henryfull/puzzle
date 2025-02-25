@@ -6,7 +6,6 @@ var current_language = "es"  # Idioma por defecto (puedes cambiarlo dinámicamen
 # Cargar el archivo CSV al iniciar
 func _ready():
 	load_csv("res://PacksData/translation.csv")
-	set_language(GLOBAL.settings.language)
 	print(current_language)
 
 # Función para leer el CSV y almacenar los textos
@@ -22,10 +21,7 @@ func load_csv(path):
 	
 	# Procesar cada línea del CSV
 	for i in range(1, lines.size()):
-		var row = lines[i].split(",")
-		if row.size() < 2:
-			continue
-		
+		var row = lines[i].split(",")		
 		var key = row[0]  # La primera columna es la clave del texto
 		translations[key] = {}  # Diccionario para almacenar las traducciones
 		
@@ -33,6 +29,8 @@ func load_csv(path):
 		for j in range(1, row.size()):
 			var lang_code = headers[j]  # Código del idioma (es, en, fr, etc.)
 			translations[key][lang_code] = row[j]  # Guardamos la traducción
+	set_language(GLOBAL.settings.language)
+	current_language = GLOBAL.settings.language
 
 # Función para obtener un texto en el idioma actual
 func get_translation(key):

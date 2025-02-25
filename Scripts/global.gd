@@ -2,7 +2,7 @@ extends Node
 
 
 var settings = {
-	"language": "es",
+	"language": "en",
 	"font_size" : 14,
 	"volume" : {
 		"general": 50,
