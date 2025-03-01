@@ -46,6 +46,93 @@
 		  "description": "Un cuadro expresionista con figuras humanas y colores intensos que crean un efecto visual impactante y emocional."
 		}
 	  ]
+	},
+	{
+	  "id": "pack3",
+	  "name": "Adult 1",
+	  "description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+	  "puzzles": [
+		{
+		  "id": "puzzle30",
+		  "name": "Chica 1",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image1.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle31",
+		  "name": "Chica 2",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image2.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle32",
+		  "name": "Chica 3",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image3.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle33",
+		  "name": "Chica 4",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image4.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle34",
+		  "name": "Chica 5",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image5.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle35",
+		  "name": "Chica 6",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image6.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle36",
+		  "name": "Chica 7",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image7.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle37",
+		  "name": "Chica 8",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image8.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle38",
+		  "name": "Chica 9",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image9.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle39",
+		  "name": "Chica 10",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/pack3/image10.jpg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		}
+	  ]
 	}
   ]
 } 
