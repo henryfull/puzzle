@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dxnqvnxvnqvnx"]
 
-[ext_resource type="Script" path="res://Scripts/ColumnPuzzleGame.gd" id="1_sm22t"]
+[ext_resource type="Script" uid="uid://cg5t0hs2vvv0g" path="res://Scripts/ColumnPuzzleGame.gd" id="1_sm22t"]
 
 [node name="ColumnPuzzleGame" type="Node2D"]
 script = ExtResource("1_sm22t")
@@ -32,4 +32,4 @@ size_flags_horizontal = 10
 text = "Reiniciar"
 
 [connection signal="pressed" from="CanvasLayer/HBoxContainer/Volver" to="." method="_on_volver_pressed"]
-[connection signal="pressed" from="CanvasLayer/HBoxContainer/Reiniciar" to="." method="_on_reiniciar_pressed"] 
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/Reiniciar" to="." method="_on_reiniciar_pressed"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://pvq1o6wdx44x"]
 
-[ext_resource type="Script" path="res://Scripts/PackSelection.gd" id="1_wswaw"]
+[ext_resource type="Script" uid="uid://db4glnv08qilj" path="res://Scripts/PackSelection.gd" id="1_wswaw"]
 
 [node name="PackSelection" type="Node2D"]
 script = ExtResource("1_wswaw")

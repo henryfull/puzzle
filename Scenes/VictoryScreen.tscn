@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://sc0afjqsuaff"]
 
-[ext_resource type="Script" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
+[ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_i68vf"]
 
 [node name="VictoryScreen" type="Node2D"]

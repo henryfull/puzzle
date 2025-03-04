@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://by6tdey6sc6uw"]
 
-[ext_resource type="Script" path="res://Scripts/Options.gd" id="1_7s1ry"]
-[ext_resource type="Script" path="res://Scripts/LangSelector.gd" id="2_kgki5"]
-[ext_resource type="Script" path="res://Scripts/Utils.gd" id="2_qqjs0"]
-[ext_resource type="Script" path="res://Scripts/ResolutionButton.gd" id="3_p0ibv"]
+[ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
+[ext_resource type="Script" uid="uid://dv7ssdl7hhf3r" path="res://Scripts/LangSelector.gd" id="2_kgki5"]
+[ext_resource type="Script" uid="uid://1epn1mhu0fwt" path="res://Scripts/Utils.gd" id="2_qqjs0"]
+[ext_resource type="Script" uid="uid://do1o3ww8nd3mq" path="res://Scripts/ResolutionButton.gd" id="3_p0ibv"]
 
 [node name="Options" type="Node2D"]
 script = ExtResource("1_7s1ry")
