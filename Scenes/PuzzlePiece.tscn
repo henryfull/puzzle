@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d1qdaaubr40oq"]
 
-[ext_resource type="Script" path="res://Scripts/PuzzlePiece.gd" id="1_uava8"]
+[ext_resource type="Script" uid="uid://cn5nba6ccpqkh" path="res://Scripts/PuzzlePiece.gd" id="1_uava8"]
 [ext_resource type="Texture2D" uid="uid://bcq73labgj32k" path="res://Assets/Images/Pieces/piece_back.jpg" id="2_6fljm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8pe7f"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dh7t7utu076oi"]
 
-[ext_resource type="Script" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
+[ext_resource type="Script" uid="uid://cct0rg0djuimx" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_pl40w")
@@ -35,6 +35,6 @@ layout_mode = 2
 text = "tr(\"common_options\")"
 flat = true
 
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/BTN_play" to="." method="_on_btn_play_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/BTN_play" to="." method="_on_btn_play_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]

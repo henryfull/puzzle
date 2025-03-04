@@ -12,6 +12,7 @@ class_name PuzzleGame
 @export var rows: int = 8
 @export var max_scale_percentage: float = 0.8
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
+@export var max_extra_rows: int = 5  # Máximo número de filas adicionales que se pueden añadir
 
 #
 # === VARIABLES INTERNAS ===
@@ -21,6 +22,8 @@ var puzzle_width: float
 var puzzle_height: float
 var cell_size: Vector2
 var puzzle_offset: Vector2
+var original_rows: int  # Para guardar el número original de filas
+var extra_rows_added: int = 0  # Contador de filas adicionales añadidas
 
 # Diccionario para saber qué pieza está en cada celda
 # Clave: "col_fila" (String), Valor: referencia a la pieza
@@ -64,6 +67,9 @@ func _ready():
 		image_path = GLOBAL.selected_puzzle.image
 	
 	make_sounds_game()
+	
+	# Guardar el número original de filas
+	original_rows = rows
 
 	# Primero, obtenemos la textura trasera usando la escena del Viewport y esperando un frame
 	var puzzle_back = await generate_back_texture_from_viewport(viewport_scene_path)
@@ -415,40 +421,219 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 	# Reproducir sonido de fusión
 	AudioManager.play_sfx("res://Assets/Sounds/FX/plop.mp3")
 
+# Función para añadir una fila adicional al tablero
+func add_extra_row():
+	if extra_rows_added >= max_extra_rows:
+		return false  # No se pueden añadir más filas
+	
+	rows += 1
+	extra_rows_added += 1
+	
+	# En lugar de recalcular el tamaño de las celdas, aumentamos el tamaño total del puzzle
+	var viewport_size = get_viewport_rect().size
+	puzzle_height = cell_size.y * rows  # Mantenemos el tamaño de celda original
+	
+	# Recalcular el offset para centrar el puzzle con su nuevo tamaño
+	puzzle_offset = (viewport_size - Vector2(puzzle_width, puzzle_height)) * 0.5
+	
+	# Actualizar la posición de todas las piezas para reflejar el nuevo offset
+	for piece_obj in pieces:
+		piece_obj.node.position = puzzle_offset + piece_obj.current_cell * cell_size
+		# Ya no modificamos la escala de las piezas
+	
+	return true
+
+# Función para verificar si hay espacio suficiente para un grupo
+func check_space_for_group(leader: Piece, target_cell: Vector2) -> bool:
+	for p in leader.group:
+		var offset = p.original_pos - leader.original_pos
+		var p_target = target_cell + offset
+		
+		# Si la celda está fuera de los límites horizontales, no hay espacio
+		if p_target.x < 0 or p_target.x >= columns:
+			return false
+			
+		# Si la celda está fuera de los límites verticales, verificamos si podemos añadir filas
+		if p_target.y >= rows:
+			# Si ya hemos alcanzado el máximo de filas adicionales, no hay espacio
+			if extra_rows_added >= max_extra_rows:
+				return false
+			# Si no, consideramos que podemos añadir filas
+	
+	return true
+
+# Función para encontrar una posición válida para un grupo
+func find_valid_position_for_group(leader: Piece) -> Vector2:
+	# Primero intentamos con la posición actual
+	var current_pos = get_cell_of_piece(leader)
+	
+	# Si la posición actual es válida, la usamos
+	if check_space_for_group(leader, current_pos):
+		return current_pos
+	
+	# Si no, buscamos una posición válida en todo el tablero
+	for r in range(rows):
+		for c in range(columns):
+			var test_pos = Vector2(c, r)
+			if check_space_for_group(leader, test_pos):
+				return test_pos
+	
+	# Si no encontramos una posición válida, intentamos añadir una fila
+	if add_extra_row():
+		# Buscar en la nueva fila
+		for c in range(columns):
+			var test_pos = Vector2(c, rows - 1)
+			if check_space_for_group(leader, test_pos):
+				return test_pos
+		
+		# Si aún no encontramos, buscamos recursivamente
+		return find_valid_position_for_group(leader)
+	
+	# Si no podemos añadir más filas, usamos la posición actual y dejamos que el sistema
+	# maneje las colisiones lo mejor que pueda
+	return current_pos
+
+# Función para mover todas las piezas que colisionan con un grupo
+func move_colliding_pieces(leader: Piece, target_cell: Vector2) -> void:
+	var occupied_cells = []
+	var group_cells = []
+	var occupants = []
+	
+	# Recopilar todas las celdas que ocupará el grupo
+	for p in leader.group:
+		var offset = p.original_pos - leader.original_pos
+		var p_target = target_cell + offset
+		
+		# Asegurarse de que la celda está dentro de los límites horizontales
+		p_target.x = clamp(p_target.x, 0, columns - 1)
+		
+		# Para los límites verticales, verificamos si necesitamos añadir filas
+		if p_target.y >= rows:
+			if not add_extra_row():
+				p_target.y = rows - 1  # Si no podemos añadir más filas, usamos la última
+		
+		group_cells.append(p_target)
+	
+	# Encontrar todas las piezas que colisionan con el grupo
+	for p_target in group_cells:
+		var occupant = get_piece_at(p_target)
+		if occupant != null and not (occupant in leader.group):
+			occupied_cells.append(p_target)
+			occupants.append(occupant)
+	
+	# Si hay colisiones, mover las piezas que colisionan
+	if occupied_cells.size() > 0:
+		# Primero, intentamos encontrar celdas libres para las piezas que colisionan
+		var free_cells = find_free_cells(occupied_cells.size())
+		
+		# Si no hay suficientes celdas libres, añadimos filas hasta encontrar suficientes
+		while free_cells.size() < occupied_cells.size():
+			if not add_extra_row():
+				break  # Si no podemos añadir más filas, usamos las celdas que tenemos
+			
+			# Buscar celdas libres en la nueva fila
+			for c in range(columns):
+				var cell = Vector2(c, rows - 1)
+				if get_piece_at(cell) == null and not (cell in free_cells):
+					free_cells.append(cell)
+					if free_cells.size() >= occupied_cells.size():
+						break
+			
+			if free_cells.size() >= occupied_cells.size():
+				break
+		
+		# Mover las piezas que colisionan a las celdas libres
+		for i in range(min(occupants.size(), free_cells.size())):
+			var occupant = occupants[i]
+			if occupant != null:
+				remove_piece_at(occupant.current_cell)
+				set_piece_at(free_cells[i], occupant)
+				occupant.node.position = puzzle_offset + free_cells[i] * cell_size
+
+# Función para encontrar celdas libres
+func find_free_cells(count: int) -> Array:
+	var free_cells = []
+	
+	# Buscar celdas libres en todo el tablero
+	for r in range(rows):
+		for c in range(columns):
+			var cell = Vector2(c, r)
+			if get_piece_at(cell) == null:
+				free_cells.append(cell)
+				if free_cells.size() >= count:
+					return free_cells
+	
+	return free_cells
+
 func place_group(piece: Piece):
+	# Obtener el líder del grupo
+	var leader = get_group_leader(piece)
+	
 	# Calcular la celda destino para la pieza principal (líder)
-	var leader = piece
 	var target_cell = get_cell_of_piece(leader)
-	target_cell.x = clamp(target_cell.x, 0, columns - 1)
-	target_cell.y = clamp(target_cell.y, 0, rows - 1)
+	
+	# Verificar si hay espacio para el grupo en la posición actual
+	if not check_space_for_group(leader, target_cell):
+		# Si no hay espacio, intentamos añadir filas si es necesario
+		# Calculamos cuántas filas necesitamos para acomodar el grupo
+		var max_y = 0
+		for p in leader.group:
+			var offset = p.original_pos - leader.original_pos
+			var p_target_y = target_cell.y + offset.y
+			max_y = max(max_y, p_target_y)
+		
+		# Si necesitamos más filas de las que tenemos, las añadimos
+		while max_y >= rows and add_extra_row():
+			pass
+		
+		# Buscar una posición válida para el grupo
+		target_cell = find_valid_position_for_group(leader)
+	
+	# Mover las piezas que colisionan con el grupo
+	move_colliding_pieces(leader, target_cell)
 	
 	# Liberar las celdas ocupadas por las piezas del grupo
-	for p in piece.group:
+	for p in leader.group:
 		remove_piece_at(p.current_cell)
 	
 	# Colocar cada pieza del grupo en su posición relativa
-	for p in piece.group:
+	for p in leader.group:
 		var offset = p.original_pos - leader.original_pos
 		var p_target = target_cell + offset
+		
+		# Asegurarse de que la celda está dentro de los límites horizontales
+		p_target.x = clamp(p_target.x, 0, columns - 1)
+		
+		# Para los límites verticales, intentamos añadir filas si es necesario
+		if p_target.y >= rows:
+			if not add_extra_row():
+				p_target.y = rows - 1  # Si no podemos añadir más filas, usamos la última
+		
 		var occupant = get_piece_at(p_target)
-		if occupant != null and not (occupant in piece.group):
-			# Realizar el intercambio: colocar p en p_target y mover el occupant a la celda antigua de p
-			var old_cell = p.current_cell
-			remove_piece_at(occupant.current_cell)
-			remove_piece_at(old_cell)
-			set_piece_at(p_target, p)
-			set_piece_at(old_cell, occupant)
-			p.node.position = puzzle_offset + p_target * cell_size
-			occupant.node.position = puzzle_offset + old_cell * cell_size
-		else:
-			set_piece_at(p_target, p)
-			p.node.position = puzzle_offset + p_target * cell_size
+		if occupant != null and not (occupant in leader.group):
+			# Si hay una pieza ocupando la celda, moverla a una celda libre
+			var free_cells = find_free_cells(1)
+			if free_cells.size() > 0:
+				remove_piece_at(occupant.current_cell)
+				set_piece_at(free_cells[0], occupant)
+				occupant.node.position = puzzle_offset + free_cells[0] * cell_size
+			elif add_extra_row():
+				# Si no hay celdas libres, intentamos añadir una fila
+				free_cells = find_free_cells(1)
+				if free_cells.size() > 0:
+					remove_piece_at(occupant.current_cell)
+					set_piece_at(free_cells[0], occupant)
+					occupant.node.position = puzzle_offset + free_cells[0] * cell_size
+		
+		# Colocar la pieza en su posición
+		set_piece_at(p_target, p)
+		p.node.position = puzzle_offset + p_target * cell_size
 	
 	# Intentar fusionar el grupo con piezas adyacentes fuera del grupo
 	var merged = true
 	while merged:
 		merged = false
-		for p in piece.group.duplicate():
+		for p in leader.group.duplicate():
 			var adjacent = find_adjacent_pieces(p, p.current_cell)
 			for adj in adjacent:
 				if are_pieces_mergeable(p, adj):
