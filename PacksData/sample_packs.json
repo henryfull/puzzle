@@ -174,6 +174,93 @@
 		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
 		}
 	  ]
+	},
+	{
+	  "id": "fruits1",
+	  "name": "Fruits",
+	  "description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+	  "puzzles": [
+		{
+		  "id": "puzzle30",
+		  "name": " Sandia 1",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image1.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle31",
+		  "name": "Naranja 2",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image2.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle32",
+		  "name": "Pera 3",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image3.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle33",
+		  "name": "Platano 4",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image4.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle34",
+		  "name": "Fresa",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image5.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle35",
+		  "name": "Cerezas",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image6.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle36",
+		  "name": "Piña",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image7.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle37",
+		  "name": "Limon",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image8.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle38",
+		  "name": "Manzana",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image9.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		},
+		{
+		  "id": "puzzle39",
+		  "name": "Granada",
+		  "difficulty": "easy",
+		  "pieces": 6,
+		  "image": "res://Assets/Images/fruits/image10.jpeg",
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		}
+	  ]
 	}
   ]
 } 
