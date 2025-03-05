@@ -27,6 +27,10 @@ position = Vector2(112, -586)
 scale = Vector2(0.826633, 0.826633)
 texture = ExtResource("2_i68vf")
 
+[node name="LabelPuzzle" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8

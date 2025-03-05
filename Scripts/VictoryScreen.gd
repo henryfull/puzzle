@@ -7,7 +7,7 @@ func _ready():
 	# Si hay un puzzle seleccionado, se carga su imagen
 	if GLOBAL.selected_puzzle != null:
 		tex = load(GLOBAL.selected_puzzle.image)
-	
+		$CanvasLayer/VBoxContainer/LabelPuzzle.text = GLOBAL.selected_puzzle.name
 	if has_node("CanvasLayer/VBoxContainer/Sprite2D"):
 		var sprite: Sprite2D = get_node("CanvasLayer/VBoxContainer/Sprite2D")
 		$CanvasLayer/VBoxContainer/Sprite2D.texture = tex
