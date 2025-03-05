@@ -936,9 +936,10 @@ func on_flip_button_pressed() -> void:
 		if piece_obj.node.has_method("flip_piece"):
 			piece_obj.node.flip_piece()
 
-func _on_PuzzleSelected() -> void:
-	# Función llamada al seleccionar un puzzle
-	safe_change_scene("res://Scenes/PuzzleSelection.tscn") 
+# Función para volver a la selección de puzzles
+func _on_PuzzleSelected():
+	print("PuzzleGame: Volviendo a la selección de puzzles")
+	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
 
 # Nueva función para verificar y corregir el estado del grid
 func verify_and_fix_grid():

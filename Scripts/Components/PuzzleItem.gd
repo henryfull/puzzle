@@ -16,7 +16,10 @@ func _ready():
 	
 	# Crear la estructura de nodos si no existe
 	if not has_node("Button"):
+		print("PuzzleItem: No se encontró el nodo Button, creando estructura de UI")
 		_create_ui_structure()
+	else:
+		print("PuzzleItem: Se encontró el nodo Button existente")
 	
 	# Obtener referencias a los nodos
 	select_button = $Button
@@ -26,6 +29,14 @@ func _ready():
 	# Verificar que todos los nodos se hayan encontrado correctamente
 	if select_button and image_texture and name_label:
 		print("PuzzleItem: Todos los nodos encontrados correctamente")
+		
+		# Asegurarse de que la señal pressed del botón esté conectada
+		if not select_button.is_connected("pressed", Callable(self, "_on_select_pressed")):
+			print("PuzzleItem: Conectando señal pressed del botón a _on_select_pressed")
+			select_button.pressed.connect(Callable(self, "_on_select_pressed"))
+		else:
+			print("PuzzleItem: La señal pressed ya está conectada")
+		
 		is_initialized = true
 		
 		# Si ya tenemos datos del puzzle, configurarlo ahora
@@ -34,6 +45,12 @@ func _ready():
 			_apply_puzzle_data()
 	else:
 		print("ERROR: No se pudieron encontrar todos los nodos necesarios para PuzzleItem")
+		if not select_button:
+			print("ERROR: No se encontró el nodo select_button")
+		if not image_texture:
+			print("ERROR: No se encontró el nodo image_texture")
+		if not name_label:
+			print("ERROR: No se encontró el nodo name_label")
 		push_error("No se pudieron encontrar todos los nodos necesarios para PuzzleItem")
 
 # Función para crear la estructura de UI
@@ -48,14 +65,17 @@ func _create_ui_structure():
 	# Crear el botón
 	select_button = Button.new()
 	select_button.name = "Button"
-	select_button.custom_minimum_size = Vector2(160, 180)
+	select_button.custom_minimum_size = Vector2(160, 230)
 	select_button.size_flags_horizontal = SIZE_EXPAND_FILL
 	select_button.size_flags_vertical = SIZE_EXPAND_FILL
+	
+	# Conectar la señal pressed del botón
 	select_button.pressed.connect(Callable(self, "_on_select_pressed"))
+	print("PuzzleItem: Señal pressed del botón conectada a _on_select_pressed")
 	
 	# Añadir estilos al botón
 	select_button.add_theme_constant_override("h_separation", 10)
-	select_button.add_theme_constant_override("icon_max_width", 140)
+	select_button.add_theme_constant_override("icon_max_width", 160)
 	select_button.add_theme_stylebox_override("normal", _create_stylebox(Color(0.9, 0.9, 0.9, 1.0), 8))
 	select_button.add_theme_stylebox_override("hover", _create_stylebox(Color(1.0, 1.0, 1.0, 1.0), 10))
 	select_button.add_theme_stylebox_override("pressed", _create_stylebox(Color(0.8, 0.8, 0.8, 1.0), 6))
@@ -65,7 +85,7 @@ func _create_ui_structure():
 	image_texture.name = "TextureRect"
 	image_texture.expand = true
 	image_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	image_texture.custom_minimum_size = Vector2(140, 140)
+	image_texture.custom_minimum_size = Vector2(140, 180)
 	image_texture.size_flags_horizontal = SIZE_EXPAND_FILL
 	image_texture.size_flags_vertical = SIZE_EXPAND_FILL
 	image_texture.position = Vector2(10, 10)
@@ -84,6 +104,8 @@ func _create_ui_structure():
 	add_child(select_button)
 	select_button.add_child(image_texture)
 	select_button.add_child(name_label)
+	
+	print("PuzzleItem: Estructura de UI creada correctamente")
 
 # Función para crear un StyleBox con sombra
 func _create_stylebox(color: Color, shadow_size: int) -> StyleBoxFlat:
@@ -178,9 +200,16 @@ func _set_default_image():
 		image_texture.texture = placeholder
 
 func _on_select_pressed():
-	print("PuzzleItem: _on_select_pressed()")
+	print("PuzzleItem: _on_select_pressed() - BOTÓN PRESIONADO")
+	
+	# Imprimir información sobre el botón
+	print("PuzzleItem: Botón presionado - Nombre: ", select_button.name if select_button else "NULL")
+	
 	if puzzle_data:
 		print("PuzzleItem: Emitiendo señal puzzle_selected con datos: ", puzzle_data)
+		print("PuzzleItem: Nombre del puzzle: ", puzzle_data.get("name", "NO NAME"))
+		print("PuzzleItem: Datos completos del puzzle: ", JSON.stringify(puzzle_data))
 		emit_signal("puzzle_selected", puzzle_data)
 	else:
 		print("ERROR: No hay datos del puzzle para emitir la señal")
+		print("ERROR: puzzle_data es NULL")
