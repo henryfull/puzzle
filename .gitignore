@@ -3,3 +3,4 @@
 /android/
 *.import
 .DS_Store
+*.uid

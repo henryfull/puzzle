@@ -61,6 +61,7 @@ language = "es"
 layout_mode = 2
 item_count = 3
 popup/item_0/text = "es"
+popup/item_0/id = 0
 popup/item_1/text = "en"
 popup/item_1/id = 1
 popup/item_2/text = "ca"
