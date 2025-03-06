@@ -4,12 +4,15 @@
 extends Node2D
 class_name PuzzleGame
 
+# Acceso al singleton ProgressManager
+@onready var progress_manager = get_node("/root/ProgressManager")
+
 #
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
 @export var image_path: String = "res://Assets/Images/arte1.jpg"
-@export var columns: int = 2
-@export var rows: int = 2
+@export var columns: int = 3
+@export var rows: int = 3
 @export var max_scale_percentage: float = 0.8
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
 @export var max_extra_rows: int = 5  # Máximo número de filas adicionales que se pueden añadir
@@ -38,6 +41,10 @@ var total_moves: int = 0
 var audio_move: AudioStreamPlayer
 var audio_merge: AudioStreamPlayer
 
+# === VARIABLES PARA GESTIÓN DE PROGRESIÓN ===
+var current_pack_id: String = ""
+var current_puzzle_id: String = ""
+
 #
 # === SUBCLASE: Piece ===
 # Representa cada pieza del puzzle como un Node2D con Sprite2D integrado.
@@ -62,9 +69,16 @@ class Piece:
 # === FUNCIÓN _ready(): se llama al iniciar la escena ===
 #
 func _ready():
-	# Si hay un puzzle seleccionado en global, usar su imagen
+	# Configurar el puzzle según los datos seleccionados
 	if GLOBAL.selected_puzzle != null:
 		image_path = GLOBAL.selected_puzzle.image
+		
+		# Guardar los IDs para la progresión
+		if GLOBAL.selected_pack != null:
+			current_pack_id = GLOBAL.selected_pack.id
+		
+		if GLOBAL.selected_puzzle != null:
+			current_puzzle_id = GLOBAL.selected_puzzle.id
 	
 	make_sounds_game()
 	
@@ -89,13 +103,13 @@ func _ready():
 
 func make_sounds_game():
 	audio_move = AudioStreamPlayer.new()
-	audio_move.stream = load("res://Assets/Sounds/FX/bubble.wav")
-	audio_move.bus = "SFX"
+	audio_move.stream = load("res://Assets/Audio/move.wav")
+	audio_move.volume_db = -10
 	add_child(audio_move)
 	
 	audio_merge = AudioStreamPlayer.new()
-	audio_merge.stream = load("res://Assets/Sounds/FX/plop.mp3")
-	audio_merge.bus = "SFX"
+	audio_merge.stream = load("res://Assets/Audio/merge.wav")
+	audio_merge.volume_db = -5
 	add_child(audio_merge)
 
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
@@ -271,7 +285,7 @@ func _unhandled_input(event):
 					p.node.z_index = 0
 				place_group(group_leader)
 				total_moves += 1
-				AudioManager.play_sfx("res://Assets/Sounds/FX/bubble.wav")
+				AudioManager.play_sfx("res://Assets/Audio/move.wav")
 				
 				# Verificar y corregir el estado del grid después de cada movimiento
 				verify_and_fix_grid()
@@ -446,7 +460,7 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 		p.node.position = puzzle_offset + target_cell * cell_size
 	
 	# Reproducir sonido de fusión
-	AudioManager.play_sfx("res://Assets/Sounds/FX/plop.mp3")
+	AudioManager.play_sfx("res://Assets/Audio/merge.wav")
 	
 	# Verificar victoria después de cada fusión
 	call_deferred("check_victory_deferred")
@@ -749,7 +763,7 @@ func check_victory():
 	# Si todas las piezas están en su posición original
 	if all_in_place:
 		print("¡Victoria por posición exacta en el grid!")
-		safe_change_scene("res://Scenes/VictoryScreen.tscn")
+		_on_puzzle_completed()
 		return true
 	
 	# Si más del 90% de las piezas están cerca de su posición original, consideramos victoria
@@ -764,7 +778,7 @@ func check_victory():
 			piece_obj.current_cell = piece_obj.original_pos
 			set_piece_at(piece_obj.original_pos, piece_obj)
 		
-		safe_change_scene("res://Scenes/VictoryScreen.tscn")
+		_on_puzzle_completed()
 		return true
 	
 	return false
@@ -781,7 +795,7 @@ func check_victory_deferred():
 	# Si todas las piezas están en su lugar, mostrar pantalla de victoria
 	if all_in_place:
 		print("¡Victoria! (diferida)")
-		safe_change_scene("res://Scenes/VictoryScreen.tscn")
+		_on_puzzle_completed()
 	else:
 		# Verificar también por posición visual (a veces el grid puede no estar actualizado)
 		check_victory_by_position()
@@ -820,7 +834,7 @@ func check_victory_periodic():
 			set_piece_at(piece_obj.original_pos, piece_obj)
 		
 		# Cambiar a la pantalla de victoria
-		safe_change_scene("res://Scenes/VictoryScreen.tscn")
+		_on_puzzle_completed()
 		return true
 	
 	# Intentar verificar victoria por posición visual primero
@@ -860,7 +874,7 @@ func check_victory_by_position():
 			set_piece_at(piece_obj.original_pos, piece_obj)
 		
 		# Mostrar pantalla de victoria
-		safe_change_scene("res://Scenes/VictoryScreen.tscn")
+		_on_puzzle_completed()
 		return true
 	
 	# Si más del 95% de las piezas están en su lugar, considerar victoria
@@ -876,7 +890,7 @@ func check_victory_by_position():
 			set_piece_at(piece_obj.original_pos, piece_obj)
 		
 		# Mostrar pantalla de victoria
-		safe_change_scene("res://Scenes/VictoryScreen.tscn")
+		_on_puzzle_completed()
 		return true
 	
 	return false
@@ -1083,7 +1097,7 @@ func force_victory_check():
 		
 		# Verificar victoria después de ajustar todas las piezas
 		print("¡Victoria forzada!")
-		safe_change_scene("res://Scenes/VictoryScreen.tscn")
+		_on_puzzle_completed()
 		return true
 	else:
 		# Si no todas las piezas están en su lugar, intentar con los métodos normales
@@ -1126,3 +1140,140 @@ func safe_change_scene(scene_path: String) -> void:
 		get_tree().call_deferred("change_scene_to_file", scene_path)
 	else:
 		push_error("No se pudo cambiar a la escena: " + scene_path)
+
+# Función llamada cuando se mueve una pieza
+func _on_piece_moved(piece, old_cell, new_cell):
+	total_moves += 1
+	
+	# Reproducir sonido de movimiento
+	audio_move.play()
+	
+	# Verificar si el puzzle está completo
+	if check_victory():
+		# Esperar un momento antes de mostrar la pantalla de victoria
+		await get_tree().create_timer(0.5).timeout
+		_on_puzzle_completed()
+
+# Función llamada cuando se completa el puzzle
+func _on_puzzle_completed():
+	print("¡Puzzle completado!")
+	
+	# Verificar que tenemos los IDs necesarios
+	if current_pack_id.is_empty() or current_puzzle_id.is_empty():
+		print("ERROR: No se pueden guardar el progreso, faltan los IDs del pack o puzzle")
+		return
+	
+	# Marcar el puzzle como completado en el ProgressManager
+	print("PuzzleGame: Marcando puzzle como completado - Pack: " + current_pack_id + ", Puzzle: " + current_puzzle_id)
+	progress_manager.complete_puzzle(current_pack_id, current_puzzle_id)
+	
+	# Desbloquear el siguiente puzzle inmediatamente
+	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
+	if next_puzzle != null:
+		print("PuzzleGame: Siguiente puzzle desbloqueado: " + next_puzzle.name)
+	else:
+		print("PuzzleGame: No hay siguiente puzzle disponible")
+	
+	# Mostrar pantalla de victoria
+	show_victory_screen()
+
+# Función para mostrar la pantalla de victoria
+func show_victory_screen():
+	# Crear un panel para la pantalla de victoria
+	var victory_panel = Panel.new()
+	victory_panel.name = "VictoryPanel"
+	victory_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	victory_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	
+	# Añadir estilo al panel
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.2, 0.2, 0.2, 0.9)
+	style.corner_radius_top_left = 10
+	style.corner_radius_top_right = 10
+	style.corner_radius_bottom_left = 10
+	style.corner_radius_bottom_right = 10
+	victory_panel.add_theme_stylebox_override("panel", style)
+	
+	# Crear un contenedor para los elementos
+	var container = VBoxContainer.new()
+	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	container.alignment = BoxContainer.ALIGNMENT_CENTER
+	container.add_theme_constant_override("separation", 20)
+	victory_panel.add_child(container)
+	
+	# Añadir un título
+	var title = Label.new()
+	title.text = "¡Puzzle Completado!"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 32)
+	title.add_theme_color_override("font_color", Color(1, 0.8, 0.2))
+	container.add_child(title)
+	
+	# Añadir información sobre el puzzle completado
+	var info = Label.new()
+	info.text = "Has completado el puzzle en " + str(total_moves) + " movimientos."
+	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	info.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	info.add_theme_font_size_override("font_size", 18)
+	info.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
+	container.add_child(info)
+	
+	# Añadir un contenedor para los botones
+	var button_container = HBoxContainer.new()
+	button_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	button_container.add_theme_constant_override("separation", 20)
+	container.add_child(button_container)
+	
+	# Verificar si hay un siguiente puzzle disponible
+	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
+	
+	# Añadir botón para volver a la selección de puzzles
+	var back_button = Button.new()
+	back_button.text = "Volver a la selección"
+	back_button.custom_minimum_size = Vector2(200, 50)
+	back_button.connect("pressed", Callable(self, "_on_back_button_pressed"))
+	button_container.add_child(back_button)
+	
+	# Añadir botón para el siguiente puzzle si está disponible
+	if next_puzzle != null:
+		var next_button = Button.new()
+		next_button.text = "Siguiente puzzle"
+		next_button.custom_minimum_size = Vector2(200, 50)
+		next_button.connect("pressed", Callable(self, "_on_next_button_pressed"))
+		button_container.add_child(next_button)
+	
+	# Añadir el panel a la escena
+	var canvas_layer = CanvasLayer.new()
+	canvas_layer.layer = 10  # Asegurarse de que esté por encima de todo
+	add_child(canvas_layer)
+	
+	# Ajustar el tamaño y posición del panel
+	victory_panel.custom_minimum_size = Vector2(400, 300)
+	victory_panel.position = Vector2(
+		(get_viewport_rect().size.x - victory_panel.custom_minimum_size.x) / 2,
+		(get_viewport_rect().size.y - victory_panel.custom_minimum_size.y) / 2
+	)
+	
+	canvas_layer.add_child(victory_panel)
+
+# Función para volver a la selección de puzzles
+func _on_back_button_pressed():
+	# Volver a la pantalla de selección de puzzles
+	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+
+# Función para jugar el siguiente puzzle
+func _on_next_button_pressed():
+	# Obtener el siguiente puzzle del pack actual
+	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
+	
+	if next_puzzle != null:
+		# Si hay un siguiente puzzle, lo cargamos directamente
+		GLOBAL.selected_puzzle = next_puzzle
+		# Reiniciar la escena actual con el nuevo puzzle
+		get_tree().change_scene_to_file("res://Scenes/PuzzleGame.tscn")
+	else:
+		# Si no hay siguiente puzzle, volvemos a la selección
+		get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")

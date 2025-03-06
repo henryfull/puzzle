@@ -27,6 +27,7 @@ AchievementsManager="*res://Scripts/AchievementsManager.gd"
 GLOBAL="*res://Scripts/global.gd"
 AudioManager="*res://Scripts/AudioManager.gd"
 TranslationLoader="*res://Scripts/TranslationLoader.gd"
+ProgressManager="*res://Scripts/ProgressManager.gd"
 
 [display]
 

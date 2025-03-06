@@ -7,9 +7,12 @@ signal puzzle_selected(puzzle_data)
 var image_texture: TextureRect
 var name_label: Label
 var select_button: Button
+var lock_icon: TextureRect  # Nuevo: icono de candado para puzzles bloqueados
+
 # Datos del puzzle
 var puzzle_data = null
 var is_initialized = false
+var is_locked = false  # Nuevo: indica si el puzzle está bloqueado
 
 func _ready():
 	print("PuzzleItem: _ready()")
@@ -79,6 +82,7 @@ func _create_ui_structure():
 	select_button.add_theme_stylebox_override("normal", _create_stylebox(Color(0.9, 0.9, 0.9, 1.0), 8))
 	select_button.add_theme_stylebox_override("hover", _create_stylebox(Color(1.0, 1.0, 1.0, 1.0), 10))
 	select_button.add_theme_stylebox_override("pressed", _create_stylebox(Color(0.8, 0.8, 0.8, 1.0), 6))
+	select_button.add_theme_stylebox_override("disabled", _create_stylebox(Color(0.7, 0.7, 0.7, 0.8), 8))
 	
 	# Crear la imagen
 	image_texture = TextureRect.new()
@@ -100,10 +104,45 @@ func _create_ui_structure():
 	name_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
 	name_label.text = "Puzzle"
 	
+	# Crear el icono de candado (inicialmente oculto)
+	lock_icon = TextureRect.new()
+	lock_icon.name = "LockIcon"
+	lock_icon.expand = true
+	lock_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	lock_icon.custom_minimum_size = Vector2(60, 60)
+	lock_icon.size_flags_horizontal = SIZE_SHRINK_CENTER
+	lock_icon.size_flags_vertical = SIZE_SHRINK_CENTER
+	lock_icon.position = Vector2(50, 50)  # Centrado en la imagen
+	lock_icon.visible = false
+	
+	# Intentar cargar una imagen de candado
+	var lock_texture = null
+	var lock_paths = [
+		"res://Assets/Images/lock_icon.png",
+		"res://Assets/UI/lock.png"
+	]
+	
+	for path in lock_paths:
+		if ResourceLoader.exists(path):
+			lock_texture = load(path)
+			if lock_texture:
+				lock_icon.texture = lock_texture
+				break
+	
+	# Si no se pudo cargar una imagen, crear un texto de candado
+	if not lock_texture:
+		var lock_label = Label.new()
+		lock_label.text = "🔒"  # Emoji de candado
+		lock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lock_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		lock_label.add_theme_font_size_override("font_size", 32)
+		lock_icon.add_child(lock_label)
+	
 	# Añadir los nodos a la jerarquía
 	add_child(select_button)
 	select_button.add_child(image_texture)
 	select_button.add_child(name_label)
+	select_button.add_child(lock_icon)
 	
 	print("PuzzleItem: Estructura de UI creada correctamente")
 
@@ -128,12 +167,43 @@ func setup(puzzle):
 	print("PuzzleItem: setup() con puzzle: ", puzzle)
 	puzzle_data = puzzle
 	
+	# Verificar si el puzzle está desbloqueado
+	if puzzle_data and puzzle_data.has("unlocked"):
+		is_locked = not puzzle_data.unlocked
+	
 	# Solo aplicar los datos si ya estamos inicializados
 	if is_initialized:
 		print("PuzzleItem: Componente inicializado, aplicando datos del puzzle")
 		_apply_puzzle_data()
 	else:
 		print("PuzzleItem: Componente no inicializado, los datos se aplicarán en _ready()")
+
+# Función para establecer el estado de bloqueo
+func set_locked(locked: bool):
+	is_locked = locked
+	
+	if is_initialized:
+		_update_lock_state()
+
+# Función para actualizar el estado visual de bloqueo
+func _update_lock_state():
+	if not is_initialized:
+		return
+	
+	# Actualizar el botón
+	select_button.disabled = is_locked
+	
+	# Actualizar el icono de candado
+	if lock_icon:
+		lock_icon.visible = is_locked
+	
+	# Aplicar un efecto de desaturación a la imagen si está bloqueada
+	if image_texture:
+		if is_locked:
+			# Aplicar un shader de desaturación o simplemente reducir la opacidad
+			image_texture.modulate = Color(0.7, 0.7, 0.7, 0.7)
+		else:
+			image_texture.modulate = Color(1, 1, 1, 1)
 
 # Función interna para aplicar los datos del puzzle a los nodos
 func _apply_puzzle_data():
@@ -170,6 +240,9 @@ func _apply_puzzle_data():
 			print("ERROR: image_texture es nulo")
 		if not puzzle_data:
 			print("ERROR: puzzle_data es nulo")
+	
+	# Actualizar el estado de bloqueo
+	_update_lock_state()
 
 # Función para establecer la imagen por defecto
 func _set_default_image():
@@ -201,6 +274,11 @@ func _set_default_image():
 
 func _on_select_pressed():
 	print("PuzzleItem: _on_select_pressed() - BOTÓN PRESIONADO")
+	
+	# Si el puzzle está bloqueado, no hacer nada
+	if is_locked:
+		print("PuzzleItem: El puzzle está bloqueado, no se puede seleccionar")
+		return
 	
 	# Imprimir información sobre el botón
 	print("PuzzleItem: Botón presionado - Nombre: ", select_button.name if select_button else "NULL")

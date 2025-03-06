@@ -31,7 +31,7 @@ func _ready():
 	load_puzzles()
 		
 func load_puzzles():
-	var packs = GLOBAL.selected_pack
+	var pack = GLOBAL.selected_pack
 	
 	# Limpiar cualquier elemento existente en el grid_container, no en el VBoxContainer
 	for child in grid_container.get_children():
@@ -39,7 +39,7 @@ func load_puzzles():
 	
 	# Añadir un título a la pantalla
 	if title_label:
-		title_label.text = "Pack: " + packs.name
+		title_label.text = "Pack: " + pack.name
 		title_label.custom_minimum_size = Vector2(0, 60)
 		title_label.add_theme_font_size_override("font_size", 32)
 		title_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
@@ -70,7 +70,7 @@ func load_puzzles():
 		grid_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
 	# Verificar si hay puzzles para mostrar
-	if not packs.has("puzzles") or packs.puzzles.size() == 0:
+	if not pack.has("puzzles") or pack.puzzles.size() == 0:
 		var no_puzzles_label = Label.new()
 		no_puzzles_label.text = "No hay puzzles disponibles en este pack"
 		no_puzzles_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -82,10 +82,13 @@ func load_puzzles():
 		print("No hay puzzles para mostrar")
 	else:
 		# Cargar los puzzles
-		print("Cargando " + str(packs.puzzles.size()) + " puzzles")
-		for i in range(packs.puzzles.size()):
-			var pack = packs.puzzles[i]
-			print("Cargando puzzle " + str(i) + ": " + str(pack))
+		print("Cargando " + str(pack.puzzles.size()) + " puzzles")
+		for i in range(pack.puzzles.size()):
+			var puzzle = pack.puzzles[i]
+			print("Cargando puzzle " + str(i) + ": " + str(puzzle))
+			
+			# Verificar si el puzzle está desbloqueado
+			var is_unlocked = puzzle.has("unlocked") and puzzle.unlocked
 			
 			# Cargar la escena del PuzzleItem
 			var puzzle_item_scene = load("res://Scenes/Components/New/PuzzleItem.tscn")
@@ -98,10 +101,15 @@ func load_puzzles():
 				puzzle_item.size_flags_vertical = Control.SIZE_EXPAND_FILL
 				
 				# Configurar el PuzzleItem con los datos del puzzle
-				puzzle_item.setup(pack)
+				puzzle_item.setup(puzzle)
 				
-				# Conectar la señal de selección de puzzle
-				puzzle_item.connect("puzzle_selected", Callable(self, "_on_PuzzleSelected"))
+				# Si el puzzle no está desbloqueado, desactivar el PuzzleItem
+				if not is_unlocked:
+					puzzle_item.set_locked(true)
+				
+				# Conectar la señal de selección de puzzle solo si está desbloqueado
+				if is_unlocked:
+					puzzle_item.connect("puzzle_selected", Callable(self, "_on_PuzzleSelected"))
 				
 				# Añadir el PuzzleItem al GridContainer
 				grid_container.add_child(puzzle_item)

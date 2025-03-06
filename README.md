@@ -1,3 +1,85 @@
+# Juego de Puzzles en Godot 4.4
+
+Este proyecto es un juego de puzzles desarrollado en Godot 4.4, donde los jugadores pueden disfrutar de diferentes packs de puzzles con distintos niveles de dificultad.
+
+## Características
+
+- Múltiples packs de puzzles temáticos
+- Sistema de progresión que desbloquea puzzles y packs a medida que se avanza
+- Soporte para packs de pago que pueden ser comprados
+- Guardado automático del progreso
+- Interfaz de usuario intuitiva y atractiva
+
+## Sistema de Progresión
+
+El juego implementa un sistema de progresión que funciona de la siguiente manera:
+
+### Progresión de Puzzles
+
+- Cada pack contiene múltiples puzzles
+- Inicialmente, solo el primer puzzle de cada pack está desbloqueado
+- Al completar un puzzle, se desbloquea automáticamente el siguiente
+- Los puzzles bloqueados aparecen con un icono de candado y no se pueden seleccionar
+
+### Progresión de Packs
+
+- Inicialmente, solo el primer pack está desbloqueado
+- Al completar todos los puzzles de un pack, se marca como completado y se desbloquea el siguiente pack
+- Los packs bloqueados aparecen con un indicador visual y no se pueden seleccionar
+
+### Packs de Pago
+
+- Algunos packs requieren ser comprados antes de poder jugarlos
+- Estos packs aparecen con un botón de "Comprar"
+- Una vez comprados, se desbloquea su primer puzzle y se pueden jugar normalmente
+
+## Estructura de Datos
+
+El sistema utiliza un archivo JSON para almacenar la información de los packs y puzzles, y un archivo de guardado para mantener el progreso del jugador:
+
+```json
+// Estructura del archivo de progresión (user://progress.json)
+{
+  "packs": {
+    "pack1": {
+      "unlocked": true,
+      "purchased": true,
+      "completed": false,
+      "puzzles": {
+        "puzzle1": {"completed": true, "unlocked": true},
+        "puzzle2": {"completed": false, "unlocked": true},
+        "puzzle3": {"completed": false, "unlocked": false}
+      }
+    },
+    "pack2": {
+      "unlocked": false,
+      "purchased": false,
+      "completed": false,
+      "puzzles": {}
+    }
+  }
+}
+```
+
+## Implementación Técnica
+
+El sistema de progresión se implementa a través de las siguientes clases:
+
+- `ProgressManager`: Singleton que gestiona toda la progresión, carga y guarda los datos
+- `PackSelection`: Muestra los packs disponibles y su estado (desbloqueado, comprado, completado)
+- `PuzzleSelection`: Muestra los puzzles de un pack y su estado (desbloqueado, completado)
+- `PuzzleGame`: El juego en sí, que marca los puzzles como completados al terminarlos
+
+## Cómo Usar
+
+1. Clona este repositorio
+2. Abre el proyecto en Godot 4.4
+3. Ejecuta el juego desde la escena MainMenu.tscn
+
+## Licencia
+
+Este proyecto está licenciado bajo [tu licencia aquí].
+
 # Mejoras en el Juego de Puzzle
 
 Este documento resume las mejoras implementadas en el juego de puzzle para resolver los problemas de desaparición incorrecta de grupos y separación de piezas.

@@ -5,14 +5,18 @@
 	  "id": "pack1",
 	  "name": "Adult 1",
 	  "description": "Puzzles inspirados en obras de arte moderno y abstracto.",
-	  "puzzles": [
+	  "unlocked": true,
+      "purchased": true,
+      "completed": false,
+		"puzzles": [
 		{
 		  "id": "puzzle30",
 		  "name": "Chica 1",
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image1.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle31",
@@ -20,7 +24,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image2.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle32",
@@ -28,7 +33,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image3.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle33",
@@ -36,7 +42,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image4.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle34",
@@ -44,7 +51,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image5.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle35",
@@ -52,7 +60,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image6.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle36",
@@ -60,7 +69,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image7.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle37",
@@ -68,7 +78,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image8.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle38",
@@ -76,7 +87,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image9.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle39",
@@ -84,7 +96,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image10.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		}
 	  ]
 	},
@@ -92,6 +105,9 @@
 	  "id": "pack3",
 	  "name": "Adult 3",
 	  "description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+	  "unlocked": false,
+      "purchased": false,
+      "completed": false,
 	  "puzzles": [
 		{
 		  "id": "puzzle30",
@@ -99,7 +115,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image1.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle31",
@@ -107,7 +124,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image2.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle32",
@@ -115,7 +133,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image3.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle33",
@@ -123,7 +142,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image4.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle34",
@@ -131,7 +151,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image5.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle35",
@@ -139,7 +160,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image6.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle36",
@@ -147,7 +169,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image7.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle37",
@@ -155,7 +178,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image8.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle38",
@@ -163,7 +187,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image9.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle39",
@@ -171,7 +196,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack3/image10.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		}
 	  ]
 	},
@@ -179,6 +205,9 @@
 	  "id": "fruits1",
 	  "name": "Fruits",
 	  "description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+	  "unlocked": false,
+      "purchased": false,
+      "completed": false,
 	  "puzzles": [
 		{
 		  "id": "puzzle30",
@@ -186,7 +215,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image1.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle31",
@@ -194,7 +224,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image2.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle32",
@@ -202,7 +233,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image3.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle33",
@@ -210,7 +242,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image4.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle34",
@@ -218,7 +251,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image5.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle35",
@@ -226,7 +260,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image6.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle36",
@@ -234,7 +269,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image7.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle37",
@@ -242,7 +278,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image8.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle38",
@@ -250,7 +287,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image9.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		},
 		{
 		  "id": "puzzle39",
@@ -258,7 +296,8 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/fruits/image10.jpeg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico."
+		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "completed": false
 		}
 	  ]
 	}
