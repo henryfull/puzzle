@@ -1,6 +1,5 @@
 extends Node
 
-
 var settings = {
 	"language": "en",
 	"font_size" : 14,
@@ -14,3 +13,6 @@ var settings = {
 
 var selected_pack = null
 var selected_puzzle = null
+
+# Variable para almacenar datos de la victoria
+var victory_data = null

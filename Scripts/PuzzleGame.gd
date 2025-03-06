@@ -45,6 +45,11 @@ var audio_merge: AudioStreamPlayer
 var current_pack_id: String = ""
 var current_puzzle_id: String = ""
 
+# Variables para la pantalla de victoria
+var victory_image_view: Control
+var victory_text_view: Control
+var victory_toggle_button: Button
+
 #
 # === SUBCLASE: Piece ===
 # Representa cada pieza del puzzle como un Node2D con Sprite2D integrado.
@@ -704,7 +709,7 @@ func place_group(piece: Piece):
 					break
 			if merged:
 				break
-
+	
 	# Al final del place_group, verificar si se pueden formar más grupos
 	check_all_groups()
 	
@@ -1132,6 +1137,28 @@ func force_victory_check():
 		
 		return true
 
+# Función para crear un estilo de botón
+func _create_button_style(color: Color) -> StyleBoxFlat:
+	var style = StyleBoxFlat.new()
+	style.bg_color = color
+	style.corner_radius_top_left = 5
+	style.corner_radius_top_right = 5
+	style.corner_radius_bottom_left = 5
+	style.corner_radius_bottom_right = 5
+	return style
+
+# Función para alternar entre la vista de imagen y texto
+func _on_toggle_view_pressed():
+	# Invertir la visibilidad de las vistas
+	victory_image_view.visible = !victory_image_view.visible
+	victory_text_view.visible = !victory_text_view.visible
+	
+	# Actualizar el texto del botón según la vista actual
+	if victory_text_view.visible:
+		victory_toggle_button.text = "Imagen"
+	else:
+		victory_toggle_button.text = "Texto"
+
 # Función para cambiar de escena de manera segura
 func safe_change_scene(scene_path: String) -> void:
 	# Verificar que get_tree() no sea nulo
@@ -1183,101 +1210,16 @@ func _on_puzzle_completed():
 
 # Función para mostrar la pantalla de victoria
 func show_victory_screen():
-	# Crear un panel para la pantalla de victoria
-	var victory_panel = Panel.new()
-	victory_panel.name = "VictoryPanel"
-	victory_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	victory_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	print("Cambiando a la pantalla de victoria")
 	
-	# Añadir estilo al panel
-	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.2, 0.2, 0.2, 0.9)
-	style.corner_radius_top_left = 10
-	style.corner_radius_top_right = 10
-	style.corner_radius_bottom_left = 10
-	style.corner_radius_bottom_right = 10
-	victory_panel.add_theme_stylebox_override("panel", style)
+	# Guardar los datos necesarios en GLOBAL para que la escena de victoria pueda acceder a ellos
+	GLOBAL.victory_data = {
+		"puzzle": GLOBAL.selected_puzzle,
+		"pack": GLOBAL.selected_pack,
+		"total_moves": total_moves,
+		"pack_id": current_pack_id,
+		"puzzle_id": current_puzzle_id
+	}
 	
-	# Crear un contenedor para los elementos
-	var container = VBoxContainer.new()
-	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	container.alignment = BoxContainer.ALIGNMENT_CENTER
-	container.add_theme_constant_override("separation", 20)
-	victory_panel.add_child(container)
-	
-	# Añadir un título
-	var title = Label.new()
-	title.text = "¡Puzzle Completado!"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 32)
-	title.add_theme_color_override("font_color", Color(1, 0.8, 0.2))
-	container.add_child(title)
-	
-	# Añadir información sobre el puzzle completado
-	var info = Label.new()
-	info.text = "Has completado el puzzle en " + str(total_moves) + " movimientos."
-	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	info.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	info.add_theme_font_size_override("font_size", 18)
-	info.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
-	container.add_child(info)
-	
-	# Añadir un contenedor para los botones
-	var button_container = HBoxContainer.new()
-	button_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	button_container.add_theme_constant_override("separation", 20)
-	container.add_child(button_container)
-	
-	# Verificar si hay un siguiente puzzle disponible
-	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
-	
-	# Añadir botón para volver a la selección de puzzles
-	var back_button = Button.new()
-	back_button.text = "Volver a la selección"
-	back_button.custom_minimum_size = Vector2(200, 50)
-	back_button.connect("pressed", Callable(self, "_on_back_button_pressed"))
-	button_container.add_child(back_button)
-	
-	# Añadir botón para el siguiente puzzle si está disponible
-	if next_puzzle != null:
-		var next_button = Button.new()
-		next_button.text = "Siguiente puzzle"
-		next_button.custom_minimum_size = Vector2(200, 50)
-		next_button.connect("pressed", Callable(self, "_on_next_button_pressed"))
-		button_container.add_child(next_button)
-	
-	# Añadir el panel a la escena
-	var canvas_layer = CanvasLayer.new()
-	canvas_layer.layer = 10  # Asegurarse de que esté por encima de todo
-	add_child(canvas_layer)
-	
-	# Ajustar el tamaño y posición del panel
-	victory_panel.custom_minimum_size = Vector2(400, 300)
-	victory_panel.position = Vector2(
-		(get_viewport_rect().size.x - victory_panel.custom_minimum_size.x) / 2,
-		(get_viewport_rect().size.y - victory_panel.custom_minimum_size.y) / 2
-	)
-	
-	canvas_layer.add_child(victory_panel)
-
-# Función para volver a la selección de puzzles
-func _on_back_button_pressed():
-	# Volver a la pantalla de selección de puzzles
-	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
-
-# Función para jugar el siguiente puzzle
-func _on_next_button_pressed():
-	# Obtener el siguiente puzzle del pack actual
-	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
-	
-	if next_puzzle != null:
-		# Si hay un siguiente puzzle, lo cargamos directamente
-		GLOBAL.selected_puzzle = next_puzzle
-		# Reiniciar la escena actual con el nuevo puzzle
-		get_tree().change_scene_to_file("res://Scenes/PuzzleGame.tscn")
-	else:
-		# Si no hay siguiente puzzle, volvemos a la selección
-		get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+	# Usar la función safe_change_scene para cambiar a la escena de victoria
+	safe_change_scene("res://Scenes/VictoryScreen.tscn")
