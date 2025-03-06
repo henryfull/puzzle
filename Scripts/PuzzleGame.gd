@@ -1174,6 +1174,10 @@ func _on_puzzle_completed():
 	else:
 		print("PuzzleGame: No hay siguiente puzzle disponible")
 	
+	# Forzar el guardado de los datos de progresión
+	progress_manager.save_progress_data()
+	print("PuzzleGame: Datos de progresión guardados")
+	
 	# Mostrar pantalla de victoria
 	show_victory_screen()
 

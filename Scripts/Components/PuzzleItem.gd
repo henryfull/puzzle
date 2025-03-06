@@ -7,12 +7,14 @@ signal puzzle_selected(puzzle_data)
 var image_texture: TextureRect
 var name_label: Label
 var select_button: Button
-var lock_icon: TextureRect  # Nuevo: icono de candado para puzzles bloqueados
+var lock_icon: TextureRect  # Icono de candado para puzzles bloqueados
+var completed_icon: TextureRect  # Nuevo: icono de completado para puzzles terminados
 
 # Datos del puzzle
 var puzzle_data = null
 var is_initialized = false
-var is_locked = false  # Nuevo: indica si el puzzle está bloqueado
+var is_locked = false  # Indica si el puzzle está bloqueado
+var is_completed = false  # Nuevo: indica si el puzzle está completado
 
 func _ready():
 	print("PuzzleItem: _ready()")
@@ -28,6 +30,18 @@ func _ready():
 	select_button = $Button
 	image_texture = $Button/TextureRect
 	name_label = $Button/Label
+	
+	# Buscar o crear el icono de candado
+	if $Button.has_node("LockIcon"):
+		lock_icon = $Button/LockIcon
+	else:
+		_create_lock_icon()
+	
+	# Buscar o crear el icono de completado
+	if $Button.has_node("CompletedIcon"):
+		completed_icon = $Button/CompletedIcon
+	else:
+		_create_completed_icon()
 	
 	# Verificar que todos los nodos se hayan encontrado correctamente
 	if select_button and image_texture and name_label:
@@ -104,6 +118,19 @@ func _create_ui_structure():
 	name_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
 	name_label.text = "Puzzle"
 	
+	# Añadir los nodos a la jerarquía
+	add_child(select_button)
+	select_button.add_child(image_texture)
+	select_button.add_child(name_label)
+	
+	# Crear los iconos de estado
+	_create_lock_icon()
+	_create_completed_icon()
+	
+	print("PuzzleItem: Estructura de UI creada correctamente")
+
+# Función para crear el icono de candado
+func _create_lock_icon():
 	# Crear el icono de candado (inicialmente oculto)
 	lock_icon = TextureRect.new()
 	lock_icon.name = "LockIcon"
@@ -138,13 +165,46 @@ func _create_ui_structure():
 		lock_label.add_theme_font_size_override("font_size", 32)
 		lock_icon.add_child(lock_label)
 	
-	# Añadir los nodos a la jerarquía
-	add_child(select_button)
-	select_button.add_child(image_texture)
-	select_button.add_child(name_label)
 	select_button.add_child(lock_icon)
+
+# Función para crear el icono de completado
+func _create_completed_icon():
+	# Crear el icono de completado (inicialmente oculto)
+	completed_icon = TextureRect.new()
+	completed_icon.name = "CompletedIcon"
+	completed_icon.expand = true
+	completed_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	completed_icon.custom_minimum_size = Vector2(60, 60)
+	completed_icon.size_flags_horizontal = SIZE_SHRINK_CENTER
+	completed_icon.size_flags_vertical = SIZE_SHRINK_CENTER
+	completed_icon.position = Vector2(120, 20)  # Esquina superior derecha
+	completed_icon.visible = false
 	
-	print("PuzzleItem: Estructura de UI creada correctamente")
+	# Intentar cargar una imagen de marca de verificación
+	var check_texture = null
+	var check_paths = [
+		"res://Assets/Images/check_icon.png",
+		"res://Assets/UI/check.png"
+	]
+	
+	for path in check_paths:
+		if ResourceLoader.exists(path):
+			check_texture = load(path)
+			if check_texture:
+				completed_icon.texture = check_texture
+				break
+	
+	# Si no se pudo cargar una imagen, crear un texto de marca de verificación
+	if not check_texture:
+		var check_label = Label.new()
+		check_label.text = "✓"  # Marca de verificación
+		check_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		check_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		check_label.add_theme_font_size_override("font_size", 32)
+		check_label.add_theme_color_override("font_color", Color(0, 0.8, 0, 1))  # Verde
+		completed_icon.add_child(check_label)
+	
+	select_button.add_child(completed_icon)
 
 # Función para crear un StyleBox con sombra
 func _create_stylebox(color: Color, shadow_size: int) -> StyleBoxFlat:
@@ -171,6 +231,11 @@ func setup(puzzle):
 	if puzzle_data and puzzle_data.has("unlocked"):
 		is_locked = not puzzle_data.unlocked
 	
+	# Verificar si el puzzle está completado
+	if puzzle_data and puzzle_data.has("completed"):
+		is_completed = puzzle_data.completed
+		print("PuzzleItem: Puzzle completado: ", is_completed)
+	
 	# Solo aplicar los datos si ya estamos inicializados
 	if is_initialized:
 		print("PuzzleItem: Componente inicializado, aplicando datos del puzzle")
@@ -184,6 +249,13 @@ func set_locked(locked: bool):
 	
 	if is_initialized:
 		_update_lock_state()
+
+# Función para establecer el estado de completado
+func set_completed(completed: bool):
+	is_completed = completed
+	
+	if is_initialized:
+		_update_completed_state()
 
 # Función para actualizar el estado visual de bloqueo
 func _update_lock_state():
@@ -204,6 +276,29 @@ func _update_lock_state():
 			image_texture.modulate = Color(0.7, 0.7, 0.7, 0.7)
 		else:
 			image_texture.modulate = Color(1, 1, 1, 1)
+
+# Función para actualizar el estado visual de completado
+func _update_completed_state():
+	if not is_initialized:
+		return
+	
+	# Actualizar el icono de completado
+	if completed_icon:
+		completed_icon.visible = is_completed
+	
+	# Cambiar el estilo del botón si está completado
+	if select_button and is_completed:
+		# Crear un estilo especial para puzzles completados
+		var completed_style = _create_stylebox(Color(0.8, 1.0, 0.8, 1.0), 8)  # Verde claro
+		select_button.add_theme_stylebox_override("normal", completed_style)
+		
+		# También actualizar el estilo hover
+		var completed_hover_style = _create_stylebox(Color(0.9, 1.0, 0.9, 1.0), 10)
+		select_button.add_theme_stylebox_override("hover", completed_hover_style)
+	elif select_button and not is_completed:
+		# Restaurar el estilo normal
+		select_button.add_theme_stylebox_override("normal", _create_stylebox(Color(0.9, 0.9, 0.9, 1.0), 8))
+		select_button.add_theme_stylebox_override("hover", _create_stylebox(Color(1.0, 1.0, 1.0, 1.0), 10))
 
 # Función interna para aplicar los datos del puzzle a los nodos
 func _apply_puzzle_data():
@@ -243,51 +338,54 @@ func _apply_puzzle_data():
 	
 	# Actualizar el estado de bloqueo
 	_update_lock_state()
+	
+	# Actualizar el estado de completado
+	_update_completed_state()
 
 # Función para establecer la imagen por defecto
 func _set_default_image():
 	print("PuzzleItem: _set_default_image()")
 	if image_texture:
-		# Intentar usar una imagen existente como alternativa
+		# Intentar cargar una imagen por defecto
 		var default_paths = [
-			"res://Assets/Images/default_puzzle_image.png",
-			"res://Assets/Images/arte1.jpg",
-			"res://Assets/Images/paisaje1.jpg"
+			"res://Assets/Images/default_puzzle.png",
+			"res://Assets/UI/default_puzzle.png"
 		]
 		
-		var default_image = null
 		for path in default_paths:
 			if ResourceLoader.exists(path):
-				default_image = load(path)
-				if default_image:
-					print("PuzzleItem: Imagen alternativa cargada correctamente: ", path)
-					image_texture.texture = default_image
+				var default_texture = load(path)
+				if default_texture:
+					image_texture.texture = default_texture
 					return
 		
-		print("ERROR: No se pudo cargar ninguna imagen alternativa, creando un placeholder")
-		# Crear una imagen de color sólido como placeholder
-		var img = Image.create(100, 100, false, Image.FORMAT_RGB8)
-		# Rellenar con un color azul claro
-		img.fill(Color(0.3, 0.5, 0.8))
-		var placeholder = ImageTexture.create_from_image(img)
-		image_texture.texture = placeholder
+		# Si no se pudo cargar ninguna imagen, crear un color de fondo
+		var placeholder = ColorRect.new()
+		placeholder.color = Color(0.8, 0.8, 0.8)
+		placeholder.custom_minimum_size = Vector2(140, 180)
+		placeholder.size_flags_horizontal = SIZE_EXPAND_FILL
+		placeholder.size_flags_vertical = SIZE_EXPAND_FILL
+		
+		# Añadir un texto al placeholder
+		var placeholder_label = Label.new()
+		placeholder_label.text = "Sin imagen"
+		placeholder_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		placeholder_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		placeholder_label.add_theme_font_size_override("font_size", 16)
+		placeholder_label.add_theme_color_override("font_color", Color(0.3, 0.3, 0.3))
+		placeholder.add_child(placeholder_label)
+		
+		# Limpiar cualquier hijo existente en image_texture
+		for child in image_texture.get_children():
+			child.queue_free()
+		
+		image_texture.add_child(placeholder)
 
+# Función llamada cuando se presiona el botón
 func _on_select_pressed():
-	print("PuzzleItem: _on_select_pressed() - BOTÓN PRESIONADO")
-	
-	# Si el puzzle está bloqueado, no hacer nada
-	if is_locked:
-		print("PuzzleItem: El puzzle está bloqueado, no se puede seleccionar")
-		return
-	
-	# Imprimir información sobre el botón
-	print("PuzzleItem: Botón presionado - Nombre: ", select_button.name if select_button else "NULL")
-	
+	print("PuzzleItem: _on_select_pressed()")
 	if puzzle_data:
 		print("PuzzleItem: Emitiendo señal puzzle_selected con datos: ", puzzle_data)
-		print("PuzzleItem: Nombre del puzzle: ", puzzle_data.get("name", "NO NAME"))
-		print("PuzzleItem: Datos completos del puzzle: ", JSON.stringify(puzzle_data))
 		emit_signal("puzzle_selected", puzzle_data)
 	else:
-		print("ERROR: No hay datos del puzzle para emitir la señal")
-		print("ERROR: puzzle_data es NULL")
+		print("ERROR: No hay datos del puzzle para emitir")

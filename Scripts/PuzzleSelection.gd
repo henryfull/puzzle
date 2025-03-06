@@ -1,5 +1,8 @@
 extends Node2D
 
+# Acceso al singleton ProgressManager
+@onready var progress_manager = get_node("/root/ProgressManager")
+
 var title_label : Label
 var scroll_container : ScrollContainer
 var margin_container : MarginContainer
@@ -28,7 +31,38 @@ func _ready():
 		if not grid_container:
 			print("ERROR: No se encontró el nodo grid_container")
 	
+	# Conectar la señal de visibilidad
+	connect("visibility_changed", Callable(self, "_on_visibility_changed"))
+	
+	# Actualizar los datos del pack seleccionado desde ProgressManager
+	update_selected_pack()
+	
+	# Cargar los puzzles
 	load_puzzles()
+
+# Función que se ejecuta cuando la escena se vuelve visible
+func _on_visibility_changed():
+	print("PuzzleSelection: _on_visibility_changed() - Visibilidad cambiada")
+	if is_visible_in_tree():
+		print("PuzzleSelection: La escena se ha vuelto visible, actualizando datos")
+		# Actualizar los datos del pack seleccionado
+		update_selected_pack()
+		# Recargar los puzzles con los datos actualizados
+		load_puzzles()
+		
+# Nueva función para actualizar los datos del pack seleccionado
+func update_selected_pack():
+	if GLOBAL.selected_pack != null and GLOBAL.selected_pack.has("id"):
+		print("PuzzleSelection: Actualizando datos del pack seleccionado: " + GLOBAL.selected_pack.id)
+		# Obtener los datos actualizados del pack desde ProgressManager
+		var updated_pack = progress_manager.get_pack_with_progress(GLOBAL.selected_pack.id)
+		if not updated_pack.is_empty():
+			print("PuzzleSelection: Datos del pack actualizados correctamente")
+			GLOBAL.selected_pack = updated_pack
+		else:
+			print("ERROR: No se pudieron obtener los datos actualizados del pack")
+	else:
+		print("ERROR: No hay pack seleccionado o no tiene ID")
 		
 func load_puzzles():
 	var pack = GLOBAL.selected_pack
@@ -89,6 +123,9 @@ func load_puzzles():
 			
 			# Verificar si el puzzle está desbloqueado
 			var is_unlocked = puzzle.has("unlocked") and puzzle.unlocked
+			var is_completed = puzzle.has("completed") and puzzle.completed
+			
+			print("Puzzle " + puzzle.id + " - Desbloqueado: " + str(is_unlocked) + ", Completado: " + str(is_completed))
 			
 			# Cargar la escena del PuzzleItem
 			var puzzle_item_scene = load("res://Scenes/Components/New/PuzzleItem.tscn")
@@ -106,6 +143,10 @@ func load_puzzles():
 				# Si el puzzle no está desbloqueado, desactivar el PuzzleItem
 				if not is_unlocked:
 					puzzle_item.set_locked(true)
+				
+				# Si el puzzle está completado, marcarlo como tal
+				if is_completed:
+					puzzle_item.set_completed(true)
 				
 				# Conectar la señal de selección de puzzle solo si está desbloqueado
 				if is_unlocked:

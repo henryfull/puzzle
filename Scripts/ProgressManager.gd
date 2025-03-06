@@ -121,17 +121,26 @@ func is_puzzle_completed(pack_id: String, puzzle_id: String) -> bool:
 
 # Marca un puzzle como completado y desbloquea el siguiente
 func complete_puzzle(pack_id: String, puzzle_id: String):
+	print("ProgressManager: Marcando puzzle como completado - Pack: " + pack_id + ", Puzzle: " + puzzle_id)
+	
 	if not progress_data.packs.has(pack_id):
-		print("ProgressManager: El pack no existe en los datos de progresión")
-		return
+		print("ProgressManager: El pack no existe en los datos de progresión, inicializándolo")
+		progress_data.packs[pack_id] = {
+			"unlocked": true,
+			"purchased": true,
+			"completed": false,
+			"puzzles": {}
+		}
 		
 	# Marcar el puzzle como completado
 	if not progress_data.packs[pack_id].puzzles.has(puzzle_id):
+		print("ProgressManager: Inicializando datos del puzzle: " + puzzle_id)
 		progress_data.packs[pack_id].puzzles[puzzle_id] = {
 			"completed": true,
 			"unlocked": true
 		}
 	else:
+		print("ProgressManager: Actualizando estado del puzzle: " + puzzle_id)
 		progress_data.packs[pack_id].puzzles[puzzle_id].completed = true
 	
 	# Buscar el siguiente puzzle en el pack
@@ -151,6 +160,8 @@ func complete_puzzle(pack_id: String, puzzle_id: String):
 						next_puzzle_index = j + 1
 						break
 				break
+	
+	print("ProgressManager: Índices - Pack: " + str(current_pack_index) + ", Puzzle actual: " + str(current_puzzle_index) + ", Siguiente puzzle: " + str(next_puzzle_index))
 	
 	# Si hay un siguiente puzzle, desbloquearlo
 	if current_pack_index >= 0 and next_puzzle_index >= 0 and next_puzzle_index < packs_data.packs[current_pack_index].puzzles.size():
@@ -257,6 +268,8 @@ func purchase_pack(pack_id: String):
 func get_pack_with_progress(pack_id: String) -> Dictionary:
 	var pack_data = {}
 	
+	print("ProgressManager: Obteniendo pack con progresión: " + pack_id)
+	
 	# Buscar el pack en los datos originales
 	if packs_data.has("packs"):
 		for pack in packs_data.packs:
@@ -322,6 +335,8 @@ func reset_progress():
 
 # Obtiene el siguiente puzzle desbloqueado después del puzzle actual
 func get_next_unlocked_puzzle(pack_id: String, current_puzzle_id: String):
+	print("ProgressManager: Buscando siguiente puzzle desbloqueado - Pack: " + pack_id + ", Puzzle actual: " + current_puzzle_id)
+	
 	# Verificar que el pack existe en los datos
 	if not packs_data.has("packs"):
 		print("ProgressManager: No hay datos de packs disponibles")
@@ -344,27 +359,39 @@ func get_next_unlocked_puzzle(pack_id: String, current_puzzle_id: String):
 		print("ProgressManager: No se encontró el pack o el puzzle actual")
 		return null
 	
+	print("ProgressManager: Puzzle actual encontrado en índice: " + str(current_puzzle_index))
+	
 	# Verificar si hay un siguiente puzzle
 	if current_puzzle_index + 1 < current_pack.puzzles.size():
 		var next_puzzle = current_pack.puzzles[current_puzzle_index + 1]
+		print("ProgressManager: Siguiente puzzle encontrado: " + next_puzzle.id)
 		
 		# Asegurarse de que el siguiente puzzle esté desbloqueado
 		if not progress_data.packs.has(pack_id):
-			print("ProgressManager: El pack no existe en los datos de progresión")
-			return null
+			print("ProgressManager: El pack no existe en los datos de progresión, inicializándolo")
+			progress_data.packs[pack_id] = {
+				"unlocked": true,
+				"purchased": true,
+				"completed": false,
+				"puzzles": {}
+			}
 			
 		# Desbloquear el siguiente puzzle si no está ya desbloqueado
 		if not progress_data.packs[pack_id].puzzles.has(next_puzzle.id):
+			print("ProgressManager: Desbloqueando nuevo puzzle: " + next_puzzle.id)
 			progress_data.packs[pack_id].puzzles[next_puzzle.id] = {
 				"completed": false,
 				"unlocked": true
 			}
-			print("ProgressManager: Desbloqueado nuevo puzzle desde get_next_unlocked_puzzle: " + next_puzzle.id)
 			save_progress_data()
+			print("ProgressManager: Progreso guardado después de desbloquear puzzle")
 		elif not progress_data.packs[pack_id].puzzles[next_puzzle.id].unlocked:
+			print("ProgressManager: Actualizando estado de desbloqueo para puzzle: " + next_puzzle.id)
 			progress_data.packs[pack_id].puzzles[next_puzzle.id].unlocked = true
-			print("ProgressManager: Actualizado estado de desbloqueo para puzzle desde get_next_unlocked_puzzle: " + next_puzzle.id)
 			save_progress_data()
+			print("ProgressManager: Progreso guardado después de actualizar estado de desbloqueo")
+		else:
+			print("ProgressManager: El puzzle ya estaba desbloqueado: " + next_puzzle.id)
 		
 		return next_puzzle
 	
