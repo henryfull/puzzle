@@ -15,7 +15,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image1.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
 		  "completed": false
 		},
 		{
@@ -24,7 +24,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image2.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
 		  "completed": false
 		},
 		{
@@ -33,7 +33,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image3.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
 		  "completed": false
 		},
 		{
@@ -42,7 +42,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image4.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
 		  "completed": false
 		},
 		{
@@ -51,7 +51,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image5.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
 		  "completed": false
 		},
 		{
@@ -60,7 +60,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image6.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
 		  "completed": false
 		},
 		{
@@ -69,7 +69,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image7.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
 		  "completed": false
 		},
 		{
@@ -78,7 +78,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image8.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
 		  "completed": false
 		},
 		{
@@ -87,7 +87,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image9.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
 		  "completed": false
 		},
 		{
@@ -96,7 +96,7 @@
 		  "difficulty": "easy",
 		  "pieces": 6,
 		  "image": "res://Assets/Images/pack1/image10.jpg",
-		  "description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+		  "description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
 		  "completed": false
 		}
 	  ]

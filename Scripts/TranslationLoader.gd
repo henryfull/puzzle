@@ -1,7 +1,10 @@
 extends Node
 
 var translations = {}  # Diccionario donde guardamos las traducciones
-var current_language = "en"  # Idioma por defecto (puedes cambiarlo dinámicamente)
+var current_language = "es"  # Idioma por defecto (cambiado a español)
+
+# Señal para notificar cambios de idioma
+signal language_changed(locale_code)
 
 # Cargar el archivo CSV al iniciar
 func _ready():
@@ -40,9 +43,21 @@ func load_language_from_config():
 		var locale_code = config.get_value("settings", "language", "es")  # Predeterminado: español
 		set_language(locale_code)
 		GLOBAL.settings.language = locale_code
+		
+		# Asegurarse de que el TranslationServer tenga el idioma correcto
+		TranslationServer.set_locale(locale_code)
 	else:
 		# Si no hay configuración, usar el idioma predeterminado
 		set_language(GLOBAL.settings.language)
+		
+		# Asegurarse de que el TranslationServer tenga el idioma correcto
+		TranslationServer.set_locale(GLOBAL.settings.language)
+	
+	# Notificar a la escena actual para actualizar textos
+	await get_tree().process_frame  # Esperar un frame para asegurarse de que la escena esté lista
+	var current_scene = get_tree().current_scene
+	if current_scene and current_scene.has_method("update_ui_texts"):
+		current_scene.update_ui_texts()
 
 # Función para obtener un texto en el idioma actual
 func get_translation(key):
@@ -55,4 +70,13 @@ func set_language(lang):
 	if translations.size() > 0 and translations.values()[0].has(lang):  # Verificar si el idioma existe
 		current_language = lang
 		GLOBAL.settings.language = lang
+		
+		# Emitir señal de cambio de idioma
+		emit_signal("language_changed", lang)
+		
+		# Notificar a la escena actual para actualizar textos
+		var current_scene = get_tree().current_scene
+		if current_scene and current_scene.has_method("update_ui_texts"):
+			current_scene.update_ui_texts()
+		
 		print("Idioma establecido a: ", lang)

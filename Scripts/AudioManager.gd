@@ -75,12 +75,19 @@ func save_volume_settings():
 	config.set_value("audio", "music_volume", GLOBAL.settings.volume.music)
 	config.set_value("audio", "sfx_volume", GLOBAL.settings.volume.sfx)
 	
+	# También guardar el idioma para asegurarnos de que no se pierda
+	config.set_value("settings", "language", GLOBAL.settings.language)
+	
 	# Guardar el archivo
 	err = config.save(SETTINGS_FILE)
 	if err != OK:
 		print("Error al guardar la configuración de audio: ", err)
 	else:
 		print("Configuración de audio guardada correctamente")
+	
+	# También actualizar la configuración global
+	if has_node("/root/GLOBAL"):
+		get_node("/root/GLOBAL").save_settings()
 
 func update_volumes():
 	var volume_settings = GLOBAL.settings.volume if GLOBAL.settings.has("volume") else {"general": 100, "music": 100, "sfx": 100}

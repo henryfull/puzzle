@@ -91,6 +91,10 @@ func setup_ui():
 	# Configurar la vista de imagen
 	var image_view_container = $CanvasLayer/VBoxContainer/PanelContainer/ImageView
 	if image_view_container:
+		# Asegurarse de que el contenedor de imagen ocupe todo el espacio disponible
+		image_view_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		image_view_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		
 		var texture_rect = image_view_container.get_node_or_null("TextureRect")
 		if texture_rect:
 			texture_rect.expand = true
@@ -107,6 +111,7 @@ func setup_ui():
 		
 		var image_name_label = image_view_container.get_node_or_null("PanelContainer/LabelNamePuzzle")
 		if image_name_label:
+			image_name_label.visible = true
 			image_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			image_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			image_name_label.add_theme_font_size_override("font_size", 24)
@@ -118,8 +123,28 @@ func setup_ui():
 	# Configurar el Sprite2D si existe
 	var sprite = $CanvasLayer/VBoxContainer/PanelContainer/ImageView/PuzzleImage2D
 	if sprite:
-		sprite.position = Vector2(175, 175)  # Centrar en el contenedor
-		sprite.scale = Vector2(0.5, 0.5)  # Ajustar escala
+		# Obtener el tamaño del contenedor
+		var container_size = get_viewport_rect().size
+		
+		# Calcular el espacio disponible para la imagen (considerando otros elementos)
+		var available_height = container_size.y * 0.65  # Usar solo el 65% de la altura para la imagen
+		var max_width = min(container_size.x * 0.8, 720)  # Limitar el ancho máximo
+		
+		# Calcular la escala para que la imagen se ajuste al espacio disponible
+		var texture_size = sprite.texture.get_size()
+		var scale_factor_width = max_width / texture_size.x
+		var scale_factor_height = available_height / texture_size.y
+		
+		# Usar el factor más pequeño para asegurar que la imagen quepa completamente
+		var scale_factor = min(scale_factor_width, scale_factor_height)
+		
+		# Aplicar la escala manteniendo la proporción
+		sprite.scale = Vector2(scale_factor, scale_factor)
+		
+		# Centrar la imagen en el contenedor
+		sprite.position = Vector2(container_size.x / 2, container_size.y / 2 - 50)
+		
+		# Guardar referencia
 		image_view = sprite
 	
 	# Configurar la vista de texto
@@ -128,8 +153,19 @@ func setup_ui():
 		text_view.visible = false
 		text_view.bbcode_enabled = true
 		text_view.scroll_active = true
-		text_view.add_theme_font_size_override("normal_font_size", 16)
+		text_view.add_theme_font_size_override("normal_font_size", 18)  # Aumentar tamaño de fuente
 		text_view.add_theme_color_override("default_color", Color(0, 0, 0))
+		text_view.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		text_view.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		
+		# Configurar márgenes para el texto
+		text_view.add_theme_constant_override("margin_left", 40)
+		text_view.add_theme_constant_override("margin_right", 40)
+		text_view.add_theme_constant_override("margin_top", 40)
+		text_view.add_theme_constant_override("margin_bottom", 40)
+		
+		# Configurar el espaciado entre líneas
+		text_view.add_theme_constant_override("line_separation", 10)
 	
 	# Configurar el botón de alternancia
 	toggle_button = $CanvasLayer/VBoxContainer/BlockButtonChange/Button
@@ -143,8 +179,11 @@ func setup_ui():
 		toggle_button.connect("pressed", Callable(self, "_on_toggle_view_pressed"))
 	
 	# Configurar los botones existentes
-	var hbox_buttons = $CanvasLayer/BlockButtonChange
+	var hbox_buttons = $CanvasLayer/VBoxContainer/HBoxContainer
 	if hbox_buttons:
+		# Centrar el contenedor de botones
+		hbox_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+		
 		# Asegurarse de que los botones tengan el estilo correcto
 		for button in hbox_buttons.get_children():
 			if button is Button:
@@ -168,15 +207,36 @@ func update_ui_with_puzzle_data():
 		
 		if image_view is Sprite2D:
 			image_view.texture = image_texture
+			
+			# Recalcular la escala para la nueva textura
+			var container_size = get_viewport_rect().size
+			
+			# Calcular el espacio disponible para la imagen (considerando otros elementos)
+			var available_height = container_size.y * 0.65  # Usar solo el 65% de la altura para la imagen
+			var max_width = min(container_size.x * 0.8, 720)  # Limitar el ancho máximo
+			
+			# Calcular la escala para que la imagen se ajuste al espacio disponible
+			var texture_size = image_texture.get_size()
+			var scale_factor_width = max_width / texture_size.x
+			var scale_factor_height = available_height / texture_size.y
+			
+			# Usar el factor más pequeño para asegurar que la imagen quepa completamente
+			var scale_factor = min(scale_factor_width, scale_factor_height)
+			
+			# Aplicar la escala manteniendo la proporción
+			image_view.scale = Vector2(scale_factor, scale_factor)
+			
 		elif image_view is Control:
 			var texture_rect = image_view.get_node_or_null("TextureRect")
 			if texture_rect:
 				texture_rect.texture = image_texture
-			
-			# Actualizar el nombre de la imagen
-			var name_label = image_view.get_node_or_null("PanelContainer/LabelNamePuzzle")
-			if name_label and puzzle_data.has("name"):
-				name_label.text = puzzle_data.name.to_upper()
+	
+	# Actualizar el nombre del puzzle
+	if puzzle_data and puzzle_data.has("name"):
+		var name_label = $CanvasLayer/VBoxContainer/PanelContainer/ImageView/PanelContainer/LabelNamePuzzle
+		if name_label:
+			name_label.text = puzzle_data.name.to_upper()
+			name_label.visible = true
 	
 	# Actualizar el texto descriptivo
 	if puzzle_data and puzzle_data.has("description") and text_view:
@@ -192,6 +252,9 @@ func update_ui_with_puzzle_data():
 		if result:
 			var scientific_name = result.get_string()
 			formatted_text = description.replace(scientific_name, "[color=red]" + scientific_name + "[/color]")
+		
+		# Añadir formato adicional para mejorar la legibilidad
+		formatted_text = "[center][font_size=20]" + formatted_text + "[/font_size][/center]"
 		
 		text_view.text = formatted_text
 	

@@ -9,6 +9,9 @@ var languages = {
 	"Deutsch": "de"
 }
 
+# Señal para notificar cambios de idioma
+signal language_changed(locale_code)
+
 func _ready():
 	# Primero poblamos los idiomas disponibles
 	populate_languages()
@@ -44,6 +47,18 @@ func _on_language_selected(index):
 	# Guardar la selección
 	save_language(locale_code)
 	
+	# También guardar en la configuración global
+	if has_node("/root/GLOBAL"):
+		get_node("/root/GLOBAL").save_settings()
+	
+	# Emitir señal de cambio de idioma
+	emit_signal("language_changed", locale_code)
+	
+	# Notificar a la escena actual para actualizar textos
+	var current_scene = get_tree().current_scene
+	if current_scene and current_scene.has_method("update_ui_texts"):
+		current_scene.update_ui_texts()
+	
 	print("Idioma cambiado a: ", locale_code)
 
 func save_language(locale_code):
@@ -56,6 +71,12 @@ func save_language(locale_code):
 	
 	# Guardar el idioma
 	config.set_value("settings", "language", locale_code)
+	
+	# También guardar los volúmenes para asegurarnos de que no se pierdan
+	config.set_value("audio", "general_volume", GLOBAL.settings.volume.general)
+	config.set_value("audio", "music_volume", GLOBAL.settings.volume.music)
+	config.set_value("audio", "sfx_volume", GLOBAL.settings.volume.sfx)
+	
 	err = config.save("user://settings.cfg")
 	
 	if err != OK:
