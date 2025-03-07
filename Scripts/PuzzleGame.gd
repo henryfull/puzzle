@@ -348,6 +348,21 @@ func place_piece(piece_obj: Piece):
 			merge_pieces(piece_obj, occupant)
 			return
 		else:
+			# Verificar si la pieza está en un grupo con otras piezas
+			if piece_obj.group.size() > 1:
+				# Si está en un grupo, mantener el comportamiento actual
+				# (no intercambiar, solo mover el grupo completo)
+				show_error_message("No se puede intercambiar: la pieza está en un grupo")
+				return
+			
+			# Si el ocupante está en un grupo con otras piezas, no intercambiar
+			if occupant.group.size() > 1:
+				# Generar un error para depuración
+				push_warning("No se puede intercambiar con una pieza que está en un grupo")
+				show_error_message("No se puede intercambiar: la pieza destino está en un grupo")
+				return
+			
+			# Si ninguna está en un grupo, intercambiar las piezas
 			swap_pieces(piece_obj, occupant)
 			return
 
@@ -403,6 +418,12 @@ func swap_pieces(a: Piece, b: Piece):
 	# Reposicionar
 	a.node.position = puzzle_offset + cell_b * cell_size
 	b.node.position = puzzle_offset + cell_a * cell_size
+	
+	# Mostrar mensaje de éxito
+	show_success_message("¡Piezas intercambiadas!")
+	
+	# Generar un error para depuración
+	push_warning("Intercambiando pieza en " + str(cell_a) + " con pieza en " + str(cell_b))
 
 #
 # === GRID: GET/SET/REMOVE PIEZA EN CELDA ===
@@ -576,6 +597,21 @@ func move_colliding_pieces(leader: Piece, target_cell: Vector2) -> void:
 	
 	# Si hay colisiones, mover las piezas que colisionan
 	if occupied_cells.size() > 0:
+		# Verificar si todas las piezas ocupantes están solas (no en grupos)
+		var all_occupants_single = true
+		for occupant in occupants:
+			if occupant.group.size() > 1:
+				all_occupants_single = false
+				break
+		
+		# Si todas las piezas ocupantes están solas y su número coincide con el tamaño del grupo,
+		# podemos intercambiar las posiciones (pero esto se maneja en place_group)
+		if all_occupants_single and occupants.size() == leader.group.size():
+			# No hacemos nada aquí, el intercambio se maneja en place_group
+			push_warning("Detectadas piezas individuales que podrían intercambiarse")
+			return
+		
+		# Si no se pueden intercambiar, mover las piezas ocupantes a celdas libres
 		# Primero, intentamos encontrar celdas libres para las piezas que colisionan
 		var free_cells = find_free_cells(occupants.size())
 		
@@ -642,17 +678,15 @@ func place_group(piece: Piece):
 		# Buscar una posición válida para el grupo
 		target_cell = find_valid_position_for_group(leader)
 	
-	# Mover las piezas que colisionan con el grupo
-	move_colliding_pieces(leader, target_cell)
-	
 	# Crear una copia del grupo para evitar modificaciones durante la iteración
 	var group_copy = leader.group.duplicate()
 	
-	# Liberar las celdas ocupadas por las piezas del grupo
-	for p in group_copy:
-		remove_piece_at(p.current_cell)
+	# Recopilar información sobre las piezas que colisionan con el grupo
+	var occupied_cells = []
+	var group_cells = []
+	var occupants = []
 	
-	# Colocar cada pieza del grupo en su posición relativa
+	# Recopilar todas las celdas que ocupará el grupo
 	for p in group_copy:
 		var offset = p.original_pos - leader.original_pos
 		var p_target = target_cell + offset
@@ -660,30 +694,104 @@ func place_group(piece: Piece):
 		# Asegurarse de que la celda está dentro de los límites horizontales
 		p_target.x = clamp(p_target.x, 0, columns - 1)
 		
-		# Para los límites verticales, intentamos añadir filas si es necesario
+		# Para los límites verticales, verificamos si necesitamos añadir filas
 		if p_target.y >= rows:
 			if not add_extra_row():
 				p_target.y = rows - 1  # Si no podemos añadir más filas, usamos la última
 		
+		group_cells.append(p_target)
+	
+	# Encontrar todas las piezas que colisionan con el grupo
+	for p_target in group_cells:
 		var occupant = get_piece_at(p_target)
 		if occupant != null and not (occupant in group_copy):
-			# Si hay una pieza ocupando la celda, moverla a una celda libre
-			var free_cells = find_free_cells(1)
-			if free_cells.size() > 0:
-				remove_piece_at(occupant.current_cell)
-				set_piece_at(free_cells[0], occupant)
-				occupant.node.position = puzzle_offset + free_cells[0] * cell_size
-			elif add_extra_row():
-				# Si no hay celdas libres, intentamos añadir una fila
-				free_cells = find_free_cells(1)
+			occupied_cells.append(p_target)
+			if not (occupant in occupants):  # Evitar duplicados
+				occupants.append(occupant)
+	
+	# Verificar si todas las piezas ocupantes están solas (no en grupos)
+	var all_occupants_single = true
+	for occupant in occupants:
+		if occupant.group.size() > 1:
+			all_occupants_single = false
+			push_warning("No se puede intercambiar con una pieza que está en un grupo")
+			show_error_message("No se puede intercambiar: hay piezas destino en grupos")
+			break
+	
+	# Si todas las piezas ocupantes están solas y su número coincide con el tamaño del grupo,
+	# podemos intercambiar las posiciones
+	if all_occupants_single and occupants.size() > 0 and occupants.size() == group_copy.size():
+		# Guardar las posiciones originales de las piezas ocupantes
+		var occupant_positions = []
+		for occupant in occupants:
+			occupant_positions.append(occupant.current_cell)
+		
+		# Liberar las celdas ocupadas por ambos grupos
+		for p in group_copy:
+			remove_piece_at(p.current_cell)
+		
+		for occupant in occupants:
+			remove_piece_at(occupant.current_cell)
+		
+		# Colocar las piezas ocupantes en las posiciones originales del grupo
+		for i in range(occupants.size()):
+			var occupant = occupants[i]
+			var orig_cell = group_copy[i].current_cell
+			set_piece_at(orig_cell, occupant)
+			occupant.node.position = puzzle_offset + orig_cell * cell_size
+		
+		# Colocar las piezas del grupo en las posiciones de las ocupantes
+		for i in range(group_copy.size()):
+			var p = group_copy[i]
+			var new_cell = occupant_positions[i]
+			set_piece_at(new_cell, p)
+			p.node.position = puzzle_offset + new_cell * cell_size
+		
+		# Generar un error para depuración
+		push_warning("Intercambiando grupo de " + str(group_copy.size()) + " piezas con " + str(occupants.size()) + " piezas individuales")
+		
+		# Mostrar mensaje de éxito
+		show_success_message("¡Grupo intercambiado con " + str(occupants.size()) + " piezas!")
+	else:
+		# Si no se pueden intercambiar, mover las piezas que colisionan con el grupo
+		move_colliding_pieces(leader, target_cell)
+		
+		# Liberar las celdas ocupadas por las piezas del grupo
+		for p in group_copy:
+			remove_piece_at(p.current_cell)
+		
+		# Colocar cada pieza del grupo en su posición relativa
+		for p in group_copy:
+			var offset = p.original_pos - leader.original_pos
+			var p_target = target_cell + offset
+			
+			# Asegurarse de que la celda está dentro de los límites horizontales
+			p_target.x = clamp(p_target.x, 0, columns - 1)
+			
+			# Para los límites verticales, intentamos añadir filas si es necesario
+			if p_target.y >= rows:
+				if not add_extra_row():
+					p_target.y = rows - 1  # Si no podemos añadir más filas, usamos la última
+			
+			var occupant = get_piece_at(p_target)
+			if occupant != null and not (occupant in group_copy):
+				# Si hay una pieza ocupando la celda, moverla a una celda libre
+				var free_cells = find_free_cells(1)
 				if free_cells.size() > 0:
 					remove_piece_at(occupant.current_cell)
 					set_piece_at(free_cells[0], occupant)
 					occupant.node.position = puzzle_offset + free_cells[0] * cell_size
-		
-		# Colocar la pieza en su posición
-		set_piece_at(p_target, p)
-		p.node.position = puzzle_offset + p_target * cell_size
+				elif add_extra_row():
+					# Si no hay celdas libres, intentamos añadir una fila
+					free_cells = find_free_cells(1)
+					if free_cells.size() > 0:
+						remove_piece_at(occupant.current_cell)
+						set_piece_at(free_cells[0], occupant)
+						occupant.node.position = puzzle_offset + free_cells[0] * cell_size
+			
+			# Colocar la pieza en su posición
+			set_piece_at(p_target, p)
+			p.node.position = puzzle_offset + p_target * cell_size
 	
 	# Verificar que todas las piezas del grupo estén correctamente colocadas en el grid
 	for p in group_copy:
@@ -1223,3 +1331,45 @@ func show_victory_screen():
 	
 	# Usar la función safe_change_scene para cambiar a la escena de victoria
 	safe_change_scene("res://Scenes/VictoryScreen.tscn")
+
+# Función para mostrar un mensaje de error temporal
+func show_error_message(message: String, duration: float = 2.0):
+	var label = Label.new()
+	label.text = message
+	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))  # Rojo claro
+	
+	# Posicionar en la parte superior de la pantalla
+	var viewport_size = get_viewport_rect().size
+	label.position = Vector2(viewport_size.x / 2 - 150, 50)
+	
+	# Añadir a la escena
+	add_child(label)
+	
+	# Crear un temporizador para eliminar el mensaje después del tiempo especificado
+	var timer = Timer.new()
+	timer.wait_time = duration
+	timer.one_shot = true
+	timer.connect("timeout", Callable(label, "queue_free"))
+	add_child(timer)
+	timer.start()
+
+# Función para mostrar un mensaje de éxito temporal
+func show_success_message(message: String, duration: float = 1.5):
+	var label = Label.new()
+	label.text = message
+	label.add_theme_color_override("font_color", Color(0.3, 1, 0.3))  # Verde claro
+	
+	# Posicionar en la parte superior de la pantalla
+	var viewport_size = get_viewport_rect().size
+	label.position = Vector2(viewport_size.x / 2 - 150, 50)
+	
+	# Añadir a la escena
+	add_child(label)
+	
+	# Crear un temporizador para eliminar el mensaje después del tiempo especificado
+	var timer = Timer.new()
+	timer.wait_time = duration
+	timer.one_shot = true
+	timer.connect("timeout", Callable(label, "queue_free"))
+	add_child(timer)
+	timer.start()
