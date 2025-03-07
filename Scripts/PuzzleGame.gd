@@ -11,8 +11,8 @@ class_name PuzzleGame
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
 @export var image_path: String = "res://Assets/Images/arte1.jpg"
-@export var columns: int = 3
-@export var rows: int = 3
+@export var columns: int = 1
+@export var rows: int = 1
 @export var max_scale_percentage: float = 0.8
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
 @export var max_extra_rows: int = 5  # Máximo número de filas adicionales que se pueden añadir
