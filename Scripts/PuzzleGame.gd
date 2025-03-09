@@ -1130,21 +1130,36 @@ func verify_and_fix_grid():
 
 # Función para crear un botón de verificación de victoria
 func create_verify_button():
+	# Detectar si estamos en un dispositivo móvil
+	var is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
+	
+	# Crear un contenedor para el botón que use anclajes
+	var container = Control.new()
+	container.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	container.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	container.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	
+	# Ajustar tamaño y posición según el dispositivo
+	if is_mobile:
+		container.size = Vector2(200, 70)
+		container.position = Vector2(-220, -80)  # Offset desde la esquina inferior derecha
+	else:
+		container.size = Vector2(160, 50)
+		container.position = Vector2(-170, -60)  # Offset desde la esquina inferior derecha
+	
+	# Crear el botón
 	var button = Button.new()
 	button.text = "¿Completado?"
 	
-	# Obtener el tamaño de la ventana
-	var viewport_size = get_viewport_rect().size
-	
-	# Posicionar el botón en la esquina inferior derecha
-	button.position = Vector2(viewport_size.x - 160, viewport_size.y - 50)
-	button.size = Vector2(150, 40)
+	# Configurar el botón para que llene el contenedor
+	button.size_flags_horizontal = Control.SIZE_FILL
+	button.size_flags_vertical = Control.SIZE_FILL
 	
 	# Estilo del botón
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0.2, 0.6, 0.8, 0.8)  # Azul semitransparente
 	
-	# En Godot 4, hay que establecer el ancho del borde para cada lado individualmente
+	# Configurar bordes
 	style.border_width_left = 2
 	style.border_width_right = 2
 	style.border_width_top = 2
@@ -1156,12 +1171,35 @@ func create_verify_button():
 	style.corner_radius_bottom_left = 10
 	style.corner_radius_bottom_right = 10
 	
+	# Añadir padding para mejor experiencia táctil en móviles
+	if is_mobile:
+		style.content_margin_left = 15
+		style.content_margin_right = 15
+		style.content_margin_top = 10
+		style.content_margin_bottom = 10
+	
 	button.add_theme_stylebox_override("normal", style)
 	button.add_theme_color_override("font_color", Color(1, 1, 1))  # Texto blanco
 	button.add_theme_color_override("font_hover_color", Color(1, 1, 0))  # Amarillo al pasar el mouse
 	
+	# Aumentar el tamaño de la fuente para dispositivos móviles
+	if is_mobile:
+		button.add_theme_font_size_override("font_size", 28)
+	else:
+		button.add_theme_font_size_override("font_size", 18)
+	
+	# Usar UIScaler si está disponible
+	if ResourceLoader.exists("res://Scripts/UIScaler.gd"):
+		var UIScaler = load("res://Scripts/UIScaler.gd")
+		UIScaler.scale_button(button)
+	
 	button.connect("pressed", Callable(self, "force_victory_check"))
-	add_child(button)
+	
+	# Añadir el botón al contenedor y el contenedor a la escena
+	container.add_child(button)
+	add_child(container)
+	
+	return container
 
 # Función para forzar la verificación de victoria
 func force_victory_check():
@@ -1245,16 +1283,6 @@ func force_victory_check():
 		
 		return true
 
-# Función para crear un estilo de botón
-func _create_button_style(color: Color) -> StyleBoxFlat:
-	var style = StyleBoxFlat.new()
-	style.bg_color = color
-	style.corner_radius_top_left = 5
-	style.corner_radius_top_right = 5
-	style.corner_radius_bottom_left = 5
-	style.corner_radius_bottom_right = 5
-	return style
-
 # Función para alternar entre la vista de imagen y texto
 func _on_toggle_view_pressed():
 	# Invertir la visibilidad de las vistas
@@ -1334,9 +1362,18 @@ func show_victory_screen():
 
 # Función para mostrar un mensaje de error temporal
 func show_error_message(message: String, duration: float = 2.0):
+	# Detectar si estamos en un dispositivo móvil
+	var is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
+	
 	var label = Label.new()
 	label.text = message
 	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))  # Rojo claro
+	
+	# Ajustar tamaño de fuente para dispositivos móviles
+	if is_mobile:
+		label.add_theme_font_size_override("font_size", 24)
+	else:
+		label.add_theme_font_size_override("font_size", 16)
 	
 	# Posicionar en la parte superior de la pantalla
 	var viewport_size = get_viewport_rect().size
@@ -1355,9 +1392,18 @@ func show_error_message(message: String, duration: float = 2.0):
 
 # Función para mostrar un mensaje de éxito temporal
 func show_success_message(message: String, duration: float = 1.5):
+	# Detectar si estamos en un dispositivo móvil
+	var is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
+	
 	var label = Label.new()
 	label.text = message
 	label.add_theme_color_override("font_color", Color(0.3, 1, 0.3))  # Verde claro
+	
+	# Ajustar tamaño de fuente para dispositivos móviles
+	if is_mobile:
+		label.add_theme_font_size_override("font_size", 24)
+	else:
+		label.add_theme_font_size_override("font_size", 16)
 	
 	# Posicionar en la parte superior de la pantalla
 	var viewport_size = get_viewport_rect().size

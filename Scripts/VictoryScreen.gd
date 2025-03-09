@@ -14,7 +14,13 @@ var text_view = null
 var toggle_button = null
 var showing_image = true
 
+# Variable para detectar si estamos en un dispositivo móvil
+var is_mobile = false
+
 func _ready():
+	# Detectar si estamos en un dispositivo móvil
+	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
+	
 	# Obtener referencia al ProgressManager
 	progress_manager = get_node("/root/ProgressManager")
 	
@@ -55,6 +61,82 @@ func _ready():
 		if GLOBAL.selected_puzzle != null:
 			puzzle_data = GLOBAL.selected_puzzle
 			update_ui_with_puzzle_data()
+	
+	# Adaptar la UI para dispositivos móviles
+	adapt_ui_for_device()
+
+# Función para adaptar la UI según el dispositivo
+func adapt_ui_for_device():
+	# Usar UIScaler si está disponible
+	if ResourceLoader.exists("res://Scripts/UIScaler.gd"):
+		var UIScaler = load("res://Scripts/UIScaler.gd")
+		
+		# Escalar botones
+		var buttons = [
+			$CanvasLayer/VBoxContainer/BlockButtonChange/Button,
+			$CanvasLayer/VBoxContainer/HBoxContainer/Volver,
+			$CanvasLayer/VBoxContainer/HBoxContainer/Siguiente,
+			$CanvasLayer/VBoxContainer/HBoxContainer/Repetir
+		]
+		
+		for button in buttons:
+			if button:
+				UIScaler.scale_button(button)
+		
+		# Escalar etiquetas
+		var labels = [
+			$CanvasLayer/VBoxContainer/LabelTitle,
+			$CanvasLayer/VBoxContainer/LabelInfo,
+			$CanvasLayer/VBoxContainer/PanelContainer/ImageView/PanelContainer/LabelNamePuzzle
+		]
+		
+		for label in labels:
+			if label:
+				UIScaler.scale_label(label)
+		
+		# Escalar contenedores
+		var containers = [
+			$CanvasLayer/VBoxContainer,
+			$CanvasLayer/VBoxContainer/HBoxContainer,
+			$CanvasLayer/VBoxContainer/BlockButtonChange
+		]
+		
+		for container in containers:
+			if container:
+				# Ajustar espaciado
+				var scale = UIScaler.get_scale_factor()
+				container.add_theme_constant_override("separation", int(10 * scale))
+	else:
+		# Si no está disponible UIScaler, usar ajustes manuales
+		if is_mobile:
+			# Ajustar botones
+			var buttons = [
+				$CanvasLayer/VBoxContainer/BlockButtonChange/Button,
+				$CanvasLayer/VBoxContainer/HBoxContainer/Volver,
+				$CanvasLayer/VBoxContainer/HBoxContainer/Siguiente,
+				$CanvasLayer/VBoxContainer/HBoxContainer/Repetir
+			]
+			
+			for button in buttons:
+				if button:
+					button.custom_minimum_size = Vector2(200, 70)
+					button.add_theme_font_size_override("font_size", 24)
+			
+			# Ajustar etiquetas
+			if $CanvasLayer/VBoxContainer/LabelTitle:
+				$CanvasLayer/VBoxContainer/LabelTitle.add_theme_font_size_override("font_size", 36)
+			
+			if $CanvasLayer/VBoxContainer/LabelInfo:
+				$CanvasLayer/VBoxContainer/LabelInfo.add_theme_font_size_override("font_size", 24)
+			
+			# Ajustar espaciado
+			$CanvasLayer/VBoxContainer.add_theme_constant_override("separation", 20)
+			$CanvasLayer/VBoxContainer/HBoxContainer.add_theme_constant_override("separation", 30)
+			
+			# Ajustar texto
+			if text_view:
+				text_view.add_theme_font_size_override("normal_font_size", 24)
+				text_view.add_theme_constant_override("line_separation", 15)
 
 # Función para configurar la interfaz básica
 func setup_ui():
@@ -286,6 +368,14 @@ func _create_button_style(color: Color) -> StyleBoxFlat:
 	style.corner_radius_top_right = 5
 	style.corner_radius_bottom_left = 5
 	style.corner_radius_bottom_right = 5
+	
+	# Añadir padding para mejor experiencia táctil
+	if is_mobile:
+		style.content_margin_left = 15
+		style.content_margin_right = 15
+		style.content_margin_top = 10
+		style.content_margin_bottom = 10
+	
 	return style
 
 # Funciones existentes para los botones
