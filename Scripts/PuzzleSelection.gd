@@ -8,6 +8,10 @@ var scroll_container : ScrollContainer
 var margin_container : MarginContainer
 var grid_container: GridContainer
 
+# Añadir variables para controlar el desplazamiento táctil
+var is_scrolling = false
+var scroll_start_time = 0
+
 func _ready():
 	print("PuzzleSelection: _ready()")
 	
@@ -30,6 +34,70 @@ func _ready():
 			print("ERROR: No se encontró el nodo margin_container")
 		if not grid_container:
 			print("ERROR: No se encontró el nodo grid_container")
+	
+	# Intentar reemplazar el ScrollContainer estándar con nuestro TouchScrollContainer
+	if scroll_container:
+		var parent = scroll_container.get_parent()
+		var index = scroll_container.get_index()
+		
+		# Guardar referencias a los hijos actuales
+		var children = []
+		for child in scroll_container.get_children():
+			children.append(child)
+		
+		# Intentar cargar la escena del TouchScrollContainer
+		var touch_scroll_scene = load("res://Scenes/Components/TouchScrollContainer.tscn")
+		if touch_scroll_scene:
+			# Crear una nueva instancia del TouchScrollContainer
+			var new_scroll = touch_scroll_scene.instantiate()
+			
+			# Copiar propiedades del ScrollContainer original
+			new_scroll.size_flags_horizontal = scroll_container.size_flags_horizontal
+			new_scroll.size_flags_vertical = scroll_container.size_flags_vertical
+			new_scroll.custom_minimum_size = scroll_container.custom_minimum_size
+			new_scroll.horizontal_scroll_mode = scroll_container.horizontal_scroll_mode
+			new_scroll.vertical_scroll_mode = scroll_container.vertical_scroll_mode
+			
+			# Conectar señales de desplazamiento
+			new_scroll.connect("touch_scroll_started", Callable(self, "_on_scroll_started"))
+			new_scroll.connect("touch_scroll_ended", Callable(self, "_on_scroll_ended"))
+			
+			# Eliminar el ScrollContainer original
+			parent.remove_child(scroll_container)
+			scroll_container.queue_free()
+			
+			# Añadir el nuevo TouchScrollContainer
+			parent.add_child(new_scroll)
+			parent.move_child(new_scroll, index)
+			
+			# Mover los hijos al nuevo ScrollContainer
+			for child in children:
+				if child.get_parent():
+					child.get_parent().remove_child(child)
+				new_scroll.add_child(child)
+			
+			# Actualizar la referencia
+			scroll_container = new_scroll
+			print("PuzzleSelection: ScrollContainer reemplazado por TouchScrollContainer")
+		else:
+			print("PuzzleSelection: No se pudo cargar TouchScrollContainer, intentando adjuntar script")
+			
+			# Intentar adjuntar el script TouchScrollHandler
+			var touch_handler_script = load("res://Scripts/TouchScrollHandler.gd")
+			if touch_handler_script:
+				scroll_container.set_script(touch_handler_script)
+				
+				# Conectar señales de desplazamiento
+				if scroll_container.has_signal("touch_scroll_started"):
+					scroll_container.connect("touch_scroll_started", Callable(self, "_on_scroll_started"))
+				if scroll_container.has_signal("touch_scroll_ended"):
+					scroll_container.connect("touch_scroll_ended", Callable(self, "_on_scroll_ended"))
+				
+				print("PuzzleSelection: Script TouchScrollHandler adjuntado al ScrollContainer")
+	
+	# Configurar el GridContainer para mejorar el desplazamiento táctil
+	if grid_container:
+		grid_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Conectar la señal de visibilidad
 	connect("visibility_changed", Callable(self, "_on_visibility_changed"))
@@ -94,6 +162,7 @@ func load_puzzles():
 		margin_container.add_theme_constant_override("margin_bottom", 20)
 		margin_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		margin_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		margin_container.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Ignorar eventos de ratón
 	
 	# Configurar el GridContainer
 	if grid_container:
@@ -102,6 +171,7 @@ func load_puzzles():
 		grid_container.add_theme_constant_override("v_separation", 20)  # Separación vertical
 		grid_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		grid_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		grid_container.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Ignorar eventos de ratón
 	
 	# Verificar si hay puzzles para mostrar
 	if not pack.has("puzzles") or pack.puzzles.size() == 0:
@@ -148,6 +218,9 @@ func load_puzzles():
 				if is_completed:
 					puzzle_item.set_completed(true)
 				
+				# Configurar el filtro de ratón para permitir la interacción
+				puzzle_item.mouse_filter = Control.MOUSE_FILTER_STOP
+				
 				# Conectar la señal de selección de puzzle solo si está desbloqueado
 				if is_unlocked:
 					puzzle_item.connect("puzzle_selected", Callable(self, "_on_PuzzleSelected"))
@@ -159,6 +232,17 @@ func load_puzzles():
 				print("ERROR: No se pudo cargar la escena PuzzleItem")
 
 func _on_PuzzleSelected(puzzle):
+	# Evitar selección durante el desplazamiento
+	if is_scrolling:
+		print("PuzzleSelection: Ignorando selección durante desplazamiento")
+		return
+		
+	# Verificar si ha pasado suficiente tiempo desde el inicio del desplazamiento
+	var current_time = Time.get_ticks_msec()
+	if current_time - scroll_start_time < 300:  # 300ms de umbral
+		print("PuzzleSelection: Ignorando selección inmediatamente después del desplazamiento")
+		return
+	
 	# Función llamada al seleccionar un puzzle
 	print("PuzzleSelection: _on_PuzzleSelected() - SEÑAL RECIBIDA")
 	print("PuzzleSelection: Datos del puzzle recibidos: ", puzzle)
@@ -197,3 +281,14 @@ func _on_ColumnPuzzleSelected():
 
 func _on_BackButton_pressed():
 	get_tree().change_scene_to_file("res://Scenes/PackSelection.tscn")
+
+func _on_scroll_started():
+	is_scrolling = true
+	scroll_start_time = Time.get_ticks_msec()
+	print("PuzzleSelection: Inicio de desplazamiento")
+
+func _on_scroll_ended():
+	# Mantener el estado de desplazamiento por un breve período para evitar clics accidentales
+	await get_tree().create_timer(0.1).timeout
+	is_scrolling = false
+	print("PuzzleSelection: Fin de desplazamiento")
