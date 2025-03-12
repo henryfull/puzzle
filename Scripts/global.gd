@@ -11,6 +11,8 @@ var settings = {
 	},
 	"ui_scale": 1.0  # Nueva configuración para escala de UI
 }
+var columns: int = 6
+var rows: int = 8
 
 var selected_pack = null
 var selected_puzzle = null

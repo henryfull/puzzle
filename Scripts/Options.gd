@@ -20,6 +20,7 @@ func update_ui_texts():
 	$"CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer2/label music".text = tr("common_music")
 	$"CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer3/label sfx".text = tr("common_sfx")
 	$"CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainerIdioma/Label idioma".text = tr("common_language")
+	
 	print("Options: Textos actualizados con idioma: ", TranslationServer.get_locale())
 
 # Función para cargar los valores actuales

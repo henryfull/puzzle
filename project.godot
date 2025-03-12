@@ -10,10 +10,13 @@ config_version=5
 
 [application]
 
-config/name="puzzle"
+config/name="puzzle tiki tiki"
+config/version="0.2"
 run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
+boot_splash/image="uid://2dkbuui3lwna"
+config/icon="uid://7chqk0fghn6n"
 
 [audio]
 
@@ -33,6 +36,7 @@ ProgressManager="*res://Scripts/ProgressManager.gd"
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
+window/handheld/orientation=1
 
 [global]
 

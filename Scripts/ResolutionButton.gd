@@ -13,6 +13,7 @@ func _ready():
 	# Solo se muestra en entornos de escritorio
 	if OS.has_feature("mobile"):
 		hide()
+		$"../Label_resolution".hide()
 	else:
 		populate_resolutions()
 		load_resolution()  # Cargar la resolución guardada, si existe.

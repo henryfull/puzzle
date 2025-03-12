@@ -11,9 +11,8 @@ class_name PuzzleGame
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
 @export var image_path: String = "res://Assets/Images/arte1.jpg"
-@export var columns: int = 4
-@export var rows: int = 4
-@export var max_scale_percentage: float = 0.8
+
+@export var max_scale_percentage: float = 0.9  # Aumentado para aprovechar más espacio
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
 @export var max_extra_rows: int = 5  # Máximo número de filas adicionales que se pueden añadir
 
@@ -27,6 +26,7 @@ var cell_size: Vector2
 var puzzle_offset: Vector2
 var original_rows: int  # Para guardar el número original de filas
 var extra_rows_added: int = 0  # Contador de filas adicionales añadidas
+var is_mobile: bool = false  # Para detectar si estamos en un dispositivo móvil
 
 # Diccionario para saber qué pieza está en cada celda
 # Clave: "col_fila" (String), Valor: referencia a la pieza
@@ -74,6 +74,9 @@ class Piece:
 # === FUNCIÓN _ready(): se llama al iniciar la escena ===
 #
 func _ready():
+	# Detectar si estamos en un dispositivo móvil
+	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
+	
 	# Configurar el puzzle según los datos seleccionados
 	if GLOBAL.selected_puzzle != null:
 		image_path = GLOBAL.selected_puzzle.image
@@ -88,7 +91,7 @@ func _ready():
 	make_sounds_game()
 	
 	# Guardar el número original de filas
-	original_rows = rows
+	original_rows = GLOBAL.rows
 
 	# Primero, obtenemos la textura trasera usando la escena del Viewport y esperando un frame
 	var puzzle_back = await generate_back_texture_from_viewport(viewport_scene_path)
@@ -133,7 +136,14 @@ func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture
 		var puzzle_data = GLOBAL.selected_puzzle
 		var label = vp_instance.get_node("Label")
 		if label:
+			# Ajustar el tamaño de la fuente según el dispositivo
+			if is_mobile:
+				label.add_theme_font_size_override("font_size", 24)
+			
 			label.text = puzzle_data.description
+			# Centrar el texto
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
 	await get_tree().process_frame # Esperar un frame para que el viewport se inicialice
 
@@ -170,16 +180,24 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 	var original_w = float(puzzle_texture.get_width())
 	var original_h = float(puzzle_texture.get_height())
 
-	# Factor para no exceder el max_scale_percentage
-	var scale_factor_w = (viewport_size.x * max_scale_percentage) / original_w
-	var scale_factor_h = (viewport_size.y * max_scale_percentage) / original_h
+	# Ajustar el factor de escala según el dispositivo
+	var device_scale_factor = 1.0
+	if is_mobile:
+		# En dispositivos móviles, usar un porcentaje mayor del espacio disponible
+		device_scale_factor = 0.95
+	else:
+		device_scale_factor = max_scale_percentage
+	
+	# Factor para no exceder el porcentaje máximo de la pantalla
+	var scale_factor_w = (viewport_size.x * device_scale_factor) / original_w
+	var scale_factor_h = (viewport_size.y * device_scale_factor) / original_h
 	var final_scale_factor = min(scale_factor_w, scale_factor_h, 1.0)
 
 	puzzle_width = original_w * final_scale_factor
 	puzzle_height = original_h * final_scale_factor
 
 	# 3) Definir el tamaño de cada celda
-	cell_size = Vector2(puzzle_width / columns, puzzle_height / rows)
+	cell_size = Vector2(puzzle_width / GLOBAL.columns, puzzle_height / GLOBAL.rows)
 
 	# 4) Calcular offset para centrar el puzzle
 	puzzle_offset = (viewport_size - Vector2(puzzle_width, puzzle_height)) * 0.5
@@ -188,8 +206,8 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 	grid.clear()
 	pieces.clear()
 	var cell_list: Array[Vector2] = []
-	for r in range(rows):
-		for c in range(columns):
+	for r in range(GLOBAL.rows):
+		for c in range(GLOBAL.columns):
 			cell_list.append(Vector2(c, r))
 
 	# Desordenar completamente el cell_list
@@ -202,15 +220,15 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 		return
 	
 	var index = 0
-	for row_i in range(rows):
-		for col_i in range(columns):
+	for row_i in range(GLOBAL.rows):
+		for col_i in range(GLOBAL.columns):
 			# Instanciar PuzzlePiece.tscn
 			var piece_node = piece_scene.instantiate()
 			add_child(piece_node)
 			
 			# Definir la región original (SIN escalado) para la parte de la textura
-			var piece_orig_w = original_w / columns
-			var piece_orig_h = original_h / rows
+			var piece_orig_w = original_w / GLOBAL.columns
+			var piece_orig_h = original_h / GLOBAL.rows
 			var region_rect = Rect2(
 				col_i * piece_orig_w,
 				row_i * piece_orig_h,
@@ -336,8 +354,8 @@ func place_piece(piece_obj: Piece):
 	var cell_y = int(round(mouse_px.y / cell_size.y))
 
 	# Clampeamos para que no se salga de la grid
-	cell_x = clamp(cell_x, 0, columns - 1)
-	cell_y = clamp(cell_y, 0, rows - 1)
+	cell_x = clamp(cell_x, 0, GLOBAL.columns - 1)
+	cell_y = clamp(cell_y, 0, GLOBAL.rows - 1)
 	var new_cell = Vector2(cell_x, cell_y)
 
 	# 2) Ver si hay otra pieza en esa celda
@@ -383,7 +401,7 @@ func find_adjacent_pieces(piece: Piece, cell: Vector2) -> Array:
 	
 	for dir in directions:
 		var check_cell = cell + dir
-		if check_cell.x < 0 or check_cell.x >= columns or check_cell.y < 0 or check_cell.y >= rows:
+		if check_cell.x < 0 or check_cell.x >= GLOBAL.columns or check_cell.y < 0 or check_cell.y >= GLOBAL.rows:
 			continue
 		var other = get_piece_at(check_cell)
 		if other != null and other != piece and not (other in piece.group):
@@ -475,10 +493,10 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 		var target_cell = piece1.current_cell + offset
 		
 		# Asegurarse de que la celda está dentro de los límites
-		target_cell.x = clamp(target_cell.x, 0, columns - 1)
-		if target_cell.y >= rows:
+		target_cell.x = clamp(target_cell.x, 0, GLOBAL.columns - 1)
+		if target_cell.y >= GLOBAL.rows:
 			if not add_extra_row():
-				target_cell.y = rows - 1
+				target_cell.y = GLOBAL.rows - 1
 		
 		# Actualizar la posición de la pieza
 		remove_piece_at(p.current_cell)
@@ -499,12 +517,12 @@ func add_extra_row():
 	if extra_rows_added >= max_extra_rows:
 		return false  # No se pueden añadir más filas
 	
-	rows += 1
+	GLOBAL.rows += 1
 	extra_rows_added += 1
 	
 	# En lugar de recalcular el tamaño de las celdas, aumentamos el tamaño total del puzzle
 	var viewport_size = get_viewport_rect().size
-	puzzle_height = cell_size.y * rows  # Mantenemos el tamaño de celda original
+	puzzle_height = cell_size.y * GLOBAL.rows  # Mantenemos el tamaño de celda original
 	
 	# Recalcular el offset para centrar el puzzle con su nuevo tamaño
 	puzzle_offset = (viewport_size - Vector2(puzzle_width, puzzle_height)) * 0.5
@@ -523,11 +541,11 @@ func check_space_for_group(leader: Piece, target_cell: Vector2) -> bool:
 		var p_target = target_cell + offset
 		
 		# Si la celda está fuera de los límites horizontales, no hay espacio
-		if p_target.x < 0 or p_target.x >= columns:
+		if p_target.x < 0 or p_target.x >= GLOBAL.columns:
 			return false
 			
 		# Si la celda está fuera de los límites verticales, verificamos si podemos añadir filas
-		if p_target.y >= rows:
+		if p_target.y >= GLOBAL.rows:
 			# Si ya hemos alcanzado el máximo de filas adicionales, no hay espacio
 			if extra_rows_added >= max_extra_rows:
 				return false
@@ -545,8 +563,8 @@ func find_valid_position_for_group(leader: Piece) -> Vector2:
 		return current_pos
 	
 	# Si no, buscamos una posición válida en todo el tablero
-	for r in range(rows):
-		for c in range(columns):
+	for r in range(GLOBAL.rows):
+		for c in range(GLOBAL.columns):
 			var test_pos = Vector2(c, r)
 			if check_space_for_group(leader, test_pos):
 				return test_pos
@@ -554,8 +572,8 @@ func find_valid_position_for_group(leader: Piece) -> Vector2:
 	# Si no encontramos una posición válida, intentamos añadir una fila
 	if add_extra_row():
 		# Buscar en la nueva fila
-		for c in range(columns):
-			var test_pos = Vector2(c, rows - 1)
+		for c in range(GLOBAL.columns):
+			var test_pos = Vector2(c, GLOBAL.rows - 1)
 			if check_space_for_group(leader, test_pos):
 				return test_pos
 		
@@ -578,12 +596,12 @@ func move_colliding_pieces(leader: Piece, target_cell: Vector2) -> void:
 		var p_target = target_cell + offset
 		
 		# Asegurarse de que la celda está dentro de los límites horizontales
-		p_target.x = clamp(p_target.x, 0, columns - 1)
+		p_target.x = clamp(p_target.x, 0, GLOBAL.columns - 1)
 		
 		# Para los límites verticales, verificamos si necesitamos añadir filas
-		if p_target.y >= rows:
+		if p_target.y >= GLOBAL.rows:
 			if not add_extra_row():
-				p_target.y = rows - 1  # Si no podemos añadir más filas, usamos la última
+				p_target.y = GLOBAL.rows - 1  # Si no podemos añadir más filas, usamos la última
 		
 		group_cells.append(p_target)
 	
@@ -621,8 +639,8 @@ func move_colliding_pieces(leader: Piece, target_cell: Vector2) -> void:
 				break  # Si no podemos añadir más filas, usamos las celdas que tenemos
 			
 			# Buscar celdas libres en la nueva fila
-			for c in range(columns):
-				var cell = Vector2(c, rows - 1)
+			for c in range(GLOBAL.columns):
+				var cell = Vector2(c, GLOBAL.rows - 1)
 				if get_piece_at(cell) == null and not (cell in free_cells) and not (cell in group_cells):
 					free_cells.append(cell)
 					if free_cells.size() >= occupants.size():
@@ -644,8 +662,8 @@ func find_free_cells(count: int) -> Array:
 	var free_cells = []
 	
 	# Buscar celdas libres en todo el tablero
-	for r in range(rows):
-		for c in range(columns):
+	for r in range(GLOBAL.rows):
+		for c in range(GLOBAL.columns):
 			var cell = Vector2(c, r)
 			if get_piece_at(cell) == null:
 				free_cells.append(cell)
@@ -672,7 +690,7 @@ func place_group(piece: Piece):
 			max_y = max(max_y, p_target_y)
 		
 		# Si necesitamos más filas de las que tenemos, las añadimos
-		while max_y >= rows and add_extra_row():
+		while max_y >= GLOBAL.rows and add_extra_row():
 			pass
 		
 		# Buscar una posición válida para el grupo
@@ -692,12 +710,12 @@ func place_group(piece: Piece):
 		var p_target = target_cell + offset
 		
 		# Asegurarse de que la celda está dentro de los límites horizontales
-		p_target.x = clamp(p_target.x, 0, columns - 1)
+		p_target.x = clamp(p_target.x, 0, GLOBAL.columns - 1)
 		
 		# Para los límites verticales, verificamos si necesitamos añadir filas
-		if p_target.y >= rows:
+		if p_target.y >= GLOBAL.rows:
 			if not add_extra_row():
-				p_target.y = rows - 1  # Si no podemos añadir más filas, usamos la última
+				p_target.y = GLOBAL.rows - 1  # Si no podemos añadir más filas, usamos la última
 		
 		group_cells.append(p_target)
 	
@@ -766,12 +784,12 @@ func place_group(piece: Piece):
 			var p_target = target_cell + offset
 			
 			# Asegurarse de que la celda está dentro de los límites horizontales
-			p_target.x = clamp(p_target.x, 0, columns - 1)
+			p_target.x = clamp(p_target.x, 0, GLOBAL.columns - 1)
 			
 			# Para los límites verticales, intentamos añadir filas si es necesario
-			if p_target.y >= rows:
+			if p_target.y >= GLOBAL.rows:
 				if not add_extra_row():
-					p_target.y = rows - 1  # Si no podemos añadir más filas, usamos la última
+					p_target.y = GLOBAL.rows - 1  # Si no podemos añadir más filas, usamos la última
 			
 			var occupant = get_piece_at(p_target)
 			if occupant != null and not (occupant in group_copy):
@@ -1130,9 +1148,6 @@ func verify_and_fix_grid():
 
 # Función para crear un botón de verificación de victoria
 func create_verify_button():
-	# Detectar si estamos en un dispositivo móvil
-	var is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
-	
 	# Crear un contenedor para el botón que use anclajes
 	var container = Control.new()
 	container.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
@@ -1141,11 +1156,11 @@ func create_verify_button():
 	
 	# Ajustar tamaño y posición según el dispositivo
 	if is_mobile:
-		container.size = Vector2(200, 70)
-		container.position = Vector2(-220, -80)  # Offset desde la esquina inferior derecha
+		container.size = Vector2(220, 80)
+		container.position = Vector2(-230, -90)  # Offset desde la esquina inferior derecha
 	else:
-		container.size = Vector2(160, 50)
-		container.position = Vector2(-170, -60)  # Offset desde la esquina inferior derecha
+		container.size = Vector2(180, 60)
+		container.position = Vector2(-190, -70)  # Offset desde la esquina inferior derecha
 	
 	# Crear el botón
 	var button = Button.new()
@@ -1173,6 +1188,11 @@ func create_verify_button():
 	
 	# Añadir padding para mejor experiencia táctil en móviles
 	if is_mobile:
+		style.content_margin_left = 20
+		style.content_margin_right = 20
+		style.content_margin_top = 15
+		style.content_margin_bottom = 15
+	else:
 		style.content_margin_left = 15
 		style.content_margin_right = 15
 		style.content_margin_top = 10
@@ -1184,9 +1204,9 @@ func create_verify_button():
 	
 	# Aumentar el tamaño de la fuente para dispositivos móviles
 	if is_mobile:
-		button.add_theme_font_size_override("font_size", 28)
+		button.add_theme_font_size_override("font_size", 32)
 	else:
-		button.add_theme_font_size_override("font_size", 18)
+		button.add_theme_font_size_override("font_size", 20)
 	
 	# Usar UIScaler si está disponible
 	if ResourceLoader.exists("res://Scripts/UIScaler.gd"):
@@ -1266,7 +1286,20 @@ func force_victory_check():
 				var label = Label.new()
 				label.text = "El puzzle aún no está completo"
 				label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
-				label.position = Vector2(get_viewport_rect().size.x / 2 - 100, 50)
+				
+				# Ajustar tamaño de fuente y posición según el dispositivo
+				if is_mobile:
+					label.add_theme_font_size_override("font_size", 28)
+				else:
+					label.add_theme_font_size_override("font_size", 18)
+				
+				# Centrar horizontalmente y ajustar el ancho para que quepa el texto
+				var viewport_size = get_viewport_rect().size
+				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				label.size.x = viewport_size.x * 0.8
+				label.position.x = viewport_size.x * 0.1
+				label.position.y = 60
+				
 				add_child(label)
 				
 				# Crear un temporizador para eliminar el mensaje después de 3 segundos
@@ -1354,7 +1387,8 @@ func show_victory_screen():
 		"pack": GLOBAL.selected_pack,
 		"total_moves": total_moves,
 		"pack_id": current_pack_id,
-		"puzzle_id": current_puzzle_id
+		"puzzle_id": current_puzzle_id,
+		"is_mobile": is_mobile  # Añadir información sobre el dispositivo
 	}
 	
 	# Usar la función safe_change_scene para cambiar a la escena de victoria
@@ -1362,22 +1396,24 @@ func show_victory_screen():
 
 # Función para mostrar un mensaje de error temporal
 func show_error_message(message: String, duration: float = 2.0):
-	# Detectar si estamos en un dispositivo móvil
-	var is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
-	
 	var label = Label.new()
 	label.text = message
 	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))  # Rojo claro
 	
 	# Ajustar tamaño de fuente para dispositivos móviles
 	if is_mobile:
-		label.add_theme_font_size_override("font_size", 24)
+		label.add_theme_font_size_override("font_size", 28)
 	else:
-		label.add_theme_font_size_override("font_size", 16)
+		label.add_theme_font_size_override("font_size", 18)
 	
 	# Posicionar en la parte superior de la pantalla
 	var viewport_size = get_viewport_rect().size
-	label.position = Vector2(viewport_size.x / 2 - 150, 50)
+	
+	# Centrar horizontalmente y ajustar el ancho para que quepa el texto
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.size.x = viewport_size.x * 0.8
+	label.position.x = viewport_size.x * 0.1
+	label.position.y = 60
 	
 	# Añadir a la escena
 	add_child(label)
@@ -1392,22 +1428,24 @@ func show_error_message(message: String, duration: float = 2.0):
 
 # Función para mostrar un mensaje de éxito temporal
 func show_success_message(message: String, duration: float = 1.5):
-	# Detectar si estamos en un dispositivo móvil
-	var is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
-	
 	var label = Label.new()
 	label.text = message
 	label.add_theme_color_override("font_color", Color(0.3, 1, 0.3))  # Verde claro
 	
 	# Ajustar tamaño de fuente para dispositivos móviles
 	if is_mobile:
-		label.add_theme_font_size_override("font_size", 24)
+		label.add_theme_font_size_override("font_size", 28)
 	else:
-		label.add_theme_font_size_override("font_size", 16)
+		label.add_theme_font_size_override("font_size", 18)
 	
 	# Posicionar en la parte superior de la pantalla
 	var viewport_size = get_viewport_rect().size
-	label.position = Vector2(viewport_size.x / 2 - 150, 50)
+	
+	# Centrar horizontalmente y ajustar el ancho para que quepa el texto
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.size.x = viewport_size.x * 0.8
+	label.position.x = viewport_size.x * 0.1
+	label.position.y = 60
 	
 	# Añadir a la escena
 	add_child(label)
