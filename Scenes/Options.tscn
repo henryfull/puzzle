@@ -39,6 +39,7 @@ size_flags_horizontal = 4
 layout_mode = 2
 
 [node name="Label_resolution" type="Label" parent="CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainerResolución"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Idioma"

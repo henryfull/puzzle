@@ -142,36 +142,35 @@ func load_puzzles():
 	# Añadir un título a la pantalla
 	if title_label:
 		title_label.text = "Pack: " + pack.name
-		title_label.custom_minimum_size = Vector2(0, 60)
-		title_label.add_theme_font_size_override("font_size", 32)
-		title_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
+		title_label.custom_minimum_size = Vector2(0, 80)
+		title_label.add_theme_font_size_override("font_size", 36)
 	
 	# Configurar el ScrollContainer
 	if scroll_container:
 		scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		scroll_container.custom_minimum_size = Vector2(0, 400)  # Altura mínima para el scroll
-		scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED  # Desactivar scroll horizontal
-		scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO  # Activar scroll vertical automático
+		scroll_container.custom_minimum_size = Vector2(0, 500)
+		scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	
 	# Configurar el MarginContainer
 	if margin_container:
-		margin_container.add_theme_constant_override("margin_left", 20)
-		margin_container.add_theme_constant_override("margin_right", 20)
-		margin_container.add_theme_constant_override("margin_top", 20)
-		margin_container.add_theme_constant_override("margin_bottom", 20)
+		margin_container.add_theme_constant_override("margin_left", 25)
+		margin_container.add_theme_constant_override("margin_right", 25)
+		margin_container.add_theme_constant_override("margin_top", 25)
+		margin_container.add_theme_constant_override("margin_bottom", 25)
 		margin_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		margin_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		margin_container.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Ignorar eventos de ratón
+		margin_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Configurar el GridContainer
 	if grid_container:
-		grid_container.columns = 2  # Mostrar 2 puzzles por fila
-		grid_container.add_theme_constant_override("h_separation", 20)  # Separación horizontal
-		grid_container.add_theme_constant_override("v_separation", 20)  # Separación vertical
+		grid_container.columns = 2
+		grid_container.add_theme_constant_override("h_separation", 30)
+		grid_container.add_theme_constant_override("v_separation", 30)
 		grid_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		grid_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		grid_container.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Ignorar eventos de ratón
+		grid_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Verificar si hay puzzles para mostrar
 	if not pack.has("puzzles") or pack.puzzles.size() == 0:
@@ -179,8 +178,8 @@ func load_puzzles():
 		no_puzzles_label.text = "No hay puzzles disponibles en este pack"
 		no_puzzles_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		no_puzzles_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		no_puzzles_label.custom_minimum_size = Vector2(0, 100)
-		no_puzzles_label.add_theme_font_size_override("font_size", 18)
+		no_puzzles_label.custom_minimum_size = Vector2(0, 120)
+		no_puzzles_label.add_theme_font_size_override("font_size", 22)
 		no_puzzles_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 		grid_container.add_child(no_puzzles_label)
 		print("No hay puzzles para mostrar")
@@ -203,7 +202,7 @@ func load_puzzles():
 				var puzzle_item = puzzle_item_scene.instantiate()
 				
 				# Configurar el tamaño y propiedades del PuzzleItem
-				puzzle_item.custom_minimum_size = Vector2(180, 300)
+				puzzle_item.custom_minimum_size = Vector2(220, 350)
 				puzzle_item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				puzzle_item.size_flags_vertical = Control.SIZE_EXPAND_FILL
 				
@@ -281,6 +280,17 @@ func _on_ColumnPuzzleSelected():
 
 func _on_BackButton_pressed():
 	get_tree().change_scene_to_file("res://Scenes/PackSelection.tscn")
+
+# Nueva función para manejar el cambio de dificultad
+func _on_difficulty_changed(columns, rows):
+	print("PuzzleSelection: Dificultad cambiada a " + str(columns) + "x" + str(rows))
+	
+	# Actualizar las variables globales
+	GLOBAL.columns = columns
+	GLOBAL.rows = rows
+	
+	# No es necesario recargar la escena en la selección de puzzles,
+	# ya que los puzzles se cargarán con la nueva dificultad cuando se seleccionen
 
 func _on_scroll_started():
 	is_scrolling = true

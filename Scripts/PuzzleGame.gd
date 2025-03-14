@@ -1086,6 +1086,37 @@ func _on_PuzzleSelected():
 	print("PuzzleGame: Volviendo a la selección de puzzles")
 	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
 
+# Nueva función para manejar el cambio de dificultad
+func _on_difficulty_changed(columns, rows):
+	print("PuzzleGame: Dificultad cambiada a " + str(columns) + "x" + str(rows))
+	
+	# Actualizar las variables globales
+	GLOBAL.columns = columns
+	GLOBAL.rows = rows
+	
+	# Mostrar un mensaje al usuario
+	show_success_message("Cambiando a dificultad " + str(columns) + "x" + str(rows))
+	
+	# Esperar un momento antes de reiniciar el puzzle
+	await get_tree().create_timer(0.5).timeout
+	
+	# Limpiar las piezas actuales
+	for piece_obj in pieces:
+		if piece_obj.node != null:
+			piece_obj.node.queue_free()
+	
+	# Limpiar las listas
+	grid.clear()
+	pieces.clear()
+	
+	# Guardar el número original de filas
+	original_rows = GLOBAL.rows
+	extra_rows_added = 0
+	
+	# Reiniciar el puzzle con la nueva dificultad
+	var puzzle_back = await generate_back_texture_from_viewport(viewport_scene_path)
+	load_and_create_pieces(puzzle_back)
+
 # Nueva función para verificar y corregir el estado del grid
 func verify_and_fix_grid():
 	# 1. Verificar que todas las piezas estén en el grid

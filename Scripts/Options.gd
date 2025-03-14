@@ -15,7 +15,7 @@ func _ready():
 
 # Función para actualizar los textos de la UI según el idioma actual
 func update_ui_texts():
-	$"CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainerResolución/Label_resolution".text = tr("common_resolution")
+	%Label_resolution.text = tr("common_resolution")
 	$"CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer4/Label_general".text = tr("common_general")
 	$"CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer2/label music".text = tr("common_music")
 	$"CanvasLayer/BoxContainer/VBoxContainer3/HBoxContainer/VBoxContainer/BoxContainer3/label sfx".text = tr("common_sfx")

@@ -75,14 +75,14 @@ func _create_ui_structure():
 	print("PuzzleItem: Creando estructura de UI")
 	
 	# Configurar este nodo Control
-	custom_minimum_size = Vector2(180, 220)
+	custom_minimum_size = Vector2(220, 260)  # Aumentado de 180x220 a 220x260
 	size_flags_horizontal = SIZE_EXPAND_FILL
 	size_flags_vertical = SIZE_EXPAND_FILL
 	
 	# Crear el botón
 	select_button = Button.new()
 	select_button.name = "Button"
-	select_button.custom_minimum_size = Vector2(160, 230)
+	select_button.custom_minimum_size = Vector2(200, 270)  # Aumentado de 160x230 a 200x270
 	select_button.size_flags_horizontal = SIZE_EXPAND_FILL
 	select_button.size_flags_vertical = SIZE_EXPAND_FILL
 	
@@ -91,8 +91,8 @@ func _create_ui_structure():
 	print("PuzzleItem: Señal pressed del botón conectada a _on_select_pressed")
 	
 	# Añadir estilos al botón
-	select_button.add_theme_constant_override("h_separation", 10)
-	select_button.add_theme_constant_override("icon_max_width", 160)
+	select_button.add_theme_constant_override("h_separation", 12)  # Aumentado de 10 a 12
+	select_button.add_theme_constant_override("icon_max_width", 190)  # Aumentado de 160 a 190
 	select_button.add_theme_stylebox_override("normal", _create_stylebox(Color(0.9, 0.9, 0.9, 1.0), 8))
 	select_button.add_theme_stylebox_override("hover", _create_stylebox(Color(1.0, 1.0, 1.0, 1.0), 10))
 	select_button.add_theme_stylebox_override("pressed", _create_stylebox(Color(0.8, 0.8, 0.8, 1.0), 6))
@@ -103,7 +103,7 @@ func _create_ui_structure():
 	image_texture.name = "TextureRect"
 	image_texture.expand = true
 	image_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	image_texture.custom_minimum_size = Vector2(140, 180)
+	image_texture.custom_minimum_size = Vector2(180, 220)  # Aumentado de 140x180 a 180x220
 	image_texture.size_flags_horizontal = SIZE_EXPAND_FILL
 	image_texture.size_flags_vertical = SIZE_EXPAND_FILL
 	image_texture.position = Vector2(10, 10)
@@ -113,9 +113,10 @@ func _create_ui_structure():
 	name_label.name = "Label"
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	name_label.custom_minimum_size = Vector2(160, 30)
-	name_label.position = Vector2(0, 150)
+	name_label.custom_minimum_size = Vector2(200, 40)  # Aumentado de 160x30 a 200x40
+	name_label.position = Vector2(0, 190)  # Ajustado de 150 a 190 para posicionarlo correctamente
 	name_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
+	name_label.add_theme_font_size_override("font_size", 18)  # Añadido tamaño de fuente
 	name_label.text = "Puzzle"
 	
 	# Añadir los nodos a la jerarquía
@@ -136,10 +137,10 @@ func _create_lock_icon():
 	lock_icon.name = "LockIcon"
 	lock_icon.expand = true
 	lock_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	lock_icon.custom_minimum_size = Vector2(60, 60)
+	lock_icon.custom_minimum_size = Vector2(80, 80)  # Aumentado de 60x60 a 80x80
 	lock_icon.size_flags_horizontal = SIZE_SHRINK_CENTER
 	lock_icon.size_flags_vertical = SIZE_SHRINK_CENTER
-	lock_icon.position = Vector2(50, 50)  # Centrado en la imagen
+	lock_icon.position = Vector2(60, 60)  # Ajustado de 50x50 a 60x60
 	lock_icon.visible = false
 	
 	# Intentar cargar una imagen de candado
@@ -162,7 +163,7 @@ func _create_lock_icon():
 		lock_label.text = "🔒"  # Emoji de candado
 		lock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lock_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		lock_label.add_theme_font_size_override("font_size", 32)
+		lock_label.add_theme_font_size_override("font_size", 40)  # Aumentado de 32 a 40
 		lock_icon.add_child(lock_label)
 	
 	select_button.add_child(lock_icon)
@@ -174,10 +175,10 @@ func _create_completed_icon():
 	completed_icon.name = "CompletedIcon"
 	completed_icon.expand = true
 	completed_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	completed_icon.custom_minimum_size = Vector2(60, 60)
+	completed_icon.custom_minimum_size = Vector2(80, 80)  # Aumentado de 60x60 a 80x80
 	completed_icon.size_flags_horizontal = SIZE_SHRINK_CENTER
 	completed_icon.size_flags_vertical = SIZE_SHRINK_CENTER
-	completed_icon.position = Vector2(120, 20)  # Esquina superior derecha
+	completed_icon.position = Vector2(140, 20)  # Ajustado de 120x20 a 140x20
 	completed_icon.visible = false
 	
 	# Intentar cargar una imagen de marca de verificación
@@ -200,7 +201,7 @@ func _create_completed_icon():
 		check_label.text = "✓"  # Marca de verificación
 		check_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		check_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		check_label.add_theme_font_size_override("font_size", 32)
+		check_label.add_theme_font_size_override("font_size", 40)  # Aumentado de 32 a 40
 		check_label.add_theme_color_override("font_color", Color(0, 0.8, 0, 1))  # Verde
 		completed_icon.add_child(check_label)
 	
