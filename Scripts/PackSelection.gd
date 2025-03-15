@@ -81,7 +81,7 @@ func load_packs():
 	
 	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll_container.custom_minimum_size = Vector2(0, 400)  # Altura mínima para el scroll
+	scroll_container.custom_minimum_size = Vector2(0, 0)  # Eliminar altura mínima fija
 	scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED  # Desactivar scroll horizontal
 	scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO  # Activar scroll vertical automático
 	
