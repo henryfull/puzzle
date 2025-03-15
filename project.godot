@@ -27,11 +27,11 @@ buses/General=0.0
 
 [autoload]
 
-AchievementsManager="*res://Scripts/AchievementsManager.gd"
-GLOBAL="*res://Scripts/global.gd"
-AudioManager="*res://Scripts/AudioManager.gd"
-TranslationLoader="*res://Scripts/TranslationLoader.gd"
-ProgressManager="*res://Scripts/ProgressManager.gd"
+TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
+AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
+GLOBAL="*res://Scripts/Autoload/global.gd"
+AudioManager="*res://Scripts/Autoload/AudioManager.gd"
+ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
 ThemeManager="*res://Scripts/Autoload/ThemeManager.gd"
 OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 

@@ -1,8 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwmh6v0v1h55u"]
+[gd_scene load_steps=9 format=3 uid="uid://cwmh6v0v1h55u"]
 
 [ext_resource type="Texture2D" uid="uid://dthy24qh2pp7r" path="res://Assets/Images/default_image_pack.png" id="1_yn4m1"]
 [ext_resource type="Script" uid="uid://chxeswjm6qscv" path="res://Scripts/PackComponent.gd" id="2_yvnxp"]
 [ext_resource type="Texture2D" uid="uid://ufqgedyv0jcq" path="res://Assets/Images/GUID/icon_lock.svg" id="3_6ueb6"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6pgc5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0xr7k"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ymhho"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2xkka"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ueb6"]
 
 [node name="PackComponent" type="Control"]
 custom_minimum_size = Vector2(600, 400)
@@ -95,6 +105,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxTexture_6pgc5")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_0xr7k")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_ymhho")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxTexture_2xkka")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_6ueb6")
 flat = true
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
