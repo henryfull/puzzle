@@ -7,34 +7,55 @@ script = ExtResource("1_pl40w")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
-layout_direction = 1
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.901961, 0.72549, 1)
+
+[node name="LabelVersion" type="Label" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = -44.0
+offset_right = 93.0
+offset_bottom = -19.0
+grow_vertical = 0
+text = "v. 0.1.2"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = -33.0
-offset_right = 50.0
-offset_bottom = 33.0
+offset_left = -57.0
+offset_top = -67.0
+offset_right = 57.0
+offset_bottom = 67.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="BTN_play" type="Button" parent="CanvasLayer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_direction = 1
 layout_mode = 2
-text = "tr(\"common_play\")"
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="BTN_play" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Play"
 language = "auto"
 
-[node name="BTN_options" type="Button" parent="CanvasLayer/VBoxContainer"]
-auto_translate_mode = 1
+[node name="BTN_options" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-text = "tr(\"common_options\")"
-flat = true
+text = "Opciones"
 
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/BTN_play" to="." method="_on_btn_play_pressed"]
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]

@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
 boot_splash/image="uid://2dkbuui3lwna"
 config/icon="uid://7chqk0fghn6n"
+boot_splash/minimum_display_time=5
 
 [audio]
 
@@ -31,18 +32,29 @@ GLOBAL="*res://Scripts/global.gd"
 AudioManager="*res://Scripts/AudioManager.gd"
 TranslationLoader="*res://Scripts/TranslationLoader.gd"
 ProgressManager="*res://Scripts/ProgressManager.gd"
+ThemeManager="*res://Scripts/Autoload/ThemeManager.gd"
+OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
-window/handheld/orientation=1
+window/handheld/orientation=5
+
+[editor]
+
+version_control/autoload_on_startup=true
 
 [global]
 
 General=0
 Music=false
 SFX=false
+
+[gui]
+
+theme/custom="uid://dyqkx5or01raf"
+theme/custom_font="uid://nsb7mxocp6o3"
 
 [internationalization]
 

@@ -1488,3 +1488,8 @@ func show_success_message(message: String, duration: float = 1.5):
 	timer.connect("timeout", Callable(label, "queue_free"))
 	add_child(timer)
 	timer.start()
+
+# Función para mostrar el menú de opciones
+func show_options_menu():
+	if has_node("/root/OptionsManager"):
+		get_node("/root/OptionsManager").show_options(self)
