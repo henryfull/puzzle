@@ -12,8 +12,15 @@ var grid_container: GridContainer
 var is_scrolling = false
 var scroll_start_time = 0
 
+# Variable para controlar si estamos en un dispositivo táctil
+var is_touch_device = false
+
 func _ready():
 	print("PuzzleSelection: _ready()")
+	
+	# Detectar si estamos en un dispositivo táctil
+	is_touch_device = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("ios") or OS.has_feature("android")
+	print("PuzzleSelection: Dispositivo táctil: ", is_touch_device)
 	
 	# Obtener referencias a los nodos existentes en la escena
 	title_label = $CanvasLayer/VBoxContainer/TitlePuzzleSelection
@@ -95,18 +102,73 @@ func _ready():
 				
 				print("PuzzleSelection: Script TouchScrollHandler adjuntado al ScrollContainer")
 	
-	# Configurar el GridContainer para mejorar el desplazamiento táctil
+	# Configurar el GridContainer
 	if grid_container:
+		# Establecer el número de columnas según el tipo de dispositivo
+		if is_touch_device:
+			grid_container.columns = 2
+		else:
+			grid_container.columns = 3
+			
+		grid_container.add_theme_constant_override("h_separation", 30)
+		grid_container.add_theme_constant_override("v_separation", 30)
+		grid_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		grid_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		grid_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Conectar la señal de visibilidad
 	connect("visibility_changed", Callable(self, "_on_visibility_changed"))
+	
+	# Ajustar el layout según el tipo de dispositivo
+	adjust_layout_for_device()
 	
 	# Actualizar los datos del pack seleccionado desde ProgressManager
 	update_selected_pack()
 	
 	# Cargar los puzzles
 	load_puzzles()
+
+# Nueva función para ajustar el layout según el tipo de dispositivo
+func adjust_layout_for_device():
+	var vbox = $CanvasLayer/VBoxContainer
+	
+	if is_touch_device:
+		# En dispositivos táctiles, usar todo el ancho disponible
+		vbox.anchors_preset = 15  # Full rect
+		vbox.anchor_right = 1.0
+		vbox.anchor_bottom = 1.0
+		vbox.offset_left = 20.0
+		vbox.offset_top = 160.0
+		vbox.offset_right = -20.0
+		vbox.offset_bottom = -20.0
+		vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		
+		# En dispositivos táctiles, usar 2 columnas
+		if grid_container:
+			grid_container.columns = 2
+		
+		print("PuzzleSelection: Layout ajustado para dispositivo táctil")
+	else:
+		# En ordenadores, usar un ancho máximo
+		vbox.anchors_preset = 8  # Center
+		vbox.anchor_left = 0.5
+		vbox.anchor_top = 0.5
+		vbox.anchor_right = 0.5
+		vbox.anchor_bottom = 0.5
+		vbox.offset_left = -450.0  # Mitad del ancho máximo
+		vbox.offset_top = -400.0
+		vbox.offset_right = 450.0  # Mitad del ancho máximo
+		vbox.offset_bottom = 500.0
+		vbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		vbox.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		vbox.custom_minimum_size = Vector2(900, 900)  # Ancho máximo para ordenadores
+		
+		# En ordenadores, usar 3 columnas para aprovechar mejor el espacio
+		if grid_container:
+			grid_container.columns = 3
+		
+		print("PuzzleSelection: Layout ajustado para ordenador")
 
 # Función que se ejecuta cuando la escena se vuelve visible
 func _on_visibility_changed():
@@ -115,6 +177,8 @@ func _on_visibility_changed():
 		print("PuzzleSelection: La escena se ha vuelto visible, actualizando datos")
 		# Actualizar los datos del pack seleccionado
 		update_selected_pack()
+		# Ajustar el layout según el tipo de dispositivo
+		adjust_layout_for_device()
 		# Recargar los puzzles con los datos actualizados
 		load_puzzles()
 		
@@ -162,15 +226,6 @@ func load_puzzles():
 		margin_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		margin_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		margin_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
-	# Configurar el GridContainer
-	if grid_container:
-		grid_container.columns = 2
-		grid_container.add_theme_constant_override("h_separation", 30)
-		grid_container.add_theme_constant_override("v_separation", 30)
-		grid_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		grid_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		grid_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Verificar si hay puzzles para mostrar
 	if not pack.has("puzzles") or pack.puzzles.size() == 0:
@@ -288,6 +343,9 @@ func _on_difficulty_changed(columns, rows):
 	# Actualizar las variables globales
 	GLOBAL.columns = columns
 	GLOBAL.rows = rows
+	
+	# Ajustar el layout según el tipo de dispositivo
+	adjust_layout_for_device()
 	
 	# No es necesario recargar la escena en la selección de puzzles,
 	# ya que los puzzles se cargarán con la nueva dificultad cuando se seleccionen

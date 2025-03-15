@@ -21,23 +21,40 @@ color = Color(1, 0.901961, 0.72549, 1)
 z_index = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_bottom = 50.0
 grow_horizontal = 2
+theme_override_constants/separation = 20
 
-[node name="Volver" type="Button" parent="CanvasLayer/HBoxContainer"]
+[node name="MarginLeft" type="MarginContainer" parent="CanvasLayer/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 20
+
+[node name="Volver" type="Button" parent="CanvasLayer/HBoxContainer/MarginLeft"]
+custom_minimum_size = Vector2(130, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Volver"
 
-[node name="Flip" type="Button" parent="CanvasLayer/HBoxContainer"]
+[node name="Spacer" type="Control" parent="CanvasLayer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 3
+
+[node name="MarginRight" type="MarginContainer" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 20
+
+[node name="Flip" type="Button" parent="CanvasLayer/HBoxContainer/MarginRight"]
+custom_minimum_size = Vector2(130, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Flip"
 
 [node name="ButtonDifficult" parent="CanvasLayer" instance=ExtResource("2_yvnqr")]
 offset_left = -140.0
-offset_top = 60.0
+offset_top = 110.0
 offset_right = -20.0
-offset_bottom = 100.0
+offset_bottom = 150.0
 
-[connection signal="pressed" from="CanvasLayer/HBoxContainer/Volver" to="." method="_on_PuzzleSelected"]
-[connection signal="pressed" from="CanvasLayer/HBoxContainer/Flip" to="." method="on_flip_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginLeft/Volver" to="." method="_on_PuzzleSelected"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginRight/Flip" to="." method="on_flip_button_pressed"]
 [connection signal="difficulty_changed" from="CanvasLayer/ButtonDifficult" to="." method="_on_difficulty_changed"]

@@ -10,7 +10,14 @@ var scroll_start_time = 0
 # Referencia a la escena del componente de pack
 var pack_component_scene = preload("res://Scenes/Components/PackComponent.tscn")
 
+# Variable para controlar si estamos en un dispositivo táctil
+var is_touch_device = false
+
 func _ready():
+	# Detectar si estamos en un dispositivo táctil
+	is_touch_device = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("ios") or OS.has_feature("android")
+	print("PackSelection: Dispositivo táctil: ", is_touch_device)
+	
 	# Inicialización de la selección de pack.
 	print("PackSelection: inicialización de los packs disponibles")
 	load_packs()
@@ -29,6 +36,41 @@ func _ready():
 			print("ERROR: No se pudo encontrar el ScrollContainer para conectar señales")
 	else:
 		print("ERROR: No se pudo cargar el script TouchScrollFix")
+	
+	# Ajustar el layout según el tipo de dispositivo
+	adjust_layout_for_device()
+
+# Nueva función para ajustar el layout según el tipo de dispositivo
+func adjust_layout_for_device():
+	var vbox = $CanvasLayer/VBoxContainer
+	
+	if is_touch_device:
+		# En dispositivos táctiles, usar todo el ancho disponible
+		vbox.anchors_preset = 15  # Full rect
+		vbox.anchor_right = 1.0
+		vbox.anchor_bottom = 1.0
+		vbox.offset_left = 20.0
+		vbox.offset_top = 20.0
+		vbox.offset_right = -20.0
+		vbox.offset_bottom = -100.0
+		vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		print("PackSelection: Layout ajustado para dispositivo táctil")
+	else:
+		# En ordenadores, usar un ancho máximo
+		vbox.anchors_preset = 8  # Center
+		vbox.anchor_left = 0.5
+		vbox.anchor_top = 0.5
+		vbox.anchor_right = 0.5
+		vbox.anchor_bottom = 0.5
+		vbox.offset_left = -400.0  # Mitad del ancho máximo
+		vbox.offset_top = -500.0
+		vbox.offset_right = 400.0  # Mitad del ancho máximo
+		vbox.offset_bottom = 500.0
+		vbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		vbox.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		vbox.custom_minimum_size = Vector2(800, 1000)  # Ancho máximo para ordenadores
+		print("PackSelection: Layout ajustado para ordenador")
 
 func load_packs():
 	# Limpiar cualquier elemento existente en el contenedor

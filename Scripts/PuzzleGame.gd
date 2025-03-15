@@ -77,6 +77,9 @@ func _ready():
 	# Detectar si estamos en un dispositivo móvil
 	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
 	
+	# Ajustar la interfaz para dispositivos móviles
+	adjust_ui_for_device()
+	
 	# Configurar el puzzle según los datos seleccionados
 	if GLOBAL.selected_puzzle != null:
 		image_path = GLOBAL.selected_puzzle.image
@@ -1493,3 +1496,35 @@ func show_success_message(message: String, duration: float = 1.5):
 func show_options_menu():
 	if has_node("/root/OptionsManager"):
 		get_node("/root/OptionsManager").show_options(self)
+
+# Nueva función para ajustar la interfaz según el tipo de dispositivo
+func adjust_ui_for_device():
+	var hbox = $CanvasLayer/HBoxContainer
+	var button_difficult = $CanvasLayer/ButtonDifficult
+	
+	if is_mobile:
+		# En dispositivos móviles, especialmente con isla (notch), añadir más margen superior
+		var safe_area = DisplayServer.get_display_safe_area()
+		var window_size = DisplayServer.window_get_size()
+		
+		# Calcular el margen superior necesario
+		var top_margin = 50  # Margen base
+		
+		# Si hay una diferencia significativa entre el área segura y el tamaño de la ventana,
+		# probablemente hay una isla o notch
+		if safe_area.position.y > 10:  # Si hay un margen de seguridad superior
+			top_margin = max(top_margin, safe_area.position.y + 20)  # Añadir margen adicional
+			
+		print("PuzzleGame: Margen superior ajustado a ", top_margin, " para dispositivo móvil")
+		
+		# Aplicar el margen superior
+		hbox.position.y = top_margin
+		
+		# Ajustar también la posición del botón de dificultad
+		button_difficult.position.y = top_margin + 60
+	else:
+		# En ordenadores, usar un margen estándar
+		hbox.position.y = 20
+		button_difficult.position.y = 80
+		
+		print("PuzzleGame: Usando margen estándar para ordenador")
