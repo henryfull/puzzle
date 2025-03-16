@@ -16,6 +16,12 @@ class_name PuzzleGame
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
 @export var max_extra_rows: int = 5  # Máximo número de filas adicionales que se pueden añadir
 
+# Variables para el paneo del tablero (simplificadas)
+var is_panning := false
+var last_pan_position := Vector2.ZERO
+var board_offset := Vector2.ZERO  # Desplazamiento actual del tablero
+var touch_points := {}  # Para rastrear múltiples puntos de contacto en táctil
+
 #
 # === VARIABLES INTERNAS ===
 #
@@ -275,72 +281,116 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 #
 # === GESTIÓN DE EVENTOS DE RATÓN / TECLADO ===
 #
-func _unhandled_input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+func _unhandled_input(event: InputEvent) -> void:
+	# Manejo de eventos táctiles para dispositivos móviles
+	if event is InputEventScreenTouch:
+		# Guardamos la información del toque en nuestro diccionario
 		if event.pressed:
-			var mouse_pos = event.position
-			var clicked_piece = null
-			
-			# Encontrar la pieza clickeada
-			for piece_obj in pieces:
-				if is_mouse_over_piece(piece_obj, mouse_pos):
-					clicked_piece = piece_obj
-					break
-			
-			if clicked_piece:
-				# Obtener el líder del grupo
-				var group_leader = get_group_leader(clicked_piece)
-				
-				# Mover todo el grupo desde cualquier pieza
-				for p in group_leader.group:
-					p.dragging = true
-					p.drag_offset = p.node.global_position - mouse_pos
-					p.node.z_index = 9999
-					if p.node.get_parent() != null:
-						p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
+			touch_points[event.index] = event.position
 		else:
-			# Al soltar, colocar todo el grupo
-			var dragging_piece = null
+			touch_points.erase(event.index)
+			
+		# Para paneo en dispositivos móviles necesitamos DOS dedos
+		if is_mobile:
+			if touch_points.size() >= 2 and event.pressed:
+				# Iniciar paneo con dos dedos
+				is_panning = true
+				# Usamos el punto medio entre los dos dedos como punto de referencia
+				last_pan_position = get_touch_center()
+			elif touch_points.size() < 2:
+				# Si hay menos de dos dedos, terminar el paneo
+				is_panning = false
+		
+		# Si es un solo dedo, procesamos como un evento normal de clic de pieza
+		if touch_points.size() == 1 and is_mobile:
+			if event.pressed:
+				# Debemos pasar la posición específica del evento de toque, no el evento genérico
+				process_piece_click_touch(event.position, event.index)
+			else:
+				process_piece_release()
+	
+	elif event is InputEventScreenDrag:
+		# Actualizar la posición del punto de contacto
+		touch_points[event.index] = event.position
+		
+		# Para paneo en dispositivos móviles necesitamos DOS dedos
+		if is_mobile and touch_points.size() >= 2 and is_panning:
+			# Calcular el nuevo centro entre los puntos de contacto
+			var new_center = get_touch_center()
+			# Calcular el desplazamiento
+			var delta = new_center - last_pan_position
+			board_offset += delta
+			last_pan_position = new_center
+			update_board_position()
+		
+		# Si estamos arrastrando con un solo dedo y no estamos en modo paneo, movernos piezas
+		elif is_mobile and touch_points.size() == 1 and not is_panning:
+			# Procesar como arrastre de pieza
 			for piece_obj in pieces:
 				if piece_obj.dragging:
-					dragging_piece = piece_obj
+					var group_leader = get_group_leader(piece_obj)
+					
+					# En lugar de usar event.relative, calculamos la nueva posición basada
+					# en la posición actual del dedo y el offset guardado al comenzar el arrastre
+					var touch_pos = event.position
+					
+					for p in group_leader.group:
+						# Aplicar la nueva posición con el offset original
+						p.node.global_position = touch_pos + p.drag_offset
+					
 					break
-			
-			if dragging_piece:
-				var group_leader = get_group_leader(dragging_piece)
-				for p in group_leader.group:
-					p.dragging = false
-					p.node.z_index = 0
-				
-				# Guardar la posición actual antes de colocar el grupo
-				var old_position = group_leader.current_cell
-				
-				# Colocar el grupo
-				place_group(group_leader)
-				total_moves += 1
-				
-				# Reproducir sonido de movimiento solo si la posición cambió
-				if old_position != group_leader.current_cell:
-					AudioManager.play_sfx("res://Assets/Sounds/SFX/plop.mp3")
-				
-				# Verificar y corregir el estado del grid después de cada movimiento
-				verify_and_fix_grid()
-				
-				# Verificar victoria después de cada movimiento
-				check_victory()
-				
-				# También verificar por posición visual
-				call_deferred("check_victory_by_position")
-
+	
+	# Manejo de eventos de ratón para PC
+	elif event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT:  # Botón derecho para paneo en PC
+			if event.pressed:
+				# Iniciar paneo con botón derecho
+				is_panning = true
+				last_pan_position = event.position
+			else:
+				# Finalizar paneo
+				is_panning = false
+		
+		# Manejo de click izquierdo para las piezas
+		elif event.button_index == MOUSE_BUTTON_LEFT:
+			process_piece_click(event)
+	
 	elif event is InputEventMouseMotion:
-		# Mover todo el grupo junto
-		for piece_obj in pieces:
-			if piece_obj.dragging:
-				var group_leader = get_group_leader(piece_obj)
-				var delta = event.relative
-				for p in group_leader.group:
-					p.node.global_position += delta
-				break
+		if is_panning:
+			# Actualizar posición del tablero durante el paneo
+			var delta = event.relative
+			board_offset += delta
+			last_pan_position = event.position
+			update_board_position()
+		elif event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+			# Si estamos arrastrando una pieza
+			for piece_obj in pieces:
+				if piece_obj.dragging:
+					var group_leader = get_group_leader(piece_obj)
+					var delta = event.relative
+					for p in group_leader.group:
+						p.node.global_position += delta
+					break
+
+func update_board_position() -> void:
+	# Actualizar la posición de todas las piezas según el desplazamiento del tablero
+	position = board_offset
+	
+	# Limitar el desplazamiento para que el tablero no se aleje demasiado
+	var viewport_size = get_viewport_rect().size
+	var board_size = Vector2(puzzle_width, puzzle_height)
+	
+	# Calcular límites de desplazamiento
+	var min_x = -board_size.x * 0.5
+	var max_x = viewport_size.x - board_size.x * 0.5
+	var min_y = -board_size.y * 0.5
+	var max_y = viewport_size.y - board_size.y * 0.5
+	
+	# Limitar el desplazamiento
+	position.x = clamp(position.x, min_x, max_x)
+	position.y = clamp(position.y, min_y, max_y)
+	
+	board_offset = position
 
 #
 # === DETECCIÓN DE CLIC SOBRE LA PIEZA ===
@@ -362,13 +412,11 @@ func is_mouse_over_piece(piece_obj: Piece, mouse_pos: Vector2) -> bool:
 #
 func place_piece(piece_obj: Piece):
 	# 1) Calcular la celda según la posición actual
-	var mouse_px = piece_obj.node.global_position - puzzle_offset
-	var cell_x = int(round(mouse_px.x / cell_size.x))
-	var cell_y = int(round(mouse_px.y / cell_size.y))
-
+	var cell = get_cell_of_piece(piece_obj)  # Usamos get_cell_of_piece que ya tiene en cuenta el desplazamiento
+	
 	# Clampeamos para que no se salga de la grid
-	cell_x = clamp(cell_x, 0, GLOBAL.columns - 1)
-	cell_y = clamp(cell_y, 0, GLOBAL.rows - 1)
+	var cell_x = clamp(int(cell.x), 0, GLOBAL.columns - 1)
+	var cell_y = clamp(int(cell.y), 0, GLOBAL.rows - 1)
 	var new_cell = Vector2(cell_x, cell_y)
 
 	# 2) Ver si hay otra pieza en esa celda
@@ -400,6 +448,8 @@ func place_piece(piece_obj: Piece):
 	# 3) Si no hay ocupante, simplemente colocar la pieza
 	remove_piece_at(piece_obj.current_cell)
 	set_piece_at(new_cell, piece_obj)
+	
+	# Calcular la posición física de la pieza teniendo en cuenta el desplazamiento del tablero
 	piece_obj.node.position = puzzle_offset + new_cell * cell_size
 
 	# 4) Fusionar con piezas adyacentes, si es posible
@@ -476,10 +526,19 @@ func remove_piece_at(cell: Vector2):
 # === OBTENER LA CELDA DE UNA PIEZA POR SU POSICIÓN ===
 #
 func get_cell_of_piece(piece_obj: Piece) -> Vector2:
-	var px = piece_obj.node.global_position.x - puzzle_offset.x
-	var py = piece_obj.node.global_position.y - puzzle_offset.y
+	# Ajustar la posición de la pieza teniendo en cuenta el desplazamiento del tablero
+	# Primero obtenemos la posición global de la pieza
+	var global_pos = piece_obj.node.global_position
+	
+	# Luego restamos la posición global del nodo raíz (que contiene el desplazamiento)
+	var adjusted_pos = global_pos - global_position
+	
+	# Ahora calculamos la celda usando las coordenadas ajustadas
+	var px = adjusted_pos.x - puzzle_offset.x
+	var py = adjusted_pos.y - puzzle_offset.y
 	var cx = int(round(px / cell_size.x))
 	var cy = int(round(py / cell_size.y))
+	
 	return Vector2(cx, cy)
 
 #
@@ -689,7 +748,8 @@ func place_group(piece: Piece):
 	# Obtener el líder del grupo
 	var leader = get_group_leader(piece)
 	
-	# Calcular la celda destino para la pieza principal (líder)
+	# Calcular la celda destino para la pieza principal (líder) usando get_cell_of_piece
+	# que ya tiene en cuenta el desplazamiento del tablero
 	var target_cell = get_cell_of_piece(leader)
 	
 	# Verificar si hay espacio para el grupo en la posición actual
@@ -1538,3 +1598,119 @@ func adjust_ui_for_device():
 		button_difficult.position.y = 80
 		
 		print("PuzzleGame: Usando margen estándar para ordenador")
+
+func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> void:
+	# Usar la posición del toque sin ajustar
+	var mouse_pos = touch_position
+	var clicked_piece = null
+	
+	# Encontrar la pieza clickeada
+	for piece_obj in pieces:
+		# Convertir la posición global del toque a local de cada pieza
+		var local_pos = piece_obj.node.to_local(mouse_pos)
+		var sprite = piece_obj.sprite
+		
+		# Verificar si el punto está dentro del sprite
+		if sprite.texture != null:
+			var tex_rect = Rect2(
+				sprite.position - sprite.texture.get_size() * sprite.scale * 0.5,
+				sprite.texture.get_size() * sprite.scale
+			)
+			
+			if tex_rect.has_point(local_pos):
+				clicked_piece = piece_obj
+				break
+	
+	if clicked_piece:
+		# Obtener el líder del grupo
+		var group_leader = get_group_leader(clicked_piece)
+		
+		# Mover todo el grupo desde cualquier pieza
+		for p in group_leader.group:
+			p.dragging = true
+			# Guardar el offset (diferencia entre posición de la pieza y posición del toque)
+			p.drag_offset = p.node.global_position - mouse_pos
+			p.node.z_index = 9999
+			if p.node.get_parent() != null:
+				p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
+
+func process_piece_release() -> void:
+	# Al soltar, colocar todo el grupo
+	var dragging_piece = null
+	for piece_obj in pieces:
+		if piece_obj.dragging:
+			dragging_piece = piece_obj
+			break
+	
+	if dragging_piece:
+		var group_leader = get_group_leader(dragging_piece)
+		for p in group_leader.group:
+			p.dragging = false
+			p.node.z_index = 0
+		
+		# Guardar la posición actual antes de colocar el grupo
+		var old_position = group_leader.current_cell
+		
+		# Colocar el grupo - aquí ocurre la magia
+		place_group(group_leader)
+		total_moves += 1
+		
+		# Reproducir sonido de movimiento solo si la posición cambió
+		if old_position != group_leader.current_cell:
+			AudioManager.play_sfx("res://Assets/Sounds/SFX/plop.mp3")
+		
+		# Verificar y corregir el estado del grid después de cada movimiento
+		verify_and_fix_grid()
+		
+		# Verificar victoria después de cada movimiento
+		check_victory()
+		
+		# También verificar por posición visual
+		call_deferred("check_victory_by_position")
+
+# Función para obtener el centro entre todos los puntos de contacto
+func get_touch_center() -> Vector2:
+	var center = Vector2.ZERO
+	if touch_points.size() > 0:
+		for point in touch_points.values():
+			center += point
+		center /= touch_points.size()
+	return center
+
+func process_piece_click(event: InputEvent) -> void:
+	if event.pressed:
+		# Usar la posición global del mouse sin ajustar por el desplazamiento
+		var mouse_pos = event.position
+		var clicked_piece = null
+		
+		# Encontrar la pieza clickeada
+		for piece_obj in pieces:
+			# Convertir la posición global del mouse a local de cada pieza
+			var local_pos = piece_obj.node.to_local(mouse_pos)
+			var sprite = piece_obj.sprite
+			
+			# Verificar si el punto está dentro del sprite
+			if sprite.texture != null:
+				var tex_rect = Rect2(
+					sprite.position - sprite.texture.get_size() * sprite.scale * 0.5,
+					sprite.texture.get_size() * sprite.scale
+				)
+				
+				if tex_rect.has_point(local_pos):
+					clicked_piece = piece_obj
+					break
+		
+		if clicked_piece:
+			# Obtener el líder del grupo
+			var group_leader = get_group_leader(clicked_piece)
+			
+			# Mover todo el grupo desde cualquier pieza
+			for p in group_leader.group:
+				p.dragging = true
+				p.drag_offset = p.node.global_position - mouse_pos
+				p.node.z_index = 9999
+				if p.node.get_parent() != null:
+					p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
+	else:
+		# Al soltar, procesar el final del arrastre de la pieza
+		process_piece_release()

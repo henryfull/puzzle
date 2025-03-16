@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="puzzle tiki tiki"
-config/version="0.2"
+config/version="0.3.1"
 run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
