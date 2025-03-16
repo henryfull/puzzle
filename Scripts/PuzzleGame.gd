@@ -114,13 +114,15 @@ func _ready():
 
 func make_sounds_game():
 	audio_move = AudioStreamPlayer.new()
-	audio_move.stream = load("res://Assets/Audio/move.wav")
+	audio_move.stream = load("res://Assets/Sounds/SFX/plop.mp3")
 	audio_move.volume_db = -10
+	audio_move.bus = "SFX"
 	add_child(audio_move)
 	
 	audio_merge = AudioStreamPlayer.new()
-	audio_merge.stream = load("res://Assets/Audio/merge.wav")
+	audio_merge.stream = load("res://Assets/Sounds/SFX/bubble.wav")
 	audio_merge.volume_db = -5
+	audio_merge.bus = "SFX"
 	add_child(audio_merge)
 
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
@@ -309,9 +311,17 @@ func _unhandled_input(event):
 				for p in group_leader.group:
 					p.dragging = false
 					p.node.z_index = 0
+				
+				# Guardar la posición actual antes de colocar el grupo
+				var old_position = group_leader.current_cell
+				
+				# Colocar el grupo
 				place_group(group_leader)
 				total_moves += 1
-				AudioManager.play_sfx("res://Assets/Audio/move.wav")
+				
+				# Reproducir sonido de movimiento solo si la posición cambió
+				if old_position != group_leader.current_cell:
+					AudioManager.play_sfx("res://Assets/Sounds/SFX/plop.mp3")
 				
 				# Verificar y corregir el estado del grid después de cada movimiento
 				verify_and_fix_grid()
@@ -506,8 +516,8 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 		set_piece_at(target_cell, p)
 		p.node.position = puzzle_offset + target_cell * cell_size
 	
-	# Reproducir sonido de fusión
-	AudioManager.play_sfx("res://Assets/Audio/merge.wav")
+	# Reproducir sonido de fusión (usando directamente el reproductor de audio)
+	audio_merge.play()
 	
 	# Verificar victoria después de cada fusión
 	call_deferred("check_victory_deferred")
@@ -1375,8 +1385,8 @@ func safe_change_scene(scene_path: String) -> void:
 func _on_piece_moved(piece, old_cell, new_cell):
 	total_moves += 1
 	
-	# Reproducir sonido de movimiento
-	audio_move.play()
+	# Ya no reproducimos el sonido de movimiento aquí
+	# audio_move.play()
 	
 	# Verificar si el puzzle está completo
 	if check_victory():

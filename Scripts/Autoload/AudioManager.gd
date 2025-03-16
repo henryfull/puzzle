@@ -17,7 +17,7 @@ La función update_volumes() ajusta el volumen de cada bus usando una conversió
 Asegúrate de agregar este script como AutoLoad (Singleton) en el proyecto.
 """
 
-const DEFAULT_MUSIC_PATH = "res://Assets/Sounds/Music/bg_default.wav"
+const DEFAULT_MUSIC_PATH = "res://Assets/Sounds/Music/bg_sunset.mp3"
 const SETTINGS_FILE = "user://settings.cfg"
 
 var music_player: AudioStreamPlayer
@@ -29,9 +29,11 @@ func _ready():
 	# Inicializar el reproductor de música en el bus "Music"
 	update_volumes()	
 	music_player = AudioStreamPlayer.new()
-	music_player.autoplay = true
 	music_player.bus = "Music"
+	music_player.autoplay = true
 	music_player.stream = load(DEFAULT_MUSIC_PATH)
+	if music_player.stream:
+		music_player.stream.loop = true
 	add_child(music_player)
 	music_player.play()
 	

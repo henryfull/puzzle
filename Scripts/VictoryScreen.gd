@@ -18,6 +18,10 @@ var showing_image = true
 var is_mobile = false
 
 func _ready():
+	# Reproducir sonido de victoria
+	if has_node("/root/AudioManager"):
+		AudioManager.play_sfx("res://Assets/Sounds/SFX/win.wav")
+	
 	# Detectar si estamos en un dispositivo móvil
 	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
 	

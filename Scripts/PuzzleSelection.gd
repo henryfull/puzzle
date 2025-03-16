@@ -328,10 +328,7 @@ func _on_PuzzleSelected(puzzle):
 		else:
 			print("ERROR: No se pudo encontrar la escena del juego")
 
-func _on_ColumnPuzzleSelected():
-	# Función llamada al seleccionar el puzzle de columnas
-	print("Puzzle de columnas seleccionado")
-	get_tree().change_scene_to_file("res://Scenes/ColumnPuzzle/ColumnPuzzleGame.tscn")
+
 
 func _on_BackButton_pressed():
 	get_tree().change_scene_to_file("res://Scenes/PackSelection.tscn")
