@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://xdw0sm0cdrgy"]
+
+[ext_resource type="Script" uid="uid://kc6yka8210ql" path="res://Scripts/Components/Slider_option.gd" id="1_en27e"]
+[ext_resource type="Texture2D" uid="uid://dn7hq5cudvked" path="res://Assets/Images/GUID/icon_volume.svg" id="2_712mx"]
+
+[node name="SliderOption" type="Control"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("1_en27e")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Etiqueta"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("2_712mx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Slider" type="HSlider" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 80.0

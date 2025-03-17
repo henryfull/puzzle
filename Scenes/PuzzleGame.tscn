@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://smtnj5lnqhfa"]
+[gd_scene load_steps=8 format=3 uid="uid://smtnj5lnqhfa"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_sm22t"]
+[ext_resource type="Texture2D" uid="uid://bwe1vtc6qyu84" path="res://Assets/Images/GUID/icon_menu.svg" id="2_euhyg"]
 [ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult.tscn" id="2_yvnqr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_euhyg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_58pa3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hpsbn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vxw10"]
 
 [node name="PuzzleGame" type="Node2D"]
 script = ExtResource("1_sm22t")
@@ -29,7 +38,17 @@ theme_override_constants/separation = 20
 layout_mode = 2
 theme_override_constants/margin_left = 20
 
+[node name="ButtonOptionPuzzle" type="Button" parent="CanvasLayer/HBoxContainer/MarginLeft"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_euhyg")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_58pa3")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hpsbn")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vxw10")
+icon = ExtResource("2_euhyg")
+flat = true
+
 [node name="Volver" type="Button" parent="CanvasLayer/HBoxContainer/MarginLeft"]
+visible = false
 custom_minimum_size = Vector2(130, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20

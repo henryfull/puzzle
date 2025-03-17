@@ -13,7 +13,9 @@ var sliderVolumeSFX = HSlider
 var sliderVolumeMusic = HSlider
 var selectLanguage = OptionButton
 var selectResolution = OptionButton
-
+var sliderOptionGeneral = null
+var sliderOptionMusic = null
+var sliderOptionSFX = null
 
 func _ready():
 	print("Options: Inicializando...")
@@ -28,9 +30,13 @@ func _ready():
 	sliderVolumeSFX = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_VFX
 	selectLanguage = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/LangSelector
 	selectResolution = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/ResolutionButton
+	
+	# Obtener referencia al componente SliderOption
+	sliderOptionGeneral = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/Sliders/SliderOptionGeneral
+	sliderOptionMusic = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/Sliders/SliderOptionMusic
+	sliderOptionSFX = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/Sliders/SliderOptionSFX
 	# Detectar si estamos en un dispositivo móvil
 	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
-	
 	# Verificar la estructura del nodo CanvasLayer
 	if has_node("CanvasLayer"):
 		print("Options: CanvasLayer encontrado")
@@ -52,6 +58,60 @@ func _ready():
 
 # Función para actualizar los textos de la UI según el idioma actual
 func update_ui_texts():
+	# Configurar SliderOption para volumen general
+	if sliderOptionGeneral:
+		print("Options: Configurando SliderOptionGeneral")
+		var global_volume = 80
+		if has_node("/root/GLOBAL"):
+			global_volume = GLOBAL.settings.volume.general
+		
+		# Configurar el SliderOption con texto, icono, valor inicial y callback
+		sliderOptionGeneral.configure(
+			tr("common_general"),
+			"icon_volume.svg",
+			global_volume,
+			self,
+			"_on_HSlider_Volumen_General_value_changed"
+		)
+	else:
+		print("Options: ERROR - No se encontró SliderOptionGeneral")
+	
+	# Configurar SliderOption para volumen de música
+	if sliderOptionMusic:
+		print("Options: Configurando SliderOptionMusic")
+		var music_volume = 80
+		if has_node("/root/GLOBAL"):
+			music_volume = GLOBAL.settings.volume.music
+		
+		# Configurar el SliderOption con texto, icono, valor inicial y callback
+		sliderOptionMusic.configure(
+			tr("common_music"),
+			"icon_music.svg",
+			music_volume,
+			self,
+			"_on_HSlider_Volumen_Musica_value_changed"
+		)
+	else:
+		print("Options: ERROR - No se encontró SliderOptionMusic")
+	
+	# Configurar SliderOption para volumen de efectos
+	if sliderOptionSFX:
+		print("Options: Configurando SliderOptionSFX")
+		var sfx_volume = 80
+		if has_node("/root/GLOBAL"):
+			sfx_volume = GLOBAL.settings.volume.sfx
+		
+		# Configurar el SliderOption con texto, icono, valor inicial y callback
+		sliderOptionSFX.configure(
+			tr("common_sfx"),
+			"icon_sfx.svg",
+			sfx_volume,
+			self,
+			"_on_HSlider_Volumen_VFX_value_changed"
+		)
+	else:
+		print("Options: ERROR - No se encontró SliderOptionSFX")
+
 	labelResolution.text = tr("common_resolution")
 	labelLanguage.text = tr("common_language")
 	labelGeneral.text = tr("common_general")

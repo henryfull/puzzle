@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
 [ext_resource type="Script" uid="uid://dv7ssdl7hhf3r" path="res://Scripts/LangSelector.gd" id="2_kgki5"]
+[ext_resource type="PackedScene" uid="uid://xdw0sm0cdrgy" path="res://Scenes/Components/SliderOption.tscn" id="2_q4at1"]
 [ext_resource type="Script" uid="uid://1epn1mhu0fwt" path="res://Scripts/Utils.gd" id="2_qqjs0"]
 [ext_resource type="Script" uid="uid://do1o3ww8nd3mq" path="res://Scripts/ResolutionButton.gd" id="3_p0ibv"]
-
-[sub_resource type="Theme" id="Theme_6f4k2"]
 
 [node name="Options" type="Node2D"]
 script = ExtResource("1_7s1ry")
@@ -44,11 +43,30 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 text = "Opciones"
 
+[node name="Label2" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.34
+
+[node name="Sliders" type="GridContainer" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="SliderOptionGeneral" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/Sliders" instance=ExtResource("2_q4at1")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SliderOptionMusic" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/Sliders" instance=ExtResource("2_q4at1")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SliderOptionSFX" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/Sliders" instance=ExtResource("2_q4at1")]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
@@ -58,7 +76,6 @@ columns = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme = SubResource("Theme_6f4k2")
 text = "Resolución"
 language = "es"
 

@@ -16,6 +16,9 @@ class_name PuzzleGame
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
 @export var max_extra_rows: int = 5  # Máximo número de filas adicionales que se pueden añadir
 
+# Parámetros de control del tablero
+@export_range(0.1, 2.0, 0.1) var pan_sensitivity: float = 1.0  # Sensibilidad del desplazamiento
+
 # Variables para el paneo del tablero (simplificadas)
 var is_panning := false
 var last_pan_position := Vector2.ZERO
@@ -83,8 +86,14 @@ func _ready():
 	# Detectar si estamos en un dispositivo móvil
 	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
 	
+	# Cargar preferencias del usuario
+	load_user_preferences()
+	
 	# Ajustar la interfaz para dispositivos móviles
 	adjust_ui_for_device()
+	
+	# Crear el botón de opciones
+	create_options_button()
 	
 	# Configurar el puzzle según los datos seleccionados
 	if GLOBAL.selected_puzzle != null:
@@ -315,12 +324,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 		# Para paneo en dispositivos móviles necesitamos DOS dedos
 		if is_mobile and touch_points.size() >= 2 and is_panning:
-			# Calcular el nuevo centro entre los puntos de contacto
-			var new_center = get_touch_center()
-			# Calcular el desplazamiento
-			var delta = new_center - last_pan_position
-			board_offset += delta
-			last_pan_position = new_center
+			# En lugar de usar el centro de los dedos, usamos directamente la posición del dedo 
+			# que se está moviendo, lo que da un control más directo
+			var current_pos = event.position
+			var prev_pos = current_pos - event.relative
+			
+			# El delta es exactamente el movimiento real del dedo
+			var delta = event.relative
+			
+			# Aplicamos directamente el delta del movimiento del dedo, manteniendo
+			# la misma dirección que el gesto del usuario, pero ajustando por la sensibilidad
+			board_offset += delta * pan_sensitivity
+			
+			last_pan_position = current_pos
 			update_board_position()
 		
 		# Si estamos arrastrando con un solo dedo y no estamos en modo paneo, movernos piezas
@@ -359,7 +375,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		if is_panning:
 			# Actualizar posición del tablero durante el paneo
 			var delta = event.relative
-			board_offset += delta
+			# Aplicar la sensibilidad al desplazamiento
+			board_offset += delta * pan_sensitivity
 			last_pan_position = event.position
 			update_board_position()
 		elif event.button_mask & MOUSE_BUTTON_MASK_LEFT:
@@ -381,15 +398,19 @@ func update_board_position() -> void:
 	var board_size = Vector2(puzzle_width, puzzle_height)
 	
 	# Calcular límites de desplazamiento
-	var min_x = -board_size.x * 0.5
-	var max_x = viewport_size.x - board_size.x * 0.5
-	var min_y = -board_size.y * 0.5
-	var max_y = viewport_size.y - board_size.y * 0.5
+	# Permitimos desplazar el tablero dentro de límites razonables,
+	# pero siempre asegurándose de que parte del tablero sea visible
+	var margin = 100.0  # Margen de píxeles para que siempre quede algo visible
+	var min_x = min(-board_size.x + margin, -board_size.x * 0.75)
+	var max_x = max(viewport_size.x - margin, viewport_size.x - board_size.x * 0.25)
+	var min_y = min(-board_size.y + margin, -board_size.y * 0.75)
+	var max_y = max(viewport_size.y - margin, viewport_size.y - board_size.y * 0.25)
 	
 	# Limitar el desplazamiento
 	position.x = clamp(position.x, min_x, max_x)
 	position.y = clamp(position.y, min_y, max_y)
 	
+	# Actualizar el board_offset para reflejar la posición ajustada
 	board_offset = position
 
 #
@@ -1714,3 +1735,169 @@ func process_piece_click(event: InputEvent) -> void:
 	else:
 		# Al soltar, procesar el final del arrastre de la pieza
 		process_piece_release()
+
+# Función para cambiar la sensibilidad del desplazamiento
+func set_pan_sensitivity(value: float) -> void:
+	pan_sensitivity = clamp(value, 0.1, 2.0)
+	# Si existe un sistema de guardado de preferencias, guardar el valor
+	if has_node("/root/OptionsManager"):
+		var options_manager = get_node("/root/OptionsManager")
+		if options_manager.has_method("save_option"):
+			options_manager.save_option("pan_sensitivity", pan_sensitivity)
+
+# Función para cargar las preferencias del usuario
+func load_user_preferences() -> void:
+	if has_node("/root/OptionsManager"):
+		var options_manager = get_node("/root/OptionsManager")
+		if options_manager.has_method("get_option"):
+			var saved_sensitivity = options_manager.get_option("pan_sensitivity", pan_sensitivity)
+			pan_sensitivity = saved_sensitivity
+
+# Función para crear un botón de opciones que muestre un panel de ajustes
+func create_options_button():
+	# Crear un botón de opciones
+	var options_button = Button.new()
+	options_button.text = "Opciones"
+	
+	# Ajustar tamaño y posición según el dispositivo
+	if is_mobile:
+		options_button.size = Vector2(150, 60)
+		options_button.position = Vector2(get_viewport_rect().size.x - 160, 20)
+	else:
+		options_button.size = Vector2(120, 40)
+		options_button.position = Vector2(get_viewport_rect().size.x - 130, 20)
+	
+	# Estilo del botón
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.2, 0.6, 0.8, 0.8)  # Azul semitransparente
+	style.border_width_left = 2
+	style.border_width_right = 2
+	style.border_width_top = 2
+	style.border_width_bottom = 2
+	style.border_color = Color(1, 1, 1, 0.9)  # Borde blanco
+	style.corner_radius_top_left = 10
+	style.corner_radius_top_right = 10
+	style.corner_radius_bottom_left = 10
+	style.corner_radius_bottom_right = 10
+	
+	options_button.add_theme_stylebox_override("normal", style)
+	options_button.add_theme_color_override("font_color", Color(1, 1, 1))
+	
+	# Conectar la señal pressed
+	options_button.connect("pressed", Callable(self, "show_options_panel"))
+	
+	# Añadir a la escena
+	var canvas_layer = CanvasLayer.new()
+	canvas_layer.name = "OptionsLayer"
+	add_child(canvas_layer)
+	canvas_layer.add_child(options_button)
+
+# Función para mostrar el panel de opciones
+func show_options_panel():
+	# Verificar si ya existe un panel de opciones
+	if has_node("OptionsLayer/OptionsPanel"):
+		# Si existe, simplemente mostrarlo
+		get_node("OptionsLayer/OptionsPanel").visible = true
+		return
+	
+	# Crear un panel para las opciones
+	var panel = Panel.new()
+	panel.name = "OptionsPanel"
+	
+	# Ajustar tamaño y posición
+	var viewport_size = get_viewport_rect().size
+	panel.size = Vector2(viewport_size.x * 0.8, viewport_size.y * 0.6)
+	panel.position = Vector2(viewport_size.x * 0.1, viewport_size.y * 0.2)
+	
+	# Estilo del panel
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.15, 0.15, 0.15, 0.9)  # Fondo oscuro semitransparente
+	style.border_width_left = 2
+	style.border_width_right = 2
+	style.border_width_top = 2
+	style.border_width_bottom = 2
+	style.border_color = Color(0.8, 0.8, 0.8, 0.9)  # Borde gris claro
+	style.corner_radius_top_left = 10
+	style.corner_radius_top_right = 10
+	style.corner_radius_bottom_left = 10
+	style.corner_radius_bottom_right = 10
+	
+	panel.add_theme_stylebox_override("panel", style)
+	
+	# Crear un contenedor vertical para los controles
+	var vbox = VBoxContainer.new()
+	vbox.size = Vector2(panel.size.x * 0.9, panel.size.y * 0.9)
+	vbox.position = Vector2(panel.size.x * 0.05, panel.size.y * 0.05)
+	panel.add_child(vbox)
+	
+	# Añadir un título
+	var title = Label.new()
+	title.text = "Opciones"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 24)
+	title.add_theme_color_override("font_color", Color(1, 1, 1))
+	vbox.add_child(title)
+	
+	# Añadir un separador
+	var separator = HSeparator.new()
+	separator.custom_minimum_size = Vector2(0, 20)
+	vbox.add_child(separator)
+	
+	# Añadir control para la sensibilidad del desplazamiento
+	var sensitivity_hbox = HBoxContainer.new()
+	vbox.add_child(sensitivity_hbox)
+	
+	var sensitivity_label = Label.new()
+	sensitivity_label.text = "Sensibilidad del desplazamiento:"
+	sensitivity_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sensitivity_label.add_theme_color_override("font_color", Color(1, 1, 1))
+	sensitivity_hbox.add_child(sensitivity_label)
+	
+	var sensitivity_slider = HSlider.new()
+	sensitivity_slider.name = "SensitivitySlider"
+	sensitivity_slider.min_value = 0.1
+	sensitivity_slider.max_value = 2.0
+	sensitivity_slider.step = 0.1
+	sensitivity_slider.value = pan_sensitivity
+	sensitivity_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sensitivity_hbox.add_child(sensitivity_slider)
+	
+	var sensitivity_value = Label.new()
+	sensitivity_value.name = "SensitivityValue"
+	sensitivity_value.text = str(pan_sensitivity)
+	sensitivity_value.add_theme_color_override("font_color", Color(1, 1, 1))
+	sensitivity_value.custom_minimum_size = Vector2(50, 0)
+	sensitivity_hbox.add_child(sensitivity_value)
+	
+	# Conectar la señal value_changed del slider
+	sensitivity_slider.connect("value_changed", Callable(self, "_on_sensitivity_changed"))
+	
+	# Añadir un botón para cerrar el panel
+	var close_button = Button.new()
+	close_button.text = "Cerrar"
+	close_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	close_button.custom_minimum_size = Vector2(100, 40)
+	close_button.connect("pressed", Callable(self, "_on_close_options"))
+	
+	# Añadir un separador antes del botón de cerrar
+	var separator2 = HSeparator.new()
+	separator2.custom_minimum_size = Vector2(0, 20)
+	vbox.add_child(separator2)
+	
+	vbox.add_child(close_button)
+	
+	# Añadir el panel a la capa de opciones
+	get_node("OptionsLayer").add_child(panel)
+
+# Función para manejar el cambio de sensibilidad
+func _on_sensitivity_changed(value: float):
+	set_pan_sensitivity(value)
+	
+	# Actualizar el texto del valor
+	if has_node("OptionsLayer/OptionsPanel/SensitivityValue"):
+		get_node("OptionsLayer/OptionsPanel/SensitivityValue").text = str(value)
+
+# Función para cerrar el panel de opciones
+func _on_close_options():
+	if has_node("OptionsLayer/OptionsPanel"):
+		get_node("OptionsLayer/OptionsPanel").visible = false

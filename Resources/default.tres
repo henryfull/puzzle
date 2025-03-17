@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=34 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=37 format=3 uid="uid://dyqkx5or01raf"]
 
 [ext_resource type="Texture2D" uid="uid://dypngl7v4eapt" path="res://Assets/Images/GUID/btn_dissabled.svg" id="1_m25v8"]
 [ext_resource type="Texture2D" uid="uid://ennedk7aaty5" path="res://Assets/Images/GUID/btn_dark_brown.svg" id="1_vq864"]
@@ -147,31 +147,43 @@ texture_margin_right = 20.0
 texture_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_quunw"]
-content_margin_left = 142.0
+content_margin_left = 152.0
 texture = ExtResource("2_yiway")
 texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-axis_stretch_horizontal = 1
-axis_stretch_vertical = 1
+texture_margin_top = 20.1133
+texture_margin_right = 180.0
+texture_margin_bottom = 20.7222
 modulate_color = Color(0.498039, 0.313726, 0.219608, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m3e3b"]
 texture = ExtResource("10_8wbtt")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2al4h"]
+content_margin_left = 20.0
+texture = ExtResource("12_dvb71")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gph5t"]
+content_margin_left = 20.0
+texture = ExtResource("12_dvb71")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lfami"]
+content_margin_left = 20.0
 texture = ExtResource("12_dvb71")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jca5l"]
+content_margin_left = 20.0
 texture = ExtResource("3_yiway")
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_parne"]
+content_margin_left = 20.0
+texture = ExtResource("12_dvb71")
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bke4e"]
+content_margin_left = 20.0
+content_margin_top = 30.0
+content_margin_right = 20.0
+content_margin_bottom = 40.0
 texture = ExtResource("2_etx7k")
-texture_margin_left = 60.0
-texture_margin_top = 90.0
-texture_margin_right = 60.0
-texture_margin_bottom = 60.0
 
 [resource]
 Button/styles/disabled = SubResource("StyleBoxTexture_d4acn")
@@ -203,12 +215,15 @@ HSlider/styles/grabber_area = SubResource("StyleBoxTexture_kwhnq")
 HSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_ht6ax")
 HSlider/styles/slider = SubResource("StyleBoxTexture_quunw")
 Label/colors/font_color = Color(0.372549, 0.192157, 0.0980392, 1)
-Label/font_sizes/font_size = 24
+Label/font_sizes/font_size = 32
 Label/fonts/font = ExtResource("7_ht6ax")
 OptionButton/icons/arrow = null
 OptionButton/icons/icon = null
 OptionButton/styles/disabled = SubResource("StyleBoxTexture_m3e3b")
 OptionButton/styles/hover = SubResource("StyleBoxTexture_2al4h")
+OptionButton/styles/hover_pressed = SubResource("StyleBoxTexture_gph5t")
+OptionButton/styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_lfami")
 OptionButton/styles/normal = SubResource("StyleBoxTexture_jca5l")
+OptionButton/styles/pressed = SubResource("StyleBoxTexture_parne")
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_bke4e")
 VBoxContainer/constants/separation = 20
