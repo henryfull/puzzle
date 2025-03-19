@@ -1,7 +1,6 @@
-[gd_resource type="Theme" load_steps=37 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=36 format=3 uid="uid://dyqkx5or01raf"]
 
-[ext_resource type="Texture2D" uid="uid://dypngl7v4eapt" path="res://Assets/Images/GUID/btn_dissabled.svg" id="1_m25v8"]
-[ext_resource type="Texture2D" uid="uid://ennedk7aaty5" path="res://Assets/Images/GUID/btn_dark_brown.svg" id="1_vq864"]
+[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
 [ext_resource type="Texture2D" uid="uid://dxdaesnrrmk3n" path="res://Assets/Images/GUID/btn_dark_brown_highlight.svg" id="2_d4acn"]
 [ext_resource type="Texture2D" uid="uid://duj1f7klka4gk" path="res://Assets/Images/GUID/options_bg.svg" id="2_etx7k"]
 [ext_resource type="Texture2D" uid="uid://dm7j0qpidej4f" path="res://Assets/Images/GUID/circle_slider.svg" id="2_jca5l"]
@@ -13,13 +12,6 @@
 [ext_resource type="FontFile" uid="uid://nsb7mxocp6o3" path="res://Assets/Fonts/Galano Grotesque Medium.otf" id="7_ht6ax"]
 [ext_resource type="Texture2D" uid="uid://b5dus4yk4ok48" path="res://Assets/Images/GUID/select_dissabled_bg.svg" id="10_8wbtt"]
 [ext_resource type="Texture2D" uid="uid://fvelup2ddceq" path="res://Assets/Images/GUID/select_highlight_bg.svg" id="12_dvb71"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d4acn"]
-texture = ExtResource("1_m25v8")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wbtt"]
 texture = ExtResource("2_d4acn")
@@ -35,12 +27,12 @@ texture_margin_top = 20.0
 texture_margin_right = 20.0
 texture_margin_bottom = 20.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vq864"]
-texture = ExtResource("1_vq864")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
+[sub_resource type="AtlasTexture" id="AtlasTexture_8wbtt"]
+atlas = ExtResource("2_8wbtt")
+region = Rect2(24, 32, 328, 104)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ut3e1"]
+texture = SubResource("AtlasTexture_8wbtt")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_epneu"]
 texture = ExtResource("2_d4acn")
@@ -186,10 +178,10 @@ content_margin_bottom = 40.0
 texture = ExtResource("2_etx7k")
 
 [resource]
-Button/styles/disabled = SubResource("StyleBoxTexture_d4acn")
+Button/styles/disabled = null
 Button/styles/focus = SubResource("StyleBoxTexture_8wbtt")
 Button/styles/hover = SubResource("StyleBoxTexture_dvb71")
-Button/styles/normal = SubResource("StyleBoxTexture_vq864")
+Button/styles/normal = SubResource("StyleBoxTexture_ut3e1")
 Button/styles/pressed = SubResource("StyleBoxTexture_epneu")
 GridContainer/constants/h_separation = 10
 GridContainer/constants/v_separation = 10
