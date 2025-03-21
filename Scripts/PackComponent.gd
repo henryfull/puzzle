@@ -2,6 +2,8 @@ extends Control
 
 # Señal que se emite cuando se selecciona un pack
 signal pack_selected(pack_data)
+# Señal que se emite cuando se quiere comprar un pack
+signal pack_purchase_requested(pack_data)
 
 # Variables para almacenar los datos del pack
 var pack_data = null
@@ -51,7 +53,7 @@ func _on_button_pressed():
 	if requires_purchase:
 		# Si requiere compra, emitir señal para mostrar diálogo de compra
 		print("Pack requiere compra: ", pack_data.name)
-		# Aquí podrías emitir una señal específica para compra
+		emit_signal("pack_purchase_requested", pack_data)
 		return
 	
 	# Si el pack está disponible, emitir señal de selección

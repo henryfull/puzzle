@@ -1,100 +1,80 @@
 {
 	"packs": [
 		{
-			"id": "fruits1",
+			"id": "fruits",
 			"name": "Fruits",
 			"description": "Puzzles inspirados en obras de arte moderno y abstracto.",
 			"image_path": "res://Assets/Images/packs/fruits/thumbnail.png",
-			"unlocked": false,
-			"purchased": false,
+			"unlocked": true,
+			"purchased": true,
 			"completed": false,
 			"puzzles": [
 				{
-					"id": "puzzle30",
+					"id": "fruit1",
 					"name": " Sandia 1",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image1.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle31",
+					"id": "fruit2",
 					"name": "Naranja 2",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image2.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle32",
+					"id": "fruit3",
 					"name": "Pera 3",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image3.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle33",
+					"id": "fruit4",
 					"name": "Platano 4",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image4.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle34",
+					"id": "fruit5",
 					"name": "Fresa",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image5.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle35",
+					"id": "fruit6",
 					"name": "Cerezas",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image6.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle36",
+					"id": "fruit7",
 					"name": "Piña",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image7.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle37",
+					"id": "fruit8",
 					"name": "Limon",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image8.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle38",
+					"id": "fruit9",
 					"name": "Manzana",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image9.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
-					"id": "puzzle39",
+					"id": "fruit10",
 					"name": "Granada",
-					"difficulty": "easy",
-					"pieces": 6,
 					"image": "res://Assets/Images/packs/fruits/image10.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
@@ -102,934 +82,594 @@
 			]
 		},
 		{
-			"id": "pack1",
-			"name": "Adult 1",
-			"description": "Puzzles inspirados en obras de arte moderno y abstracto.",
-			"image_path": "res://Assets/Images/packs/pack1/thumbnail.png",
-			"unlocked": true,
-			"purchased": true,
-			"completed": false,
-			"puzzles": [
-				{
-					"id": "puzzle30",
-					"name": "Chica 1",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image1.jpg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle31",
-					"name": "Chica 2",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image2.jpg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle32",
-					"name": "Chica 3",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image3.jpg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle33",
-					"name": "Chica 4",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image4.jpg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle34",
-					"name": "Chica 5",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image5.jpg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle35",
-					"name": "Chica 6",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image6.jpg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle36",
-					"name": "Chica 7",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image7.jpg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle37",
-					"name": "Chica 8",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image8.jpg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle38",
-					"name": "Chica 9",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image9.jpg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle39",
-					"name": "Chica 10",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack1/image10.jpg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				}
-			]
-		},
-		{
-			"id": "pack2",
-			"name": "Adult 2",
-			"description": "Puzzles inspirados en chicas de anime",
-			"image_path": "res://Assets/Images/packs/pack2/thumbnail.png",
-			"unlocked": true,
-			"purchased": true,
-			"completed": false,
-			"puzzles": [
-				{
-					"id": "puzzle201",
-					"name": "Chica 201",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image1.jpeg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle202",
-					"name": "Chica 202",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image2.jpeg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle203",
-					"name": "Chica 203",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image3.jpeg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle204",
-					"name": "Chica 204",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image4.jpeg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle205",
-					"name": "Chica 205",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image5.jpeg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle206",
-					"name": "Chica 206",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image6.jpeg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle207",
-					"name": "Chica 207",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image7.jpeg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle208",
-					"name": "Chica 208",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image8.jpeg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle209",
-					"name": "Chica 209",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image9.jpeg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle210",
-					"name": "Chica 210",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image10.jpeg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				},
-				{
-					"id": "puzzle211",
-					"name": "Chica 211",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image11.jpeg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle212",
-					"name": "Chica 212",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image12.jpeg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle213",
-					"name": "Chica 213",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image13.jpeg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle214",
-					"name": "Chica 214",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image14.jpeg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle215",
-					"name": "Chica 215",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image15.jpeg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle216",
-					"name": "Chica 216",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image16.jpeg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle217",
-					"name": "Chica 217",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image17.jpeg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle218",
-					"name": "Chica 218",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image18.jpeg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle219",
-					"name": "Chica 219",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image19.jpeg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle220",
-					"name": "Chica 220",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image20.jpeg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				},
-				{
-					"id": "puzzle221",
-					"name": "Chica 221",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image21.jpeg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle222",
-					"name": "Chica 222",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image22.jpeg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle223",
-					"name": "Chica 223",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image23.jpeg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle224",
-					"name": "Chica 224",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image24.jpeg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle225",
-					"name": "Chica 225",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image25.jpeg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle226",
-					"name": "Chica 226",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image26.jpeg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle227",
-					"name": "Chica 227",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image27.jpeg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle228",
-					"name": "Chica 228",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image28.jpeg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle229",
-					"name": "Chica 229",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image29.jpeg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle230",
-					"name": "Chica 230",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image30.jpeg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				},
-				{
-					"id": "puzzle231",
-					"name": "Chica 231",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image31.jpeg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle232",
-					"name": "Chica 232",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image32.jpeg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle233",
-					"name": "Chica 233",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image33.jpeg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle234",
-					"name": "Chica 234",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image34.jpeg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle235",
-					"name": "Chica 235",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image35.jpeg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle236",
-					"name": "Chica 236",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image36.jpeg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle237",
-					"name": "Chica 237",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image37.jpeg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle238",
-					"name": "Chica 238",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image38.jpeg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle239",
-					"name": "Chica 239",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image39.jpeg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle240",
-					"name": "Chica 240",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image40.jpeg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				},
-				{
-					"id": "puzzle241",
-					"name": "Chica 241",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image41.jpeg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle242",
-					"name": "Chica 242",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image42.jpeg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle243",
-					"name": "Chica 243",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image43.jpeg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle244",
-					"name": "Chica 244",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image44.jpeg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle245",
-					"name": "Chica 245",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image45.jpeg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle246",
-					"name": "Chica 246",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image46.jpeg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle247",
-					"name": "Chica 247",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image47.jpeg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle248",
-					"name": "Chica 248",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image48.jpeg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle249",
-					"name": "Chica 249",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image49.jpeg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle250",
-					"name": "Chica 250",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image50.jpeg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				},
-				{
-					"id": "puzzle251",
-					"name": "Chica 251",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image51.jpeg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle252",
-					"name": "Chica 252",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image52.jpeg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle253",
-					"name": "Chica 253",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image53.jpeg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle254",
-					"name": "Chica 254",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image54.jpeg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle255",
-					"name": "Chica 255",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image55.jpeg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle256",
-					"name": "Chica 256",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image56.jpeg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle257",
-					"name": "Chica 257",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image57.jpeg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle258",
-					"name": "Chica 258",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image58.jpeg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle259",
-					"name": "Chica 259",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image59.jpeg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle260",
-					"name": "Chica 260",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image60.jpeg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				},
-				{
-					"id": "puzzle261",
-					"name": "Chica 261",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image61.jpeg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle262",
-					"name": "Chica 262",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image62.jpeg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle263",
-					"name": "Chica 263",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image63.jpeg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle264",
-					"name": "Chica 264",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image64.jpeg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle265",
-					"name": "Chica 265",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image65.jpeg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle266",
-					"name": "Chica 266",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image66.jpeg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle267",
-					"name": "Chica 267",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image67.jpeg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle268",
-					"name": "Chica 268",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image68.jpeg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle269",
-					"name": "Chica 269",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image69.jpeg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle270",
-					"name": "Chica 270",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image70.jpeg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				},
-				{
-					"id": "puzzle271",
-					"name": "Chica 271",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image71.jpeg",
-					"description": "Sofía adora explorar las profundidades del océano. En una inmersión tranquila cerca de un arrecife de coral, encuentra la entrada secreta a una cueva submarina que nadie más parece conocer. Al entrar, descubre ruinas olvidadas y símbolos extraños grabados en la piedra.",
-					"completed": false
-				},
-				{
-					"id": "puzzle272",
-					"name": "Chica 272",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image72.jpeg",
-					"description": "Julia, relajada y tomando sol en la playa, ve cómo una pequeña botella llega flotando hasta sus pies. En su interior encuentra un mapa que marca una “X” en una isla cercana. Sin dudarlo, decide emprender un viaje lleno de misterio y sorpresas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle273",
-					"name": "Chica 273",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image73.jpeg",
-					"description": "Emma disfruta pasear al atardecer por la playa solitaria. Esta vez, mientras camina, siente una extraña presencia cerca del agua. De repente, un delfín salta y le deja caer algo brillante en sus manos: un collar antiguo que parece tener un poder mágico.",
-					"completed": false
-				},
-				{
-					"id": "puzzle274",
-					"name": "Chica 274",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image74.jpeg",
-					"description": "Valeria está disfrutando del sol tropical bajo una palmera cuando ve algo extraño enterrado en la arena cerca de ella. Al desenterrarlo, encuentra una llave dorada. Sin saber exactamente qué abrirá, se embarca en una aventura para descubrir su secreto.",
-					"completed": false
-				},
-				{
-					"id": "puzzle275",
-					"name": "Chica 275",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image75.jpeg",
-					"description": "Clara ama el surf y hoy decidió desafiar olas más grandes que nunca. Al dominar la última ola del día, nota algo brillando sobre la cresta del agua. Equilibrándose cuidadosamente, logra tomarlo en sus manos y descubre un antiguo medallón que guarda una historia que espera ser revelada.",
-					"completed": false
-				},
-				{
-					"id": "puzzle276",
-					"name": "Chica 276",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image76.jpeg",
-					"description": "Lucía disfruta jugar voleibol en la playa con sus amigas. En medio del partido, la pelota se aleja rodando hacia unas rocas lejanas. Al buscarla, descubre una pequeña caja enterrada en la arena con símbolos antiguos, dando inicio a una increíble aventura de descubrimientos y misterios.",
-					"completed": false
-				},
-				{
-					"id": "puzzle277",
-					"name": "Chica 277",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image77.jpeg",
-					"description": "Cuando el sol empieza a salir, Elisa siempre sale a caminar por la playa. Le encanta la sensación de calma y tranquilidad que le brinda el amanecer. Hoy siente que algo especial está por ocurrir, y no se equivoca: mientras pasea por la arena, encuentra una misteriosa botella con un mensaje en su interior.",
-					"completed": false
-				},
-				{
-					"id": "puzzle278",
-					"name": "Chica 278",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image78.jpeg",
-					"description": "Lara ama el mar más que cualquier otra cosa en el mundo. Siempre que puede, escapa a nadar y sentir la libertad de las olas. Pero esta vez descubre algo brillante en el fondo marino, algo que parece un antiguo amuleto perdido que podría tener propiedades mágicas.",
-					"completed": false
-				},
-				{
-					"id": "puzzle279",
-					"name": "Chica 279",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image79.jpeg",
-					"description": "Mia siempre sonríe y contagia alegría a todos los que la rodean. Hoy está disfrutando del agua cálida de la isla cuando, accidentalmente, tropieza con algo enterrado en la arena bajo el agua. ¿Será un tesoro o algo que cambiará para siempre la historia del lugar?",
-					"completed": false
-				},
-				{
-					"id": "puzzle280",
-					"name": "Chica 80",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack2/image80.jpeg",
-					"description": "Ana, que disfruta tomando el sol en la arena tibia, nota que hay un grupo de personas actuando de manera sospechosa detrás de las sombrillas. Decidida a resolver el misterio, se acerca discretamente para descubrir qué traman y se embarca en una inesperada aventura.",
-					"completed": false
-				}
-			]
-		},
-		{
-			"id": "pack3",
-			"name": "Adult 3",
-			"description": "Puzzles inspirados en obras de arte moderno y abstracto.",
-			"image_path": "res://Assets/Images/packs/pack3/thumbnail.png",
+			"id": "numbers",
+			"name": "Numbers",
+			"description": "Puzzles inspirados en números y matemáticas.",
+			"image_path": "res://Assets/Images/packs/numbers/thumbnail.png",
 			"unlocked": false,
 			"purchased": false,
 			"completed": false,
 			"puzzles": [
 				{
-					"id": "puzzle30",
-					"name": "Chica 1",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image1.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number0",
+					"name": "number_zero",
+					"image": "res://Assets/Images/packs/numbers/image1.jpeg",
+					"description": "pack_numbers_description_0",
 					"completed": false
 				},
 				{
-					"id": "puzzle31",
-					"name": "Chica 2",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image2.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number1",
+					"name": "number_one",
+					"image": "res://Assets/Images/packs/numbers/image2.jpeg",
+					"description": "pack_numbers_description_1",
 					"completed": false
 				},
 				{
-					"id": "puzzle32",
-					"name": "Chica 3",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image3.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number2",
+					"name": "number_two",
+					"image": "res://Assets/Images/packs/numbers/image3.jpeg",
+					"description": "pack_numbers_description_2",
 					"completed": false
 				},
 				{
-					"id": "puzzle33",
-					"name": "Chica 4",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image4.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number3",
+					"name": "number_three",
+					"image": "res://Assets/Images/packs/numbers/image3.jpeg",
+					"description": "pack_numbers_description_3",
 					"completed": false
 				},
 				{
-					"id": "puzzle34",
-					"name": "Chica 5",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image5.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number4",
+					"name": "number_four",
+					"image": "res://Assets/Images/packs/numbers/image4.jpeg",
+					"description": "pack_numbers_description_4",
 					"completed": false
 				},
 				{
-					"id": "puzzle35",
-					"name": "Chica 6",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image6.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number5",
+					"name": "number_five",
+					"image": "res://Assets/Images/packs/numbers/image5.jpeg",
+					"description": "pack_numbers_description_5",
 					"completed": false
 				},
 				{
-					"id": "puzzle36",
-					"name": "Chica 7",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image7.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number6",
+					"name": "number_six",
+					"image": "res://Assets/Images/packs/numbers/image6.jpeg",
+					"description": "pack_numbers_description_6",
 					"completed": false
 				},
 				{
-					"id": "puzzle37",
-					"name": "Chica 8",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image8.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number7",
+					"name": "number_seven",
+					"image": "res://Assets/Images/packs/numbers/image7.jpeg",
+					"description": "pack_numbers_description_7",
 					"completed": false
 				},
 				{
-					"id": "puzzle38",
-					"name": "Chica 9",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image9.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number8",
+					"name": "number_eight",
+					"image": "res://Assets/Images/packs/numbers/image8.jpeg",
+					"description": "pack_numbers_description_8",
 					"completed": false
 				},
 				{
-					"id": "puzzle39",
-					"name": "Chica 10",
-					"difficulty": "easy",
-					"pieces": 6,
-					"image": "res://Assets/Images/packs/pack3/image10.jpg",
-					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"id": "number9",
+					"name": "number_nine",
+					"image": "res://Assets/Images/packs/numbers/image9.jpeg",
+					"description": "pack_numbers_description_9",
+					"completed": false
+				},
+				{
+					"id": "number10",
+					"name": "number_ten",
+					"image": "res://Assets/Images/packs/numbers/image10.jpeg",
+					"description": "pack_numbers_description_10",
+					"completed": false
+				},
+				{
+					"id": "number11",
+					"name": "number_eleven",
+					"image": "res://Assets/Images/packs/numbers/image11.jpeg",
+					"description": "pack_numbers_description_11",
+					"completed": false
+				},
+				{
+					"id": "number12",
+					"name": "number_twelve",
+					"image": "res://Assets/Images/packs/numbers/image12.jpeg",
+					"description": "pack_numbers_description_12",
+					"completed": false
+				},
+				{
+					"id": "number13",
+					"name": "number_thirteen",
+					"image": "res://Assets/Images/packs/numbers/image13.jpeg",
+					"description": "pack_numbers_description_13",
+					"completed": false
+				},
+				{
+					"id": "number14",
+					"name": "number_fourteen",
+					"image": "res://Assets/Images/packs/numbers/image14.jpeg",
+					"description": "pack_numbers_description_14",
+					"completed": false
+				},
+				{
+					"id": "number15",
+					"name": "number_fifteen",
+					"image": "res://Assets/Images/packs/numbers/image15.jpeg",
+					"description": "pack_numbers_description_15",
+					"completed": false
+				},
+				{
+					"id": "number16",
+					"name": "number_sixteen",
+					"image": "res://Assets/Images/packs/numbers/image16.jpeg",
+					"description": "pack_numbers_description_16",
+					"completed": false
+				},
+				{
+					"id": "number17",
+					"name": "number_seventeen",
+					"image": "res://Assets/Images/packs/numbers/image17.jpeg",
+					"description": "pack_numbers_description_17",
+					"completed": false
+				},
+				{
+					"id": "number18",
+					"name": "number_eighteen",
+					"image": "res://Assets/Images/packs/numbers/image18.jpeg",
+					"description": "pack_numbers_description_18",
+					"completed": false
+				},
+				{
+					"id": "number19",
+					"name": "number_nineteen",
+					"image": "res://Assets/Images/packs/numbers/image19.jpeg",
+					"description": "pack_numbers_description_19",
+					"completed": false
+				},
+				{
+					"id": "number20",
+					"name": "number_twenty",
+					"image": "res://Assets/Images/packs/numbers/image20.jpeg",
+					"description": "pack_numbers_description_20",
+					"completed": false
+				},
+				{
+					"id": "number30",
+					"name": "number_thirty",
+					"image": "res://Assets/Images/packs/numbers/image30.jpeg",
+					"description": "pack_numbers_description_30",
+					"completed": false
+				},
+				{
+					"id": "number40",
+						"name": "number_forty",
+					"image": "res://Assets/Images/packs/numbers/image40.jpeg",
+					"description": "pack_numbers_description_40",
+					"completed": false
+				},
+				{
+					"id": "number50",
+					"name": "number_fifty",
+					"image": "res://Assets/Images/packs/numbers/image50.jpeg",
+					"description": "pack_numbers_description_50",
+					"completed": false
+				},
+				{
+					"id": "number60",
+					"name": "number_sixty",
+					"image": "res://Assets/Images/packs/numbers/image60.jpeg",
+					"description": "pack_numbers_description_60",
+					"completed": false
+				},
+				{
+					"id": "number70",
+					"name": "number_seventy",
+					"image": "res://Assets/Images/packs/numbers/image70.jpeg",
+					"description": "pack_numbers_description_70",
+					"completed": false
+				},
+				{
+					"id": "number80",
+					"name": "number_eighty",
+					"image": "res://Assets/Images/packs/numbers/image80.jpeg",
+					"description": "pack_numbers_description_80",
+					"completed": false
+				},
+				{
+					"id": "number90",
+					"name": "number_ninety",
+					"image": "res://Assets/Images/packs/numbers/image90.jpeg",
+					"description": "pack_numbers_description_90",
+					"completed": false
+				},
+				{
+					"id": "number100",
+					"name": "number_onehundred",
+					"image": "res://Assets/Images/packs/numbers/image100.jpeg",
+					"description": "pack_numbers_description_100",
+					"completed": false
+				},
+				{
+					"id": "number1000",
+					"name": "number_onethousand",
+					"image": "res://Assets/Images/packs/numbers/image1000.jpeg",
+					"description": "pack_numbers_description_1000",
+					"completed": false
+				}
+			]
+		},
+		{
+			"id": "wild-animals",
+			"name": "Wild Animals",
+			"description": "Puzzles inspirados en animales salvajes.",
+			"image_path": "res://Assets/Images/packs/wild-animals/thumbnail.png",
+			"unlocked": false,
+			"purchased": false,
+			"completed": false,
+			"puzzles": [
+				{
+					"id": "wild-animal1",
+					"name": "wild_animal_one",
+					"image": "res://Assets/Images/packs/wild-animals/image1.jpeg",
+					"description": "pack_wild_animals_description_1",
+					"completed": false
+				},
+				{
+					"id": "wild-animal2",
+					"name": "wild_animal_two",
+					"image": "res://Assets/Images/packs/wild-animals/image2.jpeg",
+					"description": "pack_wild_animals_description_2",
+					"completed": false
+				},
+				{
+					"id": "wild-animal3",
+					"name": "wild_animal_three",
+					"image": "res://Assets/Images/packs/wild-animals/image3.jpeg",
+					"description": "pack_wild_animals_description_3",
+					"completed": false
+				},
+				{
+					"id": "wild-animal4",
+					"name": "wild_animal_four",
+					"image": "res://Assets/Images/packs/wild-animals/image4.jpeg",
+					"description": "pack_wild_animals_description_4",
+					"completed": false
+				},
+				{
+					"id": "wild-animal5",
+					"name": "wild_animal_five",
+					"image": "res://Assets/Images/packs/wild-animals/image5.jpeg",
+					"description": "pack_wild_animals_description_5",
+					"completed": false
+				},
+				{
+					"id": "wild-animal6",
+					"name": "wild_animal_six",
+					"image": "res://Assets/Images/packs/wild-animals/image6.jpeg",
+					"description": "pack_wild_animals_description_6",
+					"completed": false
+				},
+				{
+					"id": "wild-animal7",
+					"name": "wild_animal_seven",
+					"image": "res://Assets/Images/packs/wild-animals/image7.jpeg",
+					"description": "pack_wild_animals_description_7",
+					"completed": false
+				},
+				{
+					"id": "wild-animal8",
+					"name": "wild_animal_eight",
+					"image": "res://Assets/Images/packs/wild-animals/image8.jpeg",
+					"description": "pack_wild_animals_description_8",
+					"completed": false
+				},
+				{
+					"id": "wild-animal9",
+					"name": "wild_animal_nine",
+					"image": "res://Assets/Images/packs/wild-animals/image9.jpeg",
+					"description": "pack_wild_animals_description_9",
+					"completed": false
+				},
+				{
+					"id": "wild-animal10",
+					"name": "wild_animal_ten",
+					"image": "res://Assets/Images/packs/wild-animals/image10.jpeg",
+					"description": "pack_wild_animals_description_10",
+					"completed": false
+				},
+				{
+					"id": "wild-animal11",
+					"name": "wild_animal_eleven",
+					"image": "res://Assets/Images/packs/wild-animals/image11.jpeg",
+					"description": "pack_wild_animals_description_11",
+					"completed": false
+				},
+				{
+					"id": "wild-animal12",
+					"name": "wild_animal_twelve",
+					"image": "res://Assets/Images/packs/wild-animals/image12.jpeg",
+					"description": "pack_wild_animals_description_12",
+					"completed": false
+				},
+				{
+					"id": "wild-animal13",
+					"name": "wild_animal_thirteen",
+					"image": "res://Assets/Images/packs/wild-animals/image13.jpeg",
+					"description": "pack_wild_animals_description_13",
+					"completed": false
+				},
+				{
+					"id": "wild-animal14",
+					"name": "wild_animal_fourteen",
+					"image": "res://Assets/Images/packs/wild-animals/image14.jpeg",
+					"description": "pack_wild_animals_description_14",
+					"completed": false
+				},
+				{
+					"id": "wild-animal15",
+					"name": "wild_animal_fifteen",
+					"image": "res://Assets/Images/packs/wild-animals/image15.jpeg",
+					"description": "pack_wild_animals_description_15",
+					"completed": false
+				},
+				{
+					"id": "wild-animal16",
+					"name": "wild_animal_sixteen",
+					"image": "res://Assets/Images/packs/wild-animals/image16.jpeg",
+					"description": "pack_wild_animals_description_16",
+					"completed": false
+				},
+				{
+					"id": "wild-animal17",
+					"name": "wild_animal_seventeen",
+					"image": "res://Assets/Images/packs/wild-animals/image17.jpeg",
+					"description": "pack_wild_animals_description_17",
+					"completed": false
+				},
+				{
+					"id": "wild-animal18",
+					"name": "wild_animal_eighteen",
+					"image": "res://Assets/Images/packs/wild-animals/image18.jpeg",
+					"description": "pack_wild_animals_description_18",
+					"completed": false
+				},
+				{
+					"id": "wild-animal19",
+					"name": "wild_animal_nineteen",
+					"image": "res://Assets/Images/packs/wild-animals/image19.jpeg",
+					"description": "pack_wild_animals_description_19",
+					"completed": false
+				},
+				{
+					"id": "wild-animal20",
+					"name": "wild_animal_twenty",
+					"image": "res://Assets/Images/packs/wild-animals/image20.jpeg",
+					"description": "pack_wild_animals_description_20",
+					"completed": false
+				},
+				{
+					"id": "wild-animal21",
+					"name": "wild_animal_twentyone",
+					"image": "res://Assets/Images/packs/wild-animals/image21.jpeg",
+					"description": "pack_wild_animals_description_21",
+					"completed": false
+				},
+				{
+					"id": "wild-animal22",
+					"name": "wild_animal_twentytwo",
+					"image": "res://Assets/Images/packs/wild-animals/image22.jpeg",
+					"description": "pack_wild_animals_description_22",
+					"completed": false
+				},
+				{
+					"id": "wild-animal23",
+					"name": "wild_animal_twentythree",
+					"image": "res://Assets/Images/packs/wild-animals/image23.jpeg",
+					"description": "pack_wild_animals_description_23",
+					"completed": false
+				},
+				{
+					"id": "wild-animal24",
+					"name": "wild_animal_twentyfour",
+					"image": "res://Assets/Images/packs/wild-animals/image24.jpeg",
+					"description": "pack_wild_animals_description_24",
+					"completed": false
+				},
+				{
+					"id": "wild-animal25",
+					"name": "wild_animal_twentyfive",
+					"image": "res://Assets/Images/packs/wild-animals/image25.jpeg",
+					"description": "pack_wild_animals_description_25",
+					"completed": false
+				},
+				{
+					"id": "wild-animal26",
+					"name": "wild_animal_twentysix",
+					"image": "res://Assets/Images/packs/wild-animals/image26.jpeg",
+					"description": "pack_wild_animals_description_26",
+					"completed": false
+				},
+				{
+					"id": "wild-animal27",
+					"name": "wild_animal_twentyseven",
+					"image": "res://Assets/Images/packs/wild-animals/image27.jpeg",
+					"description": "pack_wild_animals_description_27",
+					"completed": false
+				},
+				{
+					"id": "wild-animal28",
+					"name": "wild_animal_twentyeight",
+					"image": "res://Assets/Images/packs/wild-animals/image28.jpeg",
+					"description": "pack_wild_animals_description_28",
+					"completed": false
+				},
+				{
+					"id": "wild-animal29",
+					"name": "wild_animal_twentynine",
+					"image": "res://Assets/Images/packs/wild-animals/image29.jpeg",
+					"description": "pack_wild_animals_description_29",
+					"completed": false
+				},
+				{
+					"id": "wild-animal30",
+					"name": "wild_animal_thirty",
+					"image": "res://Assets/Images/packs/wild-animals/image30.jpeg",
+					"description": "pack_wild_animals_description_30",
+					"completed": false
+				}
+			]
+		},
+		{
+			"id": "farm-animals",
+			"name": "Farm Animals",
+			"description": "Puzzles inspirados en animales de granja.",
+			"image_path": "res://Assets/Images/packs/farm-animals/thumbnail.png",
+			"unlocked": false,
+			"purchased": false,
+			"completed": false,
+			"puzzles": [
+				{
+					"id": "farm-animal1",
+					"name": "farm_animal_one",
+					"image": "res://Assets/Images/packs/farm-animals/image1.jpeg",
+					"description": "pack_farm_animals_description_1",
+					"completed": false
+				},
+				{
+					"id": "farm-animal2",
+					"name": "farm_animal_two",
+					"image": "res://Assets/Images/packs/farm-animals/image2.jpeg",
+					"description": "pack_farm_animals_description_2",
+					"completed": false
+				},
+				{
+					"id": "farm-animal3",
+					"name": "farm_animal_three",
+					"image": "res://Assets/Images/packs/farm-animals/image3.jpeg",
+					"description": "pack_farm_animals_description_3",
+					"completed": false
+				},
+				{
+					"id": "farm-animal4",
+					"name": "farm_animal_four",
+					"image": "res://Assets/Images/packs/farm-animals/image4.jpeg",
+					"description": "pack_farm_animals_description_4",
+					"completed": false
+				},
+				{
+					"id": "farm-animal5",
+					"name": "farm_animal_five",
+					"image": "res://Assets/Images/packs/farm-animals/image5.jpeg",
+					"description": "pack_farm_animals_description_5",
+					"completed": false
+				},
+				{
+					"id": "farm-animal6",
+					"name": "farm_animal_six",
+					"image": "res://Assets/Images/packs/farm-animals/image6.jpeg",
+					"description": "pack_farm_animals_description_6",
+					"completed": false
+				},
+				{
+					"id": "farm-animal7",
+					"name": "farm_animal_seven",
+					"image": "res://Assets/Images/packs/farm-animals/image7.jpeg",
+					"description": "pack_farm_animals_description_7",
+					"completed": false
+				},
+				{
+					"id": "farm-animal8",
+					"name": "farm_animal_eight",
+					"image": "res://Assets/Images/packs/farm-animals/image8.jpeg",
+					"description": "pack_farm_animals_description_8",
+					"completed": false
+				},
+				{
+					"id": "farm-animal9",
+					"name": "farm_animal_nine",
+					"image": "res://Assets/Images/packs/farm-animals/image9.jpeg",
+					"description": "pack_farm_animals_description_9",
+					"completed": false
+				},
+				{
+					"id": "farm-animal10",
+					"name": "farm_animal_ten",
+					"image": "res://Assets/Images/packs/farm-animals/image10.jpeg",
+					"description": "pack_farm_animals_description_10",
+					"completed": false
+				},
+				{
+					"id": "farm-animal11",
+					"name": "farm_animal_eleven",
+					"image": "res://Assets/Images/packs/farm-animals/image11.jpeg",
+					"description": "pack_farm_animals_description_11",
+					"completed": false
+				},
+				{
+					"id": "farm-animal12",
+					"name": "farm_animal_twelve",
+					"image": "res://Assets/Images/packs/farm-animals/image12.jpeg",
+					"description": "pack_farm_animals_description_12",
+					"completed": false
+				},
+				{
+					"id": "farm-animal13",
+					"name": "farm_animal_thirteen",
+					"image": "res://Assets/Images/packs/farm-animals/image13.jpeg",
+					"description": "pack_farm_animals_description_13",
+					"completed": false
+				},
+				{
+					"id": "farm-animal14",
+					"name": "farm_animal_fourteen",
+					"image": "res://Assets/Images/packs/farm-animals/image14.jpeg",
+					"description": "pack_farm_animals_description_14",
+					"completed": false
+				},
+				{
+					"id": "farm-animal15",
+					"name": "farm_animal_fifteen",
+					"image": "res://Assets/Images/packs/farm-animals/image15.jpeg",
+					"description": "pack_farm_animals_description_15",
+					"completed": false
+				},
+				{
+					"id": "farm-animal16",
+					"name": "farm_animal_sixteen",
+					"image": "res://Assets/Images/packs/farm-animals/image16.jpeg",
+					"description": "pack_farm_animals_description_16",
+					"completed": false
+				},
+				{
+					"id": "farm-animal17",
+					"name": "farm_animal_seventeen",
+					"image": "res://Assets/Images/packs/farm-animals/image17.jpeg",
+					"description": "pack_farm_animals_description_17",
+					"completed": false
+				},
+				{
+					"id": "farm-animal18",
+					"name": "farm_animal_eighteen",
+					"image": "res://Assets/Images/packs/farm-animals/image18.jpeg",
+					"description": "pack_farm_animals_description_18",
+					"completed": false
+				},
+				{
+					"id": "farm-animal19",
+					"name": "farm_animal_nineteen",
+					"image": "res://Assets/Images/packs/farm-animals/image19.jpeg",
+					"description": "pack_farm_animals_description_19",
+					"completed": false
+				},
+				{
+					"id": "farm-animal20",
+					"name": "farm_animal_twenty",
+					"image": "res://Assets/Images/packs/farm-animals/image20.jpeg",
+					"description": "pack_farm_animals_description_20",
 					"completed": false
 				}
 			]

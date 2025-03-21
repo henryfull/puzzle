@@ -8,6 +8,7 @@ var labelSFX: Label
 var labelLanguage: Label
 var labelResolution: Label
 var buttonClose: Button
+var buttonRestore: Button
 var sliderVolumeGeneral = HSlider
 var sliderVolumeSFX = HSlider
 var sliderVolumeMusic = HSlider
@@ -25,6 +26,7 @@ func _ready():
 	labelLanguage = $%LabelIdioma
 	labelResolution = $%Label_resolution
 	buttonClose = %ButtonClose
+	buttonRestore = %RestoreButton
 	sliderVolumeGeneral = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_General
 	sliderVolumeMusic = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_Musica
 	sliderVolumeSFX = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_VFX
@@ -118,6 +120,7 @@ func update_ui_texts():
 	labelMusic.text = tr("common_music")
 	labelSFX.text = tr("common_sfx")
 	buttonClose.text = tr("common_back")
+	buttonRestore.text = tr("options_restore_purchases")
 	
 	print("Options: Textos actualizados con idioma: ", TranslationServer.get_locale())
 
@@ -174,9 +177,10 @@ func adapt_ui_for_device():
 		var UIScaler = load("res://Scripts/UIScaler.gd")
 		
 		# Escalar botones
-		var button = %ButtonClose
-		if button:
-			UIScaler.scale_button(button)
+		var buttons = [%ButtonClose, %RestoreButton]
+		for button in buttons:
+			if button:
+				UIScaler.scale_button(button)
 		
 		# Escalar etiquetas
 		var labels = [
@@ -210,11 +214,12 @@ func adapt_ui_for_device():
 	else:
 		# Si no está disponible UIScaler, usar ajustes manuales
 		if is_mobile:
-			# Ajustar botón de volver
-			var back_button = %ButtonClose
-			if back_button:
-				back_button.custom_minimum_size = Vector2(200, 70)
-				back_button.add_theme_font_size_override("font_size", 24)
+			# Ajustar botones
+			var buttons = [%ButtonClose, %RestoreButton]
+			for button in buttons:
+				if button:
+					button.custom_minimum_size = Vector2(200, 70)
+					button.add_theme_font_size_override("font_size", 24)
 			
 			# Ajustar etiquetas
 			var labels = [
@@ -294,3 +299,93 @@ func _on_HSlider_Volumen_VFX_value_changed(value):
 
 func _on_button_close_pressed() -> void:
 	OptionsManager.hide_options()
+
+func _on_restore_button_pressed() -> void:
+	print("Restaurando acceso a los puzzles - SOLUCIÓN DRÁSTICA...")
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# SOLUCIÓN DRÁSTICA: Cargar los packs directamente desde el archivo JSON
+		var packs_file = FileAccess.open("res://PacksData/sample_packs.json", FileAccess.READ)
+		if packs_file:
+			var json_string = packs_file.get_as_text()
+			var json = JSON.parse_string(json_string)
+			if json and "packs" in json and json.packs.size() > 0:
+				# Reemplazar completamente los packs en las configuraciones
+				global.settings.packs = json.packs
+				
+				# Asegurar que TODOS los packs estén correctamente configurados
+				for i in range(global.settings.packs.size()):
+					# Los primeros dos packs siempre desbloqueados y comprados
+					if i == 0 or i == 1:  # Primer pack (fruits) y segundo pack (numbers)
+						global.settings.packs[i].unlocked = true
+						global.settings.packs[i].purchased = true
+						
+						# Asegurarse de que todos los puzzles en estos packs estén desbloqueados
+						if "puzzles" in global.settings.packs[i]:
+							for puzzle in global.settings.packs[i].puzzles:
+								puzzle.unlocked = true
+					
+				print("Packs restaurados completamente desde sample_packs.json")
+			else:
+				print("ERROR: JSON de packs no válido")
+		else:
+			print("ERROR: No se pudo abrir el archivo sample_packs.json")
+			
+			# Plan B: Si no se puede cargar el archivo, intentar desbloquear lo que ya existe
+			if "packs" in global.settings and global.settings.packs.size() > 0:
+				# Asegurar que los dos primeros packs están desbloqueados y comprados
+				for i in range(min(2, global.settings.packs.size())):
+					global.settings.packs[i].unlocked = true
+					global.settings.packs[i].purchased = true
+					
+					# Asegurarse de que todos los puzzles estén desbloqueados
+					if "puzzles" in global.settings.packs[i]:
+						for puzzle in global.settings.packs[i].puzzles:
+							puzzle.unlocked = true
+						
+				print("Primeros packs desbloqueados manualmente")
+		
+		# Restaurar progreso
+		if has_node("/root/Progress"):
+			var progress = get_node("/root/Progress")
+			if progress.has_method("load_progress"):
+				progress.load_progress()
+			if progress.has_method("reset_progress"):
+				progress.reset_progress() # Intentar reiniciar el progreso como último recurso
+		
+		# Intentar restaurar compras
+		if has_node("/root/IAP"):
+			var iap = get_node("/root/IAP")
+			if iap.has_method("restore_purchases"):
+				iap.restore_purchases()
+		
+		# Guardar los cambios
+		if global.has_method("save_settings"):
+			global.save_settings()
+		
+		# Forzar la recarga completa del juego si es posible
+		if has_node("/root/SceneManager"):
+			var scene_manager = get_node("/root/SceneManager")
+			if scene_manager.has_method("change_scene"):
+				OS.alert("La restauración se ha completado. El juego se reiniciará para aplicar los cambios.", "Restauración completada")
+				scene_manager.change_scene("res://Scenes/MainMenu.tscn")
+				return
+		
+		# Aplicar los cambios en el gestor de packs
+		if has_node("/root/PacksManager"):
+			var packs_manager = get_node("/root/PacksManager")
+			if packs_manager.has_method("reload_packs"):
+				packs_manager.reload_packs()
+			elif packs_manager.has_method("load_packs"):
+				packs_manager.load_packs()
+			
+			# Intentar forzar la actualización de UI si existe un método para ello
+			if packs_manager.has_method("update_ui"):
+				packs_manager.update_ui()
+		
+		# Mostrar mensaje final
+		OS.alert("Se han desbloqueado y habilitado para jugar los dos primeros packs (Fruits y Numbers). Por favor, reinicia completamente el juego para asegurar que los cambios se apliquen correctamente.", "Restauración completada")
+	else:
+		print("ERROR: No se encontró el nodo GLOBAL")
+		OS.alert("No se pudo restaurar el acceso a los puzzles.", "Error")

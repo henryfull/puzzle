@@ -188,6 +188,7 @@ func load_packs():
 		var pack_component = pack_component_scene.instantiate()
 		pack_component.setup(pack)
 		pack_component.connect("pack_selected", Callable(self, "_on_PackSelected"))
+		pack_component.connect("pack_purchase_requested", Callable(self, "_on_PackPurchaseRequested"))
 		
 		# Añadir el componente al contenedor
 		packs_container.add_child(pack_component)
@@ -213,6 +214,51 @@ func _on_PackSelected(pack):
 	# Función llamada al seleccionar un pack
 	print("Pack seleccionado: " + pack.name + " con " + str(pack.puzzles.size()) + " puzzles")
 	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+
+func _on_PackPurchaseRequested(pack):
+	print("Se solicitó la compra del pack: " + pack.name)
+	
+	# Mostrar un diálogo de confirmación
+	var dialog = AcceptDialog.new()
+	dialog.title = "Comprar Pack"
+	dialog.dialog_text = "¿Quieres comprar el pack '" + pack.name + "'?"
+	dialog.add_button("Cancelar", true, "cancel")
+	dialog.add_button("Comprar", false, "purchase")
+	dialog.connect("confirmed", Callable(self, "_on_Purchase_Confirmed").bind(pack))
+	dialog.connect("canceled", Callable(self, "_on_Purchase_Canceled"))
+	add_child(dialog)
+	dialog.popup_centered()
+
+func _on_Purchase_Confirmed(pack):
+	print("Compra confirmada para el pack: " + pack.name)
+	
+	# Marcar el pack como comprado usando ProgressManager
+	if progress_manager.has_method("purchase_pack"):
+		progress_manager.purchase_pack(pack.id)
+		print("Pack comprado con éxito: " + pack.name)
+		
+		# Mostrar mensaje de éxito
+		var success_dialog = AcceptDialog.new()
+		success_dialog.title = "Compra Exitosa"
+		success_dialog.dialog_text = "¡Has comprado el pack '" + pack.name + "'! Ya puedes acceder a sus puzzles."
+		add_child(success_dialog)
+		success_dialog.popup_centered()
+		
+		# Recargar los packs para actualizar la interfaz
+		await get_tree().create_timer(1.5).timeout
+		load_packs()
+	else:
+		print("ERROR: No se pudo comprar el pack - Método purchase_pack no encontrado")
+		
+		# Mostrar mensaje de error
+		var error_dialog = AcceptDialog.new()
+		error_dialog.title = "Error de Compra"
+		error_dialog.dialog_text = "No se pudo completar la compra. Por favor, inténtalo de nuevo más tarde."
+		add_child(error_dialog)
+		error_dialog.popup_centered()
+
+func _on_Purchase_Canceled():
+	print("Compra cancelada")
 
 func _on_BackButton_pressed():
 	# Volver al menú principal

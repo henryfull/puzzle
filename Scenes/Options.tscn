@@ -145,6 +145,17 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("2_qqjs0")
 
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RestoreButton" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Restaurar Compras"
+
 [node name="ButtonClose" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -154,4 +165,5 @@ text = "Volver"
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_General" to="." method="_on_HSlider_Volumen_General_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_Musica" to="." method="_on_HSlider_Volumen_Musica_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_VFX" to="." method="_on_HSlider_Volumen_VFX_value_changed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/RestoreButton" to="." method="_on_restore_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]
