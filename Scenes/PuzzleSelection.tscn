@@ -89,4 +89,3 @@ visible = false
 layout_mode = 2
 
 [connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginLeft/Volver" to="." method="_on_BackButton_pressed"]
-[connection signal="difficulty_changed" from="CanvasLayer/HBoxContainer/MarginRight/ButtonDifficult" to="." method="_on_difficulty_changed"]

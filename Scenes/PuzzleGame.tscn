@@ -76,4 +76,3 @@ offset_bottom = 150.0
 
 [connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginLeft/Volver" to="." method="_on_PuzzleSelected"]
 [connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginRight/Flip" to="." method="on_flip_button_pressed"]
-[connection signal="difficulty_changed" from="CanvasLayer/ButtonDifficult" to="." method="_on_difficulty_changed"]

@@ -12,7 +12,7 @@ config_version=5
 
 config/name="puzzle tiki tiki"
 config/version="0.3.1"
-run/main_scene="res://Scenes/MainMenu.tscn"
+run/main_scene="uid://dh7t7utu076oi"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
 boot_splash/image="uid://ctfuu506avefk"
@@ -27,18 +27,26 @@ buses/General=0.0
 
 [autoload]
 
-TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
-AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
+ConfigService="*res://scripts/services/config_service.gd"
+AudioService="*res://scripts/services/audio_service.gd"
+ThemeService="*res://scripts/services/theme_service.gd"
+ProgressService="*res://scripts/services/progress_service.gd"
+DataService="*res://scripts/services/data_service.gd"
+Game="*res://scripts/core/game/game.gd"
 GLOBAL="*res://Scripts/Autoload/global.gd"
-AudioManager="*res://Scripts/Autoload/AudioManager.gd"
-ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
+TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
 ThemeManager="*res://Scripts/Autoload/ThemeManager.gd"
+ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
 OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
+AudioManager="*res://Scripts/Autoload/AudioManager.gd"
+AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
 
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 window/handheld/orientation=5
 
 [editor]
@@ -59,9 +67,12 @@ theme/custom_font="uid://nsb7mxocp6o3"
 [internationalization]
 
 locale/translations=PackedStringArray("res://PacksData/translation.ca.translation", "res://PacksData/translation.en.translation", "res://PacksData/translation.es.translation")
+locale/translations_pot_files=PackedStringArray("res://data/localization/translations.csv")
 
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_2d=2
+environment/defaults/default_clear_color=Color(0.301961, 0.301961, 0.301961, 1)
