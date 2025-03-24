@@ -8,6 +8,7 @@
 			"unlocked": true,
 			"purchased": true,
 			"completed": false,
+			"difficulty": "easy",
 			"puzzles": [
 				{
 					"id": "fruit1",
@@ -89,6 +90,7 @@
 			"unlocked": false,
 			"purchased": false,
 			"completed": false,
+			"difficulty": "easy",
 			"puzzles": [
 				{
 					"id": "number0",
@@ -310,6 +312,7 @@
 			"unlocked": false,
 			"purchased": false,
 			"completed": false,
+			"difficulty": "easy",
 			"puzzles": [
 				{
 					"id": "wild-animal1",
@@ -531,6 +534,7 @@
 			"unlocked": false,
 			"purchased": false,
 			"completed": false,
+			"difficulty": "easy",
 			"puzzles": [
 				{
 					"id": "farm-animal1",

@@ -1209,7 +1209,12 @@ func _on_difficulty_changed(columns, rows):
 	
 	# Reiniciar el puzzle con la nueva dificultad
 	var puzzle_back = await generate_back_texture_from_viewport(viewport_scene_path)
-	load_and_create_pieces(puzzle_back)
+	if puzzle_back:
+		load_and_create_pieces(puzzle_back)
+	else:
+		# Si falla la generación de la textura trasera, recargamos la escena
+		print("PuzzleGame: Error al generar textura trasera, recargando escena...")
+		get_tree().reload_current_scene()
 
 # Nueva función para verificar y corregir el estado del grid
 func verify_and_fix_grid():
@@ -1900,3 +1905,8 @@ func _on_sensitivity_changed(value: float):
 func _on_close_options():
 	if has_node("OptionsLayer/OptionsPanel"):
 		get_node("OptionsLayer/OptionsPanel").visible = false
+
+
+func _on_BackButton_pressed() -> void:
+	# Volver al menú principal
+	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
