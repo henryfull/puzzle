@@ -104,13 +104,11 @@ func _ready():
 	
 	# Configurar el GridContainer - Forzar siempre 2 columnas
 	if grid_container:
-		# Siempre usar 2 columnas independientemente del dispositivo
-		grid_container.columns = 2
-		
-		grid_container.add_theme_constant_override("h_separation", 30)
-		grid_container.add_theme_constant_override("v_separation", 30)
-		grid_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		grid_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		# Siempre usar 2 columnas independientemente del dispositivo		
+		#grid_container.add_theme_constant_override("h_separation", 30)
+		#grid_container.add_theme_constant_override("v_separation", 70)
+		#grid_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		#grid_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		grid_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Conectar la señal de visibilidad
@@ -168,7 +166,6 @@ func adjust_layout_for_device():
 	if grid_container:
 		grid_container.columns = 2
 		grid_container.add_theme_constant_override("h_separation", 30)
-		grid_container.add_theme_constant_override("v_separation", 30)
 		grid_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		grid_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		grid_container.mouse_filter = Control.MOUSE_FILTER_IGNORE

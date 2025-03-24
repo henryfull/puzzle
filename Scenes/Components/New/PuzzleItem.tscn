@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bqxn8yvgpjnx5"]
+[gd_scene load_steps=18 format=3 uid="uid://bqxn8yvgpjnx5"]
 
 [ext_resource type="Script" uid="uid://co2eql11n26j2" path="res://Scripts/Components/PuzzleItem.gd" id="1_yjk2p"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_g0pxh"]
@@ -12,7 +12,7 @@ corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fb6eo"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(0.803922, 1, 0.827451, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -31,6 +31,20 @@ shadow_offset = Vector2(0, 2)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2hulm"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g7ceq"]
+bg_color = Color(0.219608, 0.4, 0.498039, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_52rkp"]
+bg_color = Color(0.803922, 0.901961, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwali"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g7ceq"]
@@ -42,7 +56,6 @@ shadow_offset = Vector2(0, 2)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l7jeh"]
 
 [node name="PuzzleItem" type="Control"]
-custom_minimum_size = Vector2(220, 400)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,7 +67,7 @@ size_flags_vertical = 3
 script = ExtResource("1_yjk2p")
 
 [node name="BackgroundRect" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(220, 400)
+custom_minimum_size = Vector2(240, 400)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -65,7 +78,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(1, 1, 1, 0)
 
-[node name="Panel" type="Panel" parent="BackgroundRect"]
+[node name="PanelActive" type="Panel" parent="BackgroundRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,7 +88,9 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lwali")
 
 [node name="FrameRect" type="Panel" parent="BackgroundRect"]
-custom_minimum_size = Vector2(200, 240)
+clip_children = 2
+clip_contents = true
+custom_minimum_size = Vector2(220, 250)
 layout_direction = 1
 layout_mode = 1
 anchors_preset = 15
@@ -95,6 +110,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_default_cursor_shape = 2
@@ -106,26 +122,17 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_2hulm")
 flat = true
 
 [node name="TextureRect" type="TextureRect" parent="BackgroundRect/FrameRect/Button"]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_g0pxh")
 expand_mode = 1
-stretch_mode = 5
-
-[node name="LockIcon" type="TextureRect" parent="BackgroundRect/FrameRect"]
-visible = false
-layout_mode = 0
-offset_left = 60.0
-offset_top = 80.0
-offset_right = 140.0
-offset_bottom = 160.0
-texture = ExtResource("3_lwali")
-expand_mode = 1
-stretch_mode = 5
+stretch_mode = 6
 
 [node name="CompletedIcon" type="TextureRect" parent="BackgroundRect/FrameRect"]
 visible = false
@@ -137,7 +144,7 @@ offset_bottom = 60.0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NameLabel" type="Label" parent="."]
+[node name="NameLabel" type="Label" parent="BackgroundRect"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -152,6 +159,80 @@ grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 22
 text = "NAME PUZZLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="BackgroundRectLook" type="ColorRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(220, 400)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(1, 1, 1, 0)
+
+[node name="PanelLook" type="Panel" parent="BackgroundRectLook"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g7ceq")
+
+[node name="FrameRect" type="Panel" parent="BackgroundRectLook"]
+clip_children = 2
+clip_contents = true
+custom_minimum_size = Vector2(200, 240)
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_52rkp")
+
+[node name="LockIcon" type="TextureRect" parent="BackgroundRectLook/FrameRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.5
+offset_top = -93.0
+offset_right = 62.5
+offset_bottom = 93.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_lwali")
+stretch_mode = 3
+
+[node name="NameLabel" type="Label" parent="BackgroundRectLook"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -40.0
+offset_right = 100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "???"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true

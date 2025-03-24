@@ -1591,7 +1591,7 @@ func show_options_menu():
 # Nueva función para ajustar la interfaz según el tipo de dispositivo
 func adjust_ui_for_device():
 	var hbox = $CanvasLayer/HBoxContainer
-	var button_difficult = $CanvasLayer/ButtonDifficult
+	var button_difficult = $CanvasLayer/HBoxContainer/ButtonDifficult
 	
 	if is_mobile:
 		# En dispositivos móviles, especialmente con isla (notch), añadir más margen superior
@@ -1612,7 +1612,6 @@ func adjust_ui_for_device():
 		hbox.position.y = top_margin
 		
 		# Ajustar también la posición del botón de dificultad
-		button_difficult.position.y = top_margin + 60
 	else:
 		# En ordenadores, usar un margen estándar
 		hbox.position.y = 20
