@@ -1,6 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://pvq1o6wdx44x"]
+[gd_scene load_steps=9 format=3 uid="uid://pvq1o6wdx44x"]
 
 [ext_resource type="Script" uid="uid://db4glnv08qilj" path="res://Scripts/PackSelection.gd" id="1_wswaw"]
+[ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="2_gj1nx"]
+[ext_resource type="Texture2D" uid="uid://bjxia13nbayu6" path="res://Assets/Images/GUID/button_back.svg" id="3_7pjev"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cyp3e"]
+texture = ExtResource("3_7pjev")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6xblp"]
+texture = ExtResource("3_7pjev")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oq1hd"]
+texture = ExtResource("3_7pjev")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7pjev"]
+texture = ExtResource("3_7pjev")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ot00g"]
+texture = ExtResource("3_7pjev")
 
 [node name="PackSelection" type="Node2D"]
 script = ExtResource("1_wswaw")
@@ -13,9 +30,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 0.901961, 0.72549, 1)
+color = Color(0.72549, 0.854902, 1, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gj1nx")
+
+[node name="ContainerPacks" type="VBoxContainer" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -28,18 +53,68 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BackButton" type="Button" parent="CanvasLayer"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+[node name="TitleLabel" type="Label" parent="CanvasLayer/ContainerPacks"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "PACKS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleBanner" type="ColorRect" parent="CanvasLayer/ContainerPacks/TitleLabel"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -51.0
-offset_top = -80.0
-offset_right = 52.0
-offset_bottom = -20.0
 grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.196078, 0.741176, 0.196078, 1)
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/ContainerPacks"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="SubtitleLabel" type="Label" parent="CanvasLayer/ContainerPacks"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 24
+text = "Selecciona un pack"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/ContainerPacks"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="PacksContainer" type="VBoxContainer" parent="CanvasLayer/ContainerPacks/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="BackButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 51.0
+offset_top = -156.0
+offset_right = 171.0
+offset_bottom = -56.0
 grow_vertical = 0
-text = "Volver"
+theme_override_styles/focus = SubResource("StyleBoxTexture_cyp3e")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_6xblp")
+theme_override_styles/hover = SubResource("StyleBoxTexture_oq1hd")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_7pjev")
+theme_override_styles/normal = SubResource("StyleBoxTexture_ot00g")
 
 [connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_BackButton_pressed"]

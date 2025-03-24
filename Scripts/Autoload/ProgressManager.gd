@@ -13,14 +13,40 @@ var progress_data = {
 var packs_data = {}
 
 func _ready():
+	# Imprimir un mensaje de diagnóstico al inicio
+	print("ProgressManager: Inicializando...")
+	
 	# Cargar los datos de progresión al iniciar
 	load_progress_data()
 	
 	# Cargar los datos de packs desde el archivo JSON
 	load_packs_data()
 	
+	# Verificar si los packs se cargaron correctamente
+	if packs_data.is_empty() or not packs_data.has("packs") or packs_data.packs.size() == 0:
+		print("ProgressManager: ERROR - Fallo al cargar los packs, intentando cargar manualmente")
+		# Intentar cargar directamente el archivo JSON
+		var file = FileAccess.open(PACKS_DATA_FILE, FileAccess.READ)
+		if file:
+			var json_text = file.get_as_text()
+			file.close()
+			var json_result = JSON.parse_string(json_text)
+			if json_result and json_result.has("packs"):
+				packs_data = json_result
+				print("ProgressManager: Datos de packs cargados manualmente. Número de packs: ", packs_data.packs.size())
+			else:
+				print("ProgressManager: ERROR - No se pudo cargar manualmente el archivo de packs")
+				# Crear una estructura mínima para evitar errores
+				packs_data = {"packs": []}
+		else:
+			print("ProgressManager: ERROR - No se pudo abrir el archivo para carga manual")
+			# Crear una estructura mínima para evitar errores
+			packs_data = {"packs": []}
+	
 	# Inicializar la progresión si es necesario
 	initialize_progress_if_needed()
+	
+	print("ProgressManager: Inicialización completada")
 
 # Carga los datos de progresión desde el archivo de guardado
 func load_progress_data():
@@ -49,17 +75,43 @@ func save_progress_data():
 
 # Carga los datos de packs desde el archivo JSON
 func load_packs_data():
+	print("ProgressManager: Intentando cargar packs desde: ", PACKS_DATA_FILE)
 	var file = FileAccess.open(PACKS_DATA_FILE, FileAccess.READ)
 	if file:
 		var json_text = file.get_as_text()
+		file.close()
+		print("ProgressManager: Archivo JSON leído, tamaño: ", json_text.length(), " bytes")
 		var json_result = JSON.parse_string(json_text)
 		if json_result and json_result.has("packs"):
 			packs_data = json_result
-			print("ProgressManager: Datos de packs cargados correctamente")
+			print("ProgressManager: Datos de packs cargados correctamente. Número de packs: ", packs_data.packs.size())
+			
+			# Imprimir información básica de cada pack para diagnóstico
+			for i in range(packs_data.packs.size()):
+				var pack = packs_data.packs[i]
+				print("ProgressManager: Pack ", i, " - ID: ", pack.id, ", Name: ", pack.name, 
+					", Unlocked: ", pack.get("unlocked", false), ", Puzzles: ", 
+					pack.puzzles.size() if pack.has("puzzles") else "No puzzles")
 		else:
-			print("ProgressManager: Error al analizar el JSON de packs")
+			print("ProgressManager: ERROR - No se pudo analizar el JSON de packs o no tiene la estructura esperada")
+			
+			# Intentar diagnóstico adicional
+			if json_result:
+				print("ProgressManager: El JSON se analizó pero no tiene la clave 'packs'")
+				print("ProgressManager: Claves disponibles: ", json_result.keys())
+			else:
+				print("ProgressManager: Error al analizar el JSON")
 	else:
-		print("ProgressManager: No se encontró el archivo de packs")
+		print("ProgressManager: ERROR - No se encontró el archivo de packs en: ", PACKS_DATA_FILE)
+		
+		# Intentar verificar la existencia del directorio y archivo
+		var dir = DirAccess.open("res://PacksData")
+		if dir:
+			print("ProgressManager: El directorio PacksData existe")
+			var files = dir.get_files()
+			print("ProgressManager: Archivos en PacksData: ", files)
+		else:
+			print("ProgressManager: ERROR - No se pudo abrir el directorio PacksData")
 
 # Inicializa la progresión si es necesario
 func initialize_progress_if_needed():
@@ -315,14 +367,24 @@ func get_pack_with_progress(pack_id: String) -> Dictionary:
 
 # Obtiene todos los packs con información de progresión
 func get_all_packs_with_progress() -> Array:
+	print("ProgressManager: get_all_packs_with_progress() - Obteniendo todos los packs con progresión")
 	var packs_with_progress = []
 	
 	if packs_data.has("packs"):
+		print("ProgressManager: Número de packs en packs_data: ", packs_data.packs.size())
 		for pack in packs_data.packs:
+			print("ProgressManager: Procesando pack: ", pack.id)
 			var pack_with_progress = get_pack_with_progress(pack.id)
 			if not pack_with_progress.is_empty():
 				packs_with_progress.append(pack_with_progress)
+				print("ProgressManager: Pack añadido a la lista: ", pack.id)
+			else:
+				print("ProgressManager: ERROR - No se pudo obtener datos del pack: ", pack.id)
+	else:
+		print("ProgressManager: ERROR - No hay packs en packs_data o no tiene la estructura esperada")
+		print("ProgressManager: Claves en packs_data: ", packs_data.keys())
 	
+	print("ProgressManager: Total de packs con progresión: ", packs_with_progress.size())
 	return packs_with_progress
 
 # Reinicia la progresión (para pruebas)

@@ -1,8 +1,48 @@
-[gd_scene load_steps=2 format=3 uid="uid://bqxn8yvgpjnx5"]
+[gd_scene load_steps=16 format=3 uid="uid://bqxn8yvgpjnx5"]
 
 [ext_resource type="Script" uid="uid://co2eql11n26j2" path="res://Scripts/Components/PuzzleItem.gd" id="1_yjk2p"]
+[ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_g0pxh"]
+[ext_resource type="Texture2D" uid="uid://cjqwsjyhigk3s" path="res://Assets/Images/GUID/icon_looked.png" id="3_lwali"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lwali"]
+bg_color = Color(0.168627, 0.756863, 0.231373, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fb6eo"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uu7y2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jlucu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kxtkf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_74mfi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2hulm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwali"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g7ceq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_52rkp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wj6qa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l7jeh"]
 
 [node name="PuzzleItem" type="Control"]
+custom_minimum_size = Vector2(220, 400)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,41 +53,124 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_yjk2p")
 
-[node name="Button" type="Button" parent="."]
+[node name="BackgroundRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(220, 400)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(1, 1, 1, 0)
 
-[node name="TextureRect" type="TextureRect" parent="Button"]
+[node name="Panel" type="Panel" parent="BackgroundRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lwali")
+
+[node name="FrameRect" type="Panel" parent="BackgroundRect"]
+custom_minimum_size = Vector2(200, 240)
+layout_direction = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fb6eo")
+
+[node name="Button" type="Button" parent="BackgroundRect/FrameRect"]
+custom_minimum_size = Vector2(180, 240)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uu7y2")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_jlucu")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_kxtkf")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_74mfi")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_2hulm")
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="BackgroundRect/FrameRect/Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_g0pxh")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="Button"]
+[node name="LockIcon" type="TextureRect" parent="BackgroundRect/FrameRect"]
+visible = false
+layout_mode = 0
+offset_left = 60.0
+offset_top = 80.0
+offset_right = 140.0
+offset_bottom = 160.0
+texture = ExtResource("3_lwali")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CompletedIcon" type="TextureRect" parent="BackgroundRect/FrameRect"]
+visible = false
+layout_mode = 0
+offset_left = 150.0
+offset_top = 20.0
+offset_right = 190.0
+offset_bottom = 60.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -80.0
+offset_left = -100.0
 offset_top = -40.0
-offset_right = 80.0
-offset_bottom = -10.0
+offset_right = 100.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "Puzzle"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "NAME PUZZLE"
 horizontal_alignment = 1
 vertical_alignment = 1
+uppercase = true
 
-[connection signal="pressed" from="Button" to="." method="_on_select_pressed"]
+[node name="ItemButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1132.0
+offset_bottom = -378.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lwali")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_g7ceq")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_52rkp")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_wj6qa")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_l7jeh")
+flat = true
+
+[connection signal="pressed" from="BackgroundRect/FrameRect/Button" to="." method="_on_select_pressed"]
+[connection signal="pressed" from="ItemButton" to="." method="_on_select_pressed"]

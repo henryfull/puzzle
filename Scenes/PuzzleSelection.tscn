@@ -1,26 +1,91 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6sg71qs17yj5"]
+[gd_scene load_steps=10 format=3 uid="uid://b6sg71qs17yj5"]
 
 [ext_resource type="Script" uid="uid://c1twov7g0717y" path="res://Scripts/PuzzleSelection.gd" id="1_nt7kx"]
 [ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult.tscn" id="2_yvnqr"]
+[ext_resource type="Texture2D" uid="uid://bjxia13nbayu6" path="res://Assets/Images/GUID/button_back.svg" id="3_trsaq"]
+[ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="4_oehjl"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w1ec1"]
+texture = ExtResource("3_trsaq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lg0oo"]
+texture = ExtResource("3_trsaq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_moqol"]
+texture = ExtResource("3_trsaq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4mmlg"]
+texture = ExtResource("3_trsaq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jmjrx"]
+texture = ExtResource("3_trsaq")
 
 [node name="PuzzleSelection" type="Node2D"]
 script = ExtResource("1_nt7kx")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="Background" type="TextureRect" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 0.901961, 0.72549, 1)
+texture = ExtResource("4_oehjl")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="TitleBanner" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 60.0
+offset_bottom = 180.0
+grow_horizontal = 2
+color = Color(0.239216, 0.709804, 0.290196, 1)
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/TitleBanner"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -194.5
+offset_top = -30.0
+offset_right = 194.5
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "PUZZLES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="CanvasLayer/TitleBanner"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -177.0
+offset_top = -30.0
+offset_right = 177.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Selecciona el puzzle"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 80.0
-offset_bottom = 150.0
+offset_top = 15.0
+offset_bottom = 60.0
 grow_horizontal = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 20
@@ -30,6 +95,7 @@ layout_mode = 2
 theme_override_constants/margin_left = 20
 
 [node name="Volver" type="Button" parent="CanvasLayer/HBoxContainer/MarginLeft"]
+visible = false
 custom_minimum_size = Vector2(130, 60)
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
@@ -44,6 +110,7 @@ layout_mode = 2
 theme_override_constants/margin_right = 20
 
 [node name="ButtonDifficult" parent="CanvasLayer/HBoxContainer/MarginRight" instance=ExtResource("2_yvnqr")]
+auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 8
 
@@ -52,7 +119,7 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = 160.0
+offset_top = 200.0
 offset_right = -20.0
 offset_bottom = -20.0
 grow_horizontal = 2
@@ -61,9 +128,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TitlePuzzleSelection" type="Label" parent="CanvasLayer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.239216, 0.709804, 0.290196, 1)
 theme_override_font_sizes/font_size = 36
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -88,4 +156,20 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
+[node name="BackButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 51.0
+offset_top = -156.0
+offset_right = 171.0
+offset_bottom = -56.0
+grow_vertical = 0
+theme_override_styles/focus = SubResource("StyleBoxTexture_w1ec1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_lg0oo")
+theme_override_styles/hover = SubResource("StyleBoxTexture_moqol")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_4mmlg")
+theme_override_styles/normal = SubResource("StyleBoxTexture_jmjrx")
+
 [connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginLeft/Volver" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_BackButton_pressed"]

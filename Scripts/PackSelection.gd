@@ -20,7 +20,9 @@ func _ready():
 	
 	# Inicialización de la selección de pack.
 	print("PackSelection: inicialización de los packs disponibles")
-	load_packs()
+	
+	# Configurar el ScrollContainer
+	var scroll_container = $CanvasLayer/ContainerPacks/ScrollContainer
 	
 	# Cargar el script de configuración táctil
 	var TouchScrollFix = load("res://Scripts/TouchScrollFix.gd")
@@ -28,8 +30,7 @@ func _ready():
 		# Configurar todos los nodos para mejorar el desplazamiento táctil
 		TouchScrollFix.configure_touch_scroll(self)
 		
-		# Conectar las señales del ScrollContainer después de cargarlo
-		var scroll_container = $CanvasLayer/VBoxContainer.get_node_or_null("ScrollContainer")
+		# Conectar las señales del ScrollContainer
 		if scroll_container:
 			TouchScrollFix.connect_scroll_signals(scroll_container, self, "_on_scroll_started", "_on_scroll_ended")
 		else:
@@ -39,129 +40,92 @@ func _ready():
 	
 	# Ajustar el layout según el tipo de dispositivo
 	adjust_layout_for_device()
-
-# Nueva función para ajustar el layout según el tipo de dispositivo
-func adjust_layout_for_device():
-	var vbox = $CanvasLayer/VBoxContainer
 	
-	if is_touch_device:
-		# En dispositivos táctiles, usar todo el ancho disponible
-		vbox.anchors_preset = 15  # Full rect
-		vbox.anchor_right = 1.0
-		vbox.anchor_bottom = 1.0
-		vbox.offset_left = 20.0
-		vbox.offset_top = 20.0
-		vbox.offset_right = -20.0
-		vbox.offset_bottom = -100.0
-		vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		print("PackSelection: Layout ajustado para dispositivo táctil")
-	else:
-		# En ordenadores, usar un ancho máximo
-		vbox.anchors_preset = 8  # Center
-		vbox.anchor_left = 0.5
-		vbox.anchor_top = 0.5
-		vbox.anchor_right = 0.5
-		vbox.anchor_bottom = 0.5
-		vbox.offset_left = -400.0  # Mitad del ancho máximo
-		vbox.offset_top = -500.0
-		vbox.offset_right = 400.0  # Mitad del ancho máximo
-		vbox.offset_bottom = 500.0
-		vbox.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		vbox.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		vbox.custom_minimum_size = Vector2(800, 1000)  # Ancho máximo para ordenadores
-		print("PackSelection: Layout ajustado para ordenador")
+	# Cargar los packs
+	load_packs()
+
+# Función para ajustar el layout según el tipo de dispositivo
+func adjust_layout_for_device():
+	var vbox = $CanvasLayer/ContainerPacks
+	
+	# Siempre usar pantalla completa con márgenes
+	vbox.anchors_preset = 15  # Full rect
+	vbox.anchor_right = 1.0
+	vbox.anchor_bottom = 1.0
+	vbox.offset_left = 20.0
+	vbox.offset_top = 20.0
+	vbox.offset_right = -20.0
+	vbox.offset_bottom = -100.0
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	
+	# Asegurar que el título y subtítulo queden en la parte superior
+	var title_label = $CanvasLayer/ContainerPacks/TitleLabel
+	title_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	
+	var subtitle_label = $CanvasLayer/ContainerPacks/SubtitleLabel
+	subtitle_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	
+	# Asegurar que el ScrollContainer ocupe todo el espacio restante
+	var scroll_container = $CanvasLayer/ContainerPacks/ScrollContainer
+	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	
+	print("PackSelection: Layout ajustado")
 
 func load_packs():
-	# Limpiar cualquier elemento existente en el contenedor
-	for child in $CanvasLayer/VBoxContainer.get_children():
+	# Referencia al contenedor de packs
+	var packs_container = $CanvasLayer/ContainerPacks/ScrollContainer/PacksContainer
+	
+	# Limpiar cualquier elemento de pack existente en el contenedor
+	for child in packs_container.get_children():
 		child.queue_free()
 	
-	# Añadir un título a la pantalla
-	var title_label = Label.new()
-	title_label.text = "PACKS"
-	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title_label.custom_minimum_size = Vector2(0, 60)
-	title_label.add_theme_font_size_override("font_size", 32)
-	title_label.add_theme_color_override("font_color", Color(0.4, 0.2, 0.1))
-	$CanvasLayer/VBoxContainer.add_child(title_label)
-	
-	# Añadir un separador
-	var separator = HSeparator.new()
-	separator.custom_minimum_size = Vector2(0, 20)
-	$CanvasLayer/VBoxContainer.add_child(separator)
-	
-	# Añadir un subtítulo
-	var subtitle_label = Label.new()
-	subtitle_label.text = "Selecciona un pack"
-	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	subtitle_label.custom_minimum_size = Vector2(0, 40)
-	subtitle_label.add_theme_font_size_override("font_size", 24)
-	subtitle_label.add_theme_color_override("font_color", Color(0.3, 0.3, 0.3))
-	$CanvasLayer/VBoxContainer.add_child(subtitle_label)
-	
-	# Crear un ScrollContainer personalizado para permitir desplazamiento táctil
-	var scroll_container
-	
-	# Intentar cargar la escena del TouchScrollContainer
-	var touch_scroll_scene = load("res://Scenes/Components/TouchScrollContainer.tscn")
-	if touch_scroll_scene:
-		scroll_container = touch_scroll_scene.instantiate()
-		print("Usando TouchScrollContainer personalizado")
-	else:
-		# Si no se puede cargar, usar un ScrollContainer normal
-		scroll_container = ScrollContainer.new()
-		print("Usando ScrollContainer estándar")
-		
-		# Intentar adjuntar el script TouchScrollHandler
-		var touch_handler_script = load("res://Scripts/TouchScrollHandler.gd")
-		if touch_handler_script:
-			scroll_container.set_script(touch_handler_script)
-			print("Script TouchScrollHandler adjuntado al ScrollContainer")
-	
-	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll_container.custom_minimum_size = Vector2(0, 0)  # Eliminar altura mínima fija
-	scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED  # Desactivar scroll horizontal
-	scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO  # Activar scroll vertical automático
-	
-	# Conectar señales de desplazamiento
-	if scroll_container.has_signal("touch_scroll_started"):
-		scroll_container.connect("touch_scroll_started", Callable(self, "_on_scroll_started"))
-	if scroll_container.has_signal("touch_scroll_ended"):
-		scroll_container.connect("touch_scroll_ended", Callable(self, "_on_scroll_ended"))
-	
-	$CanvasLayer/VBoxContainer.add_child(scroll_container)
-	
-	# Crear un VBoxContainer dentro del ScrollContainer para los packs
-	var packs_container = VBoxContainer.new()
-	packs_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	packs_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	packs_container.add_theme_constant_override("separation", 20)  # Separación entre packs
-	packs_container.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Ignorar eventos de ratón para que pasen al ScrollContainer
-	scroll_container.add_child(packs_container)
-	
+	print("PackSelection: Llamando a get_all_packs_with_progress desde ProgressManager")
 	# Obtener los packs con información de progresión
 	var packs = progress_manager.get_all_packs_with_progress()
-	print("Packs cargados: ", packs.size())
+	print("PackSelection: Packs cargados: ", packs.size())
+	
+	# Imprimir detalles de cada pack para diagnóstico
+	for i in range(packs.size()):
+		var pack = packs[i]
+		print("PackSelection: Pack ", i, " - ID: ", pack.id, ", Name: ", pack.name, 
+			", Unlocked: ", pack.get("unlocked", "N/A"), 
+			", Purchased: ", pack.get("purchased", "N/A"),
+			", Puzzles: ", pack.puzzles.size() if pack.has("puzzles") else "No puzzles")
 	
 	if packs.size() == 0:
-		print("ERROR: No se encontraron packs disponibles")
-		var error_label = Label.new()
-		error_label.text = "Error: No se encontraron packs disponibles"
-		error_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		error_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		error_label.custom_minimum_size = Vector2(0, 100)
-		error_label.add_theme_font_size_override("font_size", 18)
-		error_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
-		packs_container.add_child(error_label)
-		return
+		print("PackSelection: ERROR - No se encontraron packs disponibles")
+		print("PackSelection: Intentando leer directamente del archivo JSON")
+		
+		# Intentar cargar directamente del archivo JSON
+		var file = FileAccess.open("res://PacksData/sample_packs.json", FileAccess.READ)
+		if file:
+			var json_text = file.get_as_text()
+			file.close()
+			var json_result = JSON.parse_string(json_text)
+			if json_result and json_result.has("packs"):
+				packs = json_result.packs
+				print("PackSelection: Cargados ", packs.size(), " packs directamente del archivo JSON")
+			else:
+				print("PackSelection: ERROR - No se pudo analizar el JSON de packs")
+		else:
+			print("PackSelection: ERROR - No se pudo abrir el archivo JSON de packs")
+			
+		# Si todavía no hay packs después del intento directo
+		if packs.size() == 0:
+			var error_label = Label.new()
+			error_label.text = "Error: No se encontraron packs disponibles"
+			error_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			error_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			error_label.custom_minimum_size = Vector2(0, 100)
+			error_label.add_theme_font_size_override("font_size", 18)
+			error_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+			packs_container.add_child(error_label)
+			return
 	
 	# Crear componentes de pack para cada pack disponible
 	for pack in packs:
-		print("Procesando pack: ", pack.name)
+		print("PackSelection: Procesando pack: ", pack.name)
 		
 		# Añadir la ruta de la imagen al pack si existe
 		if not pack.has("image_path"):

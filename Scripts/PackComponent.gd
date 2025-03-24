@@ -21,7 +21,7 @@ func setup(data):
 	if data.has("image_path") and data.image_path != "":
 		var image = load(data.image_path)
 		if image:
-			$MarginContainer/VBoxContainer/PackImage.texture = image
+			$MarginContainer/VBoxContainer/ImageContainer/PackImage.texture = image
 	
 	# Configurar el estado de bloqueo
 	if data.has("unlocked") and not data.unlocked:
