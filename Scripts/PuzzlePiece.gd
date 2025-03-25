@@ -2,6 +2,8 @@ extends Node2D
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var area2d: Area2D = $Area2D
+@onready var number_label: Label = $NumberLabel
+@onready var background_rect: ColorRect = $BackgroundRect
 
 var puzzle_image: Texture2D
 var fragment_region: Rect2
@@ -15,6 +17,7 @@ var drag_offset: Vector2 = Vector2.ZERO
 var puzzle_front: Texture2D
 var puzzle_back: Texture2D
 var flipped: bool = false
+var order_number: int = 0  # Número de orden de la pieza
 
 var only_vertical: bool = false  # Si true, el grupo solo se mueve verticalmente
 
@@ -26,6 +29,11 @@ var border_node: Line2D
 var group_id: int = -1  # Para identificar a qué grupo pertenece
 var is_edge_piece: bool = false  # Si es pieza de borde en un grupo
 
+# Variables exportables para personalización
+@export var background_color: Color = Color(0.1, 0.1, 0.1, 1.0)  # Color de fondo para el lado trasero
+@export var number_color: Color = Color(1, 1, 1, 1)  # Color del número
+@export var number_font_size: int = 32  # Tamaño de fuente del número
+
 func _ready():
 	# Ajustar para recibir eventos de entrada
 	# El Area2D está para colisiones, pero usaremos _input_event
@@ -36,8 +44,30 @@ func _ready():
 	# Crear el borde
 	create_border()
 	
+	# Configurar label del número
+	setup_number_label()
+	
 	# Inicialmente todas las piezas son de borde
 	is_edge_piece = true
+
+func setup_number_label():
+	# Configurar el Label del número (ya debe existir en la escena)
+	if number_label:
+		number_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		number_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		number_label.add_theme_font_size_override("font_size", number_font_size)
+		number_label.add_theme_color_override("font_color", number_color)
+		number_label.visible = false
+	
+	# Configurar el rectángulo de fondo
+	if background_rect:
+		background_rect.color = background_color
+		background_rect.visible = false
+
+func set_order_number(number: int):
+	order_number = number
+	if number_label:
+		number_label.text = str(number)
 
 func set_piece_data(front_tex: Texture2D, back_tex: Texture2D, region: Rect2):
 	puzzle_front = front_tex
@@ -51,14 +81,36 @@ func update_visual():
 	# Si la pieza está volteada, usamos la textura trasera
 	if flipped:
 		atlas_tex.atlas = puzzle_back
+		if number_label:
+			number_label.visible = true
+		if background_rect:
+			background_rect.visible = true
 	else:
 		atlas_tex.atlas = puzzle_front
+		if number_label:
+			number_label.visible = false
+		if background_rect:
+			background_rect.visible = false
 	atlas_tex.region = fragment_region
 	sprite.texture = atlas_tex
+	
+	# Asegurar que el tamaño del número y el fondo se ajusten al tamaño del sprite
+	if sprite.texture:
+		var texture_size = sprite.texture.get_size() * sprite.scale
+		if number_label:
+			number_label.size = texture_size
+			number_label.position = sprite.position - texture_size/2
+		if background_rect:
+			background_rect.size = texture_size
+			background_rect.position = sprite.position - texture_size/2
 
 func flip_piece():
 	flipped = !flipped
 	update_visual()
+	
+	# Reproducir efecto de sonido de flip
+	if get_parent().has_method("play_flip_sound"):
+		get_parent().play_flip_sound()
 
 # Función para crear el borde de la pieza
 func create_border():
@@ -137,42 +189,6 @@ func set_edge_piece(is_edge: bool):
 func _process(_delta):
 	if is_instance_valid(border_node) and is_instance_valid(sprite) and sprite.texture != null:
 		update_border()
-
-# EVENTOS DE ENTRADA
-#
-# func _input_event(viewport, event, shape_idx):
-#	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-#		if event.pressed:
-#			# Iniciar drag
-#			dragging = true
-#			drag_offset = global_position - event.position
-#			bring_to_front()
-#		else:
-#			if dragging:
-#				dragging = false
-#				# Al soltar, avisar a PuzzleGame
-#				if get_parent().has_method("place_piece"):
-#					get_parent().place_piece(self)
-#				if get_parent().has_method("on_piece_moved"):
-#					get_parent().on_piece_moved()
-#
-#	elif event is InputEventMouseMotion and dragging:
-#		# Mover el grupo entero (todas las piezas fusionadas)
-#		var delta = event.relative
-#		for p in pieces_group:
-#			if only_vertical:
-#				p.global_position.y += delta.y
-#			else:
-#				p.global_position += delta
-
-#
-# FUNCIONES DE APOYO
-#
-func bring_to_front():
-	# Elevar este nodo para que se dibuje por encima de otros
-	z_index = 999999
-	if is_instance_valid(border_node):
-		border_node.z_index = 999998  # El borde justo debajo de la pieza
 
 # Función para actualizar el grupo de piezas
 func update_pieces_group(new_group: Array):

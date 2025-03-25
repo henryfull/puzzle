@@ -22,6 +22,7 @@ class_name PuzzleGame
 # Parámetros para efectos de animación
 @export_range(0.1, 1.0, 0.05) var tween_duration: float = 0.3  # Duración de la animación Tween
 @export var use_tween_effect: bool = true  # Activar/desactivar el efecto
+@export_range(0.05, 0.5, 0.05) var flip_speed: float = 0.05  # Velocidad de la animación de flip
 
 # Variables para el paneo del tablero (simplificadas)
 var is_panning := false
@@ -53,6 +54,7 @@ var total_moves: int = 0
 
 var audio_move: AudioStreamPlayer
 var audio_merge: AudioStreamPlayer
+var audio_flip: AudioStreamPlayer
 
 # === VARIABLES PARA GESTIÓN DE PROGRESIÓN ===
 var current_pack_id: String = ""
@@ -75,12 +77,14 @@ class Piece:
 	var dragging := false
 	var drag_offset := Vector2.ZERO
 	var group := []  # Lista de piezas en el mismo grupo
+	var order_number: int  # Número de orden de la pieza
 
-	func _init(_node: Node2D, _sprite: Sprite2D, _orig: Vector2):
+	func _init(_node: Node2D, _sprite: Sprite2D, _orig: Vector2, _order: int):
 		node = _node
 		sprite = _sprite
 		original_pos = _orig
 		current_cell = _orig
+		order_number = _order
 		group = [self]  # Inicialmente, cada pieza está en su propio grupo
 
 #
@@ -143,6 +147,13 @@ func make_sounds_game():
 	audio_merge.volume_db = -5
 	audio_merge.bus = "SFX"
 	add_child(audio_merge)
+	
+	# Añadir sonido de flip
+	audio_flip = AudioStreamPlayer.new()
+	audio_flip.stream = load("res://Assets/Sounds/SFX/flip.wav")
+	audio_flip.volume_db = -8
+	audio_flip.bus = "SFX"
+	add_child(audio_flip)
 
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
 	# 1) Cargar la escena del viewport
@@ -272,8 +283,12 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 			piece_node.get_node("Sprite2D").position = cell_size * 0.5
 			
 			# Crear la instancia de la clase "Piece" para el manejo de grid
-			var piece_obj = Piece.new(piece_node, piece_node.get_node("Sprite2D"), Vector2(col_i, row_i))
+			var piece_obj = Piece.new(piece_node, piece_node.get_node("Sprite2D"), Vector2(col_i, row_i), index + 1)
 			pieces.append(piece_obj)
+			
+			# Asignar el número de orden a la pieza
+			if piece_node.has_method("set_order_number"):
+				piece_node.set_order_number(index + 1)
 			
 			# Posición inicial: la celda "desordenada"
 			var random_cell = cell_list[index]
@@ -1350,10 +1365,53 @@ func update_edge_pieces_in_group(group: Array):
 			piece.node.set_edge_piece(is_edge)
 
 func on_flip_button_pressed() -> void:
-	# Ciclo por cada pieza y, si el nodo de la pieza soporta flip_piece, lo invoco
+	# Variable para rastrear si encontramos una pieza seleccionada
+	var target_piece = null
+	
+	# Primero intentamos encontrar una pieza que esté siendo arrastrada
 	for piece_obj in pieces:
-		if piece_obj.node.has_method("flip_piece"):
-			piece_obj.node.flip_piece()
+		if piece_obj.dragging:
+			target_piece = piece_obj
+			break
+	
+	# Si no hay pieza seleccionada, voltear todas las piezas (comportamiento original)
+	if target_piece == null:
+		# Crear un tween para la animación
+		var tween = create_tween()
+		
+		# Voltear todas las piezas con animación
+		for piece_obj in pieces:
+			if piece_obj.node.has_method("flip_piece"):
+				# Animar la escala para dar efecto de volteo
+				tween.parallel().tween_property(piece_obj.node, "scale", Vector2(0, 1), flip_speed)
+				
+				# A la mitad de la animación, cambiar la textura
+				tween.tween_callback(func():
+					piece_obj.node.flip_piece()
+				).set_delay(flip_speed)
+				
+				# Restaurar la escala
+				tween.parallel().tween_property(piece_obj.node, "scale", Vector2(1, 1), flip_speed).set_delay(flip_speed)
+	else:
+		# Si hay una pieza seleccionada, voltear solo su grupo
+		var group_pieces = target_piece.group
+		
+		# Crear un tween para la animación
+		var tween = create_tween()
+		
+		# Voltear cada pieza del grupo con una animación
+		for piece_obj in group_pieces:
+			if piece_obj.node.has_method("flip_piece"):
+				# Animar la escala para dar efecto de volteo
+				tween.parallel().tween_property(piece_obj.node, "scale", Vector2(0, 1), flip_speed)
+				
+				# A la mitad de la animación, cambiar la textura
+				tween.tween_callback(func():
+					piece_obj.node.flip_piece()
+				).set_delay(flip_speed)
+				
+				# Restaurar la escala
+				tween.parallel().tween_property(piece_obj.node, "scale", Vector2(1, 1), flip_speed).set_delay(flip_speed)
 
 # Función para volver a la selección de puzzles
 func _on_PuzzleSelected():
@@ -2150,3 +2208,7 @@ func update_piece_position_state(piece_obj: Piece):
 		# Si la pieza tiene el método para establecer el estado de posición, usarlo
 		if piece_obj.node.has_method("set_correct_position"):
 			piece_obj.node.set_correct_position(is_correct)
+
+func play_flip_sound():
+	if audio_flip and not audio_flip.playing:
+		audio_flip.play()

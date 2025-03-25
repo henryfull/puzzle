@@ -43,6 +43,7 @@ grow_vertical = 2
 color = Color(1, 0.901961, 0.72549, 1)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+visibility_layer = 2
 z_index = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -79,7 +80,6 @@ layout_direction = 1
 layout_mode = 2
 
 [node name="MarginRight" type="MarginContainer" parent="CanvasLayer/HBoxContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 20
 

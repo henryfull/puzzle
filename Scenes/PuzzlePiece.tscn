@@ -8,10 +8,24 @@ size = Vector2(336.38, 308.67)
 
 [node name="PuzzlePiece" type="Node2D"]
 script = ExtResource("1_uava8")
+background_color = Color(0.12549, 0.12549, 0.12549, 1)
+
+[node name="BackgroundRect" type="ColorRect" parent="."]
+clip_contents = true
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.72549, 0.854902, 1, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(148, 264)
 texture = ExtResource("2_6fljm")
+
+[node name="NumberLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2(149, 266)
