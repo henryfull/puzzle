@@ -19,6 +19,10 @@ class_name PuzzleGame
 # Parámetros de control del tablero
 @export_range(0.1, 2.0, 0.1) var pan_sensitivity: float = 1.0  # Sensibilidad del desplazamiento
 
+# Parámetros para efectos de animación
+@export_range(0.1, 1.0, 0.05) var tween_duration: float = 0.3  # Duración de la animación Tween
+@export var use_tween_effect: bool = true  # Activar/desactivar el efecto
+
 # Variables para el paneo del tablero (simplificadas)
 var is_panning := false
 var last_pan_position := Vector2.ZERO
@@ -281,6 +285,13 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 			
 			# Registrar en grid
 			set_piece_at(random_cell, piece_obj)
+			
+			# Actualizar el estado inicial de la pieza
+			update_piece_position_state(piece_obj)
+			
+			# Cada pieza comienza como pieza de borde en su propio grupo
+			if piece_obj.node.has_method("set_edge_piece"):
+				piece_obj.node.set_edge_piece(true)
 
 	# Activar la captura de eventos de mouse a nivel global
 	# (Podrías usar _input() o unhandled_input(), en este ejemplo iremos con _unhandled_input)
@@ -471,13 +482,37 @@ func place_piece(piece_obj: Piece):
 	set_piece_at(new_cell, piece_obj)
 	
 	# Calcular la posición física de la pieza teniendo en cuenta el desplazamiento del tablero
-	piece_obj.node.position = puzzle_offset + new_cell * cell_size
+	var target_position = puzzle_offset + new_cell * cell_size
+	
+	# Actualizar el estado de la pieza (si está en la posición correcta o no)
+	update_piece_position_state(piece_obj)
+	
+	# Aplicar efecto de Tween si está activado
+	if use_tween_effect:
+		apply_tween_effect(piece_obj.node, target_position)
+	else:
+		piece_obj.node.position = target_position
 
 	# 4) Fusionar con piezas adyacentes, si es posible
 	var adjacent = find_adjacent_pieces(piece_obj, new_cell)
 	for adj in adjacent:
 		if are_pieces_mergeable(piece_obj, adj):
 			merge_pieces(piece_obj, adj)
+
+# Función para aplicar el efecto de Tween
+func apply_tween_effect(node: Node2D, target_position: Vector2):
+	# Crear un nuevo Tween
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUINT)  # Transición suave
+	
+	# Animar la posición
+	tween.tween_property(node, "position", target_position, tween_duration)
+	
+	# Opcionalmente, añadir un efecto de escala para dar sensación de "rebote"
+	var original_scale = node.scale
+	tween.parallel().tween_property(node, "scale", original_scale * 1.1, tween_duration * 0.5)
+	tween.tween_property(node, "scale", original_scale, tween_duration * 0.5)
 
 func find_adjacent_pieces(piece: Piece, cell: Vector2) -> Array:
 	var adjacent = []
@@ -517,9 +552,20 @@ func swap_pieces(a: Piece, b: Piece):
 	set_piece_at(cell_b, a)
 	set_piece_at(cell_a, b)
 
-	# Reposicionar
-	a.node.position = puzzle_offset + cell_b * cell_size
-	b.node.position = puzzle_offset + cell_a * cell_size
+	# Reposicionar con efecto Tween
+	var target_pos_a = puzzle_offset + cell_b * cell_size
+	var target_pos_b = puzzle_offset + cell_a * cell_size
+	
+	# Actualizar el estado de posición de ambas piezas
+	update_piece_position_state(a)
+	update_piece_position_state(b)
+	
+	if use_tween_effect:
+		apply_tween_effect(a.node, target_pos_a)
+		apply_tween_effect(b.node, target_pos_b)
+	else:
+		a.node.position = target_pos_a
+		b.node.position = target_pos_b
 	
 	# Mostrar mensaje de éxito
 	show_success_message("¡Piezas intercambiadas!")
@@ -578,6 +624,9 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 		if not (p in new_group):
 			new_group.append(p)
 	
+	# Generar un ID de grupo único (usamos el ID de la primera pieza)
+	var group_id = piece1.node.get_instance_id()
+	
 	# Actualizar el grupo en todas las piezas
 	for p in new_group:
 		p.group = new_group
@@ -594,7 +643,28 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 		# Actualizar la posición de la pieza
 		remove_piece_at(p.current_cell)
 		set_piece_at(target_cell, p)
-		p.node.position = puzzle_offset + target_cell * cell_size
+		
+		# Calcular posición objetivo y aplicar Tween
+		var target_position = puzzle_offset + target_cell * cell_size
+		
+		# Actualizar el estado de la pieza (si está en la posición correcta o no)
+		update_piece_position_state(p)
+		
+		# Actualizar el ID de grupo de la pieza
+		if p.node.has_method("set_group_id"):
+			p.node.set_group_id(group_id)
+		
+		# Actualizar el pieces_group en el nodo de la pieza
+		if p.node.has_method("update_pieces_group"):
+			p.node.pieces_group = new_group
+		
+		if use_tween_effect:
+			apply_tween_effect(p.node, target_position)
+		else:
+			p.node.position = target_position
+	
+	# Identificar las piezas de borde en el grupo
+	update_edge_pieces_in_group(new_group)
 	
 	# Reproducir sonido de fusión (usando directamente el reproductor de audio)
 	audio_merge.play()
@@ -850,14 +920,26 @@ func place_group(piece: Piece):
 			var occupant = occupants[i]
 			var orig_cell = group_copy[i].current_cell
 			set_piece_at(orig_cell, occupant)
-			occupant.node.position = puzzle_offset + orig_cell * cell_size
+			
+			# Aplicar efecto Tween
+			var target_position = puzzle_offset + orig_cell * cell_size
+			if use_tween_effect:
+				apply_tween_effect(occupant.node, target_position)
+			else:
+				occupant.node.position = target_position
 		
 		# Colocar las piezas del grupo en las posiciones de las ocupantes
 		for i in range(group_copy.size()):
 			var p = group_copy[i]
 			var new_cell = occupant_positions[i]
 			set_piece_at(new_cell, p)
-			p.node.position = puzzle_offset + new_cell * cell_size
+			
+			# Aplicar efecto Tween
+			var target_position = puzzle_offset + new_cell * cell_size
+			if use_tween_effect:
+				apply_tween_effect(p.node, target_position)
+			else:
+				p.node.position = target_position
 		
 		# Generar un error para depuración
 		push_warning("Intercambiando grupo de " + str(group_copy.size()) + " piezas con " + str(occupants.size()) + " piezas individuales")
@@ -892,18 +974,37 @@ func place_group(piece: Piece):
 				if free_cells.size() > 0:
 					remove_piece_at(occupant.current_cell)
 					set_piece_at(free_cells[0], occupant)
-					occupant.node.position = puzzle_offset + free_cells[0] * cell_size
+					
+					# Aplicar efecto Tween
+					var target_position = puzzle_offset + free_cells[0] * cell_size
+					if use_tween_effect:
+						apply_tween_effect(occupant.node, target_position)
+					else:
+						occupant.node.position = target_position
+						
 				elif add_extra_row():
 					# Si no hay celdas libres, intentamos añadir una fila
 					free_cells = find_free_cells(1)
 					if free_cells.size() > 0:
 						remove_piece_at(occupant.current_cell)
 						set_piece_at(free_cells[0], occupant)
-						occupant.node.position = puzzle_offset + free_cells[0] * cell_size
+						
+						# Aplicar efecto Tween
+						var target_position = puzzle_offset + free_cells[0] * cell_size
+						if use_tween_effect:
+							apply_tween_effect(occupant.node, target_position)
+						else:
+							occupant.node.position = target_position
 			
 			# Colocar la pieza en su posición
 			set_piece_at(p_target, p)
-			p.node.position = puzzle_offset + p_target * cell_size
+			
+			# Aplicar efecto Tween
+			var target_position = puzzle_offset + p_target * cell_size
+			if use_tween_effect:
+				apply_tween_effect(p.node, target_position)
+			else:
+				p.node.position = target_position
 	
 	# Verificar que todas las piezas del grupo estén correctamente colocadas en el grid
 	for p in group_copy:
@@ -912,7 +1013,13 @@ func place_group(piece: Piece):
 			var free_cells = find_free_cells(1)
 			if free_cells.size() > 0:
 				set_piece_at(free_cells[0], p)
-				p.node.position = puzzle_offset + free_cells[0] * cell_size
+				
+				# Aplicar efecto Tween
+				var target_position = puzzle_offset + free_cells[0] * cell_size
+				if use_tween_effect:
+					apply_tween_effect(p.node, target_position)
+				else:
+					p.node.position = target_position
 	
 	# Intentar fusionar el grupo con piezas adyacentes fuera del grupo
 	var merged = true
@@ -975,6 +1082,9 @@ func check_victory():
 	var total_pieces = pieces.size()
 	
 	for piece_obj in pieces:
+		# Actualizar el estado de posición de la pieza
+		update_piece_position_state(piece_obj)
+		
 		if piece_obj.current_cell != piece_obj.original_pos:
 			all_in_place = false
 			
@@ -1002,6 +1112,10 @@ func check_victory():
 			remove_piece_at(piece_obj.current_cell)
 			piece_obj.current_cell = piece_obj.original_pos
 			set_piece_at(piece_obj.original_pos, piece_obj)
+			
+			# Marcar todas las piezas como en posición correcta
+			if piece_obj.node.has_method("set_correct_position"):
+				piece_obj.node.set_correct_position(true)
 		
 		_on_puzzle_completed()
 		return true
@@ -1057,6 +1171,10 @@ func check_victory_periodic():
 			remove_piece_at(piece_obj.current_cell)
 			piece_obj.current_cell = piece_obj.original_pos
 			set_piece_at(piece_obj.original_pos, piece_obj)
+			
+			# Marcar todas las piezas como en posición correcta
+			if piece_obj.node.has_method("set_correct_position"):
+				piece_obj.node.set_correct_position(true)
 		
 		# Cambiar a la pantalla de victoria
 		_on_puzzle_completed()
@@ -1075,6 +1193,9 @@ func check_victory_by_position():
 	var total_pieces = pieces.size()
 	
 	for piece_obj in pieces:
+		# Actualizar el estado de posición de la pieza
+		update_piece_position_state(piece_obj)
+		
 		# Calcular dónde debería estar la pieza visualmente
 		var expected_position = puzzle_offset + piece_obj.original_pos * cell_size
 		
@@ -1097,6 +1218,10 @@ func check_victory_by_position():
 			remove_piece_at(piece_obj.current_cell)
 			piece_obj.current_cell = piece_obj.original_pos
 			set_piece_at(piece_obj.original_pos, piece_obj)
+			
+			# Marcar todas las piezas como en posición correcta
+			if piece_obj.node.has_method("set_correct_position"):
+				piece_obj.node.set_correct_position(true)
 		
 		# Mostrar pantalla de victoria
 		_on_puzzle_completed()
@@ -1113,6 +1238,10 @@ func check_victory_by_position():
 			remove_piece_at(piece_obj.current_cell)
 			piece_obj.current_cell = piece_obj.original_pos
 			set_piece_at(piece_obj.original_pos, piece_obj)
+			
+			# Marcar todas las piezas como en posición correcta
+			if piece_obj.node.has_method("set_correct_position"):
+				piece_obj.node.set_correct_position(true)
 		
 		# Mostrar pantalla de victoria
 		_on_puzzle_completed()
@@ -1160,6 +1289,15 @@ func check_all_groups() -> void:
 			if merged_any:
 				break
 	
+	# Actualizar las piezas de borde en todos los grupos
+	var processed_groups = []  # Para evitar procesar dos veces el mismo grupo
+	
+	for piece_obj in pieces:
+		var leader = get_group_leader(piece_obj)
+		if not (leader in processed_groups):
+			update_edge_pieces_in_group(leader.group)
+			processed_groups.append(leader)
+	
 	# Verificar y corregir el estado del grid después de todas las fusiones
 	verify_and_fix_grid()
 	
@@ -1168,6 +1306,48 @@ func check_all_groups() -> void:
 	
 	# También verificar por posición visual
 	call_deferred("check_victory_by_position")
+
+# Nueva función para identificar las piezas de borde en un grupo
+func update_edge_pieces_in_group(group: Array):
+	if group.size() <= 1:
+		# Si solo hay una pieza en el grupo, es una pieza de borde
+		for piece in group:
+			if piece.node.has_method("set_edge_piece"):
+				piece.node.set_edge_piece(true)
+		return
+	
+	# Para grupos de más de una pieza, identificar las piezas de borde
+	var directions = [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]
+	
+	# Primero, marcar todas las piezas como no borde
+	for piece in group:
+		if piece.node.has_method("set_edge_piece"):
+			piece.node.set_edge_piece(false)
+	
+	# Luego, identificar las piezas que realmente son borde
+	for piece in group:
+		var cell = piece.current_cell
+		var is_edge = false
+		
+		# Una pieza es de borde si en alguna dirección no tiene una pieza del mismo grupo
+		for dir in directions:
+			var neighbor_cell = cell + dir
+			var has_neighbor = false
+			
+			# Buscar si hay una pieza del mismo grupo en esta dirección
+			for other_piece in group:
+				if other_piece.current_cell == neighbor_cell:
+					has_neighbor = true
+					break
+			
+			# Si no hay vecino en esta dirección, es una pieza de borde
+			if not has_neighbor:
+				is_edge = true
+				break
+		
+		# Actualizar el estado de "edge" de la pieza
+		if piece.node.has_method("set_edge_piece"):
+			piece.node.set_edge_piece(is_edge)
 
 func on_flip_button_pressed() -> void:
 	# Ciclo por cada pieza y, si el nodo de la pieza soporta flip_piece, lo invoco
@@ -1876,18 +2056,69 @@ func show_options_panel():
 	# Conectar la señal value_changed del slider
 	sensitivity_slider.connect("value_changed", Callable(self, "_on_sensitivity_changed"))
 	
+	# Añadir separador
+	var separator2 = HSeparator.new()
+	separator2.custom_minimum_size = Vector2(0, 10)
+	vbox.add_child(separator2)
+	
+	# Añadir opción para activar/desactivar el efecto Tween
+	var tween_check_hbox = HBoxContainer.new()
+	vbox.add_child(tween_check_hbox)
+	
+	var tween_check_label = Label.new()
+	tween_check_label.text = "Efecto de movimiento suave:"
+	tween_check_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tween_check_label.add_theme_color_override("font_color", Color(1, 1, 1))
+	tween_check_hbox.add_child(tween_check_label)
+	
+	var tween_check = CheckBox.new()
+	tween_check.name = "TweenCheck"
+	tween_check.button_pressed = use_tween_effect
+	tween_check_hbox.add_child(tween_check)
+	
+	# Conectar la señal toggled del checkbox
+	tween_check.connect("toggled", Callable(self, "_on_tween_toggled"))
+	
+	# Añadir control para la duración del efecto Tween
+	var tween_duration_hbox = HBoxContainer.new()
+	vbox.add_child(tween_duration_hbox)
+	
+	var tween_duration_label = Label.new()
+	tween_duration_label.text = "Duración del efecto:"
+	tween_duration_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tween_duration_label.add_theme_color_override("font_color", Color(1, 1, 1))
+	tween_duration_hbox.add_child(tween_duration_label)
+	
+	var tween_duration_slider = HSlider.new()
+	tween_duration_slider.name = "TweenDurationSlider"
+	tween_duration_slider.min_value = 0.1
+	tween_duration_slider.max_value = 1.0
+	tween_duration_slider.step = 0.05
+	tween_duration_slider.value = tween_duration
+	tween_duration_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tween_duration_hbox.add_child(tween_duration_slider)
+	
+	var tween_duration_value = Label.new()
+	tween_duration_value.name = "TweenDurationValue"
+	tween_duration_value.text = str(tween_duration) + "s"
+	tween_duration_value.add_theme_color_override("font_color", Color(1, 1, 1))
+	tween_duration_value.custom_minimum_size = Vector2(50, 0)
+	tween_duration_hbox.add_child(tween_duration_value)
+	
+	# Conectar la señal value_changed del slider
+	tween_duration_slider.connect("value_changed", Callable(self, "_on_tween_duration_changed"))
+	
+	# Añadir un separador antes del botón de cerrar
+	var separator3 = HSeparator.new()
+	separator3.custom_minimum_size = Vector2(0, 20)
+	vbox.add_child(separator3)
+	
 	# Añadir un botón para cerrar el panel
 	var close_button = Button.new()
 	close_button.text = "Cerrar"
 	close_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	close_button.custom_minimum_size = Vector2(100, 40)
 	close_button.connect("pressed", Callable(self, "_on_close_options"))
-	
-	# Añadir un separador antes del botón de cerrar
-	var separator2 = HSeparator.new()
-	separator2.custom_minimum_size = Vector2(0, 20)
-	vbox.add_child(separator2)
-	
 	vbox.add_child(close_button)
 	
 	# Añadir el panel a la capa de opciones
@@ -1910,3 +2141,12 @@ func _on_close_options():
 func _on_BackButton_pressed() -> void:
 	# Volver al menú principal
 	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+
+# Nueva función para actualizar el estado de posición de una pieza
+func update_piece_position_state(piece_obj: Piece):
+	if is_instance_valid(piece_obj) and is_instance_valid(piece_obj.node):
+		var is_correct = piece_obj.current_cell == piece_obj.original_pos
+		
+		# Si la pieza tiene el método para establecer el estado de posición, usarlo
+		if piece_obj.node.has_method("set_correct_position"):
+			piece_obj.node.set_correct_position(is_correct)
