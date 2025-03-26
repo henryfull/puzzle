@@ -22,7 +22,7 @@ class_name PuzzleGame
 # Parámetros para efectos de animación
 @export_range(0.1, 1.0, 0.05) var tween_duration: float = 0.3  # Duración de la animación Tween
 @export var use_tween_effect: bool = true  # Activar/desactivar el efecto
-@export_range(0.05, 0.5, 0.05) var flip_speed: float = 0.02  # Velocidad de la animación de flip
+@export_range(0.05, 0.5, 0.05) var flip_speed: float = 0.01  # Velocidad de la animación de flip
 
 # Variables para el paneo del tablero (simplificadas)
 var is_panning := false

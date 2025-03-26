@@ -53,8 +53,12 @@ func _ready():
 	# Establecer el orden de los nodos
 	if background_rect:
 		background_rect.z_index = 10
+		# Asegurarse de que el ColorRect no bloquee los eventos de entrada
+		background_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if number_label:
 		number_label.z_index = 11  # El número debe estar encima del fondo
+		# Asegurarse de que el Label no bloquee los eventos de entrada
+		number_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func setup_number_label():
 	# Configurar el Label del número (ya debe existir en la escena)
@@ -93,6 +97,8 @@ func update_visual():
 		if background_rect:
 			background_rect.visible = true
 			background_rect.color = background_color  # Asegurar que el color es correcto
+			# Asegurarnos de que el background_rect no bloquee los eventos de entrada
+			background_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	else:
 		atlas_tex.atlas = puzzle_front
 		if number_label:
@@ -111,6 +117,10 @@ func update_visual():
 		if number_label:
 			number_label.size = texture_size
 			number_label.position = sprite.position - texture_size/2
+			
+	# Actualizar la posición del área de colisión para asegurar que coincida con el sprite
+	if area2d and sprite.texture:
+		area2d.position = sprite.position
 
 func flip_piece():
 	flipped = !flipped
@@ -165,6 +175,19 @@ func update_border():
 	
 	# Actualizar el color del borde según si está en la posición correcta
 	update_border_color()
+	
+	# Actualizar el área de colisión para que coincida con el sprite
+	if area2d and area2d.has_node("CollisionShape2D"):
+		var collision_shape = area2d.get_node("CollisionShape2D")
+		if collision_shape:
+			# Ajustar la posición del área de colisión
+			area2d.position = center
+			
+			# Ajustar el tamaño de la colisión para que coincida con el sprite
+			# Convertir el tamaño del sprite a la escala del CollisionShape2D
+			var shape_scale = collision_shape.scale
+			collision_shape.scale.x = texture_size.x / 336.38  # Dividir por el tamaño base en la escena
+			collision_shape.scale.y = texture_size.y / 308.67  # Dividir por el tamaño base en la escena
 
 # Función para actualizar el color del borde según la posición
 func update_border_color():
@@ -207,3 +230,11 @@ func update_pieces_group(new_group: Array):
 	pieces_group = new_group
 	update_border()
 	update_border_color()
+
+# Método para manejar los eventos de entrada en el área de colisión
+func _input_event(_viewport, event, _shape_idx):
+	# Asegurarse que el evento sea de tipo InputEvent
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
+		# Delegar el manejo de eventos al nodo padre (PuzzleGame)
+		if get_parent().has_method("process_piece_click"):
+			get_parent().process_piece_click(event)
