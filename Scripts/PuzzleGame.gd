@@ -261,6 +261,9 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 			var piece_node = piece_scene.instantiate()
 			add_child(piece_node)
 			
+			# Asegurar que las piezas se muestren por encima del fondo
+			piece_node.z_index = 5
+			
 			# Definir la región original (SIN escalado) para la parte de la textura
 			var piece_orig_w = original_w / GLOBAL.columns
 			var piece_orig_h = original_h / GLOBAL.rows

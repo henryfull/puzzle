@@ -33,6 +33,17 @@ script = ExtResource("1_sm22t")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="BackgroundColor" type="ColorRect" parent="CanvasLayer"]
+visible = false
+z_index = -10
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.219608, 0.4, 0.498039, 1)
+
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 visible = false
 anchors_preset = 15
