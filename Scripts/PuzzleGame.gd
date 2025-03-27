@@ -687,6 +687,17 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 	# Reproducir sonido de fusión (usando directamente el reproductor de audio)
 	audio_merge.play()
 	
+	# Activar la animación de partículas solo en la pieza que se está moviendo
+	if piece1.node.has_node("CPUParticles2D"):
+		var particles = piece1.node.get_node("CPUParticles2D")
+		
+		# Ajustar la posición de las partículas al centro de la pieza
+		if piece1.node.has_node("Sprite2D"):
+			var sprite = piece1.node.get_node("Sprite2D")
+			particles.position = sprite.position
+		
+		particles.emitting = true
+	
 	# Verificar victoria después de cada fusión
 	call_deferred("check_victory_deferred")
 	

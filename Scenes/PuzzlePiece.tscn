@@ -1,10 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1qdaaubr40oq"]
+[gd_scene load_steps=5 format=3 uid="uid://d1qdaaubr40oq"]
 
 [ext_resource type="Script" uid="uid://cn5nba6ccpqkh" path="res://Scripts/PuzzlePiece.gd" id="1_uava8"]
-[ext_resource type="Texture2D" uid="uid://bcq73labgj32k" path="res://Assets/Images/Pieces/piece_back.jpg" id="2_6fljm"]
+[ext_resource type="Texture2D" uid="uid://d0hgnlc4lvvps" path="res://Assets/Images/icons/star_3.png" id="3_ee0qq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8pe7f"]
 size = Vector2(336.38, 308.67)
+
+[sub_resource type="Curve" id="Curve_ee0qq"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -0.0159942), 0.0, 0.0, 0, 0, Vector2(0.504292, 0.976372), 0.0, 0.0, 0, 0, Vector2(0.976395, 0.0548891), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [node name="PuzzlePiece" type="Node2D"]
 script = ExtResource("1_uava8")
@@ -12,7 +17,6 @@ background_color = Color(0.219608, 0.4, 0.498039, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(148, 264)
-texture = ExtResource("2_6fljm")
 
 [node name="BackgroundRect" type="ColorRect" parent="."]
 z_index = 10
@@ -37,5 +41,26 @@ position = Vector2(149, 266)
 position = Vector2(1.52588e-05, -0.5)
 scale = Vector2(2.36637, 3.31422)
 shape = SubResource("RectangleShape2D_8pe7f")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 12
+texture = ExtResource("3_ee0qq")
+one_shot = true
+speed_scale = 1.75
+explosiveness = 0.55
+randomness = 0.19
+fixed_fps = 60
+draw_order = 1
+emission_shape = 2
+emission_sphere_radius = 42.0
+gravity = Vector2(0, 2)
+initial_velocity_max = 20.0
+radial_accel_min = 100.0
+radial_accel_max = 100.0
+scale_amount_min = 0.02
+scale_amount_max = 0.02
+hue_variation_max = 0.48
+hue_variation_curve = SubResource("Curve_ee0qq")
 
 [connection signal="input_event" from="Area2D" to="." method="_input_event"]
