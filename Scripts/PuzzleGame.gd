@@ -382,6 +382,15 @@ func _unhandled_input(event: InputEvent) -> void:
 					for p in group_leader.group:
 						# Aplicar la nueva posición con el offset original
 						p.node.global_position = touch_pos + p.drag_offset
+						
+						# Asegurar que la pieza tenga el z-index adecuado 
+						# mientras se está arrastrando
+						if p.node.has_method("set_dragging"):
+							p.node.set_dragging(true)
+						
+						# Si la pieza tiene padre, asegurarse de que esté al frente
+						if p.node.get_parent() != null:
+							p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
 					
 					break
 	
@@ -416,6 +425,15 @@ func _unhandled_input(event: InputEvent) -> void:
 					var delta = event.relative
 					for p in group_leader.group:
 						p.node.global_position += delta
+						
+						# Asegurar que la pieza tenga el z-index adecuado 
+						# mientras se está arrastrando
+						if p.node.has_method("set_dragging"):
+							p.node.set_dragging(true)
+							
+						# Asegurar que la pieza esté al frente moviendo su nodo al final del árbol
+						if p.node.get_parent() != null:
+							p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
 					break
 
 func update_board_position() -> void:
@@ -1907,7 +1925,14 @@ func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> voi
 			p.dragging = true
 			# Guardar el offset (diferencia entre posición de la pieza y posición del toque)
 			p.drag_offset = p.node.global_position - mouse_pos
-			p.node.z_index = 9999
+			
+			# Usar el nuevo método set_dragging para cambiar el z-index
+			if p.node.has_method("set_dragging"):
+				p.node.set_dragging(true)
+			else:
+				p.node.z_index = 9999
+				
+			# Asegurar que la pieza esté al frente moviendo su nodo al final del árbol
 			if p.node.get_parent() != null:
 				p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
 
@@ -1923,7 +1948,12 @@ func process_piece_release() -> void:
 		var group_leader = get_group_leader(dragging_piece)
 		for p in group_leader.group:
 			p.dragging = false
-			p.node.z_index = 0
+			
+			# Usar el nuevo método set_dragging para restaurar el z-index
+			if p.node.has_method("set_dragging"):
+				p.node.set_dragging(false)
+			else:
+				p.node.z_index = 0
 		
 		# Guardar la posición actual antes de colocar el grupo
 		var old_position = group_leader.current_cell
@@ -1985,7 +2015,14 @@ func process_piece_click(event: InputEvent) -> void:
 			for p in group_leader.group:
 				p.dragging = true
 				p.drag_offset = p.node.global_position - mouse_pos
-				p.node.z_index = 9999
+				
+				# Usar el nuevo método set_dragging para cambiar el z-index
+				if p.node.has_method("set_dragging"):
+					p.node.set_dragging(true)
+				else:
+					p.node.z_index = 9999
+					
+				# Asegurar que la pieza esté al frente moviendo su nodo al final del árbol
 				if p.node.get_parent() != null:
 					p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
 	else:

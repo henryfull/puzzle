@@ -136,7 +136,7 @@ func create_border():
 	border_node = Line2D.new()
 	border_node.width = border_width
 	border_node.default_color = border_color
-	border_node.z_index = 1  # Para que se dibuje por encima del sprite
+	border_node.z_index = 1  # Para que se dibuje por encima del sprite normalmente
 	add_child(border_node)
 	
 	# Actualizar el borde
@@ -238,3 +238,33 @@ func _input_event(_viewport, event, _shape_idx):
 		# Delegar el manejo de eventos al nodo padre (PuzzleGame)
 		if get_parent().has_method("process_piece_click"):
 			get_parent().process_piece_click(event)
+
+# Función para actualizar el z-index cuando se arrastra o se suelta la pieza
+func set_dragging(is_dragging: bool):
+	dragging = is_dragging
+	if is_dragging:
+		z_index = 2000  # Poner la pieza al frente con z-index de 2000
+		if is_instance_valid(border_node):
+			border_node.z_index = 1999  # El borde justo debajo de la pieza, pero visible
+		
+		# Actualizar z-index del fondo y número si la pieza está volteada
+		if flipped:
+			if is_instance_valid(background_rect):
+				background_rect.z_index = 2010  # Por encima de la pieza
+			if is_instance_valid(number_label):
+				number_label.z_index = 2011  # Por encima del fondo
+	else:
+		z_index = 0  # Valor normal cuando no se arrastra
+		if is_instance_valid(border_node):
+			border_node.z_index = 1  # El borde vuelve a estar por encima del sprite
+		
+		# Restaurar z-index normal del fondo y número
+		if flipped:
+			if is_instance_valid(background_rect):
+				background_rect.z_index = 10
+			if is_instance_valid(number_label):
+				number_label.z_index = 11
+	
+	# Actualizar visualmente
+	if is_instance_valid(sprite):
+		sprite.z_index = z_index
