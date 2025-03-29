@@ -24,3 +24,66 @@ grow_horizontal = 0
 theme_type_variation = &"ButtonYellow"
 theme_override_font_sizes/font_size = 22
 text = "Dificultad"
+
+[node name="DifficultyLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ColorRect" type="ColorRect" parent="DifficultyLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.72549, 0.854902, 1, 0.784314)
+
+[node name="DifficultyPanel" type="Panel" parent="DifficultyLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -233.0
+offset_top = -364.0
+offset_right = 67.0
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.52, 1.72)
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_type_variation = &"PanelInside"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DifficultyLayer/DifficultyPanel"]
+custom_minimum_size = Vector2(280, 380)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="DifficultyLayer/DifficultyPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Selecciona la Dificultad"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="DifficultyLayer/DifficultyPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DifficultyLayer/DifficultyPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DifficultyContainer" type="VBoxContainer" parent="DifficultyLayer/DifficultyPanel/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="DifficultyLayer/DifficultyPanel/VBoxContainer"]
+custom_minimum_size = Vector2(170, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"ButtonRed"
+toggle_mode = true
+text = "Cancelar"
