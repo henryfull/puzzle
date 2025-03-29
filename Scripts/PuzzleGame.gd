@@ -7,6 +7,9 @@ class_name PuzzleGame
 # Acceso al singleton ProgressManager
 @onready var progress_manager = get_node("/root/ProgressManager")
 
+# Variable para rastrear si una pieza fue colocada
+var just_placed_piece: bool = false
+
 #
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
@@ -126,7 +129,7 @@ func _ready():
 	
 	# Crear un temporizador para verificar periódicamente la victoria
 	var victory_timer = Timer.new()
-	victory_timer.wait_time = 1.0  # Verificar cada segundo (más frecuente)
+	victory_timer.wait_time = 5.0  # Verificar cada 5 segundos (menos frecuente)
 	victory_timer.autostart = true
 	victory_timer.one_shot = false
 	victory_timer.connect("timeout", Callable(self, "check_victory_periodic"))
@@ -479,6 +482,9 @@ func is_mouse_over_piece(piece_obj: Piece, mouse_pos: Vector2) -> bool:
 # === COLOCAR LA PIEZA (SNAP A CELDA) ===
 #
 func place_piece(piece_obj: Piece):
+	# Indicar que se acaba de colocar una pieza
+	just_placed_piece = true
+	
 	# 1) Calcular la celda según la posición actual
 	var cell = get_cell_of_piece(piece_obj)  # Usamos get_cell_of_piece que ya tiene en cuenta el desplazamiento
 	
@@ -653,6 +659,9 @@ func get_cell_of_piece(piece_obj: Piece) -> Vector2:
 #
 
 func merge_pieces(piece1: Piece, piece2: Piece):
+	# Indicar que se ha colocado/fusionado una pieza
+	just_placed_piece = true
+	
 	# Combinar los grupos
 	var new_group = []
 	new_group.append_array(piece1.group)
@@ -716,11 +725,7 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 		
 		particles.emitting = true
 	
-	# Verificar victoria después de cada fusión
-	call_deferred("check_victory_deferred")
-	
-	# También verificar por posición visual
-	call_deferred("check_victory_by_position")
+	# La verificación de victoria ahora se manejará en check_all_groups() basado en just_placed_piece
 
 # Función para añadir una fila adicional al tablero
 func add_extra_row():
@@ -883,6 +888,9 @@ func find_free_cells(count: int) -> Array:
 	return free_cells
 
 func place_group(piece: Piece):
+	# Indicar que se acaba de colocar una pieza o grupo
+	just_placed_piece = true
+	
 	# Obtener el líder del grupo
 	var leader = get_group_leader(piece)
 	
@@ -1090,8 +1098,11 @@ func place_group(piece: Piece):
 	# Verificar que todas las piezas estén en el grid
 	verify_all_pieces_in_grid()
 	
-	# Verificar victoria después de colocar el grupo
-	call_deferred("check_victory_deferred")
+	# Verificar victoria solo cuando realmente se ha colocado una pieza
+	if just_placed_piece:
+		call_deferred("check_victory_deferred")
+		call_deferred("check_victory_by_position")
+		just_placed_piece = false  # Reiniciar el flag después de verificar
 
 # Nueva función para verificar que todas las piezas estén en el grid
 func verify_all_pieces_in_grid():
@@ -1188,49 +1199,30 @@ func check_victory_deferred():
 
 # Nueva función para verificación periódica de victoria
 func check_victory_periodic():
-	# Verificar y corregir el grid primero
-	verify_and_fix_grid()
-	
-	# Imprimir información de depuración
-	print("Verificación periódica de victoria...")
+	# Verificación rápida: si ya hubo una verificación reciente por una pieza colocada, saltamos esta verificación
+	if just_placed_piece:
+		return
+		
+	# Imprimir información de depuración solo si está activado el modo debug
+	if OS.is_debug_build():
+		print("Verificación periódica de victoria...")
 	
 	# Contar cuántas piezas están en su posición correcta
 	var pieces_in_place = 0
 	var total_pieces = pieces.size()
 	
 	for piece_obj in pieces:
-		var expected_position = puzzle_offset + piece_obj.original_pos * cell_size
-		var distance = piece_obj.node.position.distance_to(expected_position)
-		
-		if distance <= cell_size.length() * 0.5:  # 50% del tamaño de celda como margen de error (más tolerante)
+		if piece_obj.current_cell == piece_obj.original_pos:
 			pieces_in_place += 1
 	
-	print("Piezas en posición correcta: ", pieces_in_place, " de ", total_pieces)
-	
-	# Si más del 95% de las piezas están en su lugar, considerar victoria
+	# Solo si más del 95% de las piezas están en su lugar, usamos la verificación más intensiva
 	if pieces_in_place >= total_pieces * 0.95:
-		print("¡Victoria detectada en verificación periódica!")
-		
-		# Ajustar todas las piezas a su posición exacta
-		for piece_obj in pieces:
-			var expected_position = puzzle_offset + piece_obj.original_pos * cell_size
-			piece_obj.node.position = expected_position
-			remove_piece_at(piece_obj.current_cell)
-			piece_obj.current_cell = piece_obj.original_pos
-			set_piece_at(piece_obj.original_pos, piece_obj)
-			
-			# Marcar todas las piezas como en posición correcta
-			if piece_obj.node.has_method("set_correct_position"):
-				piece_obj.node.set_correct_position(true)
-		
-		# Cambiar a la pantalla de victoria
-		_on_puzzle_completed()
-		return true
-	
-	# Intentar verificar victoria por posición visual primero
-	if not check_victory_by_position():
-		# Si no hay victoria por posición, verificar por el grid
+		if OS.is_debug_build():
+			print("95% de piezas en su lugar, verificando con más detalle...")
 		check_victory()
+		return
+		
+	# No hacemos verificaciones visuales ni arreglos de grid aquí para ahorrar CPU
 
 # Nueva función para verificar victoria por posición visual
 func check_victory_by_position():
@@ -1348,11 +1340,11 @@ func check_all_groups() -> void:
 	# Verificar y corregir el estado del grid después de todas las fusiones
 	verify_and_fix_grid()
 	
-	# Verificar victoria después de verificar todos los grupos
-	call_deferred("check_victory_deferred")
-	
-	# También verificar por posición visual
-	call_deferred("check_victory_by_position")
+	# Verificar victoria solo cuando realmente se ha colocado una pieza
+	if just_placed_piece:
+		call_deferred("check_victory_deferred")
+		call_deferred("check_victory_by_position")
+		just_placed_piece = false  # Reiniciar el flag después de verificar
 
 # Nueva función para identificar las piezas de borde en un grupo
 func update_edge_pieces_in_group(group: Array):
@@ -1969,11 +1961,7 @@ func process_piece_release() -> void:
 		# Verificar y corregir el estado del grid después de cada movimiento
 		verify_and_fix_grid()
 		
-		# Verificar victoria después de cada movimiento
-		check_victory()
-		
-		# También verificar por posición visual
-		call_deferred("check_victory_by_position")
+		# La verificación de victoria ahora se maneja en place_group() a través de just_placed_piece
 
 # Función para obtener el centro entre todos los puntos de contacto
 func get_touch_center() -> Vector2:
