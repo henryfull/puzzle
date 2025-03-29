@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
 [ext_resource type="Texture2D" uid="uid://dxy0wnpy0jpu" path="res://Assets/Images/GUID/ribbon_blue.svg" id="2_6f4k2"]
 [ext_resource type="Script" uid="uid://dv7ssdl7hhf3r" path="res://Scripts/LangSelector.gd" id="2_kgki5"]
-[ext_resource type="PackedScene" uid="uid://xdw0sm0cdrgy" path="res://temp/SliderOption.tscn" id="2_q4at1"]
+[ext_resource type="PackedScene" uid="uid://xdw0sm0cdrgy" path="res://Scenes/Components/SliderOption.tscn" id="2_q4at1"]
 [ext_resource type="Script" uid="uid://1epn1mhu0fwt" path="res://Scripts/Utils.gd" id="2_qqjs0"]
 [ext_resource type="Script" uid="uid://do1o3ww8nd3mq" path="res://Scripts/ResolutionButton.gd" id="3_p0ibv"]
 
@@ -167,6 +167,54 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("2_qqjs0")
 
+[node name="LabelPanSensitivity" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Sensibilidad"
+language = "es"
+
+[node name="HSlider_Pan_Sensitivity" type="HSlider" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+min_value = 0.1
+max_value = 2.0
+step = 0.1
+value = 1.0
+script = ExtResource("2_qqjs0")
+
+[node name="LabelTweenEffect" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Efecto suave"
+language = "es"
+
+[node name="CheckBox_Tween_Effect" type="CheckBox" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+button_pressed = true
+
+[node name="LabelTweenDuration" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Duración efecto"
+language = "es"
+
+[node name="HSlider_Tween_Duration" type="HSlider" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+min_value = 0.1
+max_value = 1.0
+step = 0.05
+value = 0.2
+script = ExtResource("2_qqjs0")
+
 [node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -195,5 +243,8 @@ text = "Volver"
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_General" to="." method="_on_HSlider_Volumen_General_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_Musica" to="." method="_on_HSlider_Volumen_Musica_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_VFX" to="." method="_on_HSlider_Volumen_VFX_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Pan_Sensitivity" to="." method="_on_pan_sensitivity_changed"]
+[connection signal="toggled" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/CheckBox_Tween_Effect" to="." method="_on_tween_effect_toggled"]
+[connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Tween_Duration" to="." method="_on_tween_duration_changed"]
 [connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer/RestoreButton" to="." method="_on_restore_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]

@@ -26,7 +26,6 @@ var just_placed_piece: bool = false
 @export_range(0.1, 1.0, 0.05) var tween_duration: float = 0.3  # Duración de la animación Tween
 @export var use_tween_effect: bool = true  # Activar/desactivar el efecto
 @export_range(0.05, 0.5, 0.05) var flip_speed: float = 0.01  # Velocidad de la animación de flip
-@export var button_options : Button
 
 # Variables para el paneo del tablero (simplificadas)
 var is_panning := false
@@ -1883,6 +1882,8 @@ func adjust_ui_for_device():
 	else:
 		# En ordenadores, usar un margen estándar
 		hbox.position.y = 20
+		button_difficult.position.y = 80
+		
 		print("PuzzleGame: Usando margen estándar para ordenador")
 
 func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> void:
@@ -2072,6 +2073,25 @@ func load_user_preferences() -> void:
 			tween_duration = saved_tween_duration
 
 # Función para cambiar la sensibilidad del desplazamiento
+func set_pan_sensitivity(value: float) -> void:
+	pan_sensitivity = clamp(value, 0.1, 2.0)
+	
+	# Guardar en GLOBAL (método preferido)
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		if not "puzzle" in global.settings:
+			global.settings.puzzle = {}
+		
+		global.settings.puzzle.pan_sensitivity = pan_sensitivity
+		
+		if global.has_method("save_settings"):
+			global.save_settings()
+	
+	# Para compatibilidad, también guardar en OptionsManager si existe
+	elif has_node("/root/OptionsManager"):
+		var options_manager = get_node("/root/OptionsManager")
+		if options_manager.has_method("save_option"):
+			options_manager.save_option("pan_sensitivity", pan_sensitivity)
 
 # Funciones modificadas para tween
 func _on_tween_toggled(toggled):
@@ -2157,14 +2177,38 @@ func play_flip_sound():
 # Función para crear un botón de opciones que muestre un panel de ajustes
 func create_options_button():
 	# Crear un botón de opciones
+	var options_button = Button.new()
+	options_button.text = "Opciones"
 	
-	button_options.tooltip_text = tr("common_options")
+	# Ajustar tamaño y posición según el dispositivo
+	if is_mobile:
+		options_button.size = Vector2(150, 60)
+		options_button.position = Vector2(get_viewport_rect().size.x - 160, 20)
+	else:
+		options_button.size = Vector2(120, 40)
+		options_button.position = Vector2(get_viewport_rect().size.x - 130, 20)
 	
+	# Estilo del botón
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.2, 0.6, 0.8, 0.8)  # Azul semitransparente
+	style.border_width_left = 2
+	style.border_width_right = 2
+	style.border_width_top = 2
+	style.border_width_bottom = 2
+	style.border_color = Color(1, 1, 1, 0.9)  # Borde blanco
+	style.corner_radius_top_left = 10
+	style.corner_radius_top_right = 10
+	style.corner_radius_bottom_left = 10
+	style.corner_radius_bottom_right = 10
+	
+	options_button.add_theme_stylebox_override("normal", style)
+	options_button.add_theme_color_override("font_color", Color(1, 1, 1))
 	
 	# Conectar la señal pressed
-	button_options.connect("pressed", Callable(self, "show_options_panel"))
+	options_button.connect("pressed", Callable(self, "show_options_panel"))
 	
 	# Añadir a la escena
 	var canvas_layer = CanvasLayer.new()
 	canvas_layer.name = "OptionsLayer"
 	add_child(canvas_layer)
+	canvas_layer.add_child(options_button)

@@ -7,16 +7,29 @@ var labelMusic: Label
 var labelSFX: Label
 var labelLanguage: Label
 var labelResolution: Label
+# Nuevas etiquetas para opciones de sensibilidad
+var labelPanSensitivity: Label
+var labelTweenEffect: Label
+var labelTweenDuration: Label
 var buttonClose: Button
 var buttonRestore: Button
 var sliderVolumeGeneral = HSlider
 var sliderVolumeSFX = HSlider
 var sliderVolumeMusic = HSlider
+# Nuevos sliders para opciones de sensibilidad
+var sliderPanSensitivity = HSlider
+var sliderTweenDuration = HSlider
+var checkTweenEffect = CheckBox
 var selectLanguage = OptionButton
 var selectResolution = OptionButton
 var sliderOptionGeneral = null
 var sliderOptionMusic = null
 var sliderOptionSFX = null
+
+# Valores por defecto para opciones de sensibilidad (deben coincidir con los de PuzzleGame)
+var pan_sensitivity: float = 1.0
+var use_tween_effect: bool = true
+var tween_duration: float = 0.2
 
 func _ready():
 	print("Options: Inicializando...")
@@ -25,11 +38,21 @@ func _ready():
 	labelSFX = $%LabelSFX
 	labelLanguage = $%LabelIdioma
 	labelResolution = $%Label_resolution
+	# Inicializar nuevas etiquetas
+	labelPanSensitivity = $%LabelPanSensitivity
+	labelTweenEffect = $%LabelTweenEffect
+	labelTweenDuration = $%LabelTweenDuration
+	
 	buttonClose = %ButtonClose
 	buttonRestore = %RestoreButton
 	sliderVolumeGeneral = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_General
 	sliderVolumeMusic = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_Musica
 	sliderVolumeSFX = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_VFX
+	# Inicializar nuevos controles
+	sliderPanSensitivity = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Pan_Sensitivity
+	checkTweenEffect = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/CheckBox_Tween_Effect
+	sliderTweenDuration = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Tween_Duration
+	
 	selectLanguage = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/LangSelector
 	selectResolution = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/ResolutionButton
 	
@@ -119,6 +142,15 @@ func update_ui_texts():
 	labelGeneral.text = tr("common_general")
 	labelMusic.text = tr("common_music")
 	labelSFX.text = tr("common_sfx")
+	
+	# Actualizar textos para las nuevas etiquetas
+	if labelPanSensitivity:
+		labelPanSensitivity.text = tr("options_pan_sensitivity")
+	if labelTweenEffect:
+		labelTweenEffect.text = tr("options_tween_effect")
+	if labelTweenDuration:
+		labelTweenDuration.text = tr("options_tween_duration")
+	
 	buttonClose.text = tr("common_back")
 	buttonRestore.text = tr("options_restore_purchases")
 	
@@ -144,6 +176,47 @@ func load_current_values():
 		var slider_sfx = sliderVolumeSFX
 		if slider_sfx:
 			slider_sfx.value = global.settings.volume.sfx
+		
+		# Cargar opciones de sensibilidad si existen en GLOBAL
+		if "puzzle" in global.settings and global.settings.puzzle != null:
+			# Sensibilidad de desplazamiento
+			if sliderPanSensitivity and "pan_sensitivity" in global.settings.puzzle:
+				sliderPanSensitivity.value = global.settings.puzzle.pan_sensitivity
+				pan_sensitivity = global.settings.puzzle.pan_sensitivity
+			
+			# Usar efecto tween
+			if checkTweenEffect and "use_tween_effect" in global.settings.puzzle:
+				checkTweenEffect.button_pressed = global.settings.puzzle.use_tween_effect
+				use_tween_effect = global.settings.puzzle.use_tween_effect
+			
+			# Duración del efecto tween
+			if sliderTweenDuration and "tween_duration" in global.settings.puzzle:
+				sliderTweenDuration.value = global.settings.puzzle.tween_duration
+				tween_duration = global.settings.puzzle.tween_duration
+		else:
+			print("Options: No se encontraron ajustes de puzzle en GLOBAL.settings")
+			
+			# Si OptionsManager existe, intentar cargar desde ahí
+			if has_node("/root/OptionsManager"):
+				var options_manager = get_node("/root/OptionsManager")
+				if options_manager.has_method("get_option"):
+					# Cargar la sensibilidad de desplazamiento
+					var saved_sensitivity = options_manager.get_option("pan_sensitivity", pan_sensitivity)
+					pan_sensitivity = saved_sensitivity
+					if sliderPanSensitivity:
+						sliderPanSensitivity.value = pan_sensitivity
+					
+					# Cargar configuración de efecto tween
+					var saved_tween_effect = options_manager.get_option("use_tween_effect", use_tween_effect)
+					use_tween_effect = saved_tween_effect
+					if checkTweenEffect:
+						checkTweenEffect.button_pressed = use_tween_effect
+					
+					# Cargar duración del efecto tween
+					var saved_tween_duration = options_manager.get_option("tween_duration", tween_duration)
+					tween_duration = saved_tween_duration
+					if sliderTweenDuration:
+						sliderTweenDuration.value = tween_duration
 		
 		# Idioma
 		var lang_selector = selectLanguage
@@ -188,7 +261,10 @@ func adapt_ui_for_device():
 			$LabelIdioma,
 			$Label_general,
 			$LabelMusic,
-			$LabelSFX
+			$LabelSFX,
+			%LabelPanSensitivity,
+			%LabelTweenEffect,
+			%LabelTweenDuration
 		]
 		
 		for label in labels:
@@ -201,7 +277,9 @@ func adapt_ui_for_device():
 			selectLanguage,
 			sliderVolumeGeneral, 
 			sliderVolumeMusic,
-			sliderVolumeSFX
+			sliderVolumeSFX,
+			sliderPanSensitivity,
+			sliderTweenDuration
 		]
 		
 		for control in option_controls:
@@ -211,6 +289,10 @@ func adapt_ui_for_device():
 				elif control is HSlider:
 					var scale = UIScaler.get_scale_factor()
 					control.custom_minimum_size = Vector2(100 * scale, 0)
+		
+		# Escalar el CheckBox
+		if checkTweenEffect:
+			UIScaler.scale_button(checkTweenEffect)
 	else:
 		# Si no está disponible UIScaler, usar ajustes manuales
 		if is_mobile:
@@ -227,7 +309,10 @@ func adapt_ui_for_device():
 				$LabelIdioma,
 				$Label_general,
 				$LabelMusic,
-				$LabelSFX
+				$LabelSFX,
+				%LabelPanSensitivity,
+				%LabelTweenEffect,
+				%LabelTweenDuration
 			]
 			
 			for label in labels:
@@ -248,14 +333,18 @@ func adapt_ui_for_device():
 			var sliders = [
 				sliderVolumeGeneral, 
 				sliderVolumeMusic,
-				sliderVolumeSFX
+				sliderVolumeSFX,
+				sliderPanSensitivity,
+				sliderTweenDuration
 			]
 			
 			for slider in sliders:
 				if slider:
 					slider.custom_minimum_size = Vector2(200, 30)
 			
-			# Ajustar espaciado
+			# Ajustar checkbox
+			if checkTweenEffect:
+				checkTweenEffect.add_theme_font_size_override("font_size", 20)
 
 	# Añadir un fondo semitransparente para el panel de opciones
 	var panel_bg = ColorRect.new()
@@ -296,6 +385,84 @@ func _on_HSlider_Volumen_VFX_value_changed(value):
 		audio_manager.update_volumes()
 		global.save_settings()
 
+# Nuevas funciones para manejar las opciones de sensibilidad
+func _on_pan_sensitivity_changed(value):
+	print("Options: Sensibilidad cambiada a: ", value)
+	pan_sensitivity = value
+	
+	# Guardar en GLOBAL si existe
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Asegurarnos de que exista la sección puzzle en settings
+		if not "puzzle" in global.settings:
+			global.settings.puzzle = {}
+		
+		global.settings.puzzle.pan_sensitivity = value
+		
+		# Guardar la configuración
+		if global.has_method("save_settings"):
+			global.save_settings()
+	
+	# Guardar también en OptionsManager para compatibilidad
+	if has_node("/root/OptionsManager"):
+		var options_manager = get_node("/root/OptionsManager")
+		if options_manager.has_method("save_option"):
+			options_manager.save_option("pan_sensitivity", value)
+
+func _on_tween_effect_toggled(toggled):
+	print("Options: Efecto Tween: ", toggled)
+	use_tween_effect = toggled
+	
+	# Actualizar la visibilidad del control de duración de tween
+	if sliderTweenDuration:
+		sliderTweenDuration.editable = toggled
+		if labelTweenDuration:
+			labelTweenDuration.modulate.a = 1.0 if toggled else 0.5
+	
+	# Guardar en GLOBAL
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Asegurarnos de que exista la sección puzzle en settings
+		if not "puzzle" in global.settings:
+			global.settings.puzzle = {}
+		
+		global.settings.puzzle.use_tween_effect = toggled
+		
+		# Guardar la configuración
+		if global.has_method("save_settings"):
+			global.save_settings()
+	
+	# Guardar también en OptionsManager para compatibilidad
+	if has_node("/root/OptionsManager"):
+		var options_manager = get_node("/root/OptionsManager")
+		if options_manager.has_method("save_option"):
+			options_manager.save_option("use_tween_effect", toggled)
+
+func _on_tween_duration_changed(value):
+	print("Options: Duración del efecto Tween: ", value)
+	tween_duration = value
+	
+	# Guardar en GLOBAL
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Asegurarnos de que exista la sección puzzle en settings
+		if not "puzzle" in global.settings:
+			global.settings.puzzle = {}
+		
+		global.settings.puzzle.tween_duration = value
+		
+		# Guardar la configuración
+		if global.has_method("save_settings"):
+			global.save_settings()
+	
+	# Guardar también en OptionsManager para compatibilidad
+	if has_node("/root/OptionsManager"):
+		var options_manager = get_node("/root/OptionsManager")
+		if options_manager.has_method("save_option"):
+			options_manager.save_option("tween_duration", value)
 
 func _on_button_close_pressed() -> void:
 	OptionsManager.hide_options()

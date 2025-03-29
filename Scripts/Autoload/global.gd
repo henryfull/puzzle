@@ -9,7 +9,12 @@ var settings = {
 		"sfx": 30,
 		"voices": 30
 	},
-	"ui_scale": 1.0  # Nueva configuración para escala de UI
+	"ui_scale": 1.0,  # Nueva configuración para escala de UI
+	"puzzle": {       # Nueva sección para opciones del puzzle
+		"pan_sensitivity": 1.0,
+		"use_tween_effect": true,
+		"tween_duration": 0.2
+	}
 }
 var columns: int = 6
 var rows: int = 8
@@ -53,6 +58,11 @@ func load_settings():
 		# Cargar escala de UI
 		settings.ui_scale = config.get_value("settings", "ui_scale", 1.0)
 		
+		# Cargar configuración del puzzle
+		settings.puzzle.pan_sensitivity = config.get_value("puzzle", "pan_sensitivity", 1.0)
+		settings.puzzle.use_tween_effect = config.get_value("puzzle", "use_tween_effect", true)
+		settings.puzzle.tween_duration = config.get_value("puzzle", "tween_duration", 0.2)
+		
 		print("GLOBAL: Configuración cargada correctamente")
 	else:
 		print("GLOBAL: No se encontró archivo de configuración o hubo un error. Usando valores predeterminados.")
@@ -85,6 +95,11 @@ func save_settings() -> void:
 	
 	# Guardar escala de UI
 	config.set_value("settings", "ui_scale", settings.ui_scale)
+	
+	# Guardar configuración del puzzle
+	config.set_value("puzzle", "pan_sensitivity", settings.puzzle.pan_sensitivity)
+	config.set_value("puzzle", "use_tween_effect", settings.puzzle.use_tween_effect)
+	config.set_value("puzzle", "tween_duration", settings.puzzle.tween_duration)
 	
 	# Guardar el archivo
 	err = config.save(SETTINGS_FILE)

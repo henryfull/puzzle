@@ -19,8 +19,18 @@ func _ready():
 		print("OptionsManager: ERROR - No se pudo cargar la escena de opciones")
 
 # Función para mostrar el menú de opciones
-func show_options(node):
+func show_options(node = null):
 	print("OptionsManager: Mostrando opciones")
+	
+	# Si no se proporciona un nodo, usar el nodo actual o el viewport actual
+	if node == null:
+		# Intentar obtener el viewport actual
+		var viewport = get_viewport()
+		if viewport and viewport.get_parent():
+			node = viewport.get_parent()
+		else:
+			# Si no hay viewport, usar el nodo actual
+			node = get_tree().get_current_scene()
 	
 	# Guardar referencia al nodo padre
 	parent_node = node
@@ -113,4 +123,55 @@ func update_texts_if_visible():
 			options_instance.update_ui_texts()
 		else:
 			print("OptionsManager: ERROR - La instancia no tiene el método update_ui_texts") 
+
+# Función para guardar una opción en GLOBAL
+func save_option(option_name: String, value):
+	print("OptionsManager: Guardando opción ", option_name, " con valor ", value)
+	
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Asegurar que exista la sección puzzle en settings si es necesario
+		if option_name.begins_with("pan_") or option_name.begins_with("tween_"):
+			if not "puzzle" in global.settings:
+				global.settings.puzzle = {}
+			
+			# Guardar la opción en la sección puzzle
+			match option_name:
+				"pan_sensitivity":
+					global.settings.puzzle.pan_sensitivity = value
+				"use_tween_effect":
+					global.settings.puzzle.use_tween_effect = value
+				"tween_duration":
+					global.settings.puzzle.tween_duration = value
+		
+		# Guardar las configuraciones
+		if global.has_method("save_settings"):
+			global.save_settings()
+		return true
+	
+	print("OptionsManager: ERROR - No se pudo guardar la opción (GLOBAL no encontrado)")
+	return false
+
+# Función para obtener una opción desde GLOBAL
+func get_option(option_name: String, default_value = null):
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Obtener la opción desde la sección puzzle si es necesario
+		if option_name.begins_with("pan_") or option_name.begins_with("tween_"):
+			if "puzzle" in global.settings:
+				match option_name:
+					"pan_sensitivity":
+						if "pan_sensitivity" in global.settings.puzzle:
+							return global.settings.puzzle.pan_sensitivity
+					"use_tween_effect":
+						if "use_tween_effect" in global.settings.puzzle:
+							return global.settings.puzzle.use_tween_effect
+					"tween_duration":
+						if "tween_duration" in global.settings.puzzle:
+							return global.settings.puzzle.tween_duration
+	
+	# Si no se encuentra la opción, devolver el valor por defecto
+	return default_value 
 			

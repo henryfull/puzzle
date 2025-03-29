@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://smtnj5lnqhfa"]
+[gd_scene load_steps=17 format=3 uid="uid://smtnj5lnqhfa"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_sm22t"]
 [ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult.tscn" id="2_yvnqr"]
@@ -22,22 +22,35 @@ texture = ExtResource("4_vxw10")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vxw10"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1855, 366, 105, 88)
+region_rect = Rect2(1855, 43, 105, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gyhh0"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1980, 366, 105, 88)
+region_rect = Rect2(1980, 43, 105, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tu11h"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1855, 366, 105, 88)
+region_rect = Rect2(1855, 43, 105, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p2qx1"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1730, 366, 105, 88)
+region_rect = Rect2(1730, 43, 105, 89)
 
-[node name="PuzzleGame" type="Node2D"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7aw43"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2230, 366, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5jwhx"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2355, 366, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pqqng"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2105, 366, 105, 88)
+
+[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("button_options")]
 script = ExtResource("1_sm22t")
+button_options = NodePath("CanvasLayer/ButtonOptions")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -96,35 +109,51 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_u0au7")
 [node name="ButtonDifficult" parent="CanvasLayer" instance=ExtResource("2_yvnqr")]
 layout_direction = 1
 anchors_preset = -1
-anchor_left = 0.809
-anchor_top = 0.928
-anchor_right = 0.809
-anchor_bottom = 0.928
-offset_left = -104.48
-offset_top = 0.159912
-offset_right = 96.52
-offset_bottom = 51.1599
+anchor_left = 0.335
+anchor_top = 0.931
+anchor_right = 0.669
+anchor_bottom = 0.967
+offset_left = 4.79999
+offset_top = -6.68005
+offset_right = -9.68002
+offset_bottom = 3.23987
+grow_horizontal = 2
 grow_vertical = 0
 
 [node name="Flip" type="Button" parent="CanvasLayer"]
-custom_minimum_size = Vector2(130, 50)
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -65.0
-offset_top = -140.0
-offset_right = 65.0
-offset_bottom = -24.0
-grow_horizontal = 2
-grow_vertical = 0
+custom_minimum_size = Vector2(90, 50)
+anchors_preset = -1
+anchor_left = 0.769
+anchor_top = 0.025
+anchor_right = 0.95
+anchor_bottom = 0.103
+offset_left = 5.31995
+offset_top = 25.0
+offset_right = -25.0001
+offset_bottom = -4.84001
+grow_horizontal = 0
 theme_override_font_sizes/font_size = 20
 theme_override_styles/focus = SubResource("StyleBoxTexture_vxw10")
 theme_override_styles/hover = SubResource("StyleBoxTexture_gyhh0")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_tu11h")
 theme_override_styles/normal = SubResource("StyleBoxTexture_p2qx1")
 text = "Flip"
+
+[node name="ButtonOptions" type="Button" parent="CanvasLayer"]
+anchors_preset = -1
+anchor_left = 0.878
+anchor_top = 0.93
+anchor_right = 0.878
+anchor_bottom = 0.93
+offset_left = -61.16
+offset_top = -42.4001
+offset_right = 60.84
+offset_bottom = 56.5999
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_7aw43")
+theme_override_styles/hover = SubResource("StyleBoxTexture_5jwhx")
+theme_override_styles/normal = SubResource("StyleBoxTexture_pqqng")
 
 [connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="difficulty_changed" from="CanvasLayer/ButtonDifficult" to="." method="_on_difficulty_changed"]
