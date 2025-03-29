@@ -2,12 +2,14 @@ extends Node2D
 
 var btn_play: Button
 var btn_options : Button
+var btn_exit : Button
 var label_version: Label
 
 func _ready():
 	# Esperar un frame para asegurarnos de que GLOBAL y TranslationLoader estén inicializados
 	btn_options = $CanvasLayer/MarginContainer/VBoxContainer/BTN_options
 	btn_play = $CanvasLayer/MarginContainer/VBoxContainer/BTN_play
+	btn_exit = $CanvasLayer/MarginContainer/VBoxContainer/BTN_exit
 	label_version = $CanvasLayer/LabelVersion
 	
 	# Mostrar la versión del juego
@@ -18,8 +20,6 @@ func _ready():
 	# Actualizar los textos según el idioma actual
 	update_ui_texts()
 	
-	# Adaptar la UI para dispositivos móviles
-	adapt_ui_for_device()
 	
 	# Conectar señal de cambio de idioma
 	if has_node("/root/TranslationLoader"):
@@ -40,52 +40,9 @@ func update_version_label():
 func update_ui_texts():
 	btn_options.text = tr("common_options")
 	btn_play.text = tr("common_play")
+	btn_exit.text = tr("common_exit")
 	print("MainMenu: Textos actualizados con idioma: ", TranslationServer.get_locale())
 
-# Función para adaptar la UI según el dispositivo
-func adapt_ui_for_device():
-	# Verificar si estamos en un dispositivo móvil
-	var is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
-	
-	# Obtener el contenedor principal
-	var main_container = $CanvasLayer/MarginContainer/VBoxContainer
-	
-	# Ajustar el espaciado del contenedor
-	if is_mobile:
-		main_container.add_theme_constant_override("separation", 30)
-	
-	# Ajustar los botones
-	var buttons = [
-		btn_play,
-		btn_options
-	]
-	
-	for button in buttons:
-		if is_mobile:
-			# Tamaño más grande para móviles
-			button.custom_minimum_size = Vector2(250, 80)
-			button.add_theme_font_size_override("font_size", 32)
-			
-			# Añadir padding para área táctil más grande
-			button.add_theme_constant_override("h_separation", 20)
-			button.add_theme_constant_override("content_margin_left", 20)
-			button.add_theme_constant_override("content_margin_right", 20)
-			button.add_theme_constant_override("content_margin_top", 15)
-			button.add_theme_constant_override("content_margin_bottom", 15)
-		else:
-			# Tamaño normal para PC
-			button.custom_minimum_size = Vector2(150, 50)
-			button.add_theme_font_size_override("font_size", 18)
-	
-	# Usar UIScaler si está disponible
-	if ResourceLoader.exists("res://Scripts/UIScaler.gd"):
-		var UIScaler = load("res://Scripts/UIScaler.gd")
-		for button in buttons:
-			UIScaler.scale_button(button)
-		
-		# Escalar también la etiqueta de versión
-		if label_version:
-			UIScaler.scale_label(label_version)
 
 # Función para manejar cambios de idioma
 func _on_language_changed(_locale_code):
@@ -117,3 +74,7 @@ func _on_AchievementsButton_pressed():
 
 func _on_ExitButton_pressed():
 	get_tree().quit() 
+
+
+func _on_btn_exit_pressed() -> void:
+	get_tree().quit()

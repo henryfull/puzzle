@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="puzzle tiki tiki"
-config/version="0.3.1"
+config/version="0.48.1"
 run/main_scene="uid://dh7t7utu076oi"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
@@ -41,6 +41,10 @@ OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 AudioManager="*res://Scripts/Autoload/AudioManager.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
 
+[debug]
+
+file_logging/enable_file_logging=true
+
 [display]
 
 window/size/viewport_width=720
@@ -66,8 +70,9 @@ theme/custom_font="uid://nsb7mxocp6o3"
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://PacksData/translation.ca.translation", "res://PacksData/translation.en.translation", "res://PacksData/translation.es.translation")
+locale/translations=PackedStringArray("res://data/localization/translation.csv", "res://data/localization/translation.ca.translation", "res://data/localization/translation.en.translation", "res://data/localization/translation.es.translation")
 locale/translations_pot_files=PackedStringArray("res://data/localization/translations.csv")
+locale/translation_add_builtin_strings_to_pot=true
 
 [rendering]
 

@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://by6tdey6sc6uw"]
+[gd_scene load_steps=7 format=3 uid="uid://by6tdey6sc6uw"]
 
 [ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
+[ext_resource type="Texture2D" uid="uid://dxy0wnpy0jpu" path="res://Assets/Images/GUID/ribbon_blue.svg" id="2_6f4k2"]
 [ext_resource type="Script" uid="uid://dv7ssdl7hhf3r" path="res://Scripts/LangSelector.gd" id="2_kgki5"]
 [ext_resource type="PackedScene" uid="uid://xdw0sm0cdrgy" path="res://temp/SliderOption.tscn" id="2_q4at1"]
 [ext_resource type="Script" uid="uid://1epn1mhu0fwt" path="res://Scripts/Utils.gd" id="2_qqjs0"]
@@ -17,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 0.901961, 0.72549, 1)
+color = Color(0.72549, 0.854902, 1, 1)
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
 anchors_preset = 8
@@ -33,6 +34,25 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="Panel" type="Panel" parent="CanvasLayer/PanelContainer"]
+layout_mode = 2
+theme_type_variation = &"PanelInside"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer/Panel"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -70.0
+offset_top = -20.0
+offset_right = -70.0
+offset_bottom = 60.0
+grow_horizontal = 2
+scale = Vector2(1.4, 1.4)
+mouse_filter = 2
+texture = ExtResource("2_6f4k2")
+expand_mode = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer"]
 layout_mode = 2
@@ -70,6 +90,8 @@ size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 30
 columns = 2
 
 [node name="Label_resolution" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer"]
@@ -149,21 +171,29 @@ script = ExtResource("2_qqjs0")
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="RestoreButton" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer"]
-unique_name_in_owner = true
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-text = "Restaurar Compras"
 
-[node name="ButtonClose" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer"]
+[node name="RestoreButton" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 70)
 layout_mode = 2
 size_flags_vertical = 4
+tooltip_text = "Restaurar compras"
+theme_type_variation = &"ButtonYellow"
+text = "Restaurar"
+
+[node name="ButtonClose" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(170, 70)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"ButtonRed"
 text = "Volver"
 
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_General" to="." method="_on_HSlider_Volumen_General_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_Musica" to="." method="_on_HSlider_Volumen_Musica_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_VFX" to="." method="_on_HSlider_Volumen_VFX_value_changed"]
-[connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/RestoreButton" to="." method="_on_restore_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer/RestoreButton" to="." method="_on_restore_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/VBoxContainer/HBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]

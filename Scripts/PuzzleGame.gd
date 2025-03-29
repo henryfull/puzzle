@@ -1866,7 +1866,7 @@ func show_options_menu():
 # Nueva función para ajustar la interfaz según el tipo de dispositivo
 func adjust_ui_for_device():
 	var hbox = $CanvasLayer/HBoxContainer
-	var button_difficult = $CanvasLayer/HBoxContainer/ButtonDifficult
+	var button_difficult = $CanvasLayer/ButtonDifficult
 	
 	if is_mobile:
 		# En dispositivos móviles, especialmente con isla (notch), añadir más margen superior

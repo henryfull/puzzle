@@ -70,7 +70,7 @@ func _apply_puzzle_data():
 	
 	# Actualizar el texto del nombre
 	if puzzle_data.has("name") and name_label:
-		name_label.text = puzzle_data.name.to_upper()
+		name_label.text = tr(puzzle_data.name)
 	
 	# Intentar cargar la imagen con diferentes claves que podrían estar en el puzzle_data
 	var image_loaded = false
