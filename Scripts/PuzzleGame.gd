@@ -20,6 +20,7 @@ var just_placed_piece: bool = false
 
 # Referencia al contenedor de piezas
 @export var pieces_container: Node2D
+@export var UILayer: CanvasLayer
 
 # Variables para gestionar el doble toque
 var last_touch_time: float = 0.0
@@ -124,6 +125,11 @@ func _ready():
 	
 	# Configurar el botón de opciones
 	create_options_button()
+	
+	# Conectar la señal del botón de dificultad
+	var button_difficult = $UILayer/ButtonDifficult
+	if button_difficult and !button_difficult.is_connected("difficulty_changed", Callable(self, "_on_difficulty_changed")):
+		button_difficult.connect("difficulty_changed", Callable(self, "_on_difficulty_changed"))
 	
 	# Configurar el puzzle según los datos seleccionados
 	if GLOBAL.selected_puzzle != null:
@@ -627,8 +633,8 @@ func find_adjacent_pieces(piece: Piece, cell: Vector2) -> Array:
 	
 	for dir in directions:
 		var check_cell = cell + dir
-		if check_cell.x < 0 or check_cell.x >= GLOBAL.columns or check_cell.y < 0 or check_cell.y >= GLOBAL.rows:
-			continue
+		# Eliminar la restricción de límites del tablero - esto permitirá encontrar piezas
+		# en cualquier posición, incluso fuera de los límites originales
 		var other = get_piece_at(check_cell)
 		if other != null and other != piece and not (other in piece.group):
 			adjacent.append(other)
@@ -642,8 +648,10 @@ func are_pieces_mergeable(piece1: Piece, piece2: Piece) -> bool:
 	
 	# También verificar que sus posiciones actuales coincidan aproximadamente con la diferencia original
 	if are_adjacent:
-		var current_diff = get_cell_of_piece(piece2) - get_cell_of_piece(piece1)
-		return abs(current_diff.x - diff.x) < 0.1 and abs(current_diff.y - diff.y) < 0.1
+		var current_diff = piece2.current_cell - piece1.current_cell
+		# Usar una comparación con un epsilon para mayor precisión
+		var epsilon = 0.1
+		return abs(current_diff.x - diff.x) < epsilon and abs(current_diff.y - diff.y) < epsilon
 	return false
 
 #
@@ -2591,79 +2599,109 @@ func any_group_contains(groups_map, piece):
 func reorganize_pieces():
 	show_success_message("Reorganizando piezas...")
 	
-	# 1. Identificar qué piezas están fuera del área original del puzzle
-	var pieces_outside_original_area = []
+	# 1. Recopilar todos los grupos existentes (tanto dentro como fuera del área original)
+	var all_groups = []  # Lista de grupos únicos (líderes)
+	var processed_pieces = []  # Piezas que ya hemos procesado
 	
 	for piece_obj in pieces:
-		# Verificar si la pieza está fuera del área original del puzzle
-		# (ya sea por encima, por debajo, o a los lados)
-		if piece_obj.current_cell.y >= original_rows or piece_obj.current_cell.y < 0 or piece_obj.current_cell.x >= GLOBAL.columns or piece_obj.current_cell.x < 0:
-			# Esta pieza está fuera del área original
-			pieces_outside_original_area.append(piece_obj)
+		if piece_obj in processed_pieces:
+			continue
+			
+		var group_leader = get_group_leader(piece_obj)
+		if not (group_leader in all_groups):
+			all_groups.append(group_leader)
+			
+		# Marcar todas las piezas de este grupo como procesadas
+		for p in group_leader.group:
+			if not (p in processed_pieces):
+				processed_pieces.append(p)
 	
-	if pieces_outside_original_area.size() == 0:
+	# 2. Identificar los grupos que están completamente fuera del área original
+	var groups_outside_original = []
+	
+	for group_leader in all_groups:
+		var completely_outside = true
+		
+		for p in group_leader.group:
+			if p.current_cell.y < original_rows and p.current_cell.y >= 0 and p.current_cell.x < GLOBAL.columns and p.current_cell.x >= 0:
+				completely_outside = false
+				break
+				
+		if completely_outside:
+			groups_outside_original.append(group_leader)
+	
+	# 3. Identificar piezas sueltas fuera del área original (piezas en grupos de tamaño 1)
+	var singles_outside_original = []
+	
+	for piece_obj in pieces:
+		if piece_obj.group.size() == 1 and (
+		   piece_obj.current_cell.y >= original_rows or piece_obj.current_cell.y < 0 or 
+		   piece_obj.current_cell.x >= GLOBAL.columns or piece_obj.current_cell.x < 0):
+			singles_outside_original.append(piece_obj)
+	
+	# Si no hay nada que reorganizar, salir
+	if groups_outside_original.size() == 0 and singles_outside_original.size() == 0:
 		show_success_message("No hay piezas para reorganizar")
 		return
 		
-	# Mostrar cuántas piezas se reorganizarán
-	print("Reorganizando " + str(pieces_outside_original_area.size()) + " piezas")
+	# Mostrar cuántas piezas/grupos se reorganizarán
+	print("Reorganizando " + str(groups_outside_original.size()) + " grupos y " + 
+		  str(singles_outside_original.size()) + " piezas sueltas")
 	
-	# 2. Identificar celdas libres en el área principal del puzzle
+	# 4. Crear un mapa de celdas ocupadas en el área original
+	var occupied_cells = {}
+	for piece_obj in pieces:
+		var cell = piece_obj.current_cell
+		if cell.y < original_rows and cell.y >= 0 and cell.x < GLOBAL.columns and cell.x >= 0:
+			occupied_cells[cell_key(cell)] = piece_obj
+	
+	# 5. Identificar celdas libres en el área original
 	var free_cells = []
-	
 	for r in range(original_rows):
 		for c in range(GLOBAL.columns):
 			var cell = Vector2(c, r)
-			if get_piece_at(cell) == null:
+			if not occupied_cells.has(cell_key(cell)):
 				free_cells.append(cell)
 	
-	# 3. Mover las piezas fuera del área original a celdas libres en el área principal
+	# 6. Intentar mover los grupos completos al área original
 	var pieces_moved = 0
+	var groups_moved = 0
 	
-	# Primero intentar mover grupos completos
-	var processed_groups = []
+	# Ordenar grupos por tamaño (de mayor a menor) para mover primero los grupos más grandes
+	groups_outside_original.sort_custom(func(a, b): return a.group.size() > b.group.size())
 	
-	for piece_obj in pieces_outside_original_area:
-		# Obtener el líder del grupo
-		var group_leader = get_group_leader(piece_obj)
+	for group_leader in groups_outside_original:
+		# Buscar un conjunto de celdas adecuado para el grupo completo
+		var group_cells = find_space_for_group_in_original_area(group_leader, occupied_cells)
 		
-		# Si ya procesamos este grupo, continuar con el siguiente
-		if group_leader in processed_groups:
-			continue
-			
-		# Marcar este grupo como procesado
-		processed_groups.append(group_leader)
-		
-		# Solo procesar si todo el grupo está fuera del área original
-		var group_outside_original = true
-		for p in group_leader.group:
-			if p.current_cell.y < original_rows and p.current_cell.y >= 0 and p.current_cell.x < GLOBAL.columns and p.current_cell.x >= 0:
-				group_outside_original = false
-				break
-		
-		if not group_outside_original:
-			continue
-			
-		# Buscar espacio para el grupo completo
-		var group_space = find_space_for_group(group_leader.group, [])
-		
-		# Filtrar las celdas para asegurarse de que estén dentro del área original
-		var valid_group_space = []
-		for cell in group_space:
-			if cell.y < original_rows and cell.y >= 0 and cell.x < GLOBAL.columns and cell.x >= 0 and get_piece_at(cell) == null:
-				valid_group_space.append(cell)
-		
-		if valid_group_space.size() >= group_leader.group.size():
-			# Mover todo el grupo a estas celdas
+		if group_cells.size() >= group_leader.group.size():
+			# ¡Encontramos espacio! Mover el grupo completo
 			var i = 0
+			
+			# Registrar las celdas que ocupará este grupo para actualizar el mapa de ocupación
+			var cells_to_occupy = []
 			for p in group_leader.group:
-				if i < valid_group_space.size():
+				if i < group_cells.size():
+					cells_to_occupy.append(group_cells[i])
+					i += 1
+			
+			# Ahora mover las piezas del grupo a sus nuevas posiciones
+			i = 0
+			for p in group_leader.group:
+				if i < cells_to_occupy.size():
 					# Quitar la pieza de su posición actual
 					remove_piece_at(p.current_cell)
 					
 					# Colocar en la nueva celda
-					var target_cell = valid_group_space[i]
+					var target_cell = cells_to_occupy[i]
 					set_piece_at(target_cell, p)
+					
+					# Marcar la celda como ocupada
+					occupied_cells[cell_key(target_cell)] = p
+					
+					# Si esta celda estaba en la lista de free_cells, quitarla
+					if target_cell in free_cells:
+						free_cells.erase(target_cell)
 					
 					# Actualizar la posición visual
 					var target_position = puzzle_offset + target_cell * cell_size
@@ -2672,15 +2710,15 @@ func reorganize_pieces():
 					else:
 						p.node.position = target_position
 					
-					# Eliminar esta celda de las disponibles
-					free_cells.erase(target_cell)
-					
 					pieces_moved += 1
 					i += 1
-		
-	# Después, mover piezas individuales que no están en grupos
-	for piece_obj in pieces_outside_original_area:
-		# Saltar si la pieza ya fue movida como parte de un grupo
+			
+			groups_moved += 1
+	
+	# 7. Después, mover piezas individuales a celdas libres restantes
+	for piece_obj in singles_outside_original:
+		# Asegurarse de que la pieza sigue estando fuera del área original
+		# (podría haber sido movida como parte de un grupo)
 		if piece_obj.current_cell.y < original_rows and piece_obj.current_cell.y >= 0 and piece_obj.current_cell.x < GLOBAL.columns and piece_obj.current_cell.x >= 0:
 			continue
 			
@@ -2691,6 +2729,9 @@ func reorganize_pieces():
 			
 			remove_piece_at(piece_obj.current_cell)
 			set_piece_at(target_cell, piece_obj)
+			
+			# Marcar la celda como ocupada
+			occupied_cells[cell_key(target_cell)] = piece_obj
 			
 			var target_position = puzzle_offset + target_cell * cell_size
 			if use_tween_effect:
@@ -2703,13 +2744,70 @@ func reorganize_pieces():
 			# No hay más espacios disponibles
 			break
 	
-	# Si se movieron piezas, reproducir el sonido de fusión
+	# 8. Si se movieron piezas, reproducir el sonido y mostrar mensaje
 	if pieces_moved > 0:
 		audio_merge.play()
-		show_success_message("¡" + str(pieces_moved) + " piezas reorganizadas!")
+		if groups_moved > 0:
+			show_success_message("¡" + str(groups_moved) + " grupos y " + str(pieces_moved - groups_moved) + " piezas reorganizadas!")
+		else:
+			show_success_message("¡" + str(pieces_moved) + " piezas reorganizadas!")
 	else:
 		show_error_message("No hay espacio para reorganizar")
 	
-	# Verificar y actualizar los grupos después de la reorganización
+	# 9. Verificar y actualizar los grupos después de la reorganización
 	check_all_groups()
 	verify_all_pieces_in_grid()
+
+# Nueva función para encontrar espacio para un grupo dentro del área original
+func find_space_for_group_in_original_area(group_leader: Piece, occupied_cells: Dictionary) -> Array:
+	# 1. Determinar la estructura relativa del grupo
+	var pieces_layout = []  # Lista de offsets relativos al líder
+	
+	for p in group_leader.group:
+		var offset = p.original_pos - group_leader.original_pos
+		pieces_layout.append(offset)
+	
+	# 2. Recorrer el área original buscando espacio disponible
+	for row in range(original_rows):
+		for col in range(GLOBAL.columns):
+			var base_cell = Vector2(col, row)
+			var can_place = true
+			var target_cells = []
+			
+			# Verificar si todas las posiciones relativas están disponibles
+			for offset in pieces_layout:
+				var check_cell = base_cell + offset
+				
+				# Verificar límites del área original
+				if check_cell.x < 0 or check_cell.x >= GLOBAL.columns or check_cell.y < 0 or check_cell.y >= original_rows:
+					can_place = false
+					break
+				
+				# Verificar si la celda está libre
+				if occupied_cells.has(cell_key(check_cell)):
+					can_place = false
+					break
+				
+				target_cells.append(check_cell)
+			
+			# Si encontramos un espacio válido, devolver las celdas
+			if can_place:
+				return target_cells
+	
+	# Si no encontramos espacio, devolver un array vacío
+	return []
+
+
+func _on_button_toggle_hud_pressed() -> void:
+	
+	var btn_hide: Button = $BackgroundLayer/ButtonHideHUD
+	var btn_show: Button = $BackgroundLayer/ButtonShowHUD
+	
+	if (UILayer.visible):
+		UILayer.visible = false
+		btn_hide.visible = false
+		btn_show.visible = true
+	else:
+		UILayer.visible = true
+		btn_hide.visible = true
+		btn_show.visible = false
