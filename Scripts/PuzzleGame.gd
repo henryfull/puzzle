@@ -21,6 +21,12 @@ var just_placed_piece: bool = false
 # Referencia al contenedor de piezas
 @export var pieces_container: Node2D
 
+# Variables para gestionar el doble toque
+var last_touch_time: float = 0.0
+var double_tap_threshold: float = 0.3  # Tiempo en segundos para considerar un doble tap
+var last_touch_position: Vector2 = Vector2.ZERO
+var double_tap_distance_threshold: float = 50.0  # Distancia máxima para considerar un doble tap
+
 #
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
@@ -339,6 +345,23 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 func _unhandled_input(event: InputEvent) -> void:
 	# Manejo de eventos táctiles para dispositivos móviles
 	if event is InputEventScreenTouch:
+		# Detectar doble toque
+		if event.pressed:
+			var current_time = Time.get_ticks_msec() / 1000.0
+			var time_diff = current_time - last_touch_time
+			var position_diff = event.position.distance_to(last_touch_position)
+			
+			# Si el tiempo entre toques es menor al umbral y la distancia es pequeña, es un doble tap
+			if time_diff < double_tap_threshold and position_diff < double_tap_distance_threshold:
+				# Es un doble tap, reorganizar las piezas
+				reorganize_pieces()
+				# Reiniciar el tiempo del último toque
+				last_touch_time = 0.0
+			else:
+				# Guardar el tiempo y posición del toque actual para el próximo
+				last_touch_time = current_time
+				last_touch_position = event.position
+		
 		# Guardamos la información del toque en nuestro diccionario
 		if event.pressed:
 			touch_points[event.index] = event.position
@@ -421,6 +444,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			else:
 				# Finalizar paneo
 				is_panning = false
+		
+		# Manejo de doble clic para reorganizar piezas
+		elif event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
+			reorganize_pieces()
 		
 		# Manejo de click izquierdo para las piezas
 		elif event.button_index == MOUSE_BUTTON_LEFT:
@@ -972,6 +999,7 @@ func place_group(piece: Piece):
 	var occupied_cells = []
 	var group_cells = []
 	var occupants = []
+	var occupant_groups = {}  # Mapa de grupos ocupantes: Clave = ID de grupo, Valor = lista de piezas
 	
 	# Recopilar todas las celdas que ocupará el grupo
 	for p in group_copy:
@@ -995,42 +1023,455 @@ func place_group(piece: Piece):
 			occupied_cells.append(p_target)
 			if not (occupant in occupants):  # Evitar duplicados
 				occupants.append(occupant)
+				
+				# Verificar si esta pieza pertenece a un grupo
+				if occupant.group.size() > 1:
+					# Obtener el líder del grupo para identificarlo
+					var occupant_leader = get_group_leader(occupant)
+					var group_id = occupant_leader.node.get_instance_id()
+					
+					# Agregar al mapa de grupos ocupantes
+					if not occupant_groups.has(group_id):
+						occupant_groups[group_id] = []
+					
+					# Añadir todas las piezas del grupo si no están ya añadidas
+					for occ_piece in occupant_leader.group:
+						if not (occ_piece in occupant_groups[group_id]):
+							occupant_groups[group_id].append(occ_piece)
 	
-	# Verificar si hay alguna pieza ocupante que pertenezca a un grupo
-	var occupants_in_groups = false
-	for occupant in occupants:
-		if occupant.group.size() > 1:
-			occupants_in_groups = true
-			push_warning("No se puede colocar sobre una pieza que está en un grupo")
-			show_error_message("No se puede colocar sobre piezas en grupos")
-			break
-	
-	# Si hay piezas ocupantes que pertenecen a grupos, devolver el grupo a su posición original
-	if occupants_in_groups:
-		# Devolver cada pieza del grupo a su posición original de inicio del arrastre
-		for p in group_copy:
-			var orig_cell = p.drag_start_cell
+	# Ahora verificamos si podemos intercambiar grupos o desplazar piezas
+	if occupant_groups.size() > 0:
+		# Caso especial: hay exactamente un grupo ocupante que ocupa exactamente las mismas celdas
+		if occupant_groups.size() == 1 and occupants.size() == group_copy.size():
+			var occupant_group_id = occupant_groups.keys()[0]
+			var occupant_group = occupant_groups[occupant_group_id]
 			
-			# Comprobar que la celda original está disponible
-			var current_occupant = get_piece_at(orig_cell)
-			if current_occupant != null and current_occupant != p:
-				# Si la posición original ya está ocupada, buscar una celda libre cercana
-				var free_cells = find_free_cells(1)
-				if free_cells.size() > 0:
-					orig_cell = free_cells[0]
+			# Si ambos grupos tienen el mismo tamaño, permitimos intercambiarlos
+			if occupant_group.size() == group_copy.size():
+				push_warning("Intercambiando grupos de igual tamaño")
+				show_success_message("¡Intercambiando grupos!")
+				
+				# Guardar posiciones originales de ambos grupos
+				var group_positions = {}
+				var occupant_positions = {}
+				
+				for p in group_copy:
+					group_positions[p] = p.current_cell
+					remove_piece_at(p.current_cell)
+				
+				for p in occupant_group:
+					occupant_positions[p] = p.current_cell
+					remove_piece_at(p.current_cell)
+				
+				# Colocar grupo entrante en posiciones del grupo ocupante
+				for p in group_copy:
+					var offset = p.original_pos - leader.original_pos
+					var occupant_leader = get_group_leader(occupant_group[0])
+					var occupant_offset = occupant_group[0].original_pos - occupant_leader.original_pos
+					
+					# Calcular posición relativa en el grupo ocupante
+					var index = -1
+					for i in range(group_copy.size()):
+						if group_copy[i] == p:
+							index = i
+							break
+					
+					if index >= 0 and index < occupant_group.size():
+						var target_pos = occupant_positions[occupant_group[index]]
+						set_piece_at(target_pos, p)
+						var visual_pos = puzzle_offset + target_pos * cell_size
+						if use_tween_effect:
+							apply_tween_effect(p.node, visual_pos)
+						else:
+							p.node.position = visual_pos
+				
+				# Colocar grupo ocupante en posiciones del grupo entrante
+				for p in occupant_group:
+					var index = -1
+					for i in range(occupant_group.size()):
+						if occupant_group[i] == p:
+							index = i
+							break
+					
+					if index >= 0 and index < group_copy.size():
+						var target_pos = group_positions[group_copy[index]]
+						set_piece_at(target_pos, p)
+						var visual_pos = puzzle_offset + target_pos * cell_size
+						if use_tween_effect:
+							apply_tween_effect(p.node, visual_pos)
+						else:
+							p.node.position = visual_pos
+				
+				# Reproducir sonido
+				if audio_merge and not audio_merge.playing:
+					audio_merge.play()
+				
+				check_all_groups()
+				verify_all_pieces_in_grid()
+				return
 			
-			remove_piece_at(p.current_cell)
-			set_piece_at(orig_cell, p)
-			
-			# Aplicar efecto Tween para mover la pieza a su posición original
-			var target_position = puzzle_offset + orig_cell * cell_size
-			if use_tween_effect:
-				apply_tween_effect(p.node, target_position)
+			# Si el grupo entrante es más grande, desplazamos el grupo ocupante
+			elif group_copy.size() > occupant_group.size():
+				push_warning("Desplazando grupo más pequeño")
+				show_success_message("¡Desplazando grupo más pequeño!")
+				
+				# Encontrar un espacio coherente para el grupo ocupante
+				var avoid_cells = group_cells  # Evitar las celdas que ocupará nuestro grupo
+				var target_cells = find_space_for_group(occupant_group, avoid_cells)
+				
+				# Si no hay suficiente espacio coherente para el grupo ocupante
+				if target_cells.size() < occupant_group.size():
+					push_warning("No hay suficiente espacio coherente para desplazar el grupo")
+					show_error_message("No hay suficiente espacio para el grupo")
+					
+					# Devolver cada pieza del grupo a su posición original de inicio del arrastre
+					for p in group_copy:
+						var orig_cell = p.drag_start_cell
+						
+						# Comprobar que la celda original está disponible
+						var current_occupant = get_piece_at(orig_cell)
+						if current_occupant != null and current_occupant != p:
+							# Si la posición original ya está ocupada, buscar una celda libre cercana
+							var backup_free_cells = find_free_cells(1)
+							if backup_free_cells.size() > 0:
+								orig_cell = backup_free_cells[0]
+						
+						remove_piece_at(p.current_cell)
+						set_piece_at(orig_cell, p)
+						
+						# Aplicar efecto Tween para mover la pieza a su posición original
+						var target_position = puzzle_offset + orig_cell * cell_size
+						if use_tween_effect:
+							apply_tween_effect(p.node, target_position)
+						else:
+							p.node.position = target_position
+					
+					return
+				
+				# Quitar todas las piezas del grupo ocupante de sus posiciones actuales
+				for p in occupant_group:
+					remove_piece_at(p.current_cell)
+				
+				# Calcular la posición base del grupo ocupante (donde irá el líder)
+				var occupant_leader = get_group_leader(occupant_group[0])
+				
+				# Colocar las piezas del grupo ocupante en las celdas coherentes
+				for i in range(occupant_group.size()):
+					var p = occupant_group[i]
+					var offset = p.original_pos - occupant_leader.original_pos
+					var leader_cell = target_cells[0]  # La celda para el líder
+					var target_piece_position = leader_cell + offset
+					
+					# Asegurarnos de que la celda esté dentro de los límites
+					target_piece_position.x = clamp(target_piece_position.x, 0, GLOBAL.columns - 1)
+					if target_piece_position.y >= GLOBAL.rows:
+						if not add_extra_row():
+							target_piece_position.y = GLOBAL.rows - 1
+					
+					set_piece_at(target_piece_position, p)
+					
+					# Aplicar efecto Tween
+					var target_position = puzzle_offset + target_piece_position * cell_size
+					if use_tween_effect:
+						apply_tween_effect(p.node, target_position)
+					else:
+						p.node.position = target_position
+				
+				# Liberar las celdas ocupadas por las piezas del grupo
+				for p in group_copy:
+					remove_piece_at(p.current_cell)
+				
+				# Colocar cada pieza del grupo en su posición relativa
+				var group_leader_pos = target_cell  # Renombramos la variable para evitar conflictos
+				for p in group_copy:
+					var offset = p.original_pos - leader.original_pos
+					var destination_cell = group_leader_pos + offset
+					
+					# Asegurarse de que la celda está dentro de los límites horizontales
+					destination_cell.x = clamp(destination_cell.x, 0, GLOBAL.columns - 1)
+					
+					# Para los límites verticales, verificar si necesitamos añadir filas
+					if destination_cell.y >= GLOBAL.rows:
+						if not add_extra_row():
+							destination_cell.y = GLOBAL.rows - 1
+					
+					set_piece_at(destination_cell, p)
+					
+					# Aplicar efecto Tween
+					var target_position = puzzle_offset + destination_cell * cell_size
+					if use_tween_effect:
+						apply_tween_effect(p.node, target_position)
+					else:
+						p.node.position = target_position
+				
+				# Reproducir sonido
+				if audio_merge and not audio_merge.playing:
+					audio_merge.play()
+				
+				check_all_groups()
+				verify_all_pieces_in_grid()
+				return
+				
 			else:
-				p.node.position = target_position
-		
-		# No continuamos con la colocación del grupo
-		return
+				# Si el grupo entrante es más pequeño, no permitir la colocación
+				push_warning("No se puede colocar grupo más pequeño sobre uno más grande")
+				show_error_message("El grupo es demasiado pequeño")
+				
+				# Devolver cada pieza del grupo a su posición original de inicio del arrastre
+				for p in group_copy:
+					var orig_cell = p.drag_start_cell
+					
+					# Comprobar que la celda original está disponible
+					var current_occupant = get_piece_at(orig_cell)
+					if current_occupant != null and current_occupant != p:
+						# Si la posición original ya está ocupada, buscar una celda libre cercana
+						var backup_free_cells = find_free_cells(1)
+						if backup_free_cells.size() > 0:
+							orig_cell = backup_free_cells[0]
+					
+					remove_piece_at(p.current_cell)
+					set_piece_at(orig_cell, p)
+					
+					# Aplicar efecto Tween para mover la pieza a su posición original
+					var target_position = puzzle_offset + orig_cell * cell_size
+					if use_tween_effect:
+						apply_tween_effect(p.node, target_position)
+					else:
+						p.node.position = target_position
+				
+				return
+		else:
+			# Caso con múltiples grupos o grupos que no coinciden exactamente:
+			# Verificar si el grupo entrante es más grande que todos los grupos ocupantes juntos
+			var total_occupant_pieces = 0
+			for group_id in occupant_groups:
+				total_occupant_pieces += occupant_groups[group_id].size()
+			
+			if group_copy.size() > total_occupant_pieces:
+				push_warning("Desplazando múltiples grupos/piezas")
+				show_success_message("¡Desplazando grupos más pequeños!")
+				
+				# Recopilar todas las piezas ocupantes
+				var all_occupant_pieces = []
+				var separated_groups = {}  # Mapa: ID de grupo -> lista de piezas
+
+				# Primero agrupar todas las piezas por sus grupos
+				for group_id in occupant_groups:
+					var group_pieces = occupant_groups[group_id]
+					separated_groups[group_id] = group_pieces
+					
+					# No añadimos las piezas aquí para procesarlas por grupos
+
+				# Añadir piezas individuales que no estén en grupos
+				for occupant in occupants:
+					if occupant.group.size() == 1 and not any_group_contains(separated_groups, occupant):
+						all_occupant_pieces.append(occupant)
+
+				# Procesar cada grupo de manera coherente
+				var all_failed = false
+				var processed_cells = []  # Para llevar un registro de qué celdas están ocupadas
+				
+				# Primero, ocupamos las celdas con nuestro grupo actual
+				for cell in group_cells:
+					processed_cells.append(cell)
+				
+				# Ahora procesamos los grupos
+				for group_id in separated_groups:
+					var group_pieces = separated_groups[group_id]
+					
+					# Encontrar un espacio coherente para este grupo
+					var target_group_cells = find_space_for_group(group_pieces, processed_cells)
+					
+					# Si no hay suficiente espacio coherente para este grupo
+					if target_group_cells.size() < group_pieces.size():
+						all_failed = true
+						break
+					
+					# Quitar todas las piezas del grupo de sus posiciones actuales
+					for p in group_pieces:
+						remove_piece_at(p.current_cell)
+					
+					# Calcular la posición base del grupo (donde irá el líder)
+					var group_leader = get_group_leader(group_pieces[0])
+					
+					# Colocar las piezas del grupo en las celdas coherentes
+					for i in range(group_pieces.size()):
+						var p = group_pieces[i]
+						var offset = p.original_pos - group_leader.original_pos
+						var leader_cell = target_group_cells[0]  # La celda para el líder
+						var target_piece_cell = leader_cell + offset
+						
+						# Asegurarnos de que la celda esté dentro de los límites
+						target_piece_cell.x = clamp(target_piece_cell.x, 0, GLOBAL.columns - 1)
+						if target_piece_cell.y >= GLOBAL.rows:
+							if not add_extra_row():
+								target_piece_cell.y = GLOBAL.rows - 1
+						
+						set_piece_at(target_piece_cell, p)
+						
+						# Aplicar efecto Tween
+						var target_position = puzzle_offset + target_piece_cell * cell_size
+						if use_tween_effect:
+							apply_tween_effect(p.node, target_position)
+						else:
+							p.node.position = target_position
+						
+						# Añadir a la lista de celdas a evitar para los siguientes grupos
+						processed_cells.append(target_piece_cell)
+
+				# Para las piezas individuales, buscar celdas libres normales
+				if not all_failed and all_occupant_pieces.size() > 0:
+					var free_cells = []
+					
+					# Buscar celdas libres (que no estén en processed_cells)
+					for r in range(GLOBAL.rows):
+						for c in range(GLOBAL.columns):
+							var check_cell = Vector2(c, r)
+							var cell_key_str = cell_key(check_cell)
+							
+							if not grid.has(cell_key_str) and not (check_cell in processed_cells):
+								free_cells.append(check_cell)
+								
+								if free_cells.size() >= all_occupant_pieces.size():
+									break
+						
+						if free_cells.size() >= all_occupant_pieces.size():
+							break
+					
+					# Si no hay suficientes celdas libres, intentar añadir filas
+					while free_cells.size() < all_occupant_pieces.size():
+						if not add_extra_row():
+							break
+						
+						# Buscar celdas libres en la nueva fila
+						for c in range(GLOBAL.columns):
+							var check_cell = Vector2(c, GLOBAL.rows - 1)
+							var cell_key_str = cell_key(check_cell)
+							
+							if not grid.has(cell_key_str) and not (check_cell in processed_cells):
+								free_cells.append(check_cell)
+								
+								if free_cells.size() >= all_occupant_pieces.size():
+									break
+					
+					# Si no hay suficientes celdas libres, fallar
+					if free_cells.size() < all_occupant_pieces.size():
+						all_failed = true
+					else:
+						# Primero quitar todas las piezas de sus posiciones actuales
+						for idx in range(all_occupant_pieces.size()):
+							var piece_to_move = all_occupant_pieces[idx]
+							remove_piece_at(piece_to_move.current_cell)
+						
+						# Luego, en un bucle separado, colocar cada pieza en su nueva posición
+						for idx in range(all_occupant_pieces.size()):
+							var piece_to_place = all_occupant_pieces[idx]
+							var free_cell = free_cells[idx]
+							
+							set_piece_at(free_cell, piece_to_place)
+							
+							# Aplicar efecto Tween
+							var target_position = puzzle_offset + free_cell * cell_size
+							if use_tween_effect:
+								apply_tween_effect(piece_to_place.node, target_position)
+							else:
+								piece_to_place.node.position = target_position
+							
+							# Añadir a la lista de celdas procesadas
+							processed_cells.append(free_cell)
+
+				# Si alguna parte falló, devolver el grupo a su posición original
+				if all_failed:
+					push_warning("No hay suficientes celdas libres para desplazar los grupos")
+					show_error_message("No hay suficiente espacio libre")
+					
+					# Devolver cada pieza del grupo a su posición original de inicio del arrastre
+					for p in group_copy:
+						var orig_cell = p.drag_start_cell
+						
+						# Comprobar que la celda original está disponible
+						var current_occupant = get_piece_at(orig_cell)
+						if current_occupant != null and current_occupant != p:
+							# Si la posición original ya está ocupada, buscar una celda libre cercana
+							var backup_free_cells = find_free_cells(1)
+							if backup_free_cells.size() > 0:
+								orig_cell = backup_free_cells[0]
+						
+						remove_piece_at(p.current_cell)
+						set_piece_at(orig_cell, p)
+						
+						# Aplicar efecto Tween para mover la pieza a su posición original
+						var target_position = puzzle_offset + orig_cell * cell_size
+						if use_tween_effect:
+							apply_tween_effect(p.node, target_position)
+						else:
+							p.node.position = target_position
+					
+					return
+				
+				# Si todo salió bien, continuar con la colocación del grupo principal
+				# Liberar las celdas ocupadas por las piezas del grupo
+				for p in group_copy:
+					remove_piece_at(p.current_cell)
+				
+				# Colocar cada pieza del grupo en su posición relativa
+				var leader_target_pos = target_cell  # Usamos la variable que ya tenemos
+				for p in group_copy:
+					var offset = p.original_pos - leader.original_pos
+					var destination_cell = leader_target_pos + offset
+					
+					# Asegurarse de que la celda está dentro de los límites horizontales
+					destination_cell.x = clamp(destination_cell.x, 0, GLOBAL.columns - 1)
+					
+					# Para los límites verticales, verificar si necesitamos añadir filas
+					if destination_cell.y >= GLOBAL.rows:
+						if not add_extra_row():
+							destination_cell.y = GLOBAL.rows - 1
+					
+					set_piece_at(destination_cell, p)
+					
+					# Aplicar efecto Tween
+					var target_position = puzzle_offset + destination_cell * cell_size
+					if use_tween_effect:
+						apply_tween_effect(p.node, target_position)
+					else:
+						p.node.position = target_position
+				
+				# Reproducir sonido
+				if audio_merge and not audio_merge.playing:
+					audio_merge.play()
+				
+				check_all_groups()
+				verify_all_pieces_in_grid()
+				return
+			else:
+				# Si el grupo entrante es más pequeño, no permitir la colocación
+				push_warning("No se puede colocar sobre múltiples grupos")
+				show_error_message("No se puede colocar sobre múltiples grupos")
+				
+				# Devolver cada pieza del grupo a su posición original de inicio del arrastre
+				for p in group_copy:
+					var orig_cell = p.drag_start_cell
+					
+					# Comprobar que la celda original está disponible
+					var current_occupant = get_piece_at(orig_cell)
+					if current_occupant != null and current_occupant != p:
+						# Si la posición original ya está ocupada, buscar una celda libre cercana
+						var backup_free_cells = find_free_cells(1)
+						if backup_free_cells.size() > 0:
+							orig_cell = backup_free_cells[0]
+					
+					remove_piece_at(p.current_cell)
+					set_piece_at(orig_cell, p)
+					
+					# Aplicar efecto Tween para mover la pieza a su posición original
+					var target_position = puzzle_offset + orig_cell * cell_size
+					if use_tween_effect:
+						apply_tween_effect(p.node, target_position)
+					else:
+						p.node.position = target_position
+				
+				return
 	
 	# Verificar si todas las piezas ocupantes están solas (no en grupos)
 	var all_occupants_single = true
@@ -2092,3 +2533,183 @@ func create_options_button():
 	else:
 		# Si no existe, podríamos crearlo dinámicamente (pero eso es lo que queremos evitar)
 		push_warning("El botón de opciones no existe en la escena. Debería añadirse manualmente.")
+
+# Nueva función para encontrar un espacio coherente para un grupo
+func find_space_for_group(group, avoid_cells = []):
+	# Primero, necesitamos conocer la estructura del grupo
+	var leader = get_group_leader(group[0])
+	var pieces_layout = []  # Lista de offsets relativos al líder
+	
+	# Recopilar la estructura relativa de las piezas
+	for p in group:
+		var offset = p.original_pos - leader.original_pos
+		pieces_layout.append(offset)
+	
+	# Recorrer todo el tablero buscando un espacio donde quepa el grupo
+	for row in range(GLOBAL.rows):
+		for col in range(GLOBAL.columns):
+			var base_cell = Vector2(col, row)
+			var can_place = true
+			var target_cells = []
+			
+			# Verificar cada posición relativa
+			for offset in pieces_layout:
+				var check_cell = base_cell + offset
+				
+				# Verificar límites
+				if check_cell.x < 0 or check_cell.x >= GLOBAL.columns or check_cell.y < 0 or check_cell.y >= GLOBAL.rows:
+					can_place = false
+					break
+				
+				# Verificar si la celda está libre y no en la lista de celdas a evitar
+				var cell_key_str = cell_key(check_cell)
+				if grid.has(cell_key_str) or check_cell in avoid_cells:
+					can_place = false
+					break
+				
+				target_cells.append(check_cell)
+			
+			# Si encontramos un espacio válido, devolver las celdas
+			if can_place:
+				return target_cells
+	
+	# Si llegamos aquí, intentamos añadir una fila y volver a buscar
+	if add_extra_row():
+		return find_space_for_group(group, avoid_cells)
+	
+	# Si no encontramos un espacio, devolver un array vacío
+	return []
+
+# Función auxiliar para verificar si algún grupo contiene una pieza específica
+func any_group_contains(groups_map, piece):
+	for group_id in groups_map:
+		if piece in groups_map[group_id]:
+			return true
+	return false
+
+# Nueva función para reorganizar las piezas en filas extras a espacios disponibles en el área principal
+func reorganize_pieces():
+	show_success_message("Reorganizando piezas...")
+	
+	# 1. Identificar qué piezas están fuera del área original del puzzle
+	var pieces_outside_original_area = []
+	
+	for piece_obj in pieces:
+		# Verificar si la pieza está fuera del área original del puzzle
+		# (ya sea por encima, por debajo, o a los lados)
+		if piece_obj.current_cell.y >= original_rows or piece_obj.current_cell.y < 0 or piece_obj.current_cell.x >= GLOBAL.columns or piece_obj.current_cell.x < 0:
+			# Esta pieza está fuera del área original
+			pieces_outside_original_area.append(piece_obj)
+	
+	if pieces_outside_original_area.size() == 0:
+		show_success_message("No hay piezas para reorganizar")
+		return
+		
+	# Mostrar cuántas piezas se reorganizarán
+	print("Reorganizando " + str(pieces_outside_original_area.size()) + " piezas")
+	
+	# 2. Identificar celdas libres en el área principal del puzzle
+	var free_cells = []
+	
+	for r in range(original_rows):
+		for c in range(GLOBAL.columns):
+			var cell = Vector2(c, r)
+			if get_piece_at(cell) == null:
+				free_cells.append(cell)
+	
+	# 3. Mover las piezas fuera del área original a celdas libres en el área principal
+	var pieces_moved = 0
+	
+	# Primero intentar mover grupos completos
+	var processed_groups = []
+	
+	for piece_obj in pieces_outside_original_area:
+		# Obtener el líder del grupo
+		var group_leader = get_group_leader(piece_obj)
+		
+		# Si ya procesamos este grupo, continuar con el siguiente
+		if group_leader in processed_groups:
+			continue
+			
+		# Marcar este grupo como procesado
+		processed_groups.append(group_leader)
+		
+		# Solo procesar si todo el grupo está fuera del área original
+		var group_outside_original = true
+		for p in group_leader.group:
+			if p.current_cell.y < original_rows and p.current_cell.y >= 0 and p.current_cell.x < GLOBAL.columns and p.current_cell.x >= 0:
+				group_outside_original = false
+				break
+		
+		if not group_outside_original:
+			continue
+			
+		# Buscar espacio para el grupo completo
+		var group_space = find_space_for_group(group_leader.group, [])
+		
+		# Filtrar las celdas para asegurarse de que estén dentro del área original
+		var valid_group_space = []
+		for cell in group_space:
+			if cell.y < original_rows and cell.y >= 0 and cell.x < GLOBAL.columns and cell.x >= 0 and get_piece_at(cell) == null:
+				valid_group_space.append(cell)
+		
+		if valid_group_space.size() >= group_leader.group.size():
+			# Mover todo el grupo a estas celdas
+			var i = 0
+			for p in group_leader.group:
+				if i < valid_group_space.size():
+					# Quitar la pieza de su posición actual
+					remove_piece_at(p.current_cell)
+					
+					# Colocar en la nueva celda
+					var target_cell = valid_group_space[i]
+					set_piece_at(target_cell, p)
+					
+					# Actualizar la posición visual
+					var target_position = puzzle_offset + target_cell * cell_size
+					if use_tween_effect:
+						apply_tween_effect(p.node, target_position)
+					else:
+						p.node.position = target_position
+					
+					# Eliminar esta celda de las disponibles
+					free_cells.erase(target_cell)
+					
+					pieces_moved += 1
+					i += 1
+		
+	# Después, mover piezas individuales que no están en grupos
+	for piece_obj in pieces_outside_original_area:
+		# Saltar si la pieza ya fue movida como parte de un grupo
+		if piece_obj.current_cell.y < original_rows and piece_obj.current_cell.y >= 0 and piece_obj.current_cell.x < GLOBAL.columns and piece_obj.current_cell.x >= 0:
+			continue
+			
+		# Si hay celdas libres disponibles, mover la pieza
+		if free_cells.size() > 0:
+			var target_cell = free_cells[0]
+			free_cells.remove_at(0)
+			
+			remove_piece_at(piece_obj.current_cell)
+			set_piece_at(target_cell, piece_obj)
+			
+			var target_position = puzzle_offset + target_cell * cell_size
+			if use_tween_effect:
+				apply_tween_effect(piece_obj.node, target_position)
+			else:
+				piece_obj.node.position = target_position
+				
+			pieces_moved += 1
+		else:
+			# No hay más espacios disponibles
+			break
+	
+	# Si se movieron piezas, reproducir el sonido de fusión
+	if pieces_moved > 0:
+		audio_merge.play()
+		show_success_message("¡" + str(pieces_moved) + " piezas reorganizadas!")
+	else:
+		show_error_message("No hay espacio para reorganizar")
+	
+	# Verificar y actualizar los grupos después de la reorganización
+	check_all_groups()
+	verify_all_pieces_in_grid()
