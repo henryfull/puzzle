@@ -14,6 +14,11 @@ Para que el juego funcione correctamente, la escena debe incluir los siguientes 
 ### Temporizadores
 - `VictoryTimer` (Timer): Para comprobar periódicamente si se ha completado el puzzle
 
+### Contenedor de piezas
+- `PiecesContainer` (Node2D): Nodo que contiene todas las piezas del puzzle
+  - Este contenedor permite organizar mejor las piezas y aplicar transformaciones al conjunto
+  - El z-index del contenedor está configurado a 5 para que las piezas aparezcan por encima del fondo
+
 ### Interfaz de usuario (UI)
 - `UILayer` (CanvasLayer): Capa que contiene todos los elementos de UI
   - `OptionsButton` (Button): Botón para mostrar las opciones
@@ -32,7 +37,8 @@ Las siguientes señales deben estar conectadas:
 ## Notas adicionales
 
 - No eliminar la función `create_options_button()`, ya que se encarga de configurar el botón de opciones
-- Las piezas del puzzle seguirán creándose dinámicamente en el código, ya que su número y disposición dependen de la configuración del puzzle
+- Las piezas del puzzle se crean dinámicamente en el código, pero ahora se añaden al contenedor `PiecesContainer` en lugar de al nodo raíz
+- El desplazamiento del tablero (paneo) ahora se aplica al contenedor de piezas, lo que simplifica la gestión de la posición
 - Si alguno de estos elementos no existe en la escena, el código tiene un fallback para crearlos dinámicamente, pero se recomienda incluirlos todos en la escena para mejor organización y rendimiento
 
 ## Ejemplo de estructura
@@ -43,6 +49,8 @@ PuzzleGame (Node2D)
 ├── AudioMerge (AudioStreamPlayer)
 ├── AudioFlip (AudioStreamPlayer)
 ├── VictoryTimer (Timer)
+├── PiecesContainer (Node2D)
+│   └── [Las piezas del puzzle se añaden aquí dinámicamente]
 └── UILayer (CanvasLayer)
     ├── OptionsButton (Button)
     ├── SuccessMessage (Label)

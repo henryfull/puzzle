@@ -18,6 +18,9 @@ var just_placed_piece: bool = false
 # Referencia al timer de verificación de victoria
 @onready var victory_timer: Timer = $VictoryTimer
 
+# Referencia al contenedor de piezas
+@export var pieces_container: Node2D
+
 #
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
@@ -130,6 +133,18 @@ func _ready():
 		success_message_label.visible = false
 	if error_message_label:
 		error_message_label.visible = false
+	
+	# Crear o verificar el contenedor de piezas
+	if not pieces_container:
+		pieces_container = Node2D.new()
+		pieces_container.name = "PiecesContainer"
+		pieces_container.z_index = 5  # Asegurar que el z-index sea 5
+		add_child(pieces_container)
+		print("Creado contenedor de piezas dinámicamente")
+	else:
+		print("Usando contenedor de piezas existente:", pieces_container.name)
+		# Asegurar que el z-index sea el correcto
+		pieces_container.z_index = 5
 	
 	# Guardar el número original de filas
 	original_rows = GLOBAL.rows
@@ -259,7 +274,7 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 		for col_i in range(GLOBAL.columns):
 			# Instanciar PuzzlePiece.tscn
 			var piece_node = piece_scene.instantiate()
-			add_child(piece_node)
+			pieces_container.add_child(piece_node)  # Añadir al contenedor en lugar de al nodo raíz
 			
 			# Asegurar que las piezas se muestren por encima del fondo
 			piece_node.z_index = 5
@@ -437,8 +452,11 @@ func _unhandled_input(event: InputEvent) -> void:
 					break
 
 func update_board_position() -> void:
-	# Actualizar la posición de todas las piezas según el desplazamiento del tablero
-	position = board_offset
+	# Actualizar la posición del contenedor de piezas según el desplazamiento del tablero
+	if pieces_container:
+		pieces_container.position = board_offset
+	else:
+		position = board_offset
 	
 	# Limitar el desplazamiento para que el tablero no se aleje demasiado
 	var viewport_size = get_viewport_rect().size
@@ -454,25 +472,46 @@ func update_board_position() -> void:
 	var max_y = max(viewport_size.y - margin, viewport_size.y - board_size.y * 0.25)
 	
 	# Limitar el desplazamiento
-	position.x = clamp(position.x, min_x, max_x)
-	position.y = clamp(position.y, min_y, max_y)
+	if pieces_container:
+		pieces_container.position.x = clamp(pieces_container.position.x, min_x, max_x)
+		pieces_container.position.y = clamp(pieces_container.position.y, min_y, max_y)
+	else:
+		position.x = clamp(position.x, min_x, max_x)
+		position.y = clamp(position.y, min_y, max_y)
 	
 	# Actualizar el board_offset para reflejar la posición ajustada
-	board_offset = position
+	board_offset = pieces_container.position if pieces_container else position
 
 #
 # === DETECCIÓN DE CLIC SOBRE LA PIEZA ===
 #
 func is_mouse_over_piece(piece_obj: Piece, mouse_pos: Vector2) -> bool:
-	# Revisamos si el mouse está sobre el sprite
+	# Verificaciones de seguridad
+	if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node) or not is_instance_valid(piece_obj.sprite):
+		return false
+		
 	var sprite = piece_obj.sprite
 	if sprite.texture == null:
 		return false
 
 	# Convertir mouse_pos a espacio local de la pieza
 	var local_pos = piece_obj.node.to_local(mouse_pos)
-	var tex_rect = Rect2(sprite.position - sprite.texture.get_size() * sprite.scale * 0.5,
-						 sprite.texture.get_size() * sprite.scale)
+	
+	# Para diagnóstico
+	if OS.is_debug_build() and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		print("Mouse pos: ", mouse_pos)
+		print("Local pos en pieza: ", local_pos)
+		print("Sprite pos: ", sprite.position)
+		print("Sprite scale: ", sprite.scale)
+		print("Texture size: ", sprite.texture.get_size())
+	
+	# Crear un rectángulo que represente el área del sprite
+	var tex_rect = Rect2(
+		sprite.position - sprite.texture.get_size() * sprite.scale * 0.5,
+		sprite.texture.get_size() * sprite.scale
+	)
+	
+	# Verificar si el punto local está dentro del rectángulo
 	return tex_rect.has_point(local_pos)
 
 #
@@ -636,8 +675,20 @@ func get_cell_of_piece(piece_obj: Piece) -> Vector2:
 	# Primero obtenemos la posición global de la pieza
 	var global_pos = piece_obj.node.global_position
 	
-	# Luego restamos la posición global del nodo raíz (que contiene el desplazamiento)
-	var adjusted_pos = global_pos - global_position
+	# Para un mejor diagnóstico
+	if OS.is_debug_build():
+		print("Posición global de pieza: ", global_pos)
+		print("Posición global del nodo: ", global_position)
+		print("Posición del contenedor: ", pieces_container.global_position if pieces_container else Vector2.ZERO)
+	
+	# El posicionamiento ha cambiado ya que las piezas están dentro del contenedor
+	var adjusted_pos
+	if pieces_container:
+		# Si estamos usando el contenedor, necesitamos tener en cuenta su posición global
+		adjusted_pos = global_pos - pieces_container.global_position
+	else:
+		# Para compatibilidad con la versión anterior
+		adjusted_pos = global_pos - global_position
 	
 	# Ahora calculamos la celda usando las coordenadas ajustadas
 	var px = adjusted_pos.x - puzzle_offset.x
@@ -1803,22 +1854,22 @@ func process_piece_click(event: InputEvent) -> void:
 		var mouse_pos = event.position
 		var clicked_piece = null
 		
+		# Para diagnóstico
+		if OS.is_debug_build():
+			print("Clic en posición: ", mouse_pos)
+		
 		# Encontrar la pieza clickeada
 		for piece_obj in pieces:
-			# Convertir la posición global del mouse a local de cada pieza
-			var local_pos = piece_obj.node.to_local(mouse_pos)
-			var sprite = piece_obj.sprite
+			# Verificar si la pieza es válida
+			if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+				continue
 			
-			# Verificar si el punto está dentro del sprite
-			if sprite.texture != null:
-				var tex_rect = Rect2(
-					sprite.position - sprite.texture.get_size() * sprite.scale * 0.5,
-					sprite.texture.get_size() * sprite.scale
-				)
-				
-				if tex_rect.has_point(local_pos):
-					clicked_piece = piece_obj
-					break
+			# Verificar si el punto está dentro de la pieza usando to_local
+			if is_mouse_over_piece(piece_obj, mouse_pos):
+				clicked_piece = piece_obj
+				if OS.is_debug_build():
+					print("Pieza encontrada en: ", piece_obj.node.global_position)
+				break
 		
 		if clicked_piece:
 			# Obtener el líder del grupo
