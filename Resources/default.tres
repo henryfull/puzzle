@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=42 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=49 format=3 uid="uid://dyqkx5or01raf"]
 
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="1_d4acn"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
@@ -55,6 +55,56 @@ region_rect = Rect2(31, 250, 318, 88)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jjsnl"]
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(368, 252, 318, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q7fk7"]
+texture = ExtResource("2_8wbtt")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(382, 474, 100, 100)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w5grb"]
+texture = ExtResource("2_8wbtt")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(382, 474, 100, 100)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b3pw5"]
+texture = ExtResource("2_8wbtt")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(803, 659, 100, 100)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yq2fi"]
+texture = ExtResource("2_8wbtt")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(382, 474, 100, 100)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_84jno"]
+texture = ExtResource("2_8wbtt")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(382, 474, 100, 100)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dgikm"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tmf1v"]
+texture = ExtResource("2_8wbtt")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(382, 474, 100, 100)
 
 [sub_resource type="ImageTexture" id="ImageTexture_vq864"]
 
@@ -159,7 +209,7 @@ expand_margin_left = 10.0
 region_rect = Rect2(484, 592, 62, 26)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_quunw"]
-content_margin_left = 128.0
+content_margin_left = 18.0
 texture = ExtResource("2_8wbtt")
 texture_margin_left = 13.0
 texture_margin_top = 13.0
@@ -197,6 +247,10 @@ region_rect = Rect2(917, 491, 360, 65)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jca5l"]
 content_margin_left = 20.0
 texture = ExtResource("2_8wbtt")
+texture_margin_left = 50.0
+texture_margin_top = 30.0
+texture_margin_right = 40.0
+texture_margin_bottom = 40.0
 region_rect = Rect2(917, 491, 360, 65)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_parne"]
@@ -254,6 +308,13 @@ ButtonYellow/styles/focus = SubResource("StyleBoxTexture_t3sfe")
 ButtonYellow/styles/hover = SubResource("StyleBoxTexture_lw0x0")
 ButtonYellow/styles/normal = SubResource("StyleBoxTexture_iong3")
 ButtonYellow/styles/pressed = SubResource("StyleBoxTexture_jjsnl")
+CheckBox/styles/disabled = SubResource("StyleBoxTexture_q7fk7")
+CheckBox/styles/focus = SubResource("StyleBoxTexture_w5grb")
+CheckBox/styles/hover = SubResource("StyleBoxTexture_b3pw5")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxTexture_yq2fi")
+CheckBox/styles/normal = SubResource("StyleBoxTexture_84jno")
+CheckBox/styles/pressed = SubResource("StyleBoxTexture_dgikm")
+CheckButton/styles/normal = SubResource("StyleBoxTexture_tmf1v")
 GridContainer/constants/h_separation = 10
 GridContainer/constants/v_separation = 10
 HBoxContainer/constants/separation = 20
@@ -268,7 +329,7 @@ HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_kwhnq")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_ht6ax")
 HScrollBar/styles/scroll = SubResource("StyleBoxFlat_m25v8")
 HScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_d4acn")
-HSlider/constants/center_grabber = 0
+HSlider/constants/center_grabber = 1
 HSlider/constants/grabber_offset = 0
 HSlider/icons/grabber = SubResource("AtlasTexture_ht6ax")
 HSlider/icons/grabber_disabled = SubResource("AtlasTexture_m3e3b")
