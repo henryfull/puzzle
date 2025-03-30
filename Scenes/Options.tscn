@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://by6tdey6sc6uw"]
 
 [ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
-[ext_resource type="Texture2D" uid="uid://dxy0wnpy0jpu" path="res://Assets/Images/GUID/ribbon_blue.svg" id="2_6f4k2"]
+[ext_resource type="PackedScene" uid="uid://dvxu5lskx6m10" path="res://Scenes/Components/panel_container.tscn" id="2_6f4k2"]
 [ext_resource type="Script" uid="uid://dv7ssdl7hhf3r" path="res://Scripts/LangSelector.gd" id="2_kgki5"]
 [ext_resource type="PackedScene" uid="uid://xdw0sm0cdrgy" path="res://temp/SliderOption.tscn" id="2_q4at1"]
 [ext_resource type="Script" uid="uid://1epn1mhu0fwt" path="res://Scripts/Utils.gd" id="2_qqjs0"]
@@ -20,39 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.72549, 0.854902, 1, 1)
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -127.5
-offset_top = -159.5
-offset_right = 127.5
-offset_bottom = 159.5
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="Panel" type="Panel" parent="CanvasLayer/PanelContainer"]
-layout_mode = 2
-theme_type_variation = &"PanelInside"
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer/Panel"]
-clip_contents = true
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = -70.0
-offset_top = -20.0
-offset_right = -70.0
-offset_bottom = 60.0
-grow_horizontal = 2
-scale = Vector2(1.4, 1.4)
-mouse_filter = 2
-texture = ExtResource("2_6f4k2")
-expand_mode = 3
+[node name="PanelContainer" parent="CanvasLayer" instance=ExtResource("2_6f4k2")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer"]
 layout_mode = 2

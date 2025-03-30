@@ -4,6 +4,8 @@ extends Node2D
 var puzzle_data = null
 var pack_data = null
 var total_moves = 0
+var elapsed_time = 0.0  # Nueva variable para el tiempo transcurrido
+var difficulty = {"columns": 0, "rows": 0}  # Nueva variable para la dificultad
 var current_pack_id = ""
 var current_puzzle_id = ""
 var progress_manager = null
@@ -43,6 +45,14 @@ func _ready():
 		# Cargar el número de movimientos
 		if victory_data.has("total_moves"):
 			total_moves = victory_data.total_moves
+		
+		# Cargar el tiempo transcurrido
+		if victory_data.has("elapsed_time"):
+			elapsed_time = victory_data.elapsed_time
+			
+		# Cargar información de dificultad
+		if victory_data.has("difficulty"):
+			difficulty = victory_data.difficulty
 		
 		# Cargar los IDs para la navegación
 		if victory_data.has("pack_id"):
@@ -281,10 +291,32 @@ func setup_ui():
 
 # Función para actualizar la interfaz con los datos del puzzle
 func update_ui_with_puzzle_data():
-	# Actualizar la información de movimientos
+	# Actualizar la información de movimientos y tiempo
 	var info_label = $CanvasLayer/VBoxContainer/LabelInfo
 	if info_label:
-		info_label.text = "Has completado el puzzle en " + str(total_moves) + " movimientos"
+		var minutes = int(elapsed_time) / 60
+		var seconds = int(elapsed_time) % 60
+		info_label.text = tr("Has completado el puzzle en ") + str(total_moves) + tr(" movimientos") + "\n" + tr("Tiempo: ") + "%02d:%02d" % [minutes, seconds]
+	
+	# Actualizar la información de estadísticas
+	var stats_label = $CanvasLayer/VBoxContainer/StatsLabel
+	if stats_label:
+		# Obtener las estadísticas del puzzle actual
+		var puzzle_stats = progress_manager.get_puzzle_stats(current_pack_id, current_puzzle_id)
+		var difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
+		
+		if puzzle_stats.has(difficulty_key):
+			var stats = puzzle_stats[difficulty_key]
+			var best_time_minutes = int(stats.best_time) / 60
+			var best_time_seconds = int(stats.best_time) % 60
+			
+			var stats_text = tr("Mejor tiempo: ") + "%02d:%02d" % [best_time_minutes, best_time_seconds] + "\n"
+			stats_text += tr("Mejor movimientos: ") + str(stats.best_moves) + "\n"
+			stats_text += tr("Veces completado: ") + str(stats.completions)
+			
+			stats_label.text = stats_text
+		else:
+			stats_label.text = tr("No hay estadísticas previas")
 	
 	# Actualizar la imagen
 	if puzzle_data and puzzle_data.has("image"):

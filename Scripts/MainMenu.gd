@@ -2,6 +2,7 @@ extends Node2D
 
 var btn_play: Button
 var btn_options : Button
+var btn_stats : Button
 var btn_exit : Button
 var label_version: Label
 
@@ -9,6 +10,7 @@ func _ready():
 	# Esperar un frame para asegurarnos de que GLOBAL y TranslationLoader estén inicializados
 	btn_options = $CanvasLayer/MarginContainer/VBoxContainer/BTN_options
 	btn_play = $CanvasLayer/MarginContainer/VBoxContainer/BTN_play
+	btn_stats = $CanvasLayer/MarginContainer/VBoxContainer/BTN_stats
 	btn_exit = $CanvasLayer/MarginContainer/VBoxContainer/BTN_exit
 	label_version = $CanvasLayer/LabelVersion
 	
@@ -40,6 +42,7 @@ func update_version_label():
 func update_ui_texts():
 	btn_options.text = tr("common_options")
 	btn_play.text = tr("common_play")
+	btn_stats.text = tr("common_stats")
 	btn_exit.text = tr("common_exit")
 	print("MainMenu: Textos actualizados con idioma: ", TranslationServer.get_locale())
 
@@ -78,3 +81,6 @@ func _on_ExitButton_pressed():
 
 func _on_btn_exit_pressed() -> void:
 	get_tree().quit()
+
+func _on_StatsButton_pressed():
+	get_tree().change_scene_to_file("res://Scenes/Screens/StatsScreen.tscn")

@@ -60,6 +60,13 @@ text = "Has completado el puzzle en 0 movimientos"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="StatsLabel" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "No hay estadísticas previas"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3

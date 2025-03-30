@@ -6,7 +6,8 @@ const PACKS_DATA_FILE = "res://PacksData/sample_packs.json"
 
 # Datos de progresión
 var progress_data = {
-	"packs": {}
+	"packs": {},
+	"statistics": {}  # Nueva sección para estadísticas de partidas
 }
 
 # Datos de packs originales (desde el archivo JSON)
@@ -118,6 +119,10 @@ func initialize_progress_if_needed():
 	# Si no hay datos de progresión o están vacíos, inicializarlos
 	if not progress_data.has("packs") or progress_data.packs.is_empty():
 		progress_data.packs = {}
+	
+	# Inicializar la sección de estadísticas si no existe
+	if not progress_data.has("statistics"):
+		progress_data.statistics = {}
 		
 	# Asegurarse de que todos los packs del archivo JSON estén en los datos de progresión
 	if packs_data.has("packs"):
@@ -390,7 +395,8 @@ func get_all_packs_with_progress() -> Array:
 # Reinicia la progresión (para pruebas)
 func reset_progress():
 	progress_data = {
-		"packs": {}
+		"packs": {},
+		"statistics": {}
 	}
 	initialize_progress_if_needed()
 	save_progress_data()
@@ -459,4 +465,90 @@ func get_next_unlocked_puzzle(pack_id: String, current_puzzle_id: String):
 	
 	# Si no hay siguiente puzzle, devolver null
 	print("ProgressManager: No hay siguiente puzzle disponible")
-	return null 
+	return null
+
+# Nueva función para guardar estadísticas de una partida
+func save_puzzle_stats(pack_id: String, puzzle_id: String, stats: Dictionary):
+	print("ProgressManager: Guardando estadísticas para el puzzle - Pack: " + pack_id + ", Puzzle: " + puzzle_id)
+	
+	# Asegurar que la estructura existe
+	if not progress_data.statistics.has(pack_id):
+		progress_data.statistics[pack_id] = {}
+	
+	if not progress_data.statistics[pack_id].has(puzzle_id):
+		progress_data.statistics[pack_id][puzzle_id] = {}
+	
+	# Determinamos clave basada en dificultad
+	var difficulty_key = str(stats.columns) + "x" + str(stats.rows)
+	
+	if not progress_data.statistics[pack_id][puzzle_id].has(difficulty_key):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key] = {
+			"completions": 0,
+			"best_time": 99999,
+			"best_moves": 99999,
+			"history": []
+		}
+	
+	# Incrementar contador de completaciones
+	progress_data.statistics[pack_id][puzzle_id][difficulty_key].completions += 1
+	
+	# Actualizar mejores tiempos y movimientos si corresponde
+	if stats.time < progress_data.statistics[pack_id][puzzle_id][difficulty_key].best_time:
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key].best_time = stats.time
+	
+	if stats.moves < progress_data.statistics[pack_id][puzzle_id][difficulty_key].best_moves:
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key].best_moves = stats.moves
+	
+	# Guardar registro en el historial (limitamos a los últimos 10 intentos)
+	var history_entry = {
+		"date": Time.get_datetime_string_from_system(),
+		"time": stats.time,
+		"moves": stats.moves
+	}
+	
+	progress_data.statistics[pack_id][puzzle_id][difficulty_key].history.push_front(history_entry)
+	
+	# Limitar el historial a 10 entradas
+	if progress_data.statistics[pack_id][puzzle_id][difficulty_key].history.size() > 10:
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key].history.resize(10)
+	
+	# Guardar los datos
+	save_progress_data()
+	print("ProgressManager: Estadísticas guardadas correctamente")
+
+# Nueva función para obtener estadísticas de un puzzle
+func get_puzzle_stats(pack_id: String, puzzle_id: String) -> Dictionary:
+	var stats = {}
+	
+	if progress_data.statistics.has(pack_id) and progress_data.statistics[pack_id].has(puzzle_id):
+		stats = progress_data.statistics[pack_id][puzzle_id].duplicate(true)
+	
+	return stats
+
+# Nueva función para obtener las estadísticas generales de un jugador
+func get_player_stats() -> Dictionary:
+	var player_stats = {
+		"total_puzzles_completed": 0,
+		"total_time_played": 0,
+		"total_moves": 0,
+		"packs_completed": 0
+	}
+	
+	# Recorrer estadísticas para calcular totales
+	for pack_id in progress_data.statistics.keys():
+		for puzzle_id in progress_data.statistics[pack_id].keys():
+			for difficulty in progress_data.statistics[pack_id][puzzle_id].keys():
+				var puzzle_stats = progress_data.statistics[pack_id][puzzle_id][difficulty]
+				player_stats.total_puzzles_completed += puzzle_stats.completions
+				
+				# Sumar el tiempo de todas las partidas en el historial
+				for entry in puzzle_stats.history:
+					player_stats.total_time_played += entry.time
+					player_stats.total_moves += entry.moves
+	
+	# Contar packs completados
+	for pack_id in progress_data.packs.keys():
+		if progress_data.packs[pack_id].completed:
+			player_stats.packs_completed += 1
+	
+	return player_stats 

@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvxu5lskx6m10"]
+
+[ext_resource type="Texture2D" uid="uid://dxy0wnpy0jpu" path="res://Assets/Images/GUID/ribbon_blue.svg" id="1_68e6n"]
+
+[node name="PanelContainer" type="PanelContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -127.5
+offset_top = -159.5
+offset_right = 127.5
+offset_bottom = 159.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_type_variation = &"PanelInside"
+
+[node name="TextureRect" type="TextureRect" parent="Panel"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -267.0
+offset_top = -50.0
+offset_right = 267.0
+offset_bottom = 108.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("1_68e6n")
+expand_mode = 1

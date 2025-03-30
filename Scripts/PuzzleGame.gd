@@ -89,6 +89,14 @@ var victory_toggle_button: Button
 # Referencias a botones en la UI
 @onready var button_options: Button = $UILayer/OptionsButton
 
+# Variables para registro de estadísticas
+var start_time: float = 0.0  # Tiempo de inicio en segundos
+var elapsed_time: float = 0.0  # Tiempo transcurrido en segundos
+var is_timer_active: bool = false  # Para controlar si el temporizador está activo
+
+# Nueva variable para controlar si el puzzle ya ha sido completado
+var puzzle_completed = false
+
 #
 # === SUBCLASE: Piece ===
 # Representa cada pieza del puzzle como un Node2D con Sprite2D integrado.
@@ -117,6 +125,9 @@ class Piece:
 # === FUNCIÓN _ready(): se llama al iniciar la escena ===
 #
 func _ready():
+	# Reiniciar el estado de completado
+	puzzle_completed = false
+	
 	# Detectar si estamos en un dispositivo móvil
 	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
 	
@@ -183,6 +194,9 @@ func _ready():
 		timer.connect("timeout", Callable(self, "check_victory_periodic"))
 		add_child(timer)
 		victory_timer = timer
+
+	# Iniciar el temporizador para medir el tiempo de juego
+	start_game_timer()
 
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
 	# 1) Cargar la escena del viewport
@@ -2109,7 +2123,17 @@ func _on_piece_moved(piece, old_cell, new_cell):
 
 # Función llamada cuando se completa el puzzle
 func _on_puzzle_completed():
+	# Evitar que se ejecute múltiples veces
+	if puzzle_completed:
+		return
+		
+	# Marcar como completado
+	puzzle_completed = true
+	
 	print("¡Puzzle completado!")
+	
+	# Detener el temporizador de juego
+	stop_game_timer()
 	
 	# Verificar que tenemos los IDs necesarios
 	if current_pack_id.is_empty() or current_puzzle_id.is_empty():
@@ -2119,6 +2143,16 @@ func _on_puzzle_completed():
 	# Marcar el puzzle como completado en el ProgressManager
 	print("PuzzleGame: Marcando puzzle como completado - Pack: " + current_pack_id + ", Puzzle: " + current_puzzle_id)
 	progress_manager.complete_puzzle(current_pack_id, current_puzzle_id)
+	
+	# Guardar estadísticas de la partida
+	var stats = {
+		"time": elapsed_time,
+		"moves": total_moves,
+		"columns": GLOBAL.columns,
+		"rows": GLOBAL.rows
+	}
+	progress_manager.save_puzzle_stats(current_pack_id, current_puzzle_id, stats)
+	print("PuzzleGame: Estadísticas de la partida guardadas")
 	
 	# Desbloquear el siguiente puzzle inmediatamente
 	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
@@ -2143,9 +2177,14 @@ func show_victory_screen():
 		"puzzle": GLOBAL.selected_puzzle,
 		"pack": GLOBAL.selected_pack,
 		"total_moves": total_moves,
+		"elapsed_time": elapsed_time,
 		"pack_id": current_pack_id,
 		"puzzle_id": current_puzzle_id,
-		"is_mobile": is_mobile  # Añadir información sobre el dispositivo
+		"is_mobile": is_mobile,  # Añadir información sobre el dispositivo
+		"difficulty": {
+			"columns": GLOBAL.columns,
+			"rows": GLOBAL.rows
+		}
 	}
 	
 	# Usar la función safe_change_scene para cambiar a la escena de victoria
@@ -2811,3 +2850,51 @@ func _on_button_toggle_hud_pressed() -> void:
 		UILayer.visible = true
 		btn_hide.visible = true
 		btn_show.visible = false
+
+# Función para iniciar el temporizador de juego
+func start_game_timer():
+	start_time = Time.get_unix_time_from_system()
+	is_timer_active = true
+	
+	# Crear y añadir un timer para actualizar el tiempo transcurrido
+	var timer = Timer.new()
+	timer.name = "GameTimer"
+	timer.wait_time = 1.0  # Actualizar cada segundo
+	timer.one_shot = false
+	timer.autostart = true
+	timer.connect("timeout", Callable(self, "update_elapsed_time"))
+	add_child(timer)
+	
+	print("PuzzleGame: Temporizador de juego iniciado")
+
+# Función para actualizar el tiempo transcurrido
+func update_elapsed_time():
+	if is_timer_active:
+		elapsed_time = Time.get_unix_time_from_system() - start_time
+		
+		# Actualizar UI si existe
+		update_timer_ui()
+
+# Función para detener el temporizador de juego
+func stop_game_timer():
+	is_timer_active = false
+	
+	# Actualizar una última vez
+	elapsed_time = Time.get_unix_time_from_system() - start_time
+	
+	# Detener el timer si existe
+	if has_node("GameTimer"):
+		var timer = get_node("GameTimer")
+		timer.stop()
+		
+	print("PuzzleGame: Temporizador de juego detenido. Tiempo total: ", elapsed_time, " segundos")
+
+# Función para actualizar la UI del temporizador (si existe)
+func update_timer_ui():
+	# Si existe un nodo de UI para mostrar el tiempo, actualizarlo
+	var timer_label = $UILayer/TimerLabel if has_node("UILayer/TimerLabel") else null
+	
+	if timer_label:
+		var minutes = int(elapsed_time) / 60
+		var seconds = int(elapsed_time) % 60
+		timer_label.text = "%02d:%02d" % [minutes, seconds]
