@@ -93,6 +93,7 @@ class Piece:
 	var current_cell: Vector2
 	var dragging := false
 	var drag_offset := Vector2.ZERO
+	var drag_start_cell := Vector2.ZERO  # Celda desde donde comenzó el arrastre
 	var group := []  # Lista de piezas en el mismo grupo
 	var order_number: int  # Número de orden de la pieza
 
@@ -101,6 +102,7 @@ class Piece:
 		sprite = _sprite
 		original_pos = _orig
 		current_cell = _orig
+		drag_start_cell = _orig  # Inicialmente, la celda de inicio es la misma que la original
 		order_number = _order
 		group = [self]  # Inicialmente, cada pieza está en su propio grupo
 
@@ -994,6 +996,42 @@ func place_group(piece: Piece):
 			if not (occupant in occupants):  # Evitar duplicados
 				occupants.append(occupant)
 	
+	# Verificar si hay alguna pieza ocupante que pertenezca a un grupo
+	var occupants_in_groups = false
+	for occupant in occupants:
+		if occupant.group.size() > 1:
+			occupants_in_groups = true
+			push_warning("No se puede colocar sobre una pieza que está en un grupo")
+			show_error_message("No se puede colocar sobre piezas en grupos")
+			break
+	
+	# Si hay piezas ocupantes que pertenecen a grupos, devolver el grupo a su posición original
+	if occupants_in_groups:
+		# Devolver cada pieza del grupo a su posición original de inicio del arrastre
+		for p in group_copy:
+			var orig_cell = p.drag_start_cell
+			
+			# Comprobar que la celda original está disponible
+			var current_occupant = get_piece_at(orig_cell)
+			if current_occupant != null and current_occupant != p:
+				# Si la posición original ya está ocupada, buscar una celda libre cercana
+				var free_cells = find_free_cells(1)
+				if free_cells.size() > 0:
+					orig_cell = free_cells[0]
+			
+			remove_piece_at(p.current_cell)
+			set_piece_at(orig_cell, p)
+			
+			# Aplicar efecto Tween para mover la pieza a su posición original
+			var target_position = puzzle_offset + orig_cell * cell_size
+			if use_tween_effect:
+				apply_tween_effect(p.node, target_position)
+			else:
+				p.node.position = target_position
+		
+		# No continuamos con la colocación del grupo
+		return
+	
 	# Verificar si todas las piezas ocupantes están solas (no en grupos)
 	var all_occupants_single = true
 	for occupant in occupants:
@@ -1788,6 +1826,11 @@ func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> voi
 		# Obtener el líder del grupo
 		var group_leader = get_group_leader(clicked_piece)
 		
+		# Guardar las posiciones originales de cada pieza del grupo antes de comenzar a arrastrar
+		for p in group_leader.group:
+			# Almacenamos la celda actual como punto de referencia para volver si es necesario
+			p.drag_start_cell = p.current_cell
+		
 		# Mover todo el grupo desde cualquier pieza
 		for p in group_leader.group:
 			p.dragging = true
@@ -1874,6 +1917,11 @@ func process_piece_click(event: InputEvent) -> void:
 		if clicked_piece:
 			# Obtener el líder del grupo
 			var group_leader = get_group_leader(clicked_piece)
+			
+			# Guardar las posiciones originales de cada pieza del grupo antes de comenzar a arrastrar
+			for p in group_leader.group:
+				# Almacenamos la celda actual como punto de referencia para volver si es necesario
+				p.drag_start_cell = p.current_cell
 			
 			# Mover todo el grupo desde cualquier pieza
 			for p in group_leader.group:

@@ -113,6 +113,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 3
 mouse_filter = 2
 color = Color(0.785649, 0.908065, 1, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="PiecesContainer" type="Node2D" parent="."]
 z_index = 5
