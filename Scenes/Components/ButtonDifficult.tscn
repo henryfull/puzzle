@@ -27,6 +27,7 @@ text = "Dificultad"
 
 [node name="DifficultyLayer" type="CanvasLayer" parent="."]
 layer = 10
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="DifficultyLayer"]
 anchors_preset = 15

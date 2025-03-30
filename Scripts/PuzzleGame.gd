@@ -10,6 +10,14 @@ class_name PuzzleGame
 # Variable para rastrear si una pieza fue colocada
 var just_placed_piece: bool = false
 
+# Referencias a nodos de audio preexistentes en la escena
+@onready var audio_move: AudioStreamPlayer = $AudioMove
+@onready var audio_merge: AudioStreamPlayer = $AudioMerge
+@onready var audio_flip: AudioStreamPlayer = $AudioFlip
+
+# Referencia al timer de verificación de victoria
+@onready var victory_timer: Timer = $VictoryTimer
+
 #
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
@@ -26,7 +34,10 @@ var just_placed_piece: bool = false
 @export_range(0.1, 1.0, 0.05) var tween_duration: float = 0.3  # Duración de la animación Tween
 @export var use_tween_effect: bool = true  # Activar/desactivar el efecto
 @export_range(0.05, 0.5, 0.05) var flip_speed: float = 0.01  # Velocidad de la animación de flip
-@export var button_options : Button
+
+# Referencias a mensajes de éxito/error que deberían estar en la escena
+@onready var success_message_label: Label = $UILayer/SuccessMessage
+@onready var error_message_label: Label = $UILayer/ErrorMessage
 
 # Variables para el paneo del tablero (simplificadas)
 var is_panning := false
@@ -56,10 +67,6 @@ var pieces := []
 # Para contar movimientos o verificar victoria
 var total_moves: int = 0
 
-var audio_move: AudioStreamPlayer
-var audio_merge: AudioStreamPlayer
-var audio_flip: AudioStreamPlayer
-
 # === VARIABLES PARA GESTIÓN DE PROGRESIÓN ===
 var current_pack_id: String = ""
 var current_puzzle_id: String = ""
@@ -68,6 +75,9 @@ var current_puzzle_id: String = ""
 var victory_image_view: Control
 var victory_text_view: Control
 var victory_toggle_button: Button
+
+# Referencias a botones en la UI
+@onready var button_options: Button = $UILayer/OptionsButton
 
 #
 # === SUBCLASE: Piece ===
@@ -101,10 +111,7 @@ func _ready():
 	# Cargar preferencias del usuario
 	load_user_preferences()
 	
-	# Ajustar la interfaz para dispositivos móviles
-	adjust_ui_for_device()
-	
-	# Crear el botón de opciones
+	# Configurar el botón de opciones
 	create_options_button()
 	
 	# Configurar el puzzle según los datos seleccionados
@@ -118,7 +125,11 @@ func _ready():
 		if GLOBAL.selected_puzzle != null:
 			current_puzzle_id = GLOBAL.selected_puzzle.id
 	
-	make_sounds_game()
+	# Ocultar los mensajes al inicio
+	if success_message_label:
+		success_message_label.visible = false
+	if error_message_label:
+		error_message_label.visible = false
 	
 	# Guardar el número original de filas
 	original_rows = GLOBAL.rows
@@ -128,36 +139,21 @@ func _ready():
 	# Luego cargamos y creamos las piezas con la parte frontal normal
 	load_and_create_pieces(puzzle_back)
 	
-	# Crear un temporizador para verificar periódicamente la victoria
-	var victory_timer = Timer.new()
-	victory_timer.wait_time = 5.0  # Verificar cada 5 segundos (menos frecuente)
-	victory_timer.autostart = true
-	victory_timer.one_shot = false
-	victory_timer.connect("timeout", Callable(self, "check_victory_periodic"))
-	add_child(victory_timer)
-	
-	# Crear un botón para verificar victoria manualmente
-	create_verify_button()
-
-func make_sounds_game():
-	audio_move = AudioStreamPlayer.new()
-	audio_move.stream = load("res://Assets/Sounds/SFX/plop.mp3")
-	audio_move.volume_db = -10
-	audio_move.bus = "SFX"
-	add_child(audio_move)
-	
-	audio_merge = AudioStreamPlayer.new()
-	audio_merge.stream = load("res://Assets/Sounds/SFX/bubble.wav")
-	audio_merge.volume_db = -5
-	audio_merge.bus = "SFX"
-	add_child(audio_merge)
-	
-	# Añadir sonido de flip
-	audio_flip = AudioStreamPlayer.new()
-	audio_flip.stream = load("res://Assets/Sounds/SFX/flip.wav")
-	audio_flip.volume_db = -8
-	audio_flip.bus = "SFX"
-	add_child(audio_flip)
+	# Configurar temporizador para verificación periódica de victoria (si existe en la escena)
+	if victory_timer:
+		victory_timer.wait_time = 5.0
+		victory_timer.connect("timeout", Callable(self, "check_victory_periodic"))
+		victory_timer.start()
+	else:
+		# Crear un temporizador si no existe en la escena
+		var timer = Timer.new()
+		timer.name = "VictoryTimer"
+		timer.wait_time = 5.0
+		timer.autostart = true
+		timer.one_shot = false
+		timer.connect("timeout", Callable(self, "check_victory_periodic"))
+		add_child(timer)
+		victory_timer = timer
 
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
 	# 1) Cargar la escena del viewport
@@ -1539,176 +1535,6 @@ func verify_and_fix_grid():
 	# También verificar por posición visual
 	call_deferred("check_victory_by_position")
 
-# Función para crear un botón de verificación de victoria
-func create_verify_button():
-	# Crear un contenedor para el botón que use anclajes
-	var container = Control.new()
-	container.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	container.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	container.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	
-	# Ajustar tamaño y posición según el dispositivo
-	if is_mobile:
-		container.size = Vector2(220, 80)
-		container.position = Vector2(-230, -90)  # Offset desde la esquina inferior derecha
-	else:
-		container.size = Vector2(180, 60)
-		container.position = Vector2(-190, -70)  # Offset desde la esquina inferior derecha
-	
-	# Crear el botón
-	var button = Button.new()
-	button.text = "¿Completado?"
-	
-	# Configurar el botón para que llene el contenedor
-	button.size_flags_horizontal = Control.SIZE_FILL
-	button.size_flags_vertical = Control.SIZE_FILL
-	
-	# Estilo del botón
-	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.2, 0.6, 0.8, 0.8)  # Azul semitransparente
-	
-	# Configurar bordes
-	style.border_width_left = 2
-	style.border_width_right = 2
-	style.border_width_top = 2
-	style.border_width_bottom = 2
-	
-	style.border_color = Color(1, 1, 1, 0.9)  # Borde blanco
-	style.corner_radius_top_left = 10
-	style.corner_radius_top_right = 10
-	style.corner_radius_bottom_left = 10
-	style.corner_radius_bottom_right = 10
-	
-	# Añadir padding para mejor experiencia táctil en móviles
-	if is_mobile:
-		style.content_margin_left = 20
-		style.content_margin_right = 20
-		style.content_margin_top = 15
-		style.content_margin_bottom = 15
-	else:
-		style.content_margin_left = 15
-		style.content_margin_right = 15
-		style.content_margin_top = 10
-		style.content_margin_bottom = 10
-	
-	button.add_theme_stylebox_override("normal", style)
-	button.add_theme_color_override("font_color", Color(1, 1, 1))  # Texto blanco
-	button.add_theme_color_override("font_hover_color", Color(1, 1, 0))  # Amarillo al pasar el mouse
-	
-	# Aumentar el tamaño de la fuente para dispositivos móviles
-	if is_mobile:
-		button.add_theme_font_size_override("font_size", 32)
-	else:
-		button.add_theme_font_size_override("font_size", 20)
-	
-	# Usar UIScaler si está disponible
-	if ResourceLoader.exists("res://Scripts/UIScaler.gd"):
-		var UIScaler = load("res://Scripts/UIScaler.gd")
-		UIScaler.scale_button(button)
-	
-	button.connect("pressed", Callable(self, "force_victory_check"))
-	
-	# Añadir el botón al contenedor y el contenedor a la escena
-	container.add_child(button)
-	add_child(container)
-	
-	return container
-
-# Función para forzar la verificación de victoria
-func force_victory_check():
-	print("Verificación de victoria forzada por el usuario")
-	
-	# Primero, intentar corregir cualquier problema en el grid
-	verify_and_fix_grid()
-	
-	# Verificar si todas las piezas están visualmente cerca de su posición correcta
-	var all_pieces_close = true
-	var pieces_to_adjust = []
-	var pieces_in_place = 0
-	var total_pieces = pieces.size()
-	
-	for piece_obj in pieces:
-		# Calcular dónde debería estar la pieza
-		var expected_position = puzzle_offset + piece_obj.original_pos * cell_size
-		
-		# Verificar si la pieza está cerca de su posición correcta
-		var distance = piece_obj.node.position.distance_to(expected_position)
-		
-		# Usar un margen de error más grande para la verificación manual
-		var margin_of_error = cell_size.length() * 0.6  # 60% del tamaño de celda como margen de error
-		
-		if distance <= margin_of_error:
-			# La pieza está cerca, la añadimos a la lista para ajustar
-			pieces_to_adjust.append({"piece": piece_obj, "expected_pos": expected_position})
-			pieces_in_place += 1
-		else:
-			all_pieces_close = false
-			print("Pieza en posición incorrecta: ", piece_obj.original_pos, " - Distancia: ", distance)
-	
-	print("Verificación manual: ", pieces_in_place, " de ", total_pieces, " piezas en posición correcta")
-	
-	# Si todas las piezas están cerca de su posición correcta o al menos el 90%
-	if all_pieces_close or pieces_in_place >= total_pieces * 0.9:
-		print("Suficientes piezas están cerca de su posición correcta. ¡Forzando victoria!")
-		
-		# Ajustar todas las piezas a su posición exacta
-		for piece_obj in pieces:
-			var expected_position = puzzle_offset + piece_obj.original_pos * cell_size
-			piece_obj.node.position = expected_position
-			remove_piece_at(piece_obj.current_cell)
-			piece_obj.current_cell = piece_obj.original_pos
-			set_piece_at(piece_obj.original_pos, piece_obj)
-		
-		# Verificar victoria después de ajustar todas las piezas
-		print("¡Victoria forzada!")
-		_on_puzzle_completed()
-		return true
-	else:
-		# Si no todas las piezas están en su lugar, intentar con los métodos normales
-		var victory_by_grid = check_victory()
-		
-		if not victory_by_grid:
-			# Si no se detectó victoria por el grid, intentar por posición visual
-			var victory_by_position = check_victory_by_position()
-			
-			if not victory_by_position:
-				# Mostrar un mensaje al usuario
-				print("El puzzle aún no está completo")
-				
-				# Crear un mensaje temporal en pantalla
-				var label = Label.new()
-				label.text = "El puzzle aún no está completo"
-				label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))
-				
-				# Ajustar tamaño de fuente y posición según el dispositivo
-				if is_mobile:
-					label.add_theme_font_size_override("font_size", 28)
-				else:
-					label.add_theme_font_size_override("font_size", 18)
-				
-				# Centrar horizontalmente y ajustar el ancho para que quepa el texto
-				var viewport_size = get_viewport_rect().size
-				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-				label.size.x = viewport_size.x * 0.8
-				label.position.x = viewport_size.x * 0.1
-				label.position.y = 60
-				
-				add_child(label)
-				
-				# Crear un temporizador para eliminar el mensaje después de 3 segundos
-				var timer = Timer.new()
-				timer.wait_time = 3.0
-				timer.one_shot = true
-				timer.connect("timeout", Callable(label, "queue_free"))
-				add_child(timer)
-				timer.start()
-				
-				return false
-			
-			return true
-		
-		return true
-
 # Función para alternar entre la vista de imagen y texto
 func _on_toggle_view_pressed():
 	# Invertir la visibilidad de las vistas
@@ -1789,101 +1615,101 @@ func show_victory_screen():
 
 # Función para mostrar un mensaje de error temporal
 func show_error_message(message: String, duration: float = 2.0):
-	var label = Label.new()
-	label.text = message
-	label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))  # Rojo claro
-	
-	# Ajustar tamaño de fuente para dispositivos móviles
-	if is_mobile:
-		label.add_theme_font_size_override("font_size", 28)
+	# Si tenemos un Label predefinido en la escena
+	if error_message_label:
+		error_message_label.text = message
+		error_message_label.visible = true
+		
+		# Crear un temporizador para ocultar el mensaje después del tiempo especificado
+		var timer = Timer.new()
+		timer.wait_time = duration
+		timer.one_shot = true
+		timer.connect("timeout", func(): error_message_label.visible = false)
+		add_child(timer)
+		timer.start()
 	else:
-		label.add_theme_font_size_override("font_size", 18)
-	
-	# Posicionar en la parte superior de la pantalla
-	var viewport_size = get_viewport_rect().size
-	
-	# Centrar horizontalmente y ajustar el ancho para que quepa el texto
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.size.x = viewport_size.x * 0.8
-	label.position.x = viewport_size.x * 0.1
-	label.position.y = 60
-	
-	# Añadir a la escena
-	add_child(label)
-	
-	# Crear un temporizador para eliminar el mensaje después del tiempo especificado
-	var timer = Timer.new()
-	timer.wait_time = duration
-	timer.one_shot = true
-	timer.connect("timeout", Callable(label, "queue_free"))
-	add_child(timer)
-	timer.start()
+		# Fallback al método antiguo si no existe el Label en la escena
+		var label = Label.new()
+		label.text = message
+		label.add_theme_color_override("font_color", Color(1, 0.3, 0.3))  # Rojo claro
+		
+		# Ajustar tamaño de fuente para dispositivos móviles
+		if is_mobile:
+			label.add_theme_font_size_override("font_size", 28)
+		else:
+			label.add_theme_font_size_override("font_size", 18)
+		
+		# Posicionar en la parte superior de la pantalla
+		var viewport_size = get_viewport_rect().size
+		
+		# Centrar horizontalmente y ajustar el ancho para que quepa el texto
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.size.x = viewport_size.x * 0.8
+		label.position.x = viewport_size.x * 0.1
+		label.position.y = 60
+		
+		# Añadir a la escena
+		add_child(label)
+		
+		# Crear un temporizador para eliminar el mensaje después del tiempo especificado
+		var timer = Timer.new()
+		timer.wait_time = duration
+		timer.one_shot = true
+		timer.connect("timeout", Callable(label, "queue_free"))
+		add_child(timer)
+		timer.start()
 
 # Función para mostrar un mensaje de éxito temporal
 func show_success_message(message: String, duration: float = 1.5):
-	var label = Label.new()
-	label.text = message
-	label.add_theme_color_override("font_color", Color(0.3, 1, 0.3))  # Verde claro
-	
-	# Ajustar tamaño de fuente para dispositivos móviles
-	if is_mobile:
-		label.add_theme_font_size_override("font_size", 28)
+	# Si tenemos un Label predefinido en la escena
+	if success_message_label:
+		success_message_label.text = message
+		success_message_label.visible = true
+		
+		# Crear un temporizador para ocultar el mensaje después del tiempo especificado
+		var timer = Timer.new()
+		timer.wait_time = duration
+		timer.one_shot = true
+		timer.connect("timeout", func(): success_message_label.visible = false)
+		add_child(timer)
+		timer.start()
 	else:
-		label.add_theme_font_size_override("font_size", 18)
-	
-	# Posicionar en la parte superior de la pantalla
-	var viewport_size = get_viewport_rect().size
-	
-	# Centrar horizontalmente y ajustar el ancho para que quepa el texto
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.size.x = viewport_size.x * 0.8
-	label.position.x = viewport_size.x * 0.1
-	label.position.y = 60
-	
-	# Añadir a la escena
-	add_child(label)
-	
-	# Crear un temporizador para eliminar el mensaje después del tiempo especificado
-	var timer = Timer.new()
-	timer.wait_time = duration
-	timer.one_shot = true
-	timer.connect("timeout", Callable(label, "queue_free"))
-	add_child(timer)
-	timer.start()
+		# Fallback al método antiguo si no existe el Label en la escena
+		var label = Label.new()
+		label.text = message
+		label.add_theme_color_override("font_color", Color(0.3, 1, 0.3))  # Verde claro
+		
+		# Ajustar tamaño de fuente para dispositivos móviles
+		if is_mobile:
+			label.add_theme_font_size_override("font_size", 28)
+		else:
+			label.add_theme_font_size_override("font_size", 18)
+		
+		# Posicionar en la parte superior de la pantalla
+		var viewport_size = get_viewport_rect().size
+		
+		# Centrar horizontalmente y ajustar el ancho para que quepa el texto
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.size.x = viewport_size.x * 0.8
+		label.position.x = viewport_size.x * 0.1
+		label.position.y = 60
+		
+		# Añadir a la escena
+		add_child(label)
+		
+		# Crear un temporizador para eliminar el mensaje después del tiempo especificado
+		var timer = Timer.new()
+		timer.wait_time = duration
+		timer.one_shot = true
+		timer.connect("timeout", Callable(label, "queue_free"))
+		add_child(timer)
+		timer.start()
 
 # Función para mostrar el menú de opciones
 func show_options_menu():
 	if has_node("/root/OptionsManager"):
 		get_node("/root/OptionsManager").show_options(self)
 
-# Nueva función para ajustar la interfaz según el tipo de dispositivo
-func adjust_ui_for_device():
-	var hbox = $CanvasLayer/HBoxContainer
-	var button_difficult = $CanvasLayer/ButtonDifficult
-	
-	if is_mobile:
-		# En dispositivos móviles, especialmente con isla (notch), añadir más margen superior
-		var safe_area = DisplayServer.get_display_safe_area()
-		var window_size = DisplayServer.window_get_size()
-		
-		# Calcular el margen superior necesario
-		var top_margin = 50  # Margen base
-		
-		# Si hay una diferencia significativa entre el área segura y el tamaño de la ventana,
-		# probablemente hay una isla o notch
-		if safe_area.position.y > 10:  # Si hay un margen de seguridad superior
-			top_margin = max(top_margin, safe_area.position.y + 20)  # Añadir margen adicional
-			
-		print("PuzzleGame: Margen superior ajustado a ", top_margin, " para dispositivo móvil")
-		
-		# Aplicar el margen superior
-		hbox.position.y = top_margin
-		
-		# Ajustar también la posición del botón de dificultad
-	else:
-		# En ordenadores, usar un margen estándar
-		hbox.position.y = 20
-		print("PuzzleGame: Usando margen estándar para ordenador")
 
 func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> void:
 	# Usar la posición del toque sin ajustar
@@ -2041,7 +1867,7 @@ func set_pan_sensitivity(value: float) -> void:
 func load_user_preferences() -> void:
 	# Cargar preferencias desde GLOBAL
 	if has_node("/root/GLOBAL"):
-		var global = get_node("/root/GLOBAL")
+		var global = GLOBAL
 		if "puzzle" in global.settings:
 			# Cargar sensibilidad de desplazamiento
 			if "pan_sensitivity" in global.settings.puzzle:
@@ -2156,15 +1982,14 @@ func play_flip_sound():
 
 # Función para crear un botón de opciones que muestre un panel de ajustes
 func create_options_button():
-	# Crear un botón de opciones
-	
-	button_options.tooltip_text = tr("common_options")
-	
-	
-	# Conectar la señal pressed
-	button_options.connect("pressed", Callable(self, "show_options_panel"))
-	
-	# Añadir a la escena
-	var canvas_layer = CanvasLayer.new()
-	canvas_layer.name = "OptionsLayer"
-	add_child(canvas_layer)
+	# Si el botón de opciones existe en la escena
+	if button_options:
+		# Actualizar el botón de opciones
+		button_options.tooltip_text = tr("common_options")
+		
+		# Conectar la señal pressed
+		if not button_options.is_connected("pressed", Callable(self, "show_options_panel")):
+			button_options.connect("pressed", Callable(self, "show_options_panel"))
+	else:
+		# Si no existe, podríamos crearlo dinámicamente (pero eso es lo que queremos evitar)
+		push_warning("El botón de opciones no existe en la escena. Debería añadirse manualmente.")

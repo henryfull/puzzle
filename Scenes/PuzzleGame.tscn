@@ -1,160 +1,204 @@
-[gd_scene load_steps=17 format=3 uid="uid://smtnj5lnqhfa"]
+[gd_scene load_steps=25 format=3 uid="uid://dh8d4yyjtjjsj"]
 
-[ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_sm22t"]
+[ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
+[ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
 [ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult.tscn" id="2_yvnqr"]
+[ext_resource type="AudioStream" uid="uid://cbd7s204ssyyo" path="res://Assets/Sounds/SFX/bubble.wav" id="3_iw5d8"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_58pa3"]
-[ext_resource type="Texture2D" uid="uid://bjxia13nbayu6" path="res://Assets/Images/GUID/button_back.svg" id="4_vxw10"]
+[ext_resource type="AudioStream" uid="uid://doif0cexxpv6t" path="res://Assets/Sounds/SFX/flip.wav" id="4_qnp3e"]
+[ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="5_uvymq"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_58pa3"]
-texture = ExtResource("4_vxw10")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hpsbn"]
-texture = ExtResource("4_vxw10")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f2h16"]
-texture = ExtResource("4_vxw10")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mupxo"]
-texture = ExtResource("4_vxw10")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_u0au7"]
-texture = ExtResource("4_vxw10")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vxw10"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hq32h"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1855, 43, 105, 89)
+region_rect = Rect2(2230, 366, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v4hqp"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2355, 366, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2nxy7"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2355, 366, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2g7li"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2355, 366, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gxtc4"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2355, 366, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_icw6g"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2105, 366, 105, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gyhh0"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1980, 43, 105, 89)
+region_rect = Rect2(2105, 151, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p2qx1"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2230, 151, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mupxo"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2355, 151, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_u0au7"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2105, 151, 105, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f2h16"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2105, 151, 105, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tu11h"]
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(1855, 43, 105, 89)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p2qx1"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(1730, 43, 105, 89)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7aw43"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2230, 366, 105, 88)
+region_rect = Rect2(1980, 43, 105, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5jwhx"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2355, 366, 105, 88)
+region_rect = Rect2(1980, 43, 105, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pqqng"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2105, 366, 105, 88)
+region_rect = Rect2(1730, 43, 105, 89)
 
-[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("button_options")]
-script = ExtResource("1_sm22t")
-button_options = NodePath("CanvasLayer/ButtonOptions")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sr37j"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(1730, 43, 105, 89)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2h16"]
+atlas = ExtResource("4_58pa3")
+region = Rect2(2085, 461, 143, 135)
 
-[node name="BackgroundColor" type="ColorRect" parent="CanvasLayer"]
-visible = false
-z_index = -10
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.219608, 0.4, 0.498039, 1)
+[node name="PuzzleGame" type="Node2D"]
+script = ExtResource("1_0gd45")
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 0.901961, 0.72549, 1)
+[node name="AudioMove" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_xo7l2")
+volume_db = -10.0
+bus = &"SFX"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
-visibility_layer = 2
-z_index = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -116.0
+[node name="AudioMerge" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_iw5d8")
+volume_db = -5.0
+bus = &"SFX"
+
+[node name="AudioFlip" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_qnp3e")
+volume_db = -8.0
+bus = &"SFX"
+
+[node name="VictoryTimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="ButtonDifficult" parent="UILayer" instance=ExtResource("2_yvnqr")]
+auto_translate_mode = 1
+anchors_preset = -1
+anchor_left = 0.353
+anchor_top = 0.93
+anchor_right = 0.619
+anchor_bottom = 0.959
+offset_left = -0.160004
+offset_top = -12.4001
+offset_right = 21.32
+offset_bottom = -8.52002
 grow_horizontal = 2
 grow_vertical = 0
-size_flags_horizontal = 3
-theme_override_constants/separation = 20
+scale = Vector2(0.9, 0.9)
+size_flags_horizontal = 8
+size_flags_vertical = 8
 
-[node name="MarginRight" type="MarginContainer" parent="CanvasLayer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_right = 20
+[node name="OptionsButton" type="Button" parent="UILayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_top = 50.0
+offset_right = -50.0
+offset_bottom = 120.0
+grow_horizontal = 0
+theme_override_styles/focus = SubResource("StyleBoxTexture_hq32h")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_v4hqp")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_2nxy7")
+theme_override_styles/hover = SubResource("StyleBoxTexture_2g7li")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_gxtc4")
+theme_override_styles/normal = SubResource("StyleBoxTexture_icw6g")
+icon_alignment = 1
+expand_icon = true
 
-[node name="BackButton" type="Button" parent="CanvasLayer"]
+[node name="SuccessMessage" type="Label" parent="UILayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 60.0
+offset_right = 400.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.3, 1)
+theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ErrorMessage" type="Label" parent="UILayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 60.0
+offset_right = 400.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="UILayer"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 50.0
 offset_top = -130.0
-offset_right = 170.0
-offset_bottom = -30.0
+offset_right = 150.0
+offset_bottom = -50.0
 grow_vertical = 0
-theme_override_styles/focus = SubResource("StyleBoxTexture_58pa3")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_hpsbn")
-theme_override_styles/hover = SubResource("StyleBoxTexture_f2h16")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_mupxo")
-theme_override_styles/normal = SubResource("StyleBoxTexture_u0au7")
+theme_override_styles/focus = SubResource("StyleBoxTexture_gyhh0")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_p2qx1")
+theme_override_styles/hover = SubResource("StyleBoxTexture_mupxo")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_u0au7")
+theme_override_styles/normal = SubResource("StyleBoxTexture_f2h16")
 
-[node name="ButtonDifficult" parent="CanvasLayer" instance=ExtResource("2_yvnqr")]
-layout_direction = 1
+[node name="FlipButton" type="Button" parent="UILayer"]
 anchors_preset = -1
-anchor_left = 0.335
-anchor_top = 0.931
-anchor_right = 0.669
-anchor_bottom = 0.967
-offset_left = 4.79999
-offset_top = -6.68005
-offset_right = -9.68002
-offset_bottom = 3.23987
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="Flip" type="Button" parent="CanvasLayer"]
-custom_minimum_size = Vector2(90, 50)
-anchors_preset = -1
-anchor_left = 0.769
-anchor_top = 0.025
-anchor_right = 0.95
-anchor_bottom = 0.103
-offset_left = 5.31995
-offset_top = 25.0
-offset_right = -25.0001
-offset_bottom = -4.84001
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 20
-theme_override_styles/focus = SubResource("StyleBoxTexture_vxw10")
-theme_override_styles/hover = SubResource("StyleBoxTexture_gyhh0")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_tu11h")
-theme_override_styles/normal = SubResource("StyleBoxTexture_p2qx1")
-text = "Flip"
-
-[node name="ButtonOptions" type="Button" parent="CanvasLayer"]
-anchors_preset = -1
-anchor_left = 0.878
-anchor_top = 0.93
-anchor_right = 0.878
-anchor_bottom = 0.93
-offset_left = -61.16
-offset_top = -42.4001
-offset_right = 60.84
-offset_bottom = 56.5999
+anchor_left = 0.832
+anchor_top = 0.915
+anchor_right = 0.915
+anchor_bottom = 0.945
+offset_left = -22.04
+offset_top = -21.2001
+offset_right = 19.2
+offset_bottom = 21.3999
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_7aw43")
+theme_override_styles/focus = SubResource("StyleBoxTexture_tu11h")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_7aw43")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5jwhx")
-theme_override_styles/normal = SubResource("StyleBoxTexture_pqqng")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_pqqng")
+theme_override_styles/normal = SubResource("StyleBoxTexture_sr37j")
+icon = SubResource("AtlasTexture_f2h16")
+icon_alignment = 1
+expand_icon = true
 
-[connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_BackButton_pressed"]
-[connection signal="difficulty_changed" from="CanvasLayer/ButtonDifficult" to="." method="_on_difficulty_changed"]
-[connection signal="pressed" from="CanvasLayer/Flip" to="." method="on_flip_button_pressed"]
+[connection signal="pressed" from="UILayer/BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="pressed" from="UILayer/FlipButton" to="." method="on_flip_button_pressed"]
