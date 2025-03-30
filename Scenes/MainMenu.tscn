@@ -69,6 +69,12 @@ theme = ExtResource("3_8saeu")
 text = "Play"
 language = "auto"
 
+[node name="BTN_achievements" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme = ExtResource("3_8saeu")
+text = "Logros"
+
 [node name="BTN_stats" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
@@ -89,6 +95,7 @@ theme_type_variation = &"ButtonYellow"
 text = "Salir"
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_achievements" to="." method="_on_AchievementsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_stats" to="." method="_on_StatsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_exit" to="." method="_on_btn_exit_pressed"]

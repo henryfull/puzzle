@@ -2154,6 +2154,27 @@ func _on_puzzle_completed():
 	progress_manager.save_puzzle_stats(current_pack_id, current_puzzle_id, stats)
 	print("PuzzleGame: Estadísticas de la partida guardadas")
 	
+	# Registrar logros - Nueva integración con AchievementsManager
+	var difficulty_level = {
+		"columns": GLOBAL.columns,
+		"rows": GLOBAL.rows
+	}
+	
+	# Comprobar si se usó la función de volteo (flip)
+	var used_flip = false
+	for piece in pieces:
+		if piece.node.rotation != 0:
+			used_flip = true
+			break
+		
+	# Registrar la finalización del puzzle para los logros
+	AchievementsManager.register_puzzle_completed(
+		difficulty_level, 
+		total_moves, 
+		elapsed_time, 
+		used_flip
+	)
+	
 	# Desbloquear el siguiente puzzle inmediatamente
 	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
 	if next_puzzle != null:

@@ -76,6 +76,9 @@ func _ready():
 			puzzle_data = GLOBAL.selected_puzzle
 			update_ui_with_puzzle_data()
 	
+	# Mostrar logros desbloqueados si hay alguno
+	show_unlocked_achievements()
+	
 	# Adaptar la UI para dispositivos móviles
 	adapt_ui_for_device()
 
@@ -432,4 +435,53 @@ func _on_NextPuzzleButton_pressed():
 		get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
 
 func _on_MainMenuButton_pressed():
-	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn") 
+	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+
+# Función para mostrar logros desbloqueados en esta partida
+func show_unlocked_achievements():
+	# Verificar si tenemos acceso al AchievementsManager
+	if not has_node("/root/AchievementsManager"):
+		return
+	
+	var achievements_manager = get_node("/root/AchievementsManager")
+	var unlocked_achievements = achievements_manager.get_achievements_unlocked_this_session()
+	
+	# Si no hay logros desbloqueados, no hacer nada
+	if unlocked_achievements.size() == 0:
+		return
+	
+	# Encontrar la sección de estadísticas para añadir información de logros
+	var stats_label = $CanvasLayer/VBoxContainer/StatsLabel
+	if stats_label:
+		var achievement_text = "¡Logros desbloqueados!\n"
+		
+		for achievement_id in unlocked_achievements:
+			var achievement_data = achievements_manager.get_achievement(achievement_id)
+			if achievement_data.size() > 0:
+				achievement_text += "- " + achievement_data.name + "\n"
+		
+		stats_label.text = achievement_text
+		stats_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		stats_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		stats_label.add_theme_font_size_override("font_size", 18)
+		stats_label.add_theme_color_override("font_color", Color(0.1, 0.3, 0.8))
+	
+	# También añadir información a la vista de texto
+	if text_view and text_view.bbcode_enabled:
+		var current_text = text_view.text
+		var achievement_bbcode = "\n\n[center][color=#003399][font_size=22]¡LOGROS DESBLOQUEADOS![/font_size][/color][/center]\n\n"
+		
+		for achievement_id in unlocked_achievements:
+			var achievement_data = achievements_manager.get_achievement(achievement_id)
+			if achievement_data.size() > 0:
+				achievement_bbcode += "[center][color=#0055AA][font_size=20]" + achievement_data.name + "[/font_size][/color]\n"
+				achievement_bbcode += "[font_size=18]" + achievement_data.desc + "[/font_size][/center]\n\n"
+		
+		text_view.text = current_text + achievement_bbcode
+	
+	# Limpiar la lista de logros desbloqueados después de mostrarlos
+	achievements_manager.clear_achievements_unlocked_this_session()
+	
+	# Hacer visible la sección de logros
+	if stats_label:
+		stats_label.visible = true 

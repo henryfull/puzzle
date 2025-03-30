@@ -1,3 +1,245 @@
-[gd_scene format=3 uid="uid://dw5mocbogi4aj"]
+[gd_scene load_steps=10 format=3 uid="uid://dw5mocbogi4aj"]
+
+[ext_resource type="Script" uid="uid://81itimgdqoxk" path="res://Scripts/Achievements.gd" id="1_fqdyt"]
+[ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="2_dta62"]
+[ext_resource type="Texture2D" uid="uid://bjxia13nbayu6" path="res://Assets/Images/GUID/button_back.svg" id="2_jykd0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqpw6"]
+bg_color = Color(0.898039, 0.85098, 0.733333, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_67yd4"]
+bg_color = Color(0.898039, 0.898039, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 5
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uslcd"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w45i3"]
+bg_color = Color(0.121569, 0.12549, 0.254902, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gd3qn"]
+bg_color = Color(0.121569, 0.12549, 0.254902, 0.701961)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 5
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dta62"]
+content_margin_left = 9.0
+content_margin_top = 9.0
+content_margin_right = 9.0
+content_margin_bottom = 9.0
 
 [node name="Achievements" type="Node2D"]
+script = ExtResource("1_fqdyt")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Background" type="Panel" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wqpw6")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dta62")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="HeaderContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="TextureButton" parent="CanvasLayer/MarginContainer/VBoxContainer/HeaderContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("2_jykd0")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.121569, 0.12549, 0.254902, 1)
+theme_override_font_sizes/font_size = 28
+text = "LOGROS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="CanvasLayer/MarginContainer/VBoxContainer/HeaderContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_67yd4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="StatsPanel" type="Panel" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_uslcd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="StatsTotal" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsTotal"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Total"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsTotal"]
+layout_mode = 2
+text = "7"
+horizontal_alignment = 1
+
+[node name="StatsUnlocked" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsUnlocked"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.121569, 0.12549, 0.254902, 1)
+theme_override_font_sizes/font_size = 14
+text = "Desbloqueados"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsUnlocked"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="StatsPercentage" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsPercentage"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.121569, 0.12549, 0.254902, 1)
+theme_override_font_sizes/font_size = 14
+text = "Completado"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsPercentage"]
+layout_mode = 2
+text = "0%"
+horizontal_alignment = 1
+
+[node name="TabsContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="AllTab" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer"]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_w45i3")
+text = "Todos"
+
+[node name="UnlockedTab" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer"]
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/h_separation = 0
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_gd3qn")
+text = "Desbloqueados"
+
+[node name="LockedTab" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_gd3qn")
+text = "Bloqueados"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_dta62")
+horizontal_scroll_mode = 0
+
+[node name="AchievementsList" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="NoAchievementsLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.121569, 0.12549, 0.254902, 0.501961)
+theme_override_font_sizes/font_size = 18
+text = "No hay logros en esta categoría"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/HeaderContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/AllTab" to="." method="_on_all_tab_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/UnlockedTab" to="." method="_on_unlocked_tab_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/LockedTab" to="." method="_on_locked_tab_pressed"]
