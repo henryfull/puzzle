@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="puzzle tiki tiki"
-config/version="0.48.1"
+config/version="0.68.1"
 run/main_scene="uid://dh7t7utu076oi"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)

@@ -347,19 +347,28 @@ func detect_platform():
 
 # Inicializa el sistema de notificaciones
 func initialize_notification_system():
-	# Cargar la escena de notificación
-	notification_scene = load("res://Scenes/UI/AchievementNotification.tscn")
-	
-	# Crear un contenedor de notificaciones si no existe
-	if get_tree().root.has_node("AchievementNotifications"):
-		notification_container = get_tree().root.get_node("AchievementNotifications")
+	# Verificar si la escena existe antes de cargarla
+	if ResourceLoader.exists("res://Scenes/UI/AchievementNotification.tscn"):
+		# Cargar la escena de notificación
+		notification_scene = load("res://Scenes/UI/AchievementNotification.tscn")
 	else:
-		notification_container = Control.new()
-		notification_container.name = "AchievementNotifications"
-		notification_container.anchor_right = 1.0
-		notification_container.anchor_bottom = 1.0
-		notification_container.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Ignora los eventos del mouse
-		get_tree().root.call_deferred("add_child", notification_container)
+		# La escena no existe, mostrar mensaje de error en consola
+		print("AchievementsManager: No se encontró la escena de notificación de logros")
+		# Desactivar las notificaciones en pantalla
+		notification_config.enabled = false
+	
+	# Solo crear el contenedor si tenemos la escena de notificación
+	if notification_scene != null:
+		# Crear un contenedor de notificaciones si no existe
+		if get_tree().root.has_node("AchievementNotifications"):
+			notification_container = get_tree().root.get_node("AchievementNotifications")
+		else:
+			notification_container = Control.new()
+			notification_container.name = "AchievementNotifications"
+			notification_container.anchor_right = 1.0
+			notification_container.anchor_bottom = 1.0
+			notification_container.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Ignora los eventos del mouse
+			get_tree().root.call_deferred("add_child", notification_container)
 
 # Guarda los datos de logros en un archivo JSON
 func save_achievements_data():
@@ -490,7 +499,12 @@ func get_all_achievements() -> Dictionary:
 
 # Función para mostrar la notificación de logro
 func show_achievement_notification(achievement_id: String) -> void:
-	if achievements.has(achievement_id) and notification_scene and notification_container:
+	# Verificar que tengamos todo lo necesario para mostrar la notificación
+	if not notification_config.enabled or notification_scene == null or notification_container == null:
+		print("AchievementsManager: No se puede mostrar notificación, sistema de notificaciones no disponible")
+		return
+		
+	if achievements.has(achievement_id):
 		var achievement = achievements[achievement_id]
 		var notification = notification_scene.instantiate()
 		notification_container.add_child(notification)
