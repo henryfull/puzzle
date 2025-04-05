@@ -54,6 +54,7 @@ anchor_bottom = 1.0
 offset_bottom = -826.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_ev5bh")
 
 [node name="Panel" type="Panel" parent="."]
@@ -149,6 +150,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 theme_override_styles/focus = SubResource("StyleBoxTexture_6pgc5")
 theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_0xr7k")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_ymhho")

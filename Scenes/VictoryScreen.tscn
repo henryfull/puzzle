@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://sc0afjqsuaff"]
+[gd_scene load_steps=8 format=3 uid="uid://sc0afjqsuaff"]
 
 [ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_i68vf"]
+[ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="3_1mj8m"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="3_8kq2x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjnxs"]
 bg_color = Color(0.054902, 0.14902, 0.301961, 1)
@@ -146,6 +148,7 @@ size_flags_horizontal = 4
 alignment = 1
 
 [node name="Volver" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 text = "Volver"
@@ -153,12 +156,22 @@ text = "Volver"
 [node name="Repetir" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
+theme = ExtResource("3_1mj8m")
 text = "Repetir"
 
 [node name="Siguiente" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 text = "Siguiente"
+
+[node name="BackButton" parent="CanvasLayer" instance=ExtResource("3_8kq2x")]
+offset_left = 50.0
+offset_top = -130.0
+offset_right = 210.0
+offset_bottom = -10.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+path = "res://Scenes/PuzzleSelection.tscn"
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/BlockButtonChange/Button" to="." method="_on_toggle_view_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/Volver" to="." method="_on_MainMenuButton_pressed"]

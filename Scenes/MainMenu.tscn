@@ -24,8 +24,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_853f1")
-expand_mode = 3
-stretch_mode = 4
+expand_mode = 1
+stretch_mode = 6
 
 [node name="LabelVersion" type="Label" parent="CanvasLayer"]
 anchors_preset = 2
@@ -66,6 +66,7 @@ size_flags_vertical = 4
 custom_minimum_size = Vector2(180, 70)
 layout_mode = 2
 theme = ExtResource("3_8saeu")
+theme_type_variation = &"ButtonRed"
 text = "Play"
 language = "auto"
 
@@ -73,6 +74,7 @@ language = "auto"
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme = ExtResource("3_8saeu")
+theme_type_variation = &"ButtonYellow"
 text = "Logros"
 
 [node name="BTN_stats" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
@@ -84,7 +86,6 @@ text = "Estadísticas"
 [node name="BTN_options" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
-theme_type_variation = &"ButtonRed"
 text = "Opciones"
 
 [node name="BTN_exit" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]

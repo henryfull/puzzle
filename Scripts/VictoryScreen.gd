@@ -88,17 +88,6 @@ func adapt_ui_for_device():
 	if ResourceLoader.exists("res://Scripts/UIScaler.gd"):
 		var UIScaler = load("res://Scripts/UIScaler.gd")
 		
-		# Escalar botones
-		var buttons = [
-			$CanvasLayer/VBoxContainer/BlockButtonChange/Button,
-			$CanvasLayer/VBoxContainer/HBoxContainer/Volver,
-			$CanvasLayer/VBoxContainer/HBoxContainer/Siguiente,
-			$CanvasLayer/VBoxContainer/HBoxContainer/Repetir
-		]
-		
-		for button in buttons:
-			if button:
-				UIScaler.scale_button(button)
 		
 		# Escalar etiquetas
 		var labels = [
@@ -124,21 +113,7 @@ func adapt_ui_for_device():
 				var scale = UIScaler.get_scale_factor()
 				container.add_theme_constant_override("separation", int(10 * scale))
 	else:
-		# Si no está disponible UIScaler, usar ajustes manuales
-		if is_mobile:
-			# Ajustar botones
-			var buttons = [
-				$CanvasLayer/VBoxContainer/BlockButtonChange/Button,
-				$CanvasLayer/VBoxContainer/HBoxContainer/Volver,
-				$CanvasLayer/VBoxContainer/HBoxContainer/Siguiente,
-				$CanvasLayer/VBoxContainer/HBoxContainer/Repetir
-			]
-			
-			for button in buttons:
-				if button:
-					button.custom_minimum_size = Vector2(200, 70)
-					button.add_theme_font_size_override("font_size", 24)
-			
+
 			# Ajustar etiquetas
 			if $CanvasLayer/VBoxContainer/LabelTitle:
 				$CanvasLayer/VBoxContainer/LabelTitle.add_theme_font_size_override("font_size", 36)

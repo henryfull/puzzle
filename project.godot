@@ -14,6 +14,7 @@ config/name="puzzle tiki tiki"
 config/version="0.68.1"
 run/main_scene="uid://dh7t7utu076oi"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+run/max_fps=60
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
 boot_splash/image="uid://ctfuu506avefk"
 config/icon="uid://7chqk0fghn6n"
@@ -34,6 +35,7 @@ ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
 OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 AudioManager="*res://Scripts/Autoload/AudioManager.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
+PackPurchaseManager="*res://Scripts/PackPurchaseManager.gd"
 
 [debug]
 
@@ -61,6 +63,10 @@ SFX=false
 
 theme/custom="uid://dyqkx5or01raf"
 theme/custom_font="uid://nsb7mxocp6o3"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
 
 [internationalization]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://dh8d4yyjtjjsj"]
+[gd_scene load_steps=32 format=3 uid="uid://dh8d4yyjtjjsj"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_58pa3"]
 [ext_resource type="AudioStream" uid="uid://doif0cexxpv6t" path="res://Assets/Sounds/SFX/flip.wav" id="4_qnp3e"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="5_uvymq"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="8_mupxo"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7gbeo"]
 texture = ExtResource("4_58pa3")
@@ -76,26 +77,6 @@ region_rect = Rect2(2355, 366, 105, 88)
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2105, 366, 105, 88)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gyhh0"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(2105, 151, 105, 88)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p2qx1"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(2230, 151, 105, 88)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mupxo"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(2355, 151, 105, 88)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_u0au7"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(2105, 151, 105, 88)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f2h16"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(2105, 151, 105, 88)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tu11h"]
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(1855, 43, 105, 89)
@@ -162,9 +143,9 @@ metadata/_edit_use_anchors_ = true
 
 [node name="ButtonHideHUD" type="Button" parent="BackgroundLayer"]
 offset_left = 50.0
-offset_top = 50.0
+offset_top = 110.0
 offset_right = 110.0
-offset_bottom = 110.0
+offset_bottom = 170.0
 theme_override_styles/focus = SubResource("StyleBoxTexture_7gbeo")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_62oin")
 theme_override_styles/hover = SubResource("StyleBoxTexture_dga1b")
@@ -174,9 +155,9 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_fxwfr")
 [node name="ButtonShowHUD" type="Button" parent="BackgroundLayer"]
 visible = false
 offset_left = 50.0
-offset_top = 50.0
+offset_top = 110.0
 offset_right = 110.0
-offset_bottom = 110.0
+offset_bottom = 170.0
 theme_override_styles/focus = SubResource("StyleBoxTexture_oer6i")
 theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_gkcsf")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_f8lc6")
@@ -192,6 +173,7 @@ y_sort_enabled = true
 
 [node name="ButtonDifficult" parent="UILayer" instance=ExtResource("2_yvnqr")]
 auto_translate_mode = 1
+visible = false
 anchors_preset = -1
 anchor_left = 0.353
 anchor_top = 0.93
@@ -212,12 +194,12 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -50.0
-offset_top = 20.0
+offset_top = 124.0
 offset_right = 50.0
-offset_bottom = 46.0
+offset_bottom = 157.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("5_uvymq")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "00:00"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -227,9 +209,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -150.0
-offset_top = 50.0
+offset_top = 104.0
 offset_right = -50.0
-offset_bottom = 120.0
+offset_bottom = 174.0
 grow_horizontal = 0
 theme_override_styles/focus = SubResource("StyleBoxTexture_hq32h")
 theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_v4hqp")
@@ -239,6 +221,14 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_gxtc4")
 theme_override_styles/normal = SubResource("StyleBoxTexture_icw6g")
 icon_alignment = 1
 expand_icon = true
+
+[node name="BackButton" parent="UILayer" instance=ExtResource("8_mupxo")]
+offset_left = 50.0
+offset_top = -130.0
+offset_right = 210.0
+offset_bottom = -10.0
+scale = Vector2(0.8, 0.8)
+path = "res://Scenes/PuzzleSelection.tscn"
 
 [node name="SuccessMessage" type="Label" parent="UILayer"]
 anchors_preset = 5
@@ -270,21 +260,6 @@ theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BackButton" type="Button" parent="UILayer"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = -130.0
-offset_right = 150.0
-offset_bottom = -50.0
-grow_vertical = 0
-theme_override_styles/focus = SubResource("StyleBoxTexture_gyhh0")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_p2qx1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_mupxo")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_u0au7")
-theme_override_styles/normal = SubResource("StyleBoxTexture_f2h16")
-
 [node name="FlipButton" type="Button" parent="UILayer"]
 anchors_preset = -1
 anchor_left = 0.832
@@ -308,5 +283,4 @@ expand_icon = true
 
 [connection signal="pressed" from="BackgroundLayer/ButtonHideHUD" to="." method="_on_button_toggle_hud_pressed"]
 [connection signal="pressed" from="BackgroundLayer/ButtonShowHUD" to="." method="_on_button_toggle_hud_pressed"]
-[connection signal="pressed" from="UILayer/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="pressed" from="UILayer/FlipButton" to="." method="on_flip_button_pressed"]

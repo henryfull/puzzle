@@ -1,14 +1,12 @@
 extends ScrollContainer
 
-class_name GridContainer
-
 # Propiedades exportadas
 @export var columns: int = 3
 @export var cell_size: Vector2 = Vector2(100, 100)
 @export var spacing: Vector2 = Vector2(10, 10)
 
 # Variables internas
-var grid_container: GridContainer
+var grid: GridContainer = null
 var selected_item: Control = null
 var items: Array = []
 
@@ -18,9 +16,11 @@ func _ready():
 
 func setup_grid():
 	# Crear el contenedor de la cuadrícula
-	grid_container = GridContainer.new()
-	grid_container.columns = columns
-	add_child(grid_container)
+	grid = GridContainer.new()
+	grid.columns = columns
+	grid.add_theme_constant_override("h_separation", int(spacing.x))
+	grid.add_theme_constant_override("v_separation", int(spacing.y))
+	add_child(grid)
 	
 	# Configurar el tamaño mínimo
 	custom_minimum_size = Vector2(
@@ -30,22 +30,24 @@ func setup_grid():
 
 func setup_touch_scroll():
 	# Configurar el desplazamiento táctil
-	scroll_horizontal_enabled = true
-	scroll_vertical_enabled = true
-	touch_scroll_enabled = true
+	horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 
 func add_item(item: Control):
 	items.append(item)
-	grid_container.add_child(item)
+	grid.add_child(item)
 	item.custom_minimum_size = cell_size
 	
 	# Conectar señales para la selección
-	if item.has_signal("gui_input"):
-		item.connect("gui_input", _on_item_gui_input.bind(item))
+	if not item.gui_input.is_connected(_on_item_gui_input):
+		item.gui_input.connect(_on_item_gui_input.bind(item))
 
 func _on_item_gui_input(event: InputEvent, item: Control):
 	if event is InputEventScreenTouch:
 		if event.pressed:
+			select_item(item)
+	elif event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			select_item(item)
 
 func select_item(item: Control):
@@ -58,13 +60,21 @@ func select_item(item: Control):
 	item.modulate = Color(0.8, 0.8, 1.0)  # Color azul claro para indicar selección
 	
 	# Emitir señal de selección
-	emit_signal("item_selected", item)
+	item_selected.emit(item)
 
 func clear():
 	for item in items:
-		item.queue_free()
+		if is_instance_valid(item):
+			item.queue_free()
 	items.clear()
 	selected_item = null
+
+func set_columns(new_columns: int):
+	columns = new_columns
+	if grid:
+		grid.columns = columns
+		# Recalcular tamaño mínimo
+		custom_minimum_size.x = columns * (cell_size.x + spacing.x) - spacing.x
 
 # Señales
 signal item_selected(item: Control) 

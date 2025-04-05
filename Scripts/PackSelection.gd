@@ -2,62 +2,39 @@ extends Node2D
 
 # Acceso al singleton ProgressManager
 @onready var progress_manager = get_node("/root/ProgressManager")
+# Referencia al administrador de compras (singleton)
+@onready var purchase_manager = get_node("/root/PackPurchaseManager")
 
 # Variables para controlar el desplazamiento táctil
 var is_scrolling = false
+var scroll_start_position = Vector2.ZERO
 var scroll_start_time = 0
-
+var scroll_container
+var packs_container
+var drag_threshold = 10  # Umbral en píxeles para considerar un desplazamiento
 # Referencia a la escena del componente de pack
 var pack_component_scene = preload("res://Scenes/Components/PackComponent/PackComponent.tscn")
 
 # Variable para controlar si estamos en un dispositivo táctil
-var is_touch_device = false
 
 func _ready():
-	# Detectar si estamos en un dispositivo táctil
-	is_touch_device = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("ios") or OS.has_feature("android")
-	print("PackSelection: Dispositivo táctil: ", is_touch_device)
-	
-	# Inicialización de la selección de pack.
 	print("PackSelection: inicialización de los packs disponibles")
 	
-	# Configurar el ScrollContainer
-	var scroll_container = $CanvasLayer/ContainerPacks/ScrollContainer
+	# Conectar señales del administrador de compras
+	purchase_manager.connect("purchase_confirmed", Callable(self, "_on_purchase_confirmed"))
+	purchase_manager.connect("purchase_canceled", Callable(self, "_on_purchase_canceled"))
 	
-	# Cargar el script de configuración táctil
-	var TouchScrollFix = load("res://Scripts/utils/TouchScrollFix.gd")
-	if TouchScrollFix:
-		# Configurar todos los nodos para mejorar el desplazamiento táctil
-		TouchScrollFix.configure_touch_scroll(self)
-		
-		# Conectar las señales del ScrollContainer
-		if scroll_container:
-			TouchScrollFix.connect_scroll_signals(scroll_container, self, "_on_scroll_started", "_on_scroll_ended")
-		else:
-			print("ERROR: No se pudo encontrar el ScrollContainer para conectar señales")
-	else:
-		print("ERROR: No se pudo cargar el script TouchScrollFix")
+	scroll_container = $CanvasLayer/ContainerPacks/ScrollContainer
+	packs_container = $CanvasLayer/ContainerPacks/ScrollContainer/PacksContainer
 	
 	# Ajustar el layout según el tipo de dispositivo
-	adjust_layout_for_device()
+	# adjust_layout_for_device()
 	
 	# Cargar los packs
 	load_packs()
 
 # Función para ajustar el layout según el tipo de dispositivo
 func adjust_layout_for_device():
-	var vbox = $CanvasLayer/ContainerPacks
-	
-	# Siempre usar pantalla completa con márgenes
-	vbox.anchors_preset = 15  # Full rect
-	vbox.anchor_right = 1.0
-	vbox.anchor_bottom = 1.0
-	vbox.offset_left = 20.0
-	vbox.offset_top = 20.0
-	vbox.offset_right = -20.0
-	vbox.offset_bottom = -100.0
-	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
 	# Asegurar que el título y subtítulo queden en la parte superior
 	var title_label = $CanvasLayer/ContainerPacks/TitleLabel
@@ -66,16 +43,9 @@ func adjust_layout_for_device():
 	var subtitle_label = $CanvasLayer/ContainerPacks/SubtitleLabel
 	subtitle_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	
-	# Asegurar que el ScrollContainer ocupe todo el espacio restante
-	var scroll_container = $CanvasLayer/ContainerPacks/ScrollContainer
-	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	
 	print("PackSelection: Layout ajustado")
 
 func load_packs():
-	# Referencia al contenedor de packs
-	var packs_container = $CanvasLayer/ContainerPacks/ScrollContainer/PacksContainer
-	
 	# Limpiar cualquier elemento de pack existente en el contenedor
 	for child in packs_container.get_children():
 		child.queue_free()
@@ -127,29 +97,9 @@ func load_packs():
 	for pack in packs:
 		print("PackSelection: Procesando pack: ", pack.name)
 		
-		# Añadir la ruta de la imagen al pack si existe
-		if not pack.has("image_path"):
-			# Intentar encontrar una imagen para el pack
-			var possible_paths = [
-				"res://Assets/Images/packs/" + pack.id + "/icon.png",
-				"res://Assets/Images/packs/" + pack.id + "/preview.png",
-				"res://Assets/Images/packs/" + pack.name.to_lower() + "/icon.png",
-				"res://Assets/Images/packs/" + pack.name.to_lower() + "/preview.png"
-			]
-			
-			for path in possible_paths:
-				var file = FileAccess.open(path, FileAccess.READ)
-				if file:
-					pack.image_path = path
-					file.close()
-					break
-			
-			# Si no se encuentra una imagen específica, usar la imagen por defecto
-			if not pack.has("image_path") or pack.image_path == "":
-				pack.image_path = "res://Assets/Images/default_image_pack.png"
-		
 		# Instanciar el componente de pack
 		var pack_component = pack_component_scene.instantiate()
+		pack_component.parent_node = self  # Pasar referencia a este nodo para control de scroll
 		pack_component.setup(pack)
 		pack_component.connect("pack_selected", Callable(self, "_on_PackSelected"))
 		pack_component.connect("pack_purchase_requested", Callable(self, "_on_PackPurchaseRequested"))
@@ -158,72 +108,21 @@ func load_packs():
 		packs_container.add_child(pack_component)
 		print("Componente añadido para pack: ", pack.name)
 
-func _on_scroll_started():
-	is_scrolling = true
-	scroll_start_time = Time.get_ticks_msec()
 
-func _on_scroll_ended():
-	# Mantener el estado de desplazamiento por un breve período para evitar clics accidentales
-	await get_tree().create_timer(0.1).timeout
-	is_scrolling = false
-
-func _on_PackSelected(pack):
-	# Verificar que el pack tenga la estructura correcta
-	if not pack.has("puzzles"):
-		print("ERROR: El pack seleccionado no tiene la clave 'puzzles'")
-		# Añadir una clave puzzles vacía para evitar errores
-		pack["puzzles"] = []
-	
-	GLOBAL.selected_pack = pack	
-	# Función llamada al seleccionar un pack
-	print("Pack seleccionado: " + pack.name + " con " + str(pack.puzzles.size()) + " puzzles")
-	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
-
+# Función llamada cuando un componente de pack emite la señal de solicitud de compra
 func _on_PackPurchaseRequested(pack):
 	print("Se solicitó la compra del pack: " + pack.name)
-	
-	# Mostrar un diálogo de confirmación
-	var dialog = AcceptDialog.new()
-	dialog.title = "Comprar Pack"
-	dialog.dialog_text = "¿Quieres comprar el pack '" + pack.name + "'?"
-	dialog.add_button("Cancelar", true, "cancel")
-	dialog.add_button("Comprar", false, "purchase")
-	dialog.connect("confirmed", Callable(self, "_on_Purchase_Confirmed").bind(pack))
-	dialog.connect("canceled", Callable(self, "_on_Purchase_Canceled"))
-	add_child(dialog)
-	dialog.popup_centered()
+	# Delegar la gestión de compra al administrador de compras
+	purchase_manager.request_purchase(pack)
 
-func _on_Purchase_Confirmed(pack):
-	print("Compra confirmada para el pack: " + pack.name)
-	
-	# Marcar el pack como comprado usando ProgressManager
-	if progress_manager.has_method("purchase_pack"):
-		progress_manager.purchase_pack(pack.id)
-		print("Pack comprado con éxito: " + pack.name)
-		
-		# Mostrar mensaje de éxito
-		var success_dialog = AcceptDialog.new()
-		success_dialog.title = "Compra Exitosa"
-		success_dialog.dialog_text = "¡Has comprado el pack '" + pack.name + "'! Ya puedes acceder a sus puzzles."
-		add_child(success_dialog)
-		success_dialog.popup_centered()
-		
-		# Recargar los packs para actualizar la interfaz
-		await get_tree().create_timer(1.5).timeout
-		load_packs()
-	else:
-		print("ERROR: No se pudo comprar el pack - Método purchase_pack no encontrado")
-		
-		# Mostrar mensaje de error
-		var error_dialog = AcceptDialog.new()
-		error_dialog.title = "Error de Compra"
-		error_dialog.dialog_text = "No se pudo completar la compra. Por favor, inténtalo de nuevo más tarde."
-		add_child(error_dialog)
-		error_dialog.popup_centered()
+# Función llamada cuando se confirma una compra
+func _on_purchase_confirmed(pack):
+	print("Compra confirmada para pack: " + pack.name + ". Actualizando interfaz...")
+	# Esperar un momento antes de recargar los packs para que se vean las animaciones
+	await get_tree().create_timer(1.5).timeout
+	# Recargar los packs para actualizar la interfaz
+	load_packs()
 
-func _on_Purchase_Canceled():
-	print("Compra cancelada")
-
-func _on_BackButton_pressed():
-	# Volver al menú principal
-	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+# Función llamada cuando se cancela una compra
+func _on_purchase_canceled():
+	print("Compra cancelada por el usuario")

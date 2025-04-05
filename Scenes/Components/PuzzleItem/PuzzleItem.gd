@@ -31,6 +31,16 @@ func _ready():
 	lock_icon = $BackgroundRect/FrameRect/LockIcon
 	completed_icon = $BackgroundRect/FrameRect/CompletedIcon
 	background_looked = $BackgroundRectLook
+	
+	# Conectar el botón principal
+	var item_button = $ItemButton
+	if item_button:
+		if not item_button.is_connected("pressed", Callable(self, "_on_select_pressed")):
+			item_button.pressed.connect(Callable(self, "_on_select_pressed"))
+			print("PuzzleItem: Conectando señal pressed de ItemButton a _on_select_pressed")
+	else:
+		print("ERROR: No se encontró el nodo ItemButton")
+		
 	# Verificar que todos los nodos se hayan encontrado correctamente
 	if select_button and image_texture and name_label:
 		print("PuzzleItem: Todos los nodos encontrados correctamente")
@@ -115,15 +125,17 @@ func _apply_puzzle_data():
 	# Actualizar el estado de bloqueo
 	if is_locked and background_looked:
 		background_looked.visible = true
-		background_rect.visible = false
 		if select_button:
 			select_button.disabled = true
 	else:
 		if background_looked:
 			background_looked.visible = false
-			background_rect.visible = true
 		if select_button:
 			select_button.disabled = false
+	
+	# Asegurarnos de que BackgroundRect siempre sea visible
+	if background_rect:
+		background_rect.visible = true
 	
 	# Actualizar el estado de completado
 	if is_completed and completed_icon:

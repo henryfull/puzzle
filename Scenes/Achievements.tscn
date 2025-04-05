@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://81itimgdqoxk" path="res://Scripts/Achievements.gd" id="1_fqdyt"]
 [ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="2_dta62"]
-[ext_resource type="Texture2D" uid="uid://bjxia13nbayu6" path="res://Assets/Images/GUID/button_back.svg" id="2_jykd0"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="4_qcdn0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqpw6"]
 bg_color = Color(0.898039, 0.85098, 0.733333, 1)
@@ -75,6 +75,7 @@ texture = ExtResource("2_dta62")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -114.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -88,15 +89,6 @@ theme_override_constants/separation = 15
 
 [node name="HeaderContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-
-[node name="BackButton" type="TextureButton" parent="CanvasLayer/MarginContainer/VBoxContainer/HeaderContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-texture_normal = ExtResource("2_jykd0")
-ignore_texture_size = true
-stretch_mode = 5
 
 [node name="TitleLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/HeaderContainer"]
 layout_mode = 2
@@ -239,7 +231,14 @@ text = "No hay logros en esta categoría"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/HeaderContainer/BackButton" to="." method="_on_back_button_pressed"]
+[node name="BackButton" parent="CanvasLayer" instance=ExtResource("4_qcdn0")]
+offset_left = 50.0
+offset_top = -130.0
+offset_right = 210.0
+offset_bottom = -10.0
+scale = Vector2(0.8, 0.8)
+path = "res://Scenes/MainMenu.tscn"
+
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/AllTab" to="." method="_on_all_tab_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/UnlockedTab" to="." method="_on_unlocked_tab_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/LockedTab" to="." method="_on_locked_tab_pressed"]

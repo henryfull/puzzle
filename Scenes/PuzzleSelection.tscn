@@ -1,27 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://b6sg71qs17yj5"]
+[gd_scene load_steps=8 format=3 uid="uid://b6sg71qs17yj5"]
 
 [ext_resource type="Script" uid="uid://c1twov7g0717y" path="res://Scripts/PuzzleSelection.gd" id="1_nt7kx"]
 [ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult/ButtonDifficult.tscn" id="2_yvnqr"]
 [ext_resource type="Texture2D" uid="uid://d2vq8rfxw5r3s" path="res://Assets/Images/GUID/banner_green.svg" id="3_lg0oo"]
-[ext_resource type="Texture2D" uid="uid://bjxia13nbayu6" path="res://Assets/Images/GUID/button_back.svg" id="3_trsaq"]
+[ext_resource type="PackedScene" uid="uid://dpw3l7nftx7kg" path="res://Scenes/Components/PuzzleGrid/PuzzleGrid.tscn" id="4_moqol"]
 [ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="4_oehjl"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="6_jmjrx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_moqol"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w1ec1"]
-texture = ExtResource("3_trsaq")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lg0oo"]
-texture = ExtResource("3_trsaq")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_moqol"]
-texture = ExtResource("3_trsaq")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4mmlg"]
-texture = ExtResource("3_trsaq")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jmjrx"]
-texture = ExtResource("3_trsaq")
 
 [node name="PuzzleSelection" type="Node2D"]
 script = ExtResource("1_nt7kx")
@@ -41,10 +27,10 @@ stretch_mode = 6
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = -2.0
-offset_top = 46.0
-offset_right = 1.26587
-offset_bottom = 261.0
+offset_left = -3.68985
+offset_top = 99.0
+offset_right = 2.95569
+offset_bottom = 314.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_moqol")
@@ -61,8 +47,8 @@ stretch_mode = 5
 z_index = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 45.0
-offset_bottom = 165.0
+offset_top = 98.0
+offset_bottom = 218.0
 grow_horizontal = 2
 color = Color(1, 1, 1, 0)
 
@@ -107,8 +93,8 @@ vertical_alignment = 1
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 15.0
-offset_bottom = 60.0
+offset_top = 68.0
+offset_bottom = 99.0
 grow_horizontal = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 20
@@ -137,13 +123,32 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = 200.0
+offset_top = 264.0
 offset_right = -20.0
 offset_bottom = -96.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 50
+
+[node name="PuzzleGrid" parent="CanvasLayer/VBoxContainer/ScrollContainer/MarginContainer" instance=ExtResource("4_moqol")]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 70
 
 [node name="TitlePuzzleSelection" type="Label" parent="CanvasLayer/VBoxContainer"]
 visible = false
@@ -154,22 +159,8 @@ theme_override_font_sizes/font_size = 36
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/VBoxContainer/ScrollContainer/MarginContainer"]
-layout_mode = 2
-theme_override_constants/h_separation = 30
-theme_override_constants/v_separation = 60
-columns = 2
-
 [node name="VScrollBar" type="VScrollBar" parent="CanvasLayer/VBoxContainer"]
+visible = false
 layout_mode = 2
 max_value = 130.0
 
@@ -192,20 +183,12 @@ grow_vertical = 0
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="BackButton" type="Button" parent="CanvasLayer"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
+[node name="BackButton" parent="CanvasLayer" instance=ExtResource("6_jmjrx")]
 offset_left = 50.0
 offset_top = -130.0
-offset_right = 170.0
-offset_bottom = -30.0
-grow_vertical = 0
-theme_override_styles/focus = SubResource("StyleBoxTexture_w1ec1")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_lg0oo")
-theme_override_styles/hover = SubResource("StyleBoxTexture_moqol")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_4mmlg")
-theme_override_styles/normal = SubResource("StyleBoxTexture_jmjrx")
+offset_right = 210.0
+offset_bottom = -10.0
+scale = Vector2(0.8, 0.8)
+path = "res://Scenes/PackSelection.tscn"
 
 [connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginLeft/Volver" to="." method="_on_BackButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_BackButton_pressed"]

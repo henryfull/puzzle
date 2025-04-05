@@ -135,6 +135,3 @@ func _on_unlocked_tab_pressed() -> void:
 
 func _on_locked_tab_pressed() -> void:
 	load_achievements("locked")
-
-func _on_back_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")

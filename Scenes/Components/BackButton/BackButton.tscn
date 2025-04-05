@@ -1,17 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://bdvvvhltoedcq"]
+[gd_scene load_steps=6 format=3 uid="uid://bdvvvhltoedcq"]
 
-[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="1_235xj"]
+[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="1_1e6wr"]
+[ext_resource type="Script" uid="uid://72qflfw51brl" path="res://Scenes/Components/BackButton/BackButton.gd" id="2_puo31"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gj1nx"]
-texture = ExtResource("1_235xj")
+texture = ExtResource("1_1e6wr")
 region_rect = Rect2(2352, 150, 110, 90)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ot00g"]
-texture = ExtResource("1_235xj")
+texture = ExtResource("1_1e6wr")
 region_rect = Rect2(2228, 150, 108, 90)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7pjev"]
-texture = ExtResource("1_235xj")
+texture = ExtResource("1_1e6wr")
 region_rect = Rect2(2100, 148, 114, 94)
 
 [node name="BackButton" type="Button"]
@@ -26,3 +27,6 @@ grow_vertical = 0
 theme_override_styles/hover = SubResource("StyleBoxTexture_gj1nx")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_ot00g")
 theme_override_styles/normal = SubResource("StyleBoxTexture_7pjev")
+script = ExtResource("2_puo31")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
