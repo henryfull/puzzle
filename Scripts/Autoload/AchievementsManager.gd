@@ -348,9 +348,9 @@ func detect_platform():
 # Inicializa el sistema de notificaciones
 func initialize_notification_system():
 	# Verificar si la escena existe antes de cargarla
-	if ResourceLoader.exists("res://Scenes/UI/AchievementNotification.tscn"):
+	if ResourceLoader.exists("res://Scenes/Components/AchievementNotification/AchievementNotification.tscn"):
 		# Cargar la escena de notificación
-		notification_scene = load("res://Scenes/UI/AchievementNotification.tscn")
+		notification_scene = load("res://Scenes/Components/AchievementNotification/AchievementNotification.tscn")
 	else:
 		# La escena no existe, mostrar mensaje de error en consola
 		print("AchievementsManager: No se encontró la escena de notificación de logros")

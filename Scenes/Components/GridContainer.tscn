@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://b83jv0xa8txmn"]
+
+[ext_resource type="Script" uid="uid://dvbrn1rfy36fp" path="res://Scripts/Components/grid_container.gd" id="1_2k4m3"]
+
+[node name="GridContainer" type="ScrollContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2k4m3")
+columns = 3
+cell_size = Vector2(100, 100)
+spacing = Vector2(10, 10)

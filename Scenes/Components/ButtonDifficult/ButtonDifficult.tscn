@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cvevaup20dup0"]
 
-[ext_resource type="Script" uid="uid://bhuotedbm1rus" path="res://Scripts/ButtonDifficult.gd" id="1_vi457"]
+[ext_resource type="Script" uid="uid://wydhfqbeqxeu" path="res://Scenes/Components/ButtonDifficult/ButtonDifficult.gd" id="1_05uwj"]
 
 [node name="ButtonDifficult" type="Control"]
 layout_mode = 3
@@ -8,7 +8,7 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 grow_horizontal = 0
-script = ExtResource("1_vi457")
+script = ExtResource("1_05uwj")
 
 [node name="ButtonChange" type="Button" parent="."]
 custom_minimum_size = Vector2(160, 60)

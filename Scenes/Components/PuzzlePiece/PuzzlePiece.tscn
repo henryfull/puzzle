@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://d1qdaaubr40oq"]
 
-[ext_resource type="Script" uid="uid://cn5nba6ccpqkh" path="res://Scripts/PuzzlePiece.gd" id="1_uava8"]
-[ext_resource type="Texture2D" uid="uid://d0hgnlc4lvvps" path="res://Assets/Images/icons/star_3.png" id="3_ee0qq"]
+[ext_resource type="Script" uid="uid://cn5nba6ccpqkh" path="res://Scenes/Components/PuzzlePiece/PuzzlePiece.gd" id="1_t2gqn"]
+[ext_resource type="Texture2D" uid="uid://d0hgnlc4lvvps" path="res://Assets/Images/icons/star_3.png" id="2_hek20"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8pe7f"]
 size = Vector2(336.38, 308.67)
@@ -12,7 +12,7 @@ _data = [Vector2(0, -0.0159942), 0.0, 0.0, 0, 0, Vector2(0.504292, 0.976372), 0.
 point_count = 3
 
 [node name="PuzzlePiece" type="Node2D"]
-script = ExtResource("1_uava8")
+script = ExtResource("1_t2gqn")
 background_color = Color(0.219608, 0.4, 0.498039, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -45,7 +45,7 @@ shape = SubResource("RectangleShape2D_8pe7f")
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 emitting = false
 amount = 12
-texture = ExtResource("3_ee0qq")
+texture = ExtResource("2_hek20")
 one_shot = true
 speed_scale = 1.75
 explosiveness = 0.55

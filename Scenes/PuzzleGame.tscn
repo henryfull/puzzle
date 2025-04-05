@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
-[ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult.tscn" id="2_yvnqr"]
+[ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult/ButtonDifficult.tscn" id="2_yvnqr"]
 [ext_resource type="AudioStream" uid="uid://cbd7s204ssyyo" path="res://Assets/Sounds/SFX/bubble.wav" id="3_iw5d8"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_58pa3"]
 [ext_resource type="AudioStream" uid="uid://doif0cexxpv6t" path="res://Assets/Sounds/SFX/flip.wav" id="4_qnp3e"]

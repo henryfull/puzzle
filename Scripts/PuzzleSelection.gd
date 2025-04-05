@@ -53,7 +53,7 @@ func _ready():
 			children.append(child)
 		
 		# Intentar cargar la escena del TouchScrollContainer
-		var touch_scroll_scene = load("res://Scenes/Components/TouchScrollContainer.tscn")
+		var touch_scroll_scene = load("res://Scenes/Components/TouchScrollContainer/TouchScrollContainer.tscn")
 		if touch_scroll_scene:
 			# Crear una nueva instancia del TouchScrollContainer
 			var new_scroll = touch_scroll_scene.instantiate()
@@ -90,7 +90,7 @@ func _ready():
 			print("PuzzleSelection: No se pudo cargar TouchScrollContainer, intentando adjuntar script")
 			
 			# Intentar adjuntar el script TouchScrollHandler
-			var touch_handler_script = load("res://Scripts/TouchScrollHandler.gd")
+			var touch_handler_script = load("res://Scripts/utils/TouchScrollHandler.gd")
 			if touch_handler_script:
 				scroll_container.set_script(touch_handler_script)
 				
@@ -266,7 +266,7 @@ func load_puzzles():
 		print("PuzzleSelection: Puzzle " + puzzle.get("id", "NO ID") + " - Desbloqueado: " + str(is_unlocked) + ", Completado: " + str(is_completed))
 		
 		# Cargar la escena del PuzzleItem
-		var puzzle_item_scene = load("res://Scenes/Components/New/PuzzleItem.tscn")
+		var puzzle_item_scene = load("res://Scenes/Components/PuzzleItem/PuzzleItem.tscn")
 		if puzzle_item_scene:
 			var puzzle_item = puzzle_item_scene.instantiate()
 			

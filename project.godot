@@ -27,12 +27,6 @@ buses/General=0.0
 
 [autoload]
 
-ConfigService="*res://scripts/services/config_service.gd"
-AudioService="*res://scripts/services/audio_service.gd"
-ThemeService="*res://scripts/services/theme_service.gd"
-ProgressService="*res://scripts/services/progress_service.gd"
-DataService="*res://scripts/services/data_service.gd"
-Game="*res://scripts/core/game/game.gd"
 GLOBAL="*res://Scripts/Autoload/global.gd"
 TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
 ThemeManager="*res://Scripts/Autoload/ThemeManager.gd"

@@ -20,7 +20,7 @@ var inactive_tab_style: StyleBoxFlat
 var current_tab: String = "all"
 
 # Elemento de logro
-var achievement_item_scene = preload("res://Scenes/UI/AchievementItem.tscn")
+var achievement_item_scene = preload("res://Scenes/Components/AchievementItem/AchievementItem.tscn")
 
 # Llamada cuando la escena está lista
 func _ready():

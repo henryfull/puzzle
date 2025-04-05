@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqnxnwvxvnlgj"]
+[gd_scene load_steps=3 format=3 uid="uid://xdw0sm0cdrgy"]
 
-[ext_resource type="Script" path="res://Scripts/Components/Slider_option.gd" id="1_en27e"]
-[ext_resource type="Texture2D" path="res://Assets/Images/GUID/icon_sfx.svg" id="2_712mx"]
+[ext_resource type="Script" uid="uid://dp5x0q8sv5hik" path="res://Scenes/Components/SliderOption/Slider_option.gd" id="1_1v032"]
+[ext_resource type="Texture2D" uid="uid://dn7hq5cudvked" path="res://Assets/Images/GUID/icon_volume.svg" id="2_712mx"]
 
-[node name="SliderOptionSFX" type="Control"]
+[node name="SliderOption" type="Control"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 3
 size_flags_vertical = 0
-script = ExtResource("1_en27e")
+script = ExtResource("1_1v032")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -22,7 +22,7 @@ size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "Efectos"
+text = "Etiqueta"
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
@@ -41,4 +41,4 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-value = 80.0 
+value = 80.0

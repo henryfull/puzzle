@@ -8,7 +8,7 @@ var is_scrolling = false
 var scroll_start_time = 0
 
 # Referencia a la escena del componente de pack
-var pack_component_scene = preload("res://Scenes/Components/PackComponent.tscn")
+var pack_component_scene = preload("res://Scenes/Components/PackComponent/PackComponent.tscn")
 
 # Variable para controlar si estamos en un dispositivo táctil
 var is_touch_device = false
@@ -25,7 +25,7 @@ func _ready():
 	var scroll_container = $CanvasLayer/ContainerPacks/ScrollContainer
 	
 	# Cargar el script de configuración táctil
-	var TouchScrollFix = load("res://Scripts/TouchScrollFix.gd")
+	var TouchScrollFix = load("res://Scripts/utils/TouchScrollFix.gd")
 	if TouchScrollFix:
 		# Configurar todos los nodos para mejorar el desplazamiento táctil
 		TouchScrollFix.configure_touch_scroll(self)

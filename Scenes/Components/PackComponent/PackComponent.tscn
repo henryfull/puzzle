@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=3 uid="uid://cwmh6v0v1h55u"]
 
-[ext_resource type="Texture2D" uid="uid://dthy24qh2pp7r" path="res://Assets/Images/default_image_pack.png" id="1_yn4m1"]
-[ext_resource type="Script" uid="uid://chxeswjm6qscv" path="res://Scripts/PackComponent.gd" id="2_yvnxp"]
-[ext_resource type="Texture2D" uid="uid://cjqwsjyhigk3s" path="res://Assets/Images/GUID/icon_looked.png" id="3_6ueb6"]
+[ext_resource type="Script" uid="uid://chxeswjm6qscv" path="res://Scenes/Components/PackComponent/PackComponent.gd" id="1_ev5bh"]
+[ext_resource type="Texture2D" uid="uid://dthy24qh2pp7r" path="res://Assets/Images/default_image_pack.png" id="2_3llcl"]
+[ext_resource type="Texture2D" uid="uid://cjqwsjyhigk3s" path="res://Assets/Images/GUID/icon_looked.png" id="3_f53a0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vw8lr"]
 bg_color = Color(1, 1, 1, 1)
@@ -54,7 +54,7 @@ anchor_bottom = 1.0
 offset_bottom = -826.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_yvnxp")
+script = ExtResource("1_ev5bh")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -94,7 +94,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_yn4m1")
+texture = ExtResource("2_3llcl")
 expand_mode = 1
 stretch_mode = 6
 
@@ -139,7 +139,7 @@ offset_right = 64.0
 offset_bottom = 92.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_6ueb6")
+texture = ExtResource("3_f53a0")
 expand_mode = 1
 
 [node name="Button" type="Button" parent="."]

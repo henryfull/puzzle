@@ -292,7 +292,7 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 	cell_list.shuffle()
 
 	# 6) Crear cada pieza (rows x columns)
-	var piece_scene = load("res://Scenes/PuzzlePiece.tscn")
+	var piece_scene = load("res://Scenes/Components/PuzzlePiece/PuzzlePiece.tscn")
 	if piece_scene == null:
 		push_warning("No se pudo cargar PuzzlePiece.tscn")
 		return

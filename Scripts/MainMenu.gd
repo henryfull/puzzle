@@ -86,4 +86,4 @@ func _on_btn_exit_pressed() -> void:
 	get_tree().quit()
 
 func _on_StatsButton_pressed():
-	get_tree().change_scene_to_file("res://Scenes/Screens/StatsScreen.tscn")
+	get_tree().change_scene_to_file("res://Scenes/StatsScreen.tscn")

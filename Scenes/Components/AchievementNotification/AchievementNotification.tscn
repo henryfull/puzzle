@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyx8b81r6dlny"]
+[gd_scene load_steps=6 format=3 uid="uid://cyx8b81r6dlny"]
 
-[ext_resource type="Script" path="res://Scripts/UI/AchievementNotification.gd" id="1_qxlkg"]
+[ext_resource type="Script" uid="uid://bku5thswny7jh" path="res://Scenes/Components/AchievementNotification/AchievementNotification.gd" id="1_gce1t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vhc1e"]
 bg_color = Color(0.121569, 0.12549, 0.254902, 0.901961)
@@ -89,8 +89,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_y7ahc"]
 _data = {
-"slide_in": SubResource("Animation_n2hvs"),
-"slide_out": SubResource("Animation_1m4vq")
+&"slide_in": SubResource("Animation_n2hvs"),
+&"slide_out": SubResource("Animation_1m4vq")
 }
 
 [node name="AchievementNotification" type="Control"]
@@ -104,7 +104,7 @@ offset_right = 710.0
 offset_bottom = 110.0
 grow_horizontal = 0
 mouse_filter = 2
-script = ExtResource("1_qxlkg")
+script = ExtResource("1_gce1t")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -164,10 +164,10 @@ autowrap_mode = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_y7ahc")
+&"": SubResource("AnimationLibrary_y7ahc")
 }
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"] 
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

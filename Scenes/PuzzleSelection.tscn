@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://b6sg71qs17yj5"]
 
 [ext_resource type="Script" uid="uid://c1twov7g0717y" path="res://Scripts/PuzzleSelection.gd" id="1_nt7kx"]
-[ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult.tscn" id="2_yvnqr"]
+[ext_resource type="PackedScene" uid="uid://cvevaup20dup0" path="res://Scenes/Components/ButtonDifficult/ButtonDifficult.tscn" id="2_yvnqr"]
 [ext_resource type="Texture2D" uid="uid://d2vq8rfxw5r3s" path="res://Assets/Images/GUID/banner_green.svg" id="3_lg0oo"]
 [ext_resource type="Texture2D" uid="uid://bjxia13nbayu6" path="res://Assets/Images/GUID/button_back.svg" id="3_trsaq"]
 [ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="4_oehjl"]

@@ -2,7 +2,7 @@ extends Viewport
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var text_viewport = load("res://Scenes/TextViewport.tscn").instantiate()
+	var text_viewport = load("res://Scenes/Components/TextViewport/TextViewport.tscn").instantiate()
 	add_child(text_viewport)
 	# Esperar un frame para que se dibuje el Viewport:
 	await get_tree().process_frame

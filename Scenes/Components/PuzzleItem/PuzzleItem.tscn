@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://bqxn8yvgpjnx5"]
 
-[ext_resource type="Script" uid="uid://co2eql11n26j2" path="res://Scripts/Components/PuzzleItem.gd" id="1_yjk2p"]
+[ext_resource type="Script" uid="uid://b7sgw0bvaefnn" path="res://Scenes/Components/PuzzleItem/PuzzleItem.gd" id="1_ycph0"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_g0pxh"]
 [ext_resource type="Texture2D" uid="uid://cjqwsjyhigk3s" path="res://Assets/Images/GUID/icon_looked.png" id="3_lwali"]
 
@@ -64,7 +64,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_yjk2p")
+script = ExtResource("1_ycph0")
 
 [node name="BackgroundRect" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(240, 400)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://daniyibh7dshy"]
 
-[ext_resource type="Script" uid="uid://dqobl1eojbiv1" path="res://Scripts/UI/AchievementItem.gd" id="1_7jey3"]
+[ext_resource type="Script" uid="uid://dqobl1eojbiv1" path="res://Scenes/Components/AchievementItem/AchievementItem.gd" id="1_147dt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ib7v3"]
 bg_color = Color(1, 1, 1, 1)
@@ -36,7 +36,7 @@ offset_bottom = -1180.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-script = ExtResource("1_7jey3")
+script = ExtResource("1_147dt")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
