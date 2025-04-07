@@ -365,9 +365,14 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 			update_piece_position_state(piece_obj)
 			
 			# Cada pieza comienza como pieza de borde en su propio grupo
-			if piece_obj.node.has_method("set_edge_piece"):
-				piece_obj.node.set_edge_piece(true)
-
+			if piece_node.has_method("set_edge_piece"):
+				piece_node.set_edge_piece(true)
+	
+	# Inicializar el contador de grupos: al inicio, cada pieza es su propio grupo
+	ungrouped_pieces = pieces.size()
+	if OS.is_debug_build():
+		print("Puzzle inicializado con ", ungrouped_pieces, " grupos individuales")
+	
 	# Activar la captura de eventos de mouse a nivel global
 	# (Podrías usar _input() o unhandled_input(), en este ejemplo iremos con _unhandled_input)
 	set_process_unhandled_input(true)
@@ -775,6 +780,10 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 	# Indicar que se ha colocado/fusionado una pieza
 	just_placed_piece = true
 	
+	# Obtener tamaños de los grupos originales para contar correctamente
+	var group1_size = piece1.group.size()
+	var group2_size = piece2.group.size()
+	
 	# Combinar los grupos
 	var new_group = []
 	new_group.append_array(piece1.group)
@@ -838,7 +847,29 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 		
 		particles.emitting = true
 	
-	# La verificación de victoria ahora se manejará en check_all_groups() basado en just_placed_piece
+	# Decrementar ungrouped_pieces: cuando se juntan dos grupos, se reduce en 1 el número total de grupos
+	# Estábamos contando grupos individuales, ahora se han convertido en uno solo
+	ungrouped_pieces -= 1
+	
+	if OS.is_debug_build():
+		print("Se ha unido un grupo de " + str(group1_size) + " piezas con otro de " + str(group2_size) + " piezas")
+		print("Grupos restantes: " + str(ungrouped_pieces))
+	
+	# Verificar si solo queda un grupo (victoria)
+	if ungrouped_pieces <= 1:
+		# Verificar que realmente todas las piezas están en un solo grupo
+		var all_pieces_in_one_group = false
+		for p in pieces:
+			if p.group.size() == pieces.size():
+				all_pieces_in_one_group = true
+				break
+				
+		if all_pieces_in_one_group:
+			print("¡Victoria por agrupación completa de piezas!")
+			call_deferred("_on_puzzle_completed")
+		else:
+			# Recalcular la cantidad real de grupos
+			count_unique_groups()
 
 # Función para añadir una fila adicional al tablero
 func add_extra_row():
@@ -1902,6 +1933,9 @@ func check_all_groups() -> void:
 	
 	# Verificar y corregir el estado del grid después de todas las fusiones
 	verify_and_fix_grid()
+	
+	# Recalcular la cantidad real de grupos
+	count_unique_groups()
 	
 	# Verificar victoria solo cuando realmente se ha colocado una pieza
 	if just_placed_piece:
@@ -3018,3 +3052,28 @@ func _input(event):
 				# Si ya tiene foco pero sigue pausado, reanudar
 				resume_game()
 				print("PuzzleGame: Juego reanudado por interacción del usuario")
+
+# Función para contar los grupos únicos y actualizar ungrouped_pieces
+func count_unique_groups():
+	var unique_groups = []
+	var group_leaders = []
+	
+	for piece_obj in pieces:
+		var leader = get_group_leader(piece_obj)
+		if not (leader in group_leaders):
+			group_leaders.append(leader)
+			unique_groups.append(leader.group)
+	
+	# Actualizar el contador de piezas sin agrupar
+	ungrouped_pieces = unique_groups.size()
+	
+	if OS.is_debug_build():
+		print("Recuento actualizado: " + str(ungrouped_pieces) + " grupos únicos")
+	
+	# Verificar si todas las piezas están en un solo grupo grande
+	if unique_groups.size() == 1 and unique_groups[0].size() == pieces.size():
+		ungrouped_pieces = 1
+		print("¡Victoria por agrupación completa de piezas!")
+		call_deferred("_on_puzzle_completed")
+	
+	return unique_groups.size()
