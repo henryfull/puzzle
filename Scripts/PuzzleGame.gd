@@ -28,10 +28,18 @@ var double_tap_threshold: float = 0.3  # Tiempo en segundos para considerar un d
 var last_touch_position: Vector2 = Vector2.ZERO
 var double_tap_distance_threshold: float = 50.0  # Distancia máxima para considerar un doble tap
 
+# Variables para el sistema de pausa
+var is_paused: bool = false  # Estado actual de pausa
+var pause_start_time: float = 0.0  # Momento en que se pausó el juego
+var accumulated_time: float = 0.0  # Tiempo acumulado en pausa
+var is_options_menu_open: bool = false  # Estado del menú de opciones
+var ungrouped_pieces: int = GLOBAL.columns * GLOBAL.rows  # Número de piezas sin agrupar
+
 #
 # === PROPIEDADES EXPORTADAS (modificables en el Inspector) ===
 #
 @export var image_path: String = "res://Assets/Images/arte1.jpg"
+@export var panelPaused: Panel 
 
 @export var max_scale_percentage: float = 0.9  # Aumentado para aprovechar más espacio
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
@@ -136,6 +144,12 @@ func _ready():
 	
 	# Configurar el botón de opciones
 	create_options_button()
+	
+	# Conectar la señal "options_closed" del OptionsManager para reanudar el juego
+	if has_node("/root/OptionsManager"):
+		var options_manager = get_node("/root/OptionsManager")
+		if !options_manager.is_connected("options_closed", Callable(self, "_on_options_closed")):
+			options_manager.connect("options_closed", Callable(self, "_on_options_closed"))
 	
 	# Conectar la señal del botón de dificultad
 	var button_difficult = $UILayer/ButtonDifficult
@@ -2306,6 +2320,10 @@ func show_success_message(message: String, duration: float = 1.5):
 # Función para mostrar el menú de opciones
 func show_options_menu():
 	if has_node("/root/OptionsManager"):
+		# Pausar el juego cuando se abre el menú de opciones
+		if !is_paused:
+			pause_game()
+		is_options_menu_open = true
 		get_node("/root/OptionsManager").show_options(self)
 
 
@@ -2554,22 +2572,13 @@ func _on_tween_duration_changed(value):
 
 # Función para mostrar el panel de opciones
 func show_options_panel():
-	# En lugar de mostrar nuestro propio panel, llamar a OptionsManager para mostrar la escena de opciones
-	if has_node("/root/OptionsManager"):
-		var options_manager = get_node("/root/OptionsManager")
-		if options_manager.has_method("show_options"):
-			options_manager.show_options()
-			return
+	# Usar nuestra función de mostrar opciones que maneja la pausa correctamente
+	show_options_menu()
 	
-	# Si OptionsManager no está disponible, mostramos nuestro propio panel (como respaldo)
-	# Verificar si ya existe un panel de opciones
+	# El resto del código legacy se mantiene como respaldo
 	if has_node("OptionsLayer/OptionsPanel"):
 		# Si existe, simplemente mostrarlo
 		get_node("OptionsLayer/OptionsPanel").visible = true
-		return
-	
-	# A partir de aquí continúa el código original para mostrar el panel propio
-	# ... existing code ...
 
 func _on_BackButton_pressed() -> void:
 	# Volver al menú principal
@@ -2876,6 +2885,7 @@ func _on_button_toggle_hud_pressed() -> void:
 func start_game_timer():
 	start_time = Time.get_unix_time_from_system()
 	is_timer_active = true
+	accumulated_time = 0.0
 	
 	# Crear y añadir un timer para actualizar el tiempo transcurrido
 	var timer = Timer.new()
@@ -2890,8 +2900,9 @@ func start_game_timer():
 
 # Función para actualizar el tiempo transcurrido
 func update_elapsed_time():
-	if is_timer_active:
-		elapsed_time = Time.get_unix_time_from_system() - start_time
+	if is_timer_active and !is_paused:
+		# Calcular el tiempo actual correctamente
+		elapsed_time = Time.get_unix_time_from_system() - start_time - accumulated_time
 		
 		# Actualizar UI si existe
 		update_timer_ui()
@@ -2900,14 +2911,19 @@ func update_elapsed_time():
 func stop_game_timer():
 	is_timer_active = false
 	
-	# Actualizar una última vez
-	elapsed_time = Time.get_unix_time_from_system() - start_time
+	# La última actualización del tiempo transcurrido debe ser correcta
+	if is_paused:
+		# Si está pausado, usar el tiempo guardado en pause_start_time
+		elapsed_time = pause_start_time - start_time - accumulated_time
+	else:
+		elapsed_time = Time.get_unix_time_from_system() - start_time - accumulated_time
 	
 	# Detener el timer si existe
 	if has_node("GameTimer"):
 		var timer = get_node("GameTimer")
 		timer.stop()
-		
+	
+	panelPaused.visible = true
 	print("PuzzleGame: Temporizador de juego detenido. Tiempo total: ", elapsed_time, " segundos")
 
 # Función para actualizar la UI del temporizador (si existe)
@@ -2919,3 +2935,86 @@ func update_timer_ui():
 		var minutes = int(elapsed_time) / 60
 		var seconds = int(elapsed_time) % 60
 		timer_label.text = "%02d:%02d" % [minutes, seconds]
+
+func _notification(what):
+	# Control de pausa cuando la ventana pierde el foco
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		if !is_paused and is_timer_active and !puzzle_completed:
+			pause_game()
+			print("PuzzleGame: Juego pausado por pérdida de foco")
+	
+	# Reanudar el juego cuando la ventana vuelve a tener foco
+	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
+		if is_paused and !is_options_menu_open and !puzzle_completed:
+			resume_game()
+			print("PuzzleGame: Juego reanudado por recuperación de foco")
+
+# Función para pausar el juego
+func pause_game():
+	if is_paused or puzzle_completed:
+		return
+		
+	is_paused = true
+	pause_start_time = Time.get_unix_time_from_system()
+	panelPaused.visible = true
+	
+	# Guardar el tiempo transcurrido en el momento de la pausa
+	elapsed_time = pause_start_time - start_time - accumulated_time
+	
+	# Pausar el temporizador manteniendo el estado actual
+	if has_node("GameTimer"):
+		var timer = get_node("GameTimer")
+		timer.paused = true
+	
+	# Mostrar mensaje de pausa
+	show_success_message("Juego en pausa", 0.5)
+	
+	print("PuzzleGame: Juego pausado en tiempo:", elapsed_time)
+
+# Función para reanudar el juego
+func resume_game():
+	if !is_paused or puzzle_completed:
+		return
+		
+	# Calcular el tiempo que estuvo en pausa
+	var current_time = Time.get_unix_time_from_system()
+	var pause_duration = current_time - pause_start_time
+	
+	# Acumular tiempo de pausa
+	accumulated_time += pause_duration
+	
+	is_paused = false
+	
+	# Reanudar el temporizador
+	if has_node("GameTimer"):
+		var timer = get_node("GameTimer")
+		timer.paused = false
+	
+	# Mostrar mensaje de reanudación
+	show_success_message("Juego reanudado", 0.5)
+	panelPaused.visible = false
+	
+	print("PuzzleGame: Juego reanudado después de ", pause_duration, " segundos en pausa. Tiempo acumulado en pausa:", accumulated_time)
+
+# Función para manejar el cierre del menú de opciones
+func _on_options_closed():
+	is_options_menu_open = false
+	if is_paused and !puzzle_completed:
+		resume_game()
+
+# Método para procesar entrada de usuario
+func _input(event):
+	# Si el juego está pausado y el usuario interactúa, considerar reanudar
+	if is_paused and !is_options_menu_open and !puzzle_completed:
+		# Verificar si es un evento de interacción relevante (click, toque, tecla)
+		if (event is InputEventMouseButton and event.pressed) or \
+		   (event is InputEventScreenTouch and event.pressed) or \
+		   (event is InputEventKey and event.pressed):
+			# Reanudar el juego si está pausado por pérdida de foco
+			if !get_viewport().has_focus():
+				# En algunas plataformas, la interacción puede restaurar el foco automáticamente
+				print("PuzzleGame: Interacción detectada mientras juego pausado, verificando foco")
+			elif get_viewport().has_focus():
+				# Si ya tiene foco pero sigue pausado, reanudar
+				resume_game()
+				print("PuzzleGame: Juego reanudado por interacción del usuario")

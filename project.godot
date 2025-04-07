@@ -14,7 +14,6 @@ config/name="puzzle tiki tiki"
 config/version="0.68.1"
 run/main_scene="uid://dh7t7utu076oi"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-run/max_fps=60
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
 boot_splash/image="uid://ctfuu506avefk"
 config/icon="uid://7chqk0fghn6n"
@@ -45,7 +44,7 @@ file_logging/enable_file_logging=true
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
-window/stretch/mode="canvas_items"
+window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/handheld/orientation=5
 

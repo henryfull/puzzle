@@ -29,10 +29,27 @@ var border_node: Line2D
 var group_id: int = -1  # Para identificar a qué grupo pertenece
 var is_edge_piece: bool = false  # Si es pieza de borde en un grupo
 
+# Nuevas variables para los colores de los grupos
+var single_piece_color: Color = Color(0.2, 0.2, 0.2, 1.0)  # Color para piezas sueltas
+var group_colors: Array = [
+	Color(0.95, 0.3, 0.3, 1.0),   # Rojo
+	Color(0.3, 0.8, 0.3, 1.0),    # Verde
+	Color(0.3, 0.3, 0.95, 1.0),   # Azul
+	Color(0.95, 0.95, 0.3, 1.0),  # Amarillo
+	Color(0.95, 0.6, 0.3, 1.0),   # Naranja
+	Color(0.7, 0.3, 0.95, 1.0),   # Púrpura
+	Color(0.3, 0.95, 0.95, 1.0),  # Cian
+	Color(0.95, 0.3, 0.6, 1.0),   # Rosa
+	Color(0.5, 0.8, 0.2, 1.0),    # Verde lima
+	Color(0.5, 0.2, 0.8, 1.0)     # Violeta
+]
+
 # Variables exportables para personalización
 @export var background_color: Color = Color(0.2, 0.2, 0.2, 1.0)  # Color de fondo para el lado trasero
 @export var number_color: Color = Color(1, 1, 1, 1)  # Color del número
 @export var number_font_size: int = 42  # Tamaño de fuente del número
+@export var use_color_groups: bool = true  # Si es false, se usará el color por defecto para todas las piezas
+@export var single_piece_color_override: Color = Color(0.2, 0.2, 0.2, 1.0)  # Color para piezas sueltas (configurable desde el editor)
 
 func _ready():
 	# Ajustar para recibir eventos de entrada
@@ -40,6 +57,10 @@ func _ready():
 	area2d.input_pickable = true
 	pieces_group = [self]
 	group_id = get_instance_id()  # Cada pieza comienza en su propio grupo
+	
+	# Si hay un color personalizado para piezas sueltas, usarlo
+	if single_piece_color_override != Color(0.2, 0.2, 0.2, 1.0):
+		single_piece_color = single_piece_color_override
 	
 	# Crear el borde
 	create_border()
@@ -96,7 +117,8 @@ func update_visual():
 			number_label.visible = true
 		if background_rect:
 			background_rect.visible = true
-			background_rect.color = background_color  # Asegurar que el color es correcto
+			# Asignar color según si es parte de un grupo o no
+			update_background_color()
 			# Asegurarnos de que el background_rect no bloquee los eventos de entrada
 			background_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	else:
@@ -121,6 +143,24 @@ func update_visual():
 	# Actualizar la posición del área de colisión para asegurar que coincida con el sprite
 	if area2d and sprite.texture:
 		area2d.position = sprite.position
+
+# Nueva función para actualizar el color del fondo según el grupo
+func update_background_color():
+	if not is_instance_valid(background_rect):
+		return
+	
+	# Si no se quiere usar colores de grupo, usar el color base
+	if not use_color_groups:
+		background_rect.color = background_color
+		return
+		
+	if pieces_group.size() > 1:
+		# Si pertenece a un grupo, asignar un color basado en el group_id
+		var color_index = abs(group_id) % group_colors.size()
+		background_rect.color = group_colors[color_index]
+	else:
+		# Si es una pieza suelta, usar el color personalizado
+		background_rect.color = single_piece_color
 
 func flip_piece():
 	flipped = !flipped
@@ -210,6 +250,8 @@ func set_correct_position(correct: bool):
 func set_group_id(id: int):
 	group_id = id
 	update_border()
+	# También actualizamos el color del fondo siempre (independientemente de si está volteado)
+	update_background_color()
 
 # Función para establecer si es una pieza de borde en un grupo
 func set_edge_piece(is_edge: bool):
@@ -223,13 +265,16 @@ func _process(_delta):
 		
 	# Verificar que el color del fondo es correcto si la pieza está volteada
 	if flipped and is_instance_valid(background_rect):
-		background_rect.color = background_color
+		update_background_color()
 
 # Función para actualizar el grupo de piezas
 func update_pieces_group(new_group: Array):
 	pieces_group = new_group
 	update_border()
 	update_border_color()
+	# Actualizar el color del fondo si la pieza está volteada
+	if flipped:
+		update_background_color()
 
 # Método para manejar los eventos de entrada en el área de colisión
 func _input_event(_viewport, event, _shape_idx):
@@ -268,3 +313,20 @@ func set_dragging(is_dragging: bool):
 	# Actualizar visualmente
 	if is_instance_valid(sprite):
 		sprite.z_index = z_index
+
+# Método para actualizar toda la visualización de la pieza (incluido bordes y colores)
+func update_all_visuals():
+	update_visual()
+	update_border()
+	update_background_color()
+	
+	# Asegurar que los z-index son correctos
+	if flipped:
+		if is_instance_valid(background_rect):
+			background_rect.z_index = 10
+		if is_instance_valid(number_label):
+			number_label.z_index = 11
+	
+	# Actualizar si está en modo de arrastre
+	if dragging:
+		set_dragging(true)

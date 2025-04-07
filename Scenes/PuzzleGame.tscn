@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dh8d4yyjtjjsj"]
+[gd_scene load_steps=34 format=3 uid="uid://dh8d4yyjtjjsj"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
@@ -101,10 +101,16 @@ region_rect = Rect2(1730, 43, 105, 89)
 atlas = ExtResource("4_58pa3")
 region = Rect2(2085, 461, 143, 135)
 
-[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mupxo"]
+bg_color = Color(0, 0, 0, 0.968627)
+
+[sub_resource type="FontVariation" id="FontVariation_u0au7"]
+
+[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer", "panelPaused")]
 script = ExtResource("1_0gd45")
 pieces_container = NodePath("PiecesContainer")
 UILayer = NodePath("UILayer")
+panelPaused = NodePath("UILayer/PanelPaused")
 
 [node name="AudioMove" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_xo7l2")
@@ -280,6 +286,33 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_sr37j")
 icon = SubResource("AtlasTexture_f2h16")
 icon_alignment = 1
 expand_icon = true
+
+[node name="PanelPaused" type="Panel" parent="UILayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mupxo")
+
+[node name="Label" type="Label" parent="UILayer/PanelPaused"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -16.5
+offset_right = 140.0
+offset_bottom = 16.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_u0au7")
+theme_override_font_sizes/font_size = 48
+text = "JUEGO EN PAUSA"
 
 [connection signal="pressed" from="BackgroundLayer/ButtonHideHUD" to="." method="_on_button_toggle_hud_pressed"]
 [connection signal="pressed" from="BackgroundLayer/ButtonShowHUD" to="." method="_on_button_toggle_hud_pressed"]
