@@ -140,3 +140,59 @@ func configure_ui_for_device():
 	
 	# Guardar la configuración actualizada
 	save_settings()
+
+# Función para aplicar configuraciones desde la nube
+# Esta función permite actualizar las configuraciones locales con datos de la nube
+func apply_cloud_settings(cloud_settings: Dictionary) -> void:
+	if cloud_settings.is_empty():
+		print("GLOBAL: No hay configuraciones de la nube para aplicar")
+		return
+	
+	var apply_audio = false
+	var apply_language = false
+	
+	# Actualizar idioma si existe en los datos de la nube
+	if cloud_settings.has("language"):
+		settings.language = cloud_settings.language
+		apply_language = true
+	
+	# Actualizar volúmenes si existen en los datos de la nube
+	if cloud_settings.has("volume"):
+		if cloud_settings.volume.has("general"):
+			settings.volume.general = cloud_settings.volume.general
+			apply_audio = true
+		if cloud_settings.volume.has("music"):
+			settings.volume.music = cloud_settings.volume.music
+			apply_audio = true
+		if cloud_settings.volume.has("sfx"):
+			settings.volume.sfx = cloud_settings.volume.sfx
+			apply_audio = true
+		if cloud_settings.volume.has("voices") and settings.volume.has("voices"):
+			settings.volume.voices = cloud_settings.volume.voices
+			apply_audio = true
+	
+	# Actualizar escala de UI si existe en los datos de la nube
+	if cloud_settings.has("ui_scale"):
+		settings.ui_scale = cloud_settings.ui_scale
+	
+	# Actualizar configuración del puzzle si existe en los datos de la nube
+	if cloud_settings.has("puzzle"):
+		if cloud_settings.puzzle.has("pan_sensitivity"):
+			settings.puzzle.pan_sensitivity = cloud_settings.puzzle.pan_sensitivity
+		if cloud_settings.puzzle.has("use_tween_effect"):
+			settings.puzzle.use_tween_effect = cloud_settings.puzzle.use_tween_effect
+		if cloud_settings.puzzle.has("tween_duration"):
+			settings.puzzle.tween_duration = cloud_settings.puzzle.tween_duration
+	
+	# Guardar las configuraciones actualizadas
+	save_settings()
+	
+	# Aplicar cambios de idioma
+	if apply_language and has_node("/root/TranslationLoader"):
+		get_node("/root/TranslationLoader").set_language(settings.language)
+	
+	# Aplicar cambios de audio
+	if apply_audio and has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").update_volumes()
+	
+	print("GLOBAL: Configuraciones de la nube aplicadas correctamente")

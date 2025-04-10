@@ -3,11 +3,12 @@ extends Node
 # Referencia a la escena de opciones
 var options_scene = null
 var options_instance = null
+var options_container = null
 var is_options_visible = false
 var parent_node = null
 
 # Señal que se emite cuando el menú de opciones se cierra
-signal options_closed
+signal options_closed()
 
 func _ready():
 	print("OptionsManager: Inicializado")
@@ -20,6 +21,10 @@ func _ready():
 
 # Función para mostrar el menú de opciones
 func show_options(node = null):
+	if is_options_visible:
+		print("OptionsManager: Las opciones ya están visibles")
+		return
+	
 	print("OptionsManager: Mostrando opciones")
 	
 	# Si no se proporciona un nodo, usar el nodo actual o el viewport actual
@@ -50,10 +55,21 @@ func show_options(node = null):
 	# Añadir el menú de opciones como hijo del nodo actual
 	parent_node.add_child(options_instance)
 	
-	# Conectar la señal del botón de volver
-	var button = options_instance.get_node("CanvasLayer/BoxContainer/VBoxContainer3/Button")
+	# Almacenar referencia al contenedor de opciones
+	options_container = options_instance.get_node("CanvasLayer/PanelContainer")
+	
+	# Conectar la señal de cierre de opciones si existe
+	if options_instance.has_signal("options_closed"):
+		options_instance.connect("options_closed", Callable(self, "_on_options_closed"))
+	
+	# Conectar la señal del botón de volver si existe
+	var button = options_instance.get_node_or_null("CanvasLayer/BoxContainer/VBoxContainer3/Button")
 	if button:
 		button.connect("pressed", Callable(self, "_on_options_back_pressed"))
+	
+	# Añadir botón de restaurar compras si estamos en plataforma móvil
+	if OS.has_feature("mobile") or OS.has_feature("ios") or OS.has_feature("android"):
+		_add_restore_purchases_button()
 	
 	# Configurar la animación de entrada
 	var canvas_layer = options_instance.get_node("CanvasLayer")
@@ -92,6 +108,7 @@ func hide_options():
 			# Eliminar la instancia de opciones
 			options_instance.queue_free()
 			options_instance = null
+			options_container = null
 			
 			# Marcar como no visible
 			is_options_visible = false
@@ -102,6 +119,7 @@ func hide_options():
 			# Si no se encuentra el CanvasLayer, eliminar la instancia directamente
 			options_instance.queue_free()
 			options_instance = null
+			options_container = null
 			is_options_visible = false
 			emit_signal("options_closed")
 	else:
@@ -112,17 +130,26 @@ func _on_options_back_pressed():
 	print("OptionsManager: Botón de volver presionado")
 	hide_options()
 
-# Función para verificar si el menú de opciones está visible
-func is_visible():
-	return is_options_visible
+# Función para manejar la señal de cierre del menú de opciones
+func _on_options_closed():
+	is_options_visible = false
+	
+	# Emitir señal que el menú de opciones se ha cerrado
+	emit_signal("options_closed")
+	
+	# Llamar al callback del nodo llamador si existe
+	if parent_node and is_instance_valid(parent_node) and parent_node.has_method("_on_options_closed"):
+		parent_node._on_options_closed()
 
 # Función para actualizar los textos del menú de opciones si está visible
 func update_texts_if_visible():
 	if is_options_visible and options_instance != null:
 		if options_instance.has_method("update_ui_texts"):
 			options_instance.update_ui_texts()
+		elif options_instance.has_method("update_texts"):
+			options_instance.update_texts()
 		else:
-			print("OptionsManager: ERROR - La instancia no tiene el método update_ui_texts") 
+			print("OptionsManager: ERROR - La instancia no tiene el método para actualizar textos")
 
 # Función para guardar una opción en GLOBAL
 func save_option(option_name: String, value):
@@ -173,5 +200,54 @@ func get_option(option_name: String, default_value = null):
 							return global.settings.puzzle.tween_duration
 	
 	# Si no se encuentra la opción, devolver el valor por defecto
-	return default_value 
+	return default_value
+
+# Función para añadir el botón de restaurar compras
+func _add_restore_purchases_button():
+	if options_container and not options_container.has_node("RestorePurchasesButton"):
+		# Obtener referencia al contenedor de botones
+		if options_container.has_node("VBoxContainer"):
+			var vbox = options_container.get_node("VBoxContainer")
+			
+			# Añadir un separador antes del botón de restaurar compras
+			var separator = HSeparator.new()
+			separator.custom_minimum_size.y = 20
+			vbox.add_child(separator)
+			
+			# Crear el botón de restaurar compras
+			var restore_button = Button.new()
+			restore_button.name = "RestorePurchasesButton"
+			restore_button.text = tr("common_purchase_restore")
+			restore_button.custom_minimum_size.y = 60
+			
+			# Conectar la señal de pulsación
+			restore_button.connect("pressed", Callable(self, "restore_purchases"))
+			
+			# Añadir el botón al contenedor
+			vbox.add_child(restore_button)
+			
+			print("OptionsManager: Botón de restaurar compras añadido")
+		else:
+			print("OptionsManager: No se encontró el contenedor VBoxContainer")
+
+# Función para restaurar compras
+func restore_purchases():
+	if has_node("/root/PurchaseManager"):
+		var purchase_manager = get_node("/root/PurchaseManager")
+		purchase_manager.restore_purchases()
+		
+		# Mostrar un mensaje temporal de que las compras se están restaurando
+		if options_container and options_container.has_node("VBoxContainer/RestorePurchasesButton"):
+			var restore_button = options_container.get_node("VBoxContainer/RestorePurchasesButton")
+			var original_text = restore_button.text
+			restore_button.text = tr("purchase_pending")
+			restore_button.disabled = true
+			
+			# Esperar un poco y restaurar el texto original
+			await get_tree().create_timer(2.0).timeout
+			
+			restore_button.text = original_text
+			restore_button.disabled = false
+	else:
+		print("OptionsManager: No se pudo encontrar el PurchaseManager para restaurar compras")
 			

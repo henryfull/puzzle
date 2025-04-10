@@ -651,3 +651,45 @@ func get_achievements_unlocked_this_session() -> Array:
 # Limpia la lista de logros desbloqueados en esta sesión
 func clear_achievements_unlocked_this_session() -> void:
 	achievements_unlocked_this_session.clear()
+
+# Función para aplicar datos de logros desde la nube
+func apply_cloud_data(cloud_achievements_data: Dictionary):
+	if cloud_achievements_data.is_empty():
+		print("AchievementsManager: No hay datos de logros en la nube para aplicar")
+		return
+	
+	var updated = false
+	
+	# Iterar sobre los logros de la nube
+	for achievement_id in cloud_achievements_data:
+		if achievements.has(achievement_id):
+			var cloud_achievement = cloud_achievements_data[achievement_id]
+			var local_achievement = achievements[achievement_id]
+			
+			# Si el logro está desbloqueado en la nube pero no localmente
+			if cloud_achievement.has("unlocked") and cloud_achievement.unlocked == true and not local_achievement.unlocked:
+				local_achievement.unlocked = true
+				local_achievement.progress = local_achievement.max_progress
+				updated = true
+				print("AchievementsManager: Logro '", local_achievement.name, "' desbloqueado desde la nube")
+			
+			# Si el progreso en la nube es mayor que el local
+			elif cloud_achievement.has("progress") and cloud_achievement.progress > local_achievement.progress and not local_achievement.unlocked:
+				local_achievement.progress = cloud_achievement.progress
+				
+				# Verificar si con este nuevo progreso se desbloquea el logro
+				if local_achievement.progress >= local_achievement.max_progress:
+					local_achievement.unlocked = true
+					local_achievement.progress = local_achievement.max_progress
+					print("AchievementsManager: Logro '", local_achievement.name, "' desbloqueado por progreso desde la nube")
+				else:
+					print("AchievementsManager: Progreso de logro '", local_achievement.name, "' actualizado desde la nube")
+				
+				updated = true
+	
+	# Guardar cambios si se hicieron actualizaciones
+	if updated:
+		save_achievements_data()
+		print("AchievementsManager: Datos de logros de la nube aplicados correctamente")
+	else:
+		print("AchievementsManager: No hubo cambios en los logros desde la nube")

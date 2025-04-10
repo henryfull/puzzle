@@ -4,6 +4,7 @@ var btn_play: Button
 var btn_options : Button
 var btn_stats : Button
 var btn_achievements : Button
+var btn_account: Button
 var btn_exit : Button
 var label_version: Label
 
@@ -13,6 +14,7 @@ func _ready():
 	btn_play = $CanvasLayer/MarginContainer/VBoxContainer/BTN_play
 	btn_stats = $CanvasLayer/MarginContainer/VBoxContainer/BTN_stats
 	btn_achievements = $CanvasLayer/MarginContainer/VBoxContainer/BTN_achievements
+	btn_account = $CanvasLayer/MarginContainer/VBoxContainer/BTN_account
 	btn_exit = $CanvasLayer/MarginContainer/VBoxContainer/BTN_exit
 	label_version = $CanvasLayer/LabelVersion
 	
@@ -46,6 +48,7 @@ func update_ui_texts():
 	btn_play.text = tr("common_play")
 	btn_stats.text = tr("common_stats")
 	btn_achievements.text = tr("common_achievements")
+	btn_account.text = tr("common_account")
 	btn_exit.text = tr("common_exit")
 	print("MainMenu: Textos actualizados con idioma: ", TranslationServer.get_locale())
 
@@ -60,7 +63,7 @@ func _on_language_changed(_locale_code):
 
 func _on_PlayButton_pressed():
 	# Si el menú de opciones está visible, ocultarlo primero
-	if has_node("/root/OptionsManager") and get_node("/root/OptionsManager").is_visible():
+	if has_node("/root/OptionsManager") and get_node("/root/OptionsManager").is_options_visible:
 		get_node("/root/OptionsManager").hide_options()
 		await get_tree().create_timer(0.3).timeout  # Esperar a que termine la animación
 	
@@ -87,3 +90,6 @@ func _on_btn_exit_pressed() -> void:
 
 func _on_StatsButton_pressed():
 	get_tree().change_scene_to_file("res://Scenes/StatsScreen.tscn")
+
+func _on_AccountButton_pressed():
+	get_tree().change_scene_to_file("res://Scenes/LoginScreen.tscn")

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>523152408003-k5vrf50f4iqa7jc2p8bc3ua939rn53i6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.523152408003-k5vrf50f4iqa7jc2p8bc3ua939rn53i6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCAhP6Nh1NYoDIVFz_3eDgPAcLTQ_hfmVM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>523152408003</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.puzzle.testios</string>
+	<key>PROJECT_ID</key>
+	<string>tikitiki-puzzle</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tikitiki-puzzle.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:523152408003:ios:c71df548cdf93258781176</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.523152408003-k5vrf50f4iqa7jc2p8bc3ua939rn53i6</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

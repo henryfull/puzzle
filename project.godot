@@ -10,14 +10,14 @@ config_version=5
 
 [application]
 
-config/name="puzzle tiki tiki"
-config/version="0.68.1"
-run/main_scene="uid://dh7t7utu076oi"
+config/name="Puzzle"
+config/version="0.1.3"
+run/main_scene="res://Scenes/LoginScreen.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
-boot_splash/image="uid://ctfuu506avefk"
-config/icon="uid://7chqk0fghn6n"
-boot_splash/minimum_display_time=5
+boot_splash/show_image=false
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+config/icon="res://icon.svg"
 
 [audio]
 
@@ -28,13 +28,15 @@ buses/General=0.0
 [autoload]
 
 GLOBAL="*res://Scripts/Autoload/global.gd"
-TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
 ThemeManager="*res://Scripts/Autoload/ThemeManager.gd"
-ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
-OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 AudioManager="*res://Scripts/Autoload/AudioManager.gd"
+ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
-PackPurchaseManager="*res://Scripts/PackPurchaseManager.gd"
+OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
+TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
+AuthManager="*res://Scripts/Autoload/AuthManager.gd"
+CloudSyncManager="*res://Scripts/Autoload/CloudSyncManager.gd"
+PurchaseManager="*res://Scripts/Autoload/PurchaseManager.gd"
 
 [debug]
 
@@ -42,11 +44,13 @@ file_logging/enable_file_logging=true
 
 [display]
 
-window/size/viewport_width=720
-window/size/viewport_height=1280
-window/stretch/mode="viewport"
+window/size/viewport_width=1080
+window/size/viewport_height=1920
+window/size/window_width_override=540
+window/size/window_height_override=960
+window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-window/handheld/orientation=5
+window/handheld/orientation=1
 
 [editor]
 
@@ -69,13 +73,14 @@ pointing/emulate_touch_from_mouse=true
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://data/localization/translation.csv", "res://data/localization/translation.ca.translation", "res://data/localization/translation.en.translation", "res://data/localization/translation.es.translation")
+locale/translations=PackedStringArray("res://data/localization/translation.en.translation", "res://data/localization/translation.es.translation")
 locale/translations_pot_files=PackedStringArray("res://data/localization/translations.csv")
 locale/translation_add_builtin_strings_to_pot=true
 
 [rendering]
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
-anti_aliasing/quality/msaa_2d=2
+anti_aliasing/quality/msaa_2d=3
 environment/defaults/default_clear_color=Color(0.301961, 0.301961, 0.301961, 1)

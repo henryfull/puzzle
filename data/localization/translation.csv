@@ -95,27 +95,27 @@ scene_character_defeats;Derrotas;Defeats;Derrotes
 scene_character_ties;Empates;Ties;Empats
 scene_character_speciality;Especialidad;Speciality;Especilitat
 ;;;
-fruit_1;Sandia;Watermelon;Sandia
-fruit_2;Naranja;Orange;Naranja
-fruit_3;Pera;Pear;Pera
-fruit_4;Manzana;Apple;Manzana
-fruit_5;Uva;Grape;Uva
-fruit_6;Fresa;Strawberry;Fresa
-fruit_7;Cereza;Cherry;Cereza
-fruit_8;Limón;Lemon;Limón
-fruit_9;Manzana;Apple;Manzana
+fruit_1;Plátano;Banana;Plàtan
+fruit_2;Naranja;Orange;Taronja
+fruit_3;Fresa;Strawberry;Maduixa
+fruit_4;Manzana;Apple;Poma
+fruit_5;Pera;Pear;Pera
+fruit_6;Uva;Grape;Raïm
+fruit_7;Piña;Pineapple;Pinya
+fruit_8;Sandía;Watermelon;Síndria
+fruit_9;Manzana;Apple;Poma
 fruit_10;Granada;Pomegranate;Granada
 ;;;
-fruit_1_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_2_description;Es una fruta amarilla, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a yellow, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita groga, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_3_description;Es una fruta verde, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a green, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita verda, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_4_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_5_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_6_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_7_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_8_description;Es una fruta amarilla, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a yellow, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita groga, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_9_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
-fruit_10_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté moltes vitamines i minerals. Per dins hi ha plena de llavors
+fruit_1_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_2_description;Es una fruta amarilla, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a yellow, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita groga, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_3_description;Es una fruta verde, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a green, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita verda, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_4_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_5_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_6_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_7_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_8_description;Es una fruta amarilla, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a yellow, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita groga, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_9_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
+fruit_10_description;Es una fruta roja, suave y que contiene mucha agua, ademas de que es una fruta que se puede comer cruda o cocida y contiene muchas vitaminas y minerales. Por dentro esta llena de semillas;This is a red, soft fruit that contains a lot of water, and it is a fruit that can be eaten raw or cooked and contains many vitamins and minerals. Inside it is full of seeds;Aquesta és una fruita vermella, suau i que conté molta aigua, i és una fruita que es pot menjar crua o cuita i conté muchas vitamines i minerals. Per dins hi ha plena de llavors
 ;;;
 number_zero;Cero;Zero;Cero
 number_one;Uno;One;Un
@@ -231,6 +231,47 @@ farm_animal17;Perro;Dog;Cà
 farm_animal18;Conejo;Rabbit;Conejo
 farm_animal19;Burro;Donkey;Burro
 farm_animal20;Caballo;Horse;Cavall
+common_achievements;Logros;Achievements;Assoliments
+common_stats;Estadísticas;Statistics;Estadístiques
+common_play;Jugar;Play;Jugar
+common_continue;Continuar;Continue;Continuar
+common_exit;Salir;Exit;Sortir
+common_back;Volver;Back;Tornar
+common_next;Siguiente;Next;Següent
+common_ok;Aceptar;OK;Acceptar
+common_cancel;Cancelar;Cancel;Cancel·lar
+common_save;Guardar;Save;Desar
+common_delete;Eliminar;Delete;Eliminar
+common_account;Mi Cuenta;My Account;El Meu Compte
+common_login;Iniciar Sesión;Login;Iniciar Sessió
+common_logout;Cerrar Sesión;Logout;Tancar Sessió
+common_sync;Sincronizar;Sync;Sincronitzar
+login_title;Mi Cuenta;My Account;El Meu Compte
+login_description;Vincula tu cuenta para guardar tu progreso en la nube y jugar en múltiples dispositivos.;Link your account to save your progress in the cloud and play on multiple devices.;Vincula el teu compte per desar el teu progrés al núvol i jugar en múltiples dispositius.
+login_google;Iniciar Sesión con Google;Sign in with Google;Iniciar Sessió amb Google
+login_apple;Iniciar Sesión con Apple;Sign in with Apple;Iniciar Sessió amb Apple
+login_continue_offline;Continuar sin Iniciar Sesión;Continue without Signing In;Continuar sense Iniciar Sessió
+login_loading;Conectando...;Connecting...;Connectant...
+login_error_title;Error de Conexión;Connection Error;Error de Connexió
+login_error_message;No se pudo establecer conexión con el servidor. Por favor, intenta nuevamente más tarde.;Could not establish a connection to the server. Please try again later.;No s'ha pogut establir connexió amb el servidor. Siusplau, torna-ho a provar més tard.
+login_sync_button;Sincronizar Ahora;Sync Now;Sincronitzar Ara
+login_continue_button;Continuar;Continue;Continuar
+login_cancel_button;Cancelar;Cancel;Cancel·lar
+login_understood_button;Entendido;Understood;Entès
+sync_error_title;Error de Sincronización;Sync Error;Error de Sincronització
+sync_error_message;No se pudieron sincronizar los datos: ;Could not sync data: ;No s'han pogut sincronitzar les dades:
+sync_success_message;Sincronización completada;Sync Complete;Sincronització Completada
+common_purchase;Comprar;Purchase;Comprar
+common_purchased;Comprado;Purchased;Comprat
+common_purchase_restore;Restaurar Compras;Restore Purchases;Restaurar Compres
+purchase_completed;Compra completada;Purchase completed;Compra completada
+purchase_failed;Compra fallida;Purchase failed;Compra fallida
+purchase_canceled;Compra cancelada;Purchase canceled;Compra cancel·lada
+purchase_pending;Procesando compra...;Processing purchase...;Processant compra...
+purchase_confirmation;¿Estás seguro de que quieres comprar este pack?;Are you sure you want to purchase this pack?;Estàs segur que vols comprar aquest pack?
+purchase_restored;Compras restauradas;Purchases restored;Compres restaurades
+purchase_restore_failed;Error al restaurar compras;Failed to restore purchases;Error en restaurar compres
+purchase_pack_info;Desbloquea este pack para acceder a todos sus puzles;Unlock this pack to access all its puzzles;Desbloqueja aquest pack per accedir a tots els seus puzles
 
 
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dh7t7utu076oi"]
 
 [ext_resource type="Script" uid="uid://cct0rg0djuimx" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
-[ext_resource type="Texture2D" uid="uid://bcfitytydoo36" path="res://Assets/Images/GUID/backgrounds/bg_menu.jpg" id="2_853f1"]
+[ext_resource type="Texture2D" uid="uid://cp8optnas0lp8" path="res://Assets/Images/GUID/backgrounds/bg_menu_expand.jpg" id="2_8saeu"]
 [ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="3_8saeu"]
 
 [node name="MainMenu" type="Node2D"]
@@ -23,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_853f1")
+texture = ExtResource("2_8saeu")
 expand_mode = 1
 stretch_mode = 6
 
@@ -70,6 +70,13 @@ theme_type_variation = &"ButtonRed"
 text = "Play"
 language = "auto"
 
+[node name="BTN_account" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme = ExtResource("3_8saeu")
+theme_type_variation = &"ButtonYellow"
+text = "Mi Cuenta"
+
 [node name="BTN_achievements" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
@@ -96,6 +103,7 @@ theme_type_variation = &"ButtonYellow"
 text = "Salir"
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_account" to="." method="_on_AccountButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_achievements" to="." method="_on_AchievementsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_stats" to="." method="_on_StatsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]

@@ -551,4 +551,65 @@ func get_player_stats() -> Dictionary:
 		if progress_data.packs[pack_id].completed:
 			player_stats.packs_completed += 1
 	
-	return player_stats 
+	return player_stats
+
+func apply_cloud_data(cloud_progress_data: Dictionary):
+	if cloud_progress_data.is_empty():
+		print("ProgressManager: No hay datos de progreso en la nube para aplicar")
+		return
+	
+	# Hacer una copia del progreso actual antes de modificarlo
+	var local_backup = progress_data.duplicate(true)
+	
+	# Determinar qué datos sobrescribir basándonos en fechas de modificación
+	# o algún otro criterio específico de tu juego
+	
+	# Para este ejemplo, simplemente fusionamos los datos de forma selectiva
+	# dando prioridad a los datos más recientes
+	
+	# Combinar datos de progreso por packs
+	if cloud_progress_data.has("packs"):
+		for pack_id in cloud_progress_data.packs:
+			# Si el pack no existe en local, lo añadimos completo
+			if not progress_data.packs.has(pack_id):
+				progress_data.packs[pack_id] = cloud_progress_data.packs[pack_id].duplicate(true)
+				continue
+			
+			# Si el pack existe, combinamos los datos
+			var cloud_pack = cloud_progress_data.packs[pack_id]
+			
+			# Combinar puzzles completados
+			if cloud_pack.has("puzzles"):
+				for puzzle_id in cloud_pack.puzzles:
+					# Si el puzzle no existe en local o tiene datos más recientes en la nube
+					if not progress_data.packs[pack_id].puzzles.has(puzzle_id) or \
+					   (cloud_pack.puzzles[puzzle_id].has("last_modified") and \
+					    progress_data.packs[pack_id].puzzles[puzzle_id].has("last_modified") and \
+					    cloud_pack.puzzles[puzzle_id].last_modified > progress_data.packs[pack_id].puzzles[puzzle_id].last_modified):
+						progress_data.packs[pack_id].puzzles[puzzle_id] = cloud_pack.puzzles[puzzle_id].duplicate(true)
+	
+	# Combinar estadísticas del jugador
+	if cloud_progress_data.has("player_stats"):
+		# Solo actualizamos las estadísticas si son más recientes
+		if not progress_data.has("player_stats") or \
+		   (cloud_progress_data.player_stats.has("last_updated") and \
+		    progress_data.player_stats.has("last_updated") and \
+		    cloud_progress_data.player_stats.last_updated > progress_data.player_stats.last_updated):
+			progress_data.player_stats = cloud_progress_data.player_stats.duplicate(true)
+	
+	# Combinar otras secciones de datos según sea necesario
+	
+	# Guardar los datos fusionados
+	save_progress_data()
+	
+	print("ProgressManager: Datos de progreso de la nube aplicados correctamente")
+
+# Obtener todos los datos de progreso para sincronización
+func get_progress_data() -> Dictionary:
+	# Añadir marca de tiempo a los datos antes de enviarlos
+	var data_to_sync = progress_data.duplicate(true)
+	
+	# Agregar timestamp global
+	data_to_sync["last_sync"] = Time.get_unix_time_from_system()
+	
+	return data_to_sync 

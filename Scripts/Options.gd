@@ -1,5 +1,8 @@
 extends Node2D
 
+# Señal que se emite cuando el menú de opciones se cierra
+signal options_closed
+
 # Variable para detectar si estamos en un dispositivo móvil
 var is_mobile = false
 var labelGeneral: Label
@@ -45,6 +48,13 @@ func _ready():
 	
 	buttonClose = %ButtonClose
 	buttonRestore = %RestoreButton
+	
+	if buttonClose:
+		buttonClose.connect("pressed", Callable(self, "_on_button_close_pressed"))
+	
+	if buttonRestore:
+		buttonRestore.connect("pressed", Callable(self, "_on_restore_button_pressed"))
+	
 	sliderVolumeGeneral = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_General
 	sliderVolumeMusic = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_Musica
 	sliderVolumeSFX = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_VFX
@@ -53,33 +63,38 @@ func _ready():
 	checkTweenEffect = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/CheckBox_Tween_Effect
 	sliderTweenDuration = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Tween_Duration
 	
+	if checkTweenEffect:
+		checkTweenEffect.connect("toggled", Callable(self, "_on_tween_effect_toggled"))
+	
+	if sliderPanSensitivity:
+		if not sliderPanSensitivity.is_connected("value_changed", Callable(self, "_on_pan_sensitivity_changed")):
+			sliderPanSensitivity.connect("value_changed", Callable(self, "_on_pan_sensitivity_changed"))
+	
+	if sliderTweenDuration:
+		if not sliderTweenDuration.is_connected("value_changed", Callable(self, "_on_tween_duration_changed")):
+			sliderTweenDuration.connect("value_changed", Callable(self, "_on_tween_duration_changed"))
+	
 	selectLanguage = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/LangSelector
 	selectResolution = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/ResolutionButton
 	
 	# Detectar si estamos en un dispositivo móvil
 	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
-	# Verificar la estructura del nodo CanvasLayer
-	if has_node("CanvasLayer"):
-		print("Options: CanvasLayer encontrado")
-		var canvas_layer = get_node("CanvasLayer")
-		print("Options: CanvasLayer tiene ", canvas_layer.get_child_count(), " hijos")
-	else:
-		print("Options: ERROR - CanvasLayer no encontrado")
 	
 	# Cargar valores actuales
 	load_current_values()
 	
-	# Adaptar la UI para dispositivos móviles
-	adapt_ui_for_device()
-	
 	# Actualizar textos de la UI
-	update_ui_texts()
+	update_texts()
 
 	print("Options: Inicialización completada")
 
-# Función para actualizar los textos de la UI según el idioma actual
-func update_ui_texts():
+# Método para cerrar las opciones (usado por OptionsManager)
+func close_options():
+	emit_signal("options_closed")
+	queue_free()
 
+# Función para actualizar los textos de la UI según el idioma actual
+func update_texts():
 	labelResolution.text = tr("common_resolution")
 	labelLanguage.text = tr("common_language")
 	labelGeneral.text = tr("common_general")
@@ -95,7 +110,7 @@ func update_ui_texts():
 		labelTweenDuration.text = tr("options_tween_duration")
 	
 	buttonClose.text = tr("common_back")
-	buttonRestore.text = tr("options_restore_purchases")
+	buttonRestore.text = tr("common_purchase_restore")
 	
 	print("Options: Textos actualizados con idioma: ", TranslationServer.get_locale())
 

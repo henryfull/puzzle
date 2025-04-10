@@ -3,7 +3,7 @@ extends Node2D
 # Acceso al singleton ProgressManager
 @onready var progress_manager = get_node("/root/ProgressManager")
 # Referencia al administrador de compras (singleton)
-@onready var purchase_manager = get_node("/root/PackPurchaseManager")
+@onready var purchase_manager = get_node("/root/PurchaseManager")
 
 # Variables para controlar el desplazamiento táctil
 var is_scrolling = false
@@ -21,7 +21,7 @@ func _ready():
 	print("PackSelection: inicialización de los packs disponibles")
 	
 	# Conectar señales del administrador de compras
-	purchase_manager.connect("purchase_confirmed", Callable(self, "_on_purchase_confirmed"))
+	purchase_manager.connect("purchase_completed", Callable(self, "_on_purchase_confirmed"))
 	purchase_manager.connect("purchase_canceled", Callable(self, "_on_purchase_canceled"))
 	
 	scroll_container = $CanvasLayer/ContainerPacks/ScrollContainer
@@ -116,13 +116,13 @@ func _on_PackPurchaseRequested(pack):
 	purchase_manager.request_purchase(pack)
 
 # Función llamada cuando se confirma una compra
-func _on_purchase_confirmed(pack):
-	print("Compra confirmada para pack: " + pack.name + ". Actualizando interfaz...")
+func _on_purchase_confirmed(pack_id):
+	print("Compra confirmada para pack ID: " + pack_id + ". Actualizando interfaz...")
 	# Esperar un momento antes de recargar los packs para que se vean las animaciones
 	await get_tree().create_timer(1.5).timeout
 	# Recargar los packs para actualizar la interfaz
 	load_packs()
 
 # Función llamada cuando se cancela una compra
-func _on_purchase_canceled():
+func _on_purchase_canceled(_pack_id):
 	print("Compra cancelada por el usuario")
