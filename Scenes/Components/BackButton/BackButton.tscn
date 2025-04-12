@@ -1,19 +1,23 @@
-[gd_scene load_steps=6 format=3 uid="uid://bdvvvhltoedcq"]
+[gd_scene load_steps=7 format=3 uid="uid://bdvvvhltoedcq"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="1_1e6wr"]
 [ext_resource type="Script" uid="uid://72qflfw51brl" path="res://Scenes/Components/BackButton/BackButton.gd" id="2_puo31"]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1e6wr"]
+texture = ExtResource("1_1e6wr")
+region_rect = Rect2(2106, 144, 102, 102)
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gj1nx"]
 texture = ExtResource("1_1e6wr")
-region_rect = Rect2(2352, 150, 110, 90)
+region_rect = Rect2(2231, 144, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ot00g"]
 texture = ExtResource("1_1e6wr")
-region_rect = Rect2(2228, 150, 108, 90)
+region_rect = Rect2(2106, 144, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7pjev"]
 texture = ExtResource("1_1e6wr")
-region_rect = Rect2(2100, 148, 114, 94)
+region_rect = Rect2(2106, 144, 102, 102)
 
 [node name="BackButton" type="Button"]
 anchors_preset = 2
@@ -21,9 +25,10 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 100.0
 offset_top = -180.0
-offset_right = 260.0
+offset_right = 220.0
 offset_bottom = -60.0
 grow_vertical = 0
+theme_override_styles/focus = SubResource("StyleBoxTexture_1e6wr")
 theme_override_styles/hover = SubResource("StyleBoxTexture_gj1nx")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_ot00g")
 theme_override_styles/normal = SubResource("StyleBoxTexture_7pjev")

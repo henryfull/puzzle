@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://dh8d4yyjtjjsj"]
+[gd_scene load_steps=32 format=3 uid="uid://dh8d4yyjtjjsj"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
@@ -57,17 +57,9 @@ region_rect = Rect2(2356, 497, 97, 80)
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2230, 366, 105, 88)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v4hqp"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(2355, 366, 105, 88)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2nxy7"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(2355, 366, 105, 88)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2g7li"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2355, 366, 105, 88)
+region_rect = Rect2(2234, 360, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gxtc4"]
 texture = ExtResource("4_58pa3")
@@ -75,27 +67,27 @@ region_rect = Rect2(2355, 366, 105, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_icw6g"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2105, 366, 105, 88)
+region_rect = Rect2(2106, 360, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tu11h"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1855, 43, 105, 89)
+region_rect = Rect2(1801, 37, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7aw43"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1980, 43, 105, 89)
+region_rect = Rect2(1925, 37, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5jwhx"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1980, 43, 105, 89)
+region_rect = Rect2(1925, 37, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pqqng"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1730, 43, 105, 89)
+region_rect = Rect2(1801, 37, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sr37j"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(1730, 43, 105, 89)
+region_rect = Rect2(1801, 37, 102, 102)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f2h16"]
 atlas = ExtResource("4_58pa3")
@@ -217,11 +209,9 @@ anchor_right = 1.0
 offset_left = -150.0
 offset_top = 104.0
 offset_right = -50.0
-offset_bottom = 174.0
+offset_bottom = 204.0
 grow_horizontal = 0
 theme_override_styles/focus = SubResource("StyleBoxTexture_hq32h")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_v4hqp")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_2nxy7")
 theme_override_styles/hover = SubResource("StyleBoxTexture_2g7li")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_gxtc4")
 theme_override_styles/normal = SubResource("StyleBoxTexture_icw6g")
@@ -231,7 +221,7 @@ expand_icon = true
 [node name="BackButton" parent="UILayer" instance=ExtResource("8_mupxo")]
 offset_left = 50.0
 offset_top = -130.0
-offset_right = 210.0
+offset_right = 170.0
 offset_bottom = -10.0
 scale = Vector2(0.8, 0.8)
 path = "res://Scenes/PuzzleSelection.tscn"
@@ -268,16 +258,18 @@ vertical_alignment = 1
 
 [node name="FlipButton" type="Button" parent="UILayer"]
 anchors_preset = -1
-anchor_left = 0.832
-anchor_top = 0.915
+anchor_left = 0.801
+anchor_top = 0.898
 anchor_right = 0.915
-anchor_bottom = 0.945
-offset_left = -22.04
-offset_top = -21.2001
-offset_right = 19.2
-offset_bottom = 21.3999
+anchor_bottom = 0.961
+offset_left = 0.280029
+offset_top = 0.559937
+offset_right = -1.79993
+offset_bottom = -0.0800781
 grow_horizontal = 0
 grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_styles/focus = SubResource("StyleBoxTexture_tu11h")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_7aw43")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5jwhx")

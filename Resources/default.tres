@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=49 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=60 format=3 uid="uid://dyqkx5or01raf"]
 
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="1_d4acn"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
@@ -7,54 +7,55 @@
 [ext_resource type="Texture2D" uid="uid://2v7k8ur8sbch" path="res://Assets/Images/GUID/circle_slider_disabled.png" id="4_d4acn"]
 [ext_resource type="Texture2D" uid="uid://c0ioy14250j4j" path="res://Assets/Images/GUID/circle_slider_highlight.png" id="5_d4acn"]
 [ext_resource type="FontFile" uid="uid://nsb7mxocp6o3" path="res://Assets/Fonts/Galano Grotesque Medium.otf" id="7_ht6ax"]
+[ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="8_kwhnq"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wbtt"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(368, 37, 318, 88)
+region_rect = Rect2(21, 37, 346, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dvb71"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(706, 37, 317, 88)
+region_rect = Rect2(383, 37, 347, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ut3e1"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(31, 37, 318, 88)
+region_rect = Rect2(21, 37, 346, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_epneu"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(368, 37, 318, 88)
+region_rect = Rect2(21, 37, 346, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r7fgh"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(364, 142, 326, 94)
+region_rect = Rect2(21, 145, 346, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m25v8"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(702, 142, 324, 94)
+region_rect = Rect2(383, 145, 347, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d4acn"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(28, 146, 324, 92)
+region_rect = Rect2(21, 145, 346, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_72ols"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(364, 142, 326, 94)
+region_rect = Rect2(21, 145, 346, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t3sfe"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(368, 252, 318, 88)
+region_rect = Rect2(21, 251, 346, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lw0x0"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(706, 252, 317, 88)
+region_rect = Rect2(383, 251, 347, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iong3"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(31, 250, 318, 88)
+region_rect = Rect2(21, 251, 346, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jjsnl"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(368, 252, 318, 88)
+region_rect = Rect2(21, 251, 346, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q7fk7"]
 texture = ExtResource("2_8wbtt")
@@ -105,6 +106,44 @@ texture_margin_top = 20.0
 texture_margin_right = 20.0
 texture_margin_bottom = 20.0
 region_rect = Rect2(382, 474, 100, 100)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_71gex"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 360, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2hadl"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1928, 360, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_edf7j"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 360, 102, 102)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kwhnq"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ngowj"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 37, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uo4bp"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1925, 37, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8l01e"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 37, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ql1t6"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 252, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yiobe"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1926, 252, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j01br"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 252, 102, 102)
 
 [sub_resource type="ImageTexture" id="ImageTexture_vq864"]
 
@@ -315,6 +354,19 @@ CheckBox/styles/hover_pressed = SubResource("StyleBoxTexture_yq2fi")
 CheckBox/styles/normal = SubResource("StyleBoxTexture_84jno")
 CheckBox/styles/pressed = SubResource("StyleBoxTexture_dgikm")
 CheckButton/styles/normal = SubResource("StyleBoxTexture_tmf1v")
+CircleButtonBlue/base_type = &"Button"
+CircleButtonBlue/styles/focus = SubResource("StyleBoxTexture_71gex")
+CircleButtonBlue/styles/hover = SubResource("StyleBoxTexture_2hadl")
+CircleButtonBlue/styles/normal = SubResource("StyleBoxTexture_edf7j")
+CircleButtonGreen/base_type = &"Button"
+CircleButtonGreen/styles/disabled = SubResource("StyleBoxEmpty_kwhnq")
+CircleButtonGreen/styles/focus = SubResource("StyleBoxTexture_ngowj")
+CircleButtonGreen/styles/hover = SubResource("StyleBoxTexture_uo4bp")
+CircleButtonGreen/styles/normal = SubResource("StyleBoxTexture_8l01e")
+CircleButtonYellow/base_type = &"Button"
+CircleButtonYellow/styles/focus = SubResource("StyleBoxTexture_ql1t6")
+CircleButtonYellow/styles/hover = SubResource("StyleBoxTexture_yiobe")
+CircleButtonYellow/styles/normal = SubResource("StyleBoxTexture_j01br")
 GridContainer/constants/h_separation = 10
 GridContainer/constants/v_separation = 10
 HBoxContainer/constants/separation = 20
@@ -353,4 +405,11 @@ OptionButton/styles/pressed = SubResource("StyleBoxTexture_parne")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_8wbtt")
 PanelInside/base_type = &"Panel"
 PanelInside/styles/panel = SubResource("StyleBoxFlat_epneu")
+Title/base_type = &"Label"
+Title/colors/font_color = Color(0.901987, 0.888092, 0.717527, 1)
+Title/colors/font_outline_color = Color(0.884299, 0.228934, 0.0956512, 1)
+Title/colors/font_shadow_color = Color(0, 0, 0, 1)
+Title/constants/line_spacing = 8
+Title/font_sizes/font_size = 42
+Title/fonts/font = ExtResource("8_kwhnq")
 VBoxContainer/constants/separation = 20

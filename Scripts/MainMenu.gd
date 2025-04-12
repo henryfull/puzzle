@@ -44,8 +44,8 @@ func update_version_label():
 func update_ui_texts():
 	btn_options.text = tr("common_options")
 	btn_play.text = tr("common_play")
-	btn_stats.text = tr("common_stats")
-	btn_achievements.text = tr("common_achievements")
+	#btn_stats.text = tr("common_stats")
+	#btn_achievements.text = tr("common_achievements")
 	btn_exit.text = tr("common_exit")
 	print("MainMenu: Textos actualizados con idioma: ", TranslationServer.get_locale())
 
