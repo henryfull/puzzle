@@ -24,6 +24,7 @@ z_index = 10
 clip_contents = true
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_default_cursor_shape = 13
 color = Color(0.219608, 0.4, 0.498039, 1)
 
 [node name="NumberLabel" type="Label" parent="."]

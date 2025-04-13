@@ -1,6 +1,5 @@
-[gd_resource type="Theme" load_steps=60 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=69 format=3 uid="uid://dyqkx5or01raf"]
 
-[ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="1_d4acn"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
 [ext_resource type="Texture2D" uid="uid://dm7j0qpidej4f" path="res://Assets/Images/GUID/circle_slider.svg" id="2_jca5l"]
 [ext_resource type="Texture2D" uid="uid://c1jd7rfsp0cgx" path="res://Assets/Images/GUID/circle_slider.png" id="3_d4acn"]
@@ -24,6 +23,22 @@ region_rect = Rect2(21, 37, 346, 91)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_epneu"]
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(21, 37, 346, 91)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1vfkc"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(21, 358, 346, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ayxdb"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(383, 358, 347, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_48job"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(21, 358, 346, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j5m7c"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(21, 358, 346, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r7fgh"]
 texture = ExtResource("2_8wbtt")
@@ -119,6 +134,10 @@ region_rect = Rect2(1928, 360, 102, 102)
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(1801, 360, 102, 102)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_op2to"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 360, 102, 102)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kwhnq"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ngowj"]
@@ -132,6 +151,26 @@ region_rect = Rect2(1925, 37, 102, 102)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8l01e"]
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(1801, 37, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8bygn"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 37, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pvq7r"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 144, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1hkqs"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1926, 144, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rgs6e"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 144, 102, 102)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_26d0h"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1801, 144, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ql1t6"]
 texture = ExtResource("2_8wbtt")
@@ -328,20 +367,27 @@ shadow_size = 5
 
 [resource]
 Button/colors/font_color = Color(1, 1, 1, 1)
-Button/font_sizes/font_size = 24
-Button/fonts/font = ExtResource("1_d4acn")
+Button/font_sizes/font_size = 42
+Button/fonts/font = ExtResource("8_kwhnq")
 Button/styles/disabled = null
 Button/styles/focus = SubResource("StyleBoxTexture_8wbtt")
 Button/styles/hover = SubResource("StyleBoxTexture_dvb71")
 Button/styles/normal = SubResource("StyleBoxTexture_ut3e1")
 Button/styles/pressed = SubResource("StyleBoxTexture_epneu")
-ButtonRed/base_type = &"Button"
+ButtonBlue/base_type = &"Button"
+ButtonBlue/font_sizes/font_size = 42
+ButtonBlue/fonts/font = ExtResource("8_kwhnq")
+ButtonBlue/styles/focus = SubResource("StyleBoxTexture_1vfkc")
+ButtonBlue/styles/hover = SubResource("StyleBoxTexture_ayxdb")
+ButtonBlue/styles/normal = SubResource("StyleBoxTexture_48job")
+ButtonBlue/styles/pressed = SubResource("StyleBoxTexture_j5m7c")
+ButtonRed/base_type = &"ButtonBlue"
 ButtonRed/colors/font_color = Color(1, 1, 1, 1)
 ButtonRed/styles/focus = SubResource("StyleBoxTexture_r7fgh")
 ButtonRed/styles/hover = SubResource("StyleBoxTexture_m25v8")
 ButtonRed/styles/normal = SubResource("StyleBoxTexture_d4acn")
 ButtonRed/styles/pressed = SubResource("StyleBoxTexture_72ols")
-ButtonYellow/base_type = &"Button"
+ButtonYellow/base_type = &"ButtonBlue"
 ButtonYellow/colors/font_color = Color(0.376649, 0.271958, 0.0689358, 1)
 ButtonYellow/styles/focus = SubResource("StyleBoxTexture_t3sfe")
 ButtonYellow/styles/hover = SubResource("StyleBoxTexture_lw0x0")
@@ -358,11 +404,18 @@ CircleButtonBlue/base_type = &"Button"
 CircleButtonBlue/styles/focus = SubResource("StyleBoxTexture_71gex")
 CircleButtonBlue/styles/hover = SubResource("StyleBoxTexture_2hadl")
 CircleButtonBlue/styles/normal = SubResource("StyleBoxTexture_edf7j")
+CircleButtonBlue/styles/pressed = SubResource("StyleBoxTexture_op2to")
 CircleButtonGreen/base_type = &"Button"
 CircleButtonGreen/styles/disabled = SubResource("StyleBoxEmpty_kwhnq")
 CircleButtonGreen/styles/focus = SubResource("StyleBoxTexture_ngowj")
 CircleButtonGreen/styles/hover = SubResource("StyleBoxTexture_uo4bp")
 CircleButtonGreen/styles/normal = SubResource("StyleBoxTexture_8l01e")
+CircleButtonGreen/styles/pressed = SubResource("StyleBoxTexture_8bygn")
+CircleButtonRed/base_type = &"Button"
+CircleButtonRed/styles/focus = SubResource("StyleBoxTexture_pvq7r")
+CircleButtonRed/styles/hover = SubResource("StyleBoxTexture_1hkqs")
+CircleButtonRed/styles/normal = SubResource("StyleBoxTexture_rgs6e")
+CircleButtonRed/styles/pressed = SubResource("StyleBoxTexture_26d0h")
 CircleButtonYellow/base_type = &"Button"
 CircleButtonYellow/styles/focus = SubResource("StyleBoxTexture_ql1t6")
 CircleButtonYellow/styles/hover = SubResource("StyleBoxTexture_yiobe")
@@ -406,10 +459,10 @@ PanelContainer/styles/panel = SubResource("StyleBoxFlat_8wbtt")
 PanelInside/base_type = &"Panel"
 PanelInside/styles/panel = SubResource("StyleBoxFlat_epneu")
 Title/base_type = &"Label"
-Title/colors/font_color = Color(0.901987, 0.888092, 0.717527, 1)
+Title/colors/font_color = Color(0.817999, 0.997152, 0.931849, 1)
 Title/colors/font_outline_color = Color(0.884299, 0.228934, 0.0956512, 1)
 Title/colors/font_shadow_color = Color(0, 0, 0, 1)
 Title/constants/line_spacing = 8
-Title/font_sizes/font_size = 42
+Title/font_sizes/font_size = 48
 Title/fonts/font = ExtResource("8_kwhnq")
 VBoxContainer/constants/separation = 20

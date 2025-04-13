@@ -137,3 +137,7 @@ func ensure_pack_selected():
 				print("PuzzleSelection: ERROR - No se pudo abrir el archivo JSON de packs")
 	else:
 		print("PuzzleSelection: Ya hay un pack seleccionado: ", GLOBAL.selected_pack.id)
+
+
+func _on_show_difficult() -> void:
+	$DifficultyPanel.get_child(0).visible = true

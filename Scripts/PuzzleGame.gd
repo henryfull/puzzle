@@ -21,6 +21,7 @@ var just_placed_piece: bool = false
 # Referencia al contenedor de piezas
 @export var pieces_container: Node2D
 @export var UILayer: CanvasLayer
+@export var movesLabel: Label
 
 # Variables para gestionar el doble toque
 var last_touch_time: float = 0.0
@@ -95,7 +96,11 @@ var victory_text_view: Control
 var victory_toggle_button: Button
 
 # Referencias a botones en la UI
-@onready var button_options: Button = $UILayer/OptionsButton
+@export var button_options: Button
+@export var flip_button: Button
+
+# Nueva variable para controlar el estado de las piezas
+var pieces_flipped: bool = false
 
 # Variables para registro de estadísticas
 var start_time: float = 0.0  # Tiempo de inicio en segundos
@@ -133,6 +138,20 @@ class Piece:
 # === FUNCIÓN _ready(): se llama al iniciar la escena ===
 #
 func _ready():
+	print("PuzzleGame: Iniciando juego...")
+	
+	# Asegurarnos que el panel de pausa esté oculto al inicio
+	if panelPaused:
+		panelPaused.visible = false
+	
+	# Inicializar el botón de flip
+	if flip_button:
+		flip_button.rotation_degrees = 0
+	
+	# Inicializar las etiquetas de mensaje (limpiarlas)
+	if success_message_label:
+		success_message_label.text = ""
+	
 	# Reiniciar el estado de completado
 	puzzle_completed = false
 	
@@ -141,9 +160,6 @@ func _ready():
 	
 	# Cargar preferencias del usuario
 	load_user_preferences()
-	
-	# Configurar el botón de opciones
-	create_options_button()
 	
 	# Conectar la señal "options_closed" del OptionsManager para reanudar el juego
 	if has_node("/root/OptionsManager"):
@@ -193,21 +209,7 @@ func _ready():
 	# Luego cargamos y creamos las piezas con la parte frontal normal
 	load_and_create_pieces(puzzle_back)
 	
-	# Configurar temporizador para verificación periódica de victoria (si existe en la escena)
-	if victory_timer:
-		victory_timer.wait_time = 5.0
-		victory_timer.connect("timeout", Callable(self, "check_victory_periodic"))
-		victory_timer.start()
-	else:
-		# Crear un temporizador si no existe en la escena
-		var timer = Timer.new()
-		timer.name = "VictoryTimer"
-		timer.wait_time = 5.0
-		timer.autostart = true
-		timer.one_shot = false
-		timer.connect("timeout", Callable(self, "check_victory_periodic"))
-		add_child(timer)
-		victory_timer = timer
+
 
 	# Iniciar el temporizador para medir el tiempo de juego
 	start_game_timer()
@@ -609,6 +611,7 @@ func place_piece(piece_obj: Piece):
 			if piece_obj.group.size() > 1:
 				# Si está en un grupo, mantener el comportamiento actual
 				# (no intercambiar, solo mover el grupo completo)
+				# audio_move.play()
 				show_error_message("No se puede intercambiar: la pieza está en un grupo")
 				return
 			
@@ -1171,7 +1174,7 @@ func place_group(piece: Piece):
 				
 				# Reproducir sonido
 				if audio_merge and not audio_merge.playing:
-					audio_merge.play()
+					audio_move.play()
 				
 				check_all_groups()
 				verify_all_pieces_in_grid()
@@ -1272,8 +1275,8 @@ func place_group(piece: Piece):
 						p.node.position = target_position
 				
 				# Reproducir sonido
-				if audio_merge and not audio_merge.playing:
-					audio_merge.play()
+				# if audio_merge and not audio_merge.playing:
+				# 	audio_merge.play()
 				
 				check_all_groups()
 				verify_all_pieces_in_grid()
@@ -1505,8 +1508,8 @@ func place_group(piece: Piece):
 						p.node.position = target_position
 				
 				# Reproducir sonido
-				if audio_merge and not audio_merge.playing:
-					audio_merge.play()
+				# if audio_merge and not audio_merge.playing:
+				# 	audio_merge.play()
 				
 				check_all_groups()
 				verify_all_pieces_in_grid()
@@ -1685,6 +1688,8 @@ func place_group(piece: Piece):
 					break
 			if merged:
 				break
+	if !merged:
+		audio_move.play()
 	
 	# Al final del place_group, verificar si se pueden formar más grupos
 	check_all_groups()
@@ -1790,33 +1795,6 @@ func check_victory_deferred():
 	else:
 		# Verificar también por posición visual (a veces el grid puede no estar actualizado)
 		check_victory_by_position()
-
-# Nueva función para verificación periódica de victoria
-func check_victory_periodic():
-	# Verificación rápida: si ya hubo una verificación reciente por una pieza colocada, saltamos esta verificación
-	if just_placed_piece:
-		return
-		
-	# Imprimir información de depuración solo si está activado el modo debug
-	if OS.is_debug_build():
-		print("Verificación periódica de victoria...")
-	
-	# Contar cuántas piezas están en su posición correcta
-	var pieces_in_place = 0
-	var total_pieces = pieces.size()
-	
-	for piece_obj in pieces:
-		if piece_obj.current_cell == piece_obj.original_pos:
-			pieces_in_place += 1
-	
-	# Solo si más del 95% de las piezas están en su lugar, usamos la verificación más intensiva
-	if pieces_in_place >= total_pieces * 0.95:
-		if OS.is_debug_build():
-			print("95% de piezas en su lugar, verificando con más detalle...")
-		check_victory()
-		return
-		
-	# No hacemos verificaciones visuales ni arreglos de grid aquí para ahorrar CPU
 
 # Nueva función para verificar victoria por posición visual
 func check_victory_by_position():
@@ -1989,6 +1967,12 @@ func on_flip_button_pressed() -> void:
 	# Variable para rastrear si encontramos una pieza seleccionada
 	var target_piece = null
 	
+	# Animar el botón de flip con una rotación de 360 grados
+	if flip_button:
+		var rotation_direction = 1 if not pieces_flipped else -1
+		var flip_button_tween = create_tween()
+		flip_button_tween.tween_property(flip_button, "rotation_degrees", flip_button.rotation_degrees + (180 * rotation_direction), 0.5)
+	
 	# Primero intentamos encontrar una pieza que esté siendo arrastrada
 	for piece_obj in pieces:
 		if piece_obj.dragging:
@@ -2013,6 +1997,9 @@ func on_flip_button_pressed() -> void:
 				
 				# Restaurar la escala
 				tween.parallel().tween_property(piece_obj.node, "scale", Vector2(1, 1), flip_speed).set_delay(flip_speed)
+		
+		# Actualizar el estado de las piezas
+		pieces_flipped = !pieces_flipped
 	else:
 		# Si hay una pieza seleccionada, voltear solo su grupo
 		var group_pieces = target_piece.group
@@ -2033,6 +2020,8 @@ func on_flip_button_pressed() -> void:
 				
 				# Restaurar la escala
 				tween.parallel().tween_property(piece_obj.node, "scale", Vector2(1, 1), flip_speed).set_delay(flip_speed)
+		
+		# No actualizamos el estado general ya que solo estamos volteando un grupo
 
 # Función para volver a la selección de puzzles
 func _on_PuzzleSelected():
@@ -2156,18 +2145,6 @@ func safe_change_scene(scene_path: String) -> void:
 	else:
 		push_error("No se pudo cambiar a la escena: " + scene_path)
 
-# Función llamada cuando se mueve una pieza
-func _on_piece_moved(piece, old_cell, new_cell):
-	total_moves += 1
-	
-	# Ya no reproducimos el sonido de movimiento aquí
-	# audio_move.play()
-	
-	# Verificar si el puzzle está completo
-	if check_victory():
-		# Esperar un momento antes de mostrar la pantalla de victoria
-		await get_tree().create_timer(0.5).timeout
-		_on_puzzle_completed()
 
 # Función llamada cuando se completa el puzzle
 func _on_puzzle_completed():
@@ -2353,12 +2330,9 @@ func show_success_message(message: String, duration: float = 1.5):
 
 # Función para mostrar el menú de opciones
 func show_options_menu():
-	if has_node("/root/OptionsManager"):
-		# Pausar el juego cuando se abre el menú de opciones
-		if !is_paused:
-			pause_game()
-		is_options_menu_open = true
-		get_node("/root/OptionsManager").show_options(self)
+	if !is_paused:
+		pause_game()
+
 
 
 func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> void:
@@ -2432,11 +2406,13 @@ func process_piece_release() -> void:
 		
 		# Colocar el grupo - aquí ocurre la magia
 		place_group(group_leader)
-		total_moves += 1
+
 		
 		# Reproducir sonido de movimiento solo si la posición cambió
 		if old_position != group_leader.current_cell:
-			AudioManager.play_sfx("res://Assets/Sounds/SFX/plop.mp3")
+			# AudioManager.play_sfx("res://Assets/Sounds/SFX/plop.mp3")
+			total_moves += 1
+			movesLabel.text = str(total_moves)
 		
 		# Verificar y corregir el estado del grid después de cada movimiento
 		verify_and_fix_grid()
@@ -2630,20 +2606,6 @@ func update_piece_position_state(piece_obj: Piece):
 func play_flip_sound():
 	if audio_flip and not audio_flip.playing:
 		audio_flip.play()
-
-# Función para crear un botón de opciones que muestre un panel de ajustes
-func create_options_button():
-	# Si el botón de opciones existe en la escena
-	if button_options:
-		# Actualizar el botón de opciones
-		button_options.tooltip_text = tr("common_options")
-		
-		# Conectar la señal pressed
-		if not button_options.is_connected("pressed", Callable(self, "show_options_panel")):
-			button_options.connect("pressed", Callable(self, "show_options_panel"))
-	else:
-		# Si no existe, podríamos crearlo dinámicamente (pero eso es lo que queremos evitar)
-		push_warning("El botón de opciones no existe en la escena. Debería añadirse manualmente.")
 
 # Nueva función para encontrar un espacio coherente para un grupo
 func find_space_for_group(group, avoid_cells = []):
@@ -2849,7 +2811,6 @@ func reorganize_pieces():
 	
 	# 8. Si se movieron piezas, reproducir el sonido y mostrar mensaje
 	if pieces_moved > 0:
-		audio_merge.play()
 		if groups_moved > 0:
 			show_success_message("¡" + str(groups_moved) + " grupos y " + str(pieces_moved - groups_moved) + " piezas reorganizadas!")
 		else:
@@ -3036,22 +2997,7 @@ func _on_options_closed():
 	if is_paused and !puzzle_completed:
 		resume_game()
 
-# Método para procesar entrada de usuario
-func _input(event):
-	# Si el juego está pausado y el usuario interactúa, considerar reanudar
-	if is_paused and !is_options_menu_open and !puzzle_completed:
-		# Verificar si es un evento de interacción relevante (click, toque, tecla)
-		if (event is InputEventMouseButton and event.pressed) or \
-		   (event is InputEventScreenTouch and event.pressed) or \
-		   (event is InputEventKey and event.pressed):
-			# Reanudar el juego si está pausado por pérdida de foco
-			if !get_viewport().has_focus():
-				# En algunas plataformas, la interacción puede restaurar el foco automáticamente
-				print("PuzzleGame: Interacción detectada mientras juego pausado, verificando foco")
-			elif get_viewport().has_focus():
-				# Si ya tiene foco pero sigue pausado, reanudar
-				resume_game()
-				print("PuzzleGame: Juego reanudado por interacción del usuario")
+
 
 # Función para contar los grupos únicos y actualizar ungrouped_pieces
 func count_unique_groups():
@@ -3077,3 +3023,12 @@ func count_unique_groups():
 		call_deferred("_on_puzzle_completed")
 	
 	return unique_groups.size()
+
+
+func _on_button_exit_pressed() -> void:
+	resume_game()
+	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+
+
+func _on_button_repeat_pressed() -> void:
+	_on_difficulty_changed(GLOBAL.columns, GLOBAL.rows)

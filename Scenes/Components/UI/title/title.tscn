@@ -40,6 +40,7 @@ offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"Title"
+text = "Hola"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

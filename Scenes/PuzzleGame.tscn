@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dh8d4yyjtjjsj"]
+[gd_scene load_steps=29 format=3 uid="uid://dh8d4yyjtjjsj"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
@@ -6,8 +6,9 @@
 [ext_resource type="AudioStream" uid="uid://cbd7s204ssyyo" path="res://Assets/Sounds/SFX/bubble.wav" id="3_iw5d8"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_58pa3"]
 [ext_resource type="AudioStream" uid="uid://doif0cexxpv6t" path="res://Assets/Sounds/SFX/flip.wav" id="4_qnp3e"]
+[ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="5_u0au7"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="5_uvymq"]
-[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="8_mupxo"]
+[ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="9_u0au7"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7gbeo"]
 texture = ExtResource("4_58pa3")
@@ -53,56 +54,50 @@ region_rect = Rect2(2233, 497, 97, 80)
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2356, 497, 97, 80)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u0au7"]
+bg_color = Color(1, 1, 1, 0.380392)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+expand_margin_left = 23.0
+expand_margin_top = 10.0
+expand_margin_right = 17.0
+expand_margin_bottom = 10.0
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hq32h"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2230, 366, 105, 88)
+region_rect = Rect2(1600, 480, 101, 101)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2g7li"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2234, 360, 102, 102)
+region_rect = Rect2(1600, 480, 101, 101)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gxtc4"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2355, 366, 105, 88)
+region_rect = Rect2(1600, 480, 101, 101)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_icw6g"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2106, 360, 102, 102)
+region_rect = Rect2(1600, 480, 101, 101)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tu11h"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(1801, 37, 102, 102)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7aw43"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(1925, 37, 102, 102)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5jwhx"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(1925, 37, 102, 102)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pqqng"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(1801, 37, 102, 102)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sr37j"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(1801, 37, 102, 102)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_f2h16"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_mupxo"]
 atlas = ExtResource("4_58pa3")
-region = Rect2(2085, 461, 143, 135)
+region = Rect2(2108, 487, 101, 81)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mupxo"]
-bg_color = Color(0, 0, 0, 0.968627)
+bg_color = Color(6.16074e-06, 0.629349, 0.813684, 0.968627)
 
 [sub_resource type="FontVariation" id="FontVariation_u0au7"]
 
-[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer", "panelPaused")]
+[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer", "movesLabel", "panelPaused", "button_options", "flip_button")]
 script = ExtResource("1_0gd45")
 pieces_container = NodePath("PiecesContainer")
 UILayer = NodePath("UILayer")
+movesLabel = NodePath("UILayer/MovesLabel")
 panelPaused = NodePath("UILayer/PanelPaused")
+button_options = NodePath("UILayer/OptionsButton")
+flip_button = NodePath("UILayer/FlipButton")
 
 [node name="AudioMove" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_xo7l2")
@@ -125,6 +120,18 @@ wait_time = 5.0
 [node name="BackgroundLayer" type="CanvasLayer" parent="."]
 layer = -1
 
+[node name="TextureRect" type="TextureRect" parent="BackgroundLayer"]
+z_index = -1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1920.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("5_u0au7")
+expand_mode = 3
+
 [node name="ColorRect" type="ColorRect" parent="BackgroundLayer"]
 z_index = -1
 layout_direction = 1
@@ -136,14 +143,20 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
 mouse_filter = 2
-color = Color(0.785649, 0.908065, 1, 1)
+color = Color(0.784314, 0.909804, 1, 0.388235)
 metadata/_edit_use_anchors_ = true
 
 [node name="ButtonHideHUD" type="Button" parent="BackgroundLayer"]
-offset_left = 50.0
-offset_top = 110.0
-offset_right = 110.0
-offset_bottom = 170.0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -110.0
+offset_right = 130.0
+offset_bottom = -10.0
+grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+mouse_default_cursor_shape = 2
 theme_override_styles/focus = SubResource("StyleBoxTexture_7gbeo")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_62oin")
 theme_override_styles/hover = SubResource("StyleBoxTexture_dga1b")
@@ -152,10 +165,16 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_fxwfr")
 
 [node name="ButtonShowHUD" type="Button" parent="BackgroundLayer"]
 visible = false
-offset_left = 50.0
-offset_top = 110.0
-offset_right = 110.0
-offset_bottom = 170.0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -110.0
+offset_right = 130.0
+offset_bottom = -10.0
+grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+mouse_default_cursor_shape = 2
 theme_override_styles/focus = SubResource("StyleBoxTexture_oer6i")
 theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_gkcsf")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_f8lc6")
@@ -169,62 +188,97 @@ y_sort_enabled = true
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 
-[node name="ButtonDifficult" parent="UILayer" instance=ExtResource("2_yvnqr")]
-auto_translate_mode = 1
-visible = false
-anchors_preset = -1
-anchor_left = 0.353
-anchor_top = 0.93
-anchor_right = 0.619
-anchor_bottom = 0.959
-offset_left = -0.160004
-offset_top = -12.4001
-offset_right = 21.32
-offset_bottom = -8.52002
+[node name="MarginContainer" type="MarginContainer" parent="UILayer"]
+show_behind_parent = true
+custom_minimum_size = Vector2(0, 120)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -143.0
 grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(0.9, 0.9)
-size_flags_horizontal = 8
-size_flags_vertical = 8
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="UILayer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.109804)
 
 [node name="TimerLabel" type="Label" parent="UILayer"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -50.0
-offset_top = 124.0
-offset_right = 50.0
-offset_bottom = 157.0
-grow_horizontal = 2
+offset_left = 30.0
+offset_top = 90.0
+offset_right = 147.0
+offset_bottom = 133.0
+pivot_offset = Vector2(55, 21)
 theme_override_fonts/font = ExtResource("5_uvymq")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 42
 text = "00:00"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OptionsButton" type="Button" parent="UILayer"]
+[node name="Panel" type="Panel" parent="UILayer/TimerLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
+
+[node name="MovesLabel" type="Label" parent="UILayer"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -150.0
-offset_top = 104.0
-offset_right = -50.0
-offset_bottom = 204.0
+offset_left = -126.0
+offset_top = 90.0
+offset_right = -30.0
+offset_bottom = 133.0
 grow_horizontal = 0
+pivot_offset = Vector2(55, 21)
+theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_font_sizes/font_size = 42
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="UILayer/MovesLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
+
+[node name="OptionsButton" type="Button" parent="UILayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -120.0
+offset_right = -50.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(40, 40)
+mouse_default_cursor_shape = 2
 theme_override_styles/focus = SubResource("StyleBoxTexture_hq32h")
 theme_override_styles/hover = SubResource("StyleBoxTexture_2g7li")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_gxtc4")
 theme_override_styles/normal = SubResource("StyleBoxTexture_icw6g")
 icon_alignment = 1
 expand_icon = true
-
-[node name="BackButton" parent="UILayer" instance=ExtResource("8_mupxo")]
-offset_left = 50.0
-offset_top = -130.0
-offset_right = 170.0
-offset_bottom = -10.0
-scale = Vector2(0.8, 0.8)
-path = "res://Scenes/PuzzleSelection.tscn"
 
 [node name="SuccessMessage" type="Label" parent="UILayer"]
 anchors_preset = 5
@@ -257,27 +311,39 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="FlipButton" type="Button" parent="UILayer"]
-anchors_preset = -1
-anchor_left = 0.801
-anchor_top = 0.898
-anchor_right = 0.915
-anchor_bottom = 0.961
-offset_left = 0.280029
-offset_top = 0.559937
-offset_right = -1.79993
-offset_bottom = -0.0800781
-grow_horizontal = 0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -120.0
+offset_right = 30.0
+offset_bottom = -40.0
+grow_horizontal = 2
 grow_vertical = 0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/focus = SubResource("StyleBoxTexture_tu11h")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_7aw43")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5jwhx")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_pqqng")
-theme_override_styles/normal = SubResource("StyleBoxTexture_sr37j")
-icon = SubResource("AtlasTexture_f2h16")
-icon_alignment = 1
-expand_icon = true
+pivot_offset = Vector2(40, 40)
+mouse_default_cursor_shape = 2
+theme_type_variation = &"CircleButtonBlue"
+
+[node name="TextureRect" type="TextureRect" parent="UILayer/FlipButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.5
+offset_top = -40.5
+offset_right = 50.5
+offset_bottom = 40.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(50.5, 40.5)
+mouse_filter = 2
+texture = SubResource("AtlasTexture_mupxo")
+expand_mode = 1
 
 [node name="PanelPaused" type="Panel" parent="UILayer"]
 visible = false
@@ -288,7 +354,66 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mupxo")
 
+[node name="BackgroundTitle" parent="UILayer/PanelPaused" instance=ExtResource("9_u0au7")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -172.0
+offset_top = 101.0
+offset_right = 172.0
+offset_bottom = 241.0
+grow_vertical = 1
+pivot_offset = Vector2(-72, 206)
+title = "Pausa"
+
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/PanelPaused"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -218.0
+offset_top = -200.0
+offset_right = 218.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(200, 250)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/PanelPaused/MarginContainer"]
+layout_mode = 2
+
+[node name="ButtonContinue" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_type_variation = &"ButtonBlue"
+text = "Continuar"
+
+[node name="ButtonRepeat" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_type_variation = &"ButtonYellow"
+text = "Repetir"
+
+[node name="ButtonDifficult" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" instance=ExtResource("2_yvnqr")]
+auto_translate_mode = 1
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="ButtonExit" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_type_variation = &"ButtonRed"
+text = "Salir"
+
 [node name="Label" type="Label" parent="UILayer/PanelPaused"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -308,4 +433,8 @@ text = "JUEGO EN PAUSA"
 
 [connection signal="pressed" from="BackgroundLayer/ButtonHideHUD" to="." method="_on_button_toggle_hud_pressed"]
 [connection signal="pressed" from="BackgroundLayer/ButtonShowHUD" to="." method="_on_button_toggle_hud_pressed"]
+[connection signal="pressed" from="UILayer/OptionsButton" to="." method="show_options_panel"]
 [connection signal="pressed" from="UILayer/FlipButton" to="." method="on_flip_button_pressed"]
+[connection signal="pressed" from="UILayer/PanelPaused/MarginContainer/VBoxContainer/ButtonContinue" to="." method="resume_game"]
+[connection signal="pressed" from="UILayer/PanelPaused/MarginContainer/VBoxContainer/ButtonRepeat" to="." method="_on_button_repeat_pressed"]
+[connection signal="pressed" from="UILayer/PanelPaused/MarginContainer/VBoxContainer/ButtonExit" to="." method="_on_button_exit_pressed"]
