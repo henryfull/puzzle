@@ -1,36 +1,65 @@
-[gd_scene load_steps=8 format=3 uid="uid://sc0afjqsuaff"]
+[gd_scene load_steps=15 format=3 uid="uid://sc0afjqsuaff"]
 
 [ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
+[ext_resource type="Texture2D" uid="uid://c8e3l3s0vy870" path="res://Assets/Images/GUID/backgrounds/bg_victory.jpg" id="2_fv7sy"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_i68vf"]
 [ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="3_1mj8m"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="3_8kq2x"]
+[ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="3_11iis"]
+[ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="4_fv7sy"]
+[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_j7jqh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cek7k"]
+atlas = ExtResource("2_fv7sy")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjces"]
+bg_color = Color(1, 0.996078, 0.886275, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 0.752941, 0.188235, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjnxs"]
-bg_color = Color(0.054902, 0.14902, 0.301961, 1)
+bg_color = Color(1, 0.752941, 0.188235, 1)
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_text"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjces"]
+region = Rect2(1990, 487, 87, 103)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qr8wd"]
-bg_color = Color(0.101961, 0.301961, 0.501961, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[sub_resource type="AtlasTexture" id="AtlasTexture_fv7sy"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(1990, 487, 87, 103)
 
-[node name="VictoryScreen" type="Node2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_11iis"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(1988, 669, 121, 103)
+
+[node name="VictoryScreen" type="Node2D" node_paths=PackedStringArray("labelNamePuzzle", "labelInfo", "statsLabel", "puzzleImage2D", "textView", "labelTitle")]
 script = ExtResource("1_g6yxt")
+labelNamePuzzle = NodePath("CanvasLayer/Body/VBoxContainer/PanelContainer/PanelContainer/LabelNamePuzzle")
+labelInfo = NodePath("CanvasLayer/Header/VBoxContainer/LabelInfo")
+statsLabel = NodePath("CanvasLayer/Header/VBoxContainer/StatsLabel")
+puzzleImage2D = NodePath("CanvasLayer/Body/VBoxContainer/PanelContainer/ImageView/PuzzleImage2D")
+textView = NodePath("CanvasLayer/Body/VBoxContainer/PanelContainer/TextView")
+labelTitle = NodePath("CanvasLayer/Header/VBoxContainer/LabelTitle")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_cek7k")
+expand_mode = 3
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15
@@ -38,64 +67,125 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 0.901961, 0.72549, 1)
+color = Color(0, 0, 1, 0.188235)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Header" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -302.0
+offset_top = 80.0
+offset_right = 302.0
+offset_bottom = 183.0
 grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
 
-[node name="LabelTitle" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Header"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "PUZZLE COMPLETADO"
+
+[node name="LabelTitle" type="Label" parent="CanvasLayer/Header/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/font = ExtResource("3_11iis")
+theme_override_font_sizes/font_size = 68
+text = "COMPLETADO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelInfo" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="LabelInfo" type="Label" parent="CanvasLayer/Header/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Has completado el puzzle en 0 movimientos"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StatsLabel" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="StatsLabel" type="Label" parent="CanvasLayer/Header/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "No hay estadísticas previas"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 5.0
+[node name="Body" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -288.0
+offset_top = -377.0
+offset_right = 288.0
+offset_bottom = 476.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="ImageView" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Body"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/VBoxContainer/PanelContainer/ImageView"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body/VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_fjces")
+
+[node name="ImageView" type="VBoxContainer" parent="CanvasLayer/Body/VBoxContainer/PanelContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(520, 640)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Body/VBoxContainer/PanelContainer/ImageView"]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PuzzleImage2D" type="Sprite2D" parent="CanvasLayer/VBoxContainer/PanelContainer/ImageView"]
-position = Vector2(360, 300)
-scale = Vector2(0.5, 0.5)
+[node name="PuzzleImage2D" type="Sprite2D" parent="CanvasLayer/Body/VBoxContainer/PanelContainer/ImageView"]
+position = Vector2(256, 300)
+scale = Vector2(0.6, 0.6)
 texture = ExtResource("2_i68vf")
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/VBoxContainer/PanelContainer/ImageView"]
+[node name="TextView" type="RichTextLabel" parent="CanvasLayer/Body/VBoxContainer/PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_constants/table_v_separation = 0
+theme_override_constants/table_h_separation = 10
+theme_override_constants/text_highlight_v_padding = 10
+theme_override_constants/text_highlight_h_padding = 0
+theme_override_constants/line_separation = 10
+theme_override_fonts/normal_font = ExtResource("4_fv7sy")
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
+bbcode_enabled = true
+text = "[center][font_size=20]Descripción del puzzle. Aquí se mostrará información detallada sobre la imagen que se muestra.[/font_size][/center]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body/VBoxContainer/PanelContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_yjnxs")
 
-[node name="LabelNamePuzzle" type="Label" parent="CanvasLayer/VBoxContainer/PanelContainer/ImageView/PanelContainer"]
+[node name="LabelNamePuzzle" type="Label" parent="CanvasLayer/Body/VBoxContainer/PanelContainer/PanelContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
@@ -103,77 +193,107 @@ text = "NOMBRE DEL PUZZLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextView" type="RichTextLabel" parent="CanvasLayer/VBoxContainer/PanelContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/table_v_separation = 10
-theme_override_constants/table_h_separation = 10
-theme_override_constants/text_highlight_v_padding = 10
-theme_override_constants/text_highlight_h_padding = 10
-theme_override_constants/line_separation = 10
-theme_override_font_sizes/bold_italics_font_size = 18
-theme_override_font_sizes/italics_font_size = 18
-theme_override_font_sizes/mono_font_size = 18
-theme_override_font_sizes/normal_font_size = 18
-theme_override_font_sizes/bold_font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxFlat_text")
-bbcode_enabled = true
-text = "[center][font_size=20]Descripción del puzzle. Aquí se mostrará información detallada sobre la imagen que se muestra.[/font_size][/center]"
-fit_content = true
-scroll_active = false
-autowrap_mode = 2
-
-[node name="BlockButtonChange" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+[node name="BlockButtonChange" type="HBoxContainer" parent="CanvasLayer/Body/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer/BlockButtonChange"]
-custom_minimum_size = Vector2(150, 40)
+[node name="Button" type="Button" parent="CanvasLayer/Body/VBoxContainer/BlockButtonChange"]
+custom_minimum_size = Vector2(280, 80)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_qr8wd")
+theme_type_variation = &"ButtonBlue"
 text = "Texto"
 
-[node name="LabelPuzzle" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="LabelPuzzle" type="Label" parent="CanvasLayer/Body/VBoxContainer"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Body/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 alignment = 1
 
-[node name="Volver" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+[node name="Volver" type="Button" parent="CanvasLayer/Body/VBoxContainer/HBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 text = "Volver"
 
-[node name="Repetir" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(150, 50)
-layout_mode = 2
-theme = ExtResource("3_1mj8m")
-text = "Repetir"
+[node name="Footer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = -1
+anchor_left = 0.084
+anchor_top = 0.906
+anchor_right = 0.921
+anchor_bottom = 1.0
+offset_left = -21.48
+offset_top = -29.6801
+offset_right = 17.8799
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
 
-[node name="Siguiente" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(150, 50)
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Footer"]
 layout_mode = 2
-text = "Siguiente"
+size_flags_horizontal = 4
+theme_override_constants/separation = 100
 
-[node name="BackButton" parent="CanvasLayer" instance=ExtResource("3_8kq2x")]
-offset_left = 50.0
-offset_top = -130.0
-offset_right = 210.0
-offset_bottom = -10.0
+[node name="BackButton" parent="CanvasLayer/Footer/HBoxContainer" instance=ExtResource("3_8kq2x")]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 path = "res://Scenes/PuzzleSelection.tscn"
 
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/BlockButtonChange/Button" to="." method="_on_toggle_view_pressed"]
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/Volver" to="." method="_on_MainMenuButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/Repetir" to="." method="_on_RepeatButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/Siguiente" to="." method="_on_NextPuzzleButton_pressed"]
+[node name="Repetir" type="Button" parent="CanvasLayer/Footer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+tooltip_text = "Repeat"
+theme = ExtResource("3_1mj8m")
+theme_type_variation = &"CircleButtonYellow"
+icon = SubResource("AtlasTexture_fjces")
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Footer/HBoxContainer/Repetir"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -31.0
+offset_right = 26.0
+offset_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_fv7sy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Siguiente" type="Button" parent="CanvasLayer/Footer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+tooltip_text = "Next"
+theme_type_variation = &"CircleButtonGreen"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Footer/HBoxContainer/Siguiente"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -26.0
+offset_right = 26.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_11iis")
+expand_mode = 1
+
+[connection signal="pressed" from="CanvasLayer/Body/VBoxContainer/BlockButtonChange/Button" to="." method="_on_toggle_view_pressed"]
+[connection signal="pressed" from="CanvasLayer/Body/VBoxContainer/HBoxContainer/Volver" to="." method="_on_MainMenuButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/Repetir" to="." method="_on_RepeatButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/Siguiente" to="." method="_on_NextPuzzleButton_pressed"]

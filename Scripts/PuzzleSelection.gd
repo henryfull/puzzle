@@ -101,12 +101,64 @@ func load_puzzles():
 	# Cargar los puzzles utilizando el componente PuzzleGrid
 	if puzzle_grid:
 		puzzle_grid.load_puzzles(pack)
+		# Desplazar automáticamente al último puzzle disponible por desbloquear
+		await get_tree().process_frame
+		scroll_to_last_available_puzzle()
 	else:
 		print("ERROR: No se encontró el componente PuzzleGrid en la escena")
 
-
-	# No es necesario recargar la escena en la selección de puzzles,
-	# ya que los puzzles se cargarán con la nueva dificultad cuando se seleccionen
+# Función para desplazar automáticamente al último puzzle disponible por desbloquear
+func scroll_to_last_available_puzzle():
+	print("PuzzleSelection: Buscando último puzzle disponible por desbloquear")
+	
+	if not puzzle_grid or not GLOBAL.selected_pack:
+		print("PuzzleSelection: No hay puzzle_grid o pack seleccionado")
+		return
+	
+	var pack = GLOBAL.selected_pack
+	if not pack.has("puzzles") or pack.puzzles.size() == 0:
+		print("PuzzleSelection: El pack no tiene puzzles")
+		return
+	
+	var puzzle_to_scroll_to = null
+	var last_unlocked_index = -1
+	
+	# Recorrer los puzzles en orden inverso para encontrar el último disponible
+	for i in range(pack.puzzles.size() - 1, -1, -1):
+		var puzzle_data = pack.puzzles[i]
+		
+		# Si encontramos un puzzle desbloqueado pero no completado, ese es el que buscamos
+		if puzzle_data.unlocked and not puzzle_data.completed:
+			puzzle_to_scroll_to = puzzle_data
+			print("PuzzleSelection: Encontrado puzzle por completar: ", puzzle_data.id)
+			break
+		
+		# Guardar referencia al último puzzle desbloqueado
+		if puzzle_data.unlocked and last_unlocked_index < i:
+			last_unlocked_index = i
+			puzzle_to_scroll_to = puzzle_data
+	
+	# Si encontramos un puzzle, desplazar hasta él
+	if puzzle_to_scroll_to:
+		print("PuzzleSelection: Desplazando al puzzle encontrado")
+		
+		# Buscar el índice del puzzle en la cuadrícula
+		var puzzle_index = -1
+		for i in range(pack.puzzles.size()):
+			if pack.puzzles[i].id == puzzle_to_scroll_to.id:
+				puzzle_index = i
+				break
+		
+		if puzzle_index >= 0:
+			# Calcular la posición aproximada
+			var rows = puzzle_index / puzzle_grid.columns
+			var scroll_position = rows * (puzzle_grid.get_theme_constant("v_separation") + 200) # 200 es una altura aproximada del elemento de puzzle
+			
+			# Ajustar el desplazamiento
+			scroll_container.scroll_vertical = scroll_position
+			print("PuzzleSelection: Desplazado a posición vertical: ", scroll_position)
+	else:
+		print("PuzzleSelection: No se encontró ningún puzzle disponible por desbloquear")
 
 # Nueva función para asegurar que haya un pack seleccionado
 func ensure_pack_selected():

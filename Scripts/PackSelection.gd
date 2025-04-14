@@ -107,7 +107,47 @@ func load_packs():
 		# Añadir el componente al contenedor
 		packs_container.add_child(pack_component)
 		print("Componente añadido para pack: ", pack.name)
+	
+	# Desplazar automáticamente al último pack disponible por desbloquear
+	await get_tree().process_frame
+	scroll_to_last_available_pack()
 
+# Función para desplazar automáticamente al último pack disponible por desbloquear
+func scroll_to_last_available_pack():
+	print("PackSelection: Buscando último pack disponible por desbloquear")
+	
+	var found_unlockable_pack = false
+	var pack_to_scroll_to = null
+	var last_index = -1
+	
+	# Recorrer los packs en orden inverso para encontrar el último disponible
+	for i in range(packs_container.get_child_count() - 1, -1, -1):
+		var pack_component = packs_container.get_child(i)
+		if pack_component.has_method("get_pack_data"):
+			var pack_data = pack_component.get_pack_data()
+			
+			# Si encontramos un pack desbloqueado pero no comprado, ese es el que buscamos
+			if pack_data.unlocked and not pack_data.purchased:
+				pack_to_scroll_to = pack_component
+				found_unlockable_pack = true
+				print("PackSelection: Encontrado pack por desbloquear: ", pack_data.name)
+				break
+			
+			# Si no encontramos ninguno por desbloquear, usamos el último desbloqueado y comprado
+			if pack_data.unlocked and pack_data.purchased and not found_unlockable_pack:
+				if last_index < i:
+					last_index = i
+					pack_to_scroll_to = pack_component
+	
+	# Si encontramos un pack, desplazar hasta él
+	if pack_to_scroll_to:
+		print("PackSelection: Desplazando al pack encontrado")
+		# Calculamos la posición a la que desplazar
+		var scroll_position = pack_to_scroll_to.position.y
+		# Ajustamos el desplazamiento teniendo en cuenta el desplazamiento del contenedor
+		scroll_container.scroll_vertical = scroll_position
+	else:
+		print("PackSelection: No se encontró ningún pack disponible por desbloquear")
 
 # Función llamada cuando un componente de pack emite la señal de solicitud de compra
 func _on_PackPurchaseRequested(pack):

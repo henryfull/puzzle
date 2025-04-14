@@ -16,7 +16,7 @@ func _ready():
 		$"../Label_resolution".hide()
 	else:
 		populate_resolutions()
-		load_resolution()  # Cargar la resolución guardada, si existe.
+		# load_resolution()  # Cargar la resolución guardada, si existe.
 		connect("item_selected", Callable(self, "_on_resolution_selected"))
 
 # Llena el OptionButton con las resoluciones disponibles.

@@ -125,6 +125,10 @@ func _show_locked_feedback():
 	tween.tween_property($LockOverlay, "modulate", Color(1, 0.5, 0.5, 1), 0.2)
 	tween.tween_property($LockOverlay, "modulate", Color(1, 1, 1, 1), 0.2)
 
+# Método para obtener los datos del pack
+func get_pack_data():
+	return pack_data
+
 # Actualiza el estado del pack (útil cuando cambia su estado)
 func update_pack_state(new_data = null):
 	if new_data:

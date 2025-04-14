@@ -70,7 +70,7 @@ func _ready():
 	load_current_values()
 	
 	# Adaptar la UI para dispositivos móviles
-	adapt_ui_for_device()
+	# adapt_ui_for_device()
 	
 	# Actualizar textos de la UI
 	update_ui_texts()
@@ -170,136 +170,6 @@ func load_current_values():
 					lang_selector.select(i)
 					break
 
-# Función para adaptar la UI según el dispositivo
-func adapt_ui_for_device():
-	print("Options: Adaptando UI para dispositivo")
-	
-	# Verificar que el CanvasLayer exista
-	if has_node("CanvasLayer"):
-		print("Options: CanvasLayer encontrado para adaptar")
-		var canvas_layer = get_node("CanvasLayer")
-		
-		# Verificar la posición actual del CanvasLayer
-		print("Options: Posición actual del CanvasLayer: ", canvas_layer.offset)
-		
-		# Asegurarnos de que el CanvasLayer tenga la propiedad layer configurada correctamente
-		canvas_layer.layer = 100  # Usar un valor alto para asegurarnos de que esté por encima de todo
-		print("Options: Layer del CanvasLayer configurado a: ", canvas_layer.layer)
-	else:
-		print("Options: ERROR - CanvasLayer no encontrado para adaptar")
-	
-	# Usar UIScaler si está disponible
-	if ResourceLoader.exists("res://Scripts/UIScaler.gd"):
-		var UIScaler = load("res://Scripts/UIScaler.gd")
-		
-		# Escalar botones
-		var buttons = [%ButtonClose, %RestoreButton]
-		for button in buttons:
-			if button:
-				UIScaler.scale_button(button)
-		
-		# Escalar etiquetas
-		var labels = [
-			%Label_resolution,
-			$LabelIdioma,
-			$Label_general,
-			$LabelMusic,
-			$LabelSFX,
-			%LabelPanSensitivity,
-			%LabelTweenEffect,
-			%LabelTweenDuration
-		]
-		
-		for label in labels:
-			if label:
-				UIScaler.scale_label(label)
-		
-		# Escalar controles de opciones
-		var option_controls = [
-			selectResolution,
-			selectLanguage,
-			sliderVolumeGeneral, 
-			sliderVolumeMusic,
-			sliderVolumeSFX,
-			sliderPanSensitivity,
-			sliderTweenDuration
-		]
-		
-		for control in option_controls:
-			if control:
-				if control is OptionButton:
-					UIScaler.scale_button(control)
-				elif control is HSlider:
-					var scale = UIScaler.get_scale_factor()
-					control.custom_minimum_size = Vector2(100 * scale, 0)
-		
-		# Escalar el CheckBox
-		if checkTweenEffect:
-			UIScaler.scale_button(checkTweenEffect)
-	else:
-		# Si no está disponible UIScaler, usar ajustes manuales
-		if is_mobile:
-			# Ajustar botones
-			var buttons = [%ButtonClose, %RestoreButton]
-			for button in buttons:
-				if button:
-					button.custom_minimum_size = Vector2(200, 70)
-					button.add_theme_font_size_override("font_size", 24)
-			
-			# Ajustar etiquetas
-			var labels = [
-				%Label_resolution,
-				$LabelIdioma,
-				$Label_general,
-				$LabelMusic,
-				$LabelSFX,
-				%LabelPanSensitivity,
-				%LabelTweenEffect,
-				%LabelTweenDuration
-			]
-			
-			for label in labels:
-				if label:
-					label.add_theme_font_size_override("font_size", 20)
-			
-			# Ajustar controles de opciones
-			var option_buttons = [
-				selectResolution, selectLanguage
-			]
-			
-			for option_button in option_buttons:
-				if option_button:
-					option_button.custom_minimum_size = Vector2(150, 50)
-					option_button.add_theme_font_size_override("font_size", 20)
-			
-			# Ajustar sliders
-			var sliders = [
-				sliderVolumeGeneral, 
-				sliderVolumeMusic,
-				sliderVolumeSFX,
-				sliderPanSensitivity,
-				sliderTweenDuration
-			]
-			
-			for slider in sliders:
-				if slider:
-					slider.custom_minimum_size = Vector2(200, 30)
-			
-			# Ajustar checkbox
-			if checkTweenEffect:
-				checkTweenEffect.add_theme_font_size_override("font_size", 20)
-
-	# Añadir un fondo semitransparente para el panel de opciones
-	var panel_bg = ColorRect.new()
-	panel_bg.name = "PanelBackground"
-	panel_bg.color = Color(0, 0, 0, 0.7)  # Negro semitransparente
-	panel_bg.set_anchors_preset(Control.PRESET_FULL_RECT)  # Cubrir toda la pantalla
-	
-	# Insertar el fondo antes de los otros elementos
-	$CanvasLayer.add_child(panel_bg)
-	$CanvasLayer.move_child(panel_bg, 0)  # Mover al fondo
-	
-	print("Options: UI adaptada para dispositivo")
 
 func _on_HSlider_Volumen_General_value_changed(value):
 	if has_node("/root/GLOBAL") and has_node("/root/AudioManager"):

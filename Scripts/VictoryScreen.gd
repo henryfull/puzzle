@@ -1,5 +1,12 @@
 extends Node2D
 
+@export var labelNamePuzzle: Label
+@export var labelInfo: Label
+@export var statsLabel: Label
+@export var puzzleImage2D: Sprite2D
+@export var textView: RichTextLabel
+@export var labelTitle : Label
+
 # Variables para almacenar los datos del puzzle
 var puzzle_data = null
 var pack_data = null
@@ -80,129 +87,40 @@ func _ready():
 	show_unlocked_achievements()
 	
 	# Adaptar la UI para dispositivos móviles
-	adapt_ui_for_device()
-
-# Función para adaptar la UI según el dispositivo
-func adapt_ui_for_device():
-	# Usar UIScaler si está disponible
-	if ResourceLoader.exists("res://Scripts/UIScaler.gd"):
-		var UIScaler = load("res://Scripts/UIScaler.gd")
-		
-		
-		# Escalar etiquetas
-		var labels = [
-			$CanvasLayer/VBoxContainer/LabelTitle,
-			$CanvasLayer/VBoxContainer/LabelInfo,
-			$CanvasLayer/VBoxContainer/PanelContainer/ImageView/PanelContainer/LabelNamePuzzle
-		]
-		
-		for label in labels:
-			if label:
-				UIScaler.scale_label(label)
-		
-		# Escalar contenedores
-		var containers = [
-			$CanvasLayer/VBoxContainer,
-			$CanvasLayer/VBoxContainer/HBoxContainer,
-			$CanvasLayer/VBoxContainer/BlockButtonChange
-		]
-		
-		for container in containers:
-			if container:
-				# Ajustar espaciado
-				var scale = UIScaler.get_scale_factor()
-				container.add_theme_constant_override("separation", int(10 * scale))
-	else:
-
-			# Ajustar etiquetas
-			if $CanvasLayer/VBoxContainer/LabelTitle:
-				$CanvasLayer/VBoxContainer/LabelTitle.add_theme_font_size_override("font_size", 36)
-			
-			if $CanvasLayer/VBoxContainer/LabelInfo:
-				$CanvasLayer/VBoxContainer/LabelInfo.add_theme_font_size_override("font_size", 24)
-			
-			# Ajustar espaciado
-			$CanvasLayer/VBoxContainer.add_theme_constant_override("separation", 20)
-			$CanvasLayer/VBoxContainer/HBoxContainer.add_theme_constant_override("separation", 30)
-			
-			# Ajustar texto
-			if text_view:
-				text_view.add_theme_font_size_override("normal_font_size", 24)
-				text_view.add_theme_constant_override("line_separation", 15)
+	# adapt_ui_for_device()
 
 # Función para configurar la interfaz básica
 func setup_ui():
 	# Obtener referencias a los nodos existentes
-	var vbox_container = $CanvasLayer/VBoxContainer
+	var vbox_container = $CanvasLayer/Body/VBoxContainer
 	
 	# Asegurarse de que el contenedor principal ocupe toda la pantalla
 	$CanvasLayer.layer = 10  # Asegurarse de que esté por encima de todo
 	
 	# Obtener referencias a los elementos de la interfaz
-	var title = $CanvasLayer/VBoxContainer/LabelTitle
-	title.text = "PUZZLE COMPLETADO"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 28)
-	title.add_theme_color_override("font_color", Color(0, 0, 0))
+	var title = labelTitle
+	title.text = "COMPLETADO"
 	
-	var info = $CanvasLayer/VBoxContainer/LabelInfo
+	var info = labelInfo
 	info.text = "Has completado el puzzle"
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	info.add_theme_font_size_override("font_size", 16)
 	info.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
 	
-	var content_container = $CanvasLayer/VBoxContainer/PanelContainer
-	var content_style = StyleBoxFlat.new()
-	content_style.bg_color = Color(1, 1, 1, 1.0) # Fondo blanco
-	content_style.corner_radius_top_left = 5
-	content_style.corner_radius_top_right = 5
-	content_style.corner_radius_bottom_left = 5
-	content_style.corner_radius_bottom_right = 5
-	content_container.add_theme_stylebox_override("panel", content_style)
+
 	
-	# Configurar la vista de imagen
-	var image_view_container = $CanvasLayer/VBoxContainer/PanelContainer/ImageView
-	if image_view_container:
-		# Asegurarse de que el contenedor de imagen ocupe todo el espacio disponible
-		image_view_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		image_view_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		
-		var texture_rect = image_view_container.get_node_or_null("TextureRect")
-		if texture_rect:
-			texture_rect.expand = true
-			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			texture_rect.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			texture_rect.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		
-		var name_panel = image_view_container.get_node_or_null("PanelContainer")
-		if name_panel:
-			var name_style = StyleBoxFlat.new()
-			name_style.bg_color = Color(0.05, 0.15, 0.3, 1.0) # Azul oscuro
-			name_panel.add_theme_stylebox_override("panel", name_style)
-			name_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		
-		var image_name_label = image_view_container.get_node_or_null("PanelContainer/LabelNamePuzzle")
-		if image_name_label:
-			image_name_label.visible = true
-			image_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			image_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			image_name_label.add_theme_font_size_override("font_size", 24)
-			image_name_label.add_theme_color_override("font_color", Color(1, 1, 1))
-			image_name_label.custom_minimum_size = Vector2(0, 50)
-		
-		image_view = image_view_container
+
 	
 	# Configurar el Sprite2D si existe
-	var sprite = $CanvasLayer/VBoxContainer/PanelContainer/ImageView/PuzzleImage2D
+	var sprite = puzzleImage2D
 	if sprite:
 		# Obtener el tamaño del contenedor
 		var container_size = get_viewport_rect().size
 		
 		# Calcular el espacio disponible para la imagen (considerando otros elementos)
-		var available_height = container_size.y * 0.65  # Usar solo el 65% de la altura para la imagen
-		var max_width = min(container_size.x * 0.8, 720)  # Limitar el ancho máximo
+		var available_height = container_size.y * 0.60  # Usar solo el 65% de la altura para la imagen
+		var max_width = min(container_size.x * 0.7, 720)  # Limitar el ancho máximo
 		
 		# Calcular la escala para que la imagen se ajuste al espacio disponible
 		var texture_size = sprite.texture.get_size()
@@ -216,13 +134,13 @@ func setup_ui():
 		sprite.scale = Vector2(scale_factor, scale_factor)
 		
 		# Centrar la imagen en el contenedor
-		sprite.position = Vector2(container_size.x / 2, container_size.y / 2 - 50)
+
 		
 		# Guardar referencia
 		image_view = sprite
 	
 	# Configurar la vista de texto
-	text_view = $CanvasLayer/VBoxContainer/PanelContainer/TextView
+	text_view = textView
 	if text_view:
 		text_view.visible = false
 		text_view.bbcode_enabled = true
@@ -270,14 +188,14 @@ func setup_ui():
 # Función para actualizar la interfaz con los datos del puzzle
 func update_ui_with_puzzle_data():
 	# Actualizar la información de movimientos y tiempo
-	var info_label = $CanvasLayer/VBoxContainer/LabelInfo
+	var info_label = labelInfo
 	if info_label:
 		var minutes = int(elapsed_time) / 60
 		var seconds = int(elapsed_time) % 60
 		info_label.text = tr("Has completado el puzzle en ") + str(total_moves) + tr(" movimientos") + "\n" + tr("Tiempo: ") + "%02d:%02d" % [minutes, seconds]
 	
 	# Actualizar la información de estadísticas
-	var stats_label = $CanvasLayer/VBoxContainer/StatsLabel
+	var stats_label = statsLabel
 	if stats_label:
 		# Obtener las estadísticas del puzzle actual
 		var puzzle_stats = progress_manager.get_puzzle_stats(current_pack_id, current_puzzle_id)
@@ -329,7 +247,7 @@ func update_ui_with_puzzle_data():
 	
 	# Actualizar el nombre del puzzle
 	if puzzle_data and puzzle_data.has("name"):
-		var name_label = $CanvasLayer/VBoxContainer/PanelContainer/ImageView/PanelContainer/LabelNamePuzzle
+		var name_label = labelNamePuzzle
 		if name_label:
 			name_label.text = puzzle_data.name.to_upper()
 			name_label.visible = true
@@ -426,7 +344,7 @@ func show_unlocked_achievements():
 		return
 	
 	# Encontrar la sección de estadísticas para añadir información de logros
-	var stats_label = $CanvasLayer/VBoxContainer/StatsLabel
+	var stats_label = statsLabel
 	if stats_label:
 		var achievement_text = "¡Logros desbloqueados!\n"
 		

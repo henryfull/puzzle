@@ -100,13 +100,15 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="BTN_play" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(280, 80)
+custom_minimum_size = Vector2(280, 70)
 layout_mode = 2
 theme_type_variation = &"ButtonRed"
+theme_override_font_sizes/font_size = 32
 text = "Play"
 language = "auto"
 
 [node name="BTN_options" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 text = "Opciones"

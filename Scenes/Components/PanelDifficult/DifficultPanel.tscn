@@ -109,7 +109,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "El modo APRENDIZ esta enfocado para que los niños aprendan formas, colores, no números de manera visual.
 Cuando se selecciona un puzzle directamente te muestra la imagen y un texto relacionado con la imagen. "
-autowrap_mode = 2
+autowrap_mode = 3
 
 [node name="HSeparator2" type="HSeparator" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
 visible = false
