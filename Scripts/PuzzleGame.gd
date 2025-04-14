@@ -2026,7 +2026,7 @@ func on_flip_button_pressed() -> void:
 # Función para volver a la selección de puzzles
 func _on_PuzzleSelected():
 	print("PuzzleGame: Volviendo a la selección de puzzles")
-	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+	GLOBAL.change_scene_with_loading("res://Scenes/PuzzleSelection.tscn")
 
 # Nueva función para manejar el cambio de dificultad
 func _on_difficulty_changed(columns, rows):
@@ -2233,8 +2233,8 @@ func show_victory_screen():
 		}
 	}
 	
-	# Usar la función safe_change_scene para cambiar a la escena de victoria
-	safe_change_scene("res://Scenes/VictoryScreen.tscn")
+	# Usar la función de cambio de escena con pantalla de carga
+	GLOBAL.change_scene_with_loading("res://Scenes/VictoryScreen.tscn")
 
 # Función para mostrar un mensaje de error temporal
 func show_error_message(message: String, duration: float = 2.0):
@@ -2592,7 +2592,7 @@ func show_options_panel():
 
 func _on_BackButton_pressed() -> void:
 	# Volver al menú principal
-	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+	GLOBAL.change_scene_with_loading("res://Scenes/PuzzleSelection.tscn")
 
 # Nueva función para actualizar el estado de posición de una pieza
 func update_piece_position_state(piece_obj: Piece):

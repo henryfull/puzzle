@@ -312,7 +312,7 @@ func _create_button_style(color: Color) -> StyleBoxFlat:
 
 # Funciones existentes para los botones
 func _on_RepeatButton_pressed():
-	get_tree().change_scene_to_file("res://Scenes/PuzzleGame.tscn")
+	GLOBAL.change_scene_with_loading("res://Scenes/PuzzleGame.tscn")
 
 func _on_NextPuzzleButton_pressed():
 	# Obtener el siguiente puzzle del pack actual
@@ -322,13 +322,13 @@ func _on_NextPuzzleButton_pressed():
 		# Si hay un siguiente puzzle, lo cargamos directamente
 		GLOBAL.selected_puzzle = next_puzzle
 		# Reiniciar la escena actual con el nuevo puzzle
-		get_tree().change_scene_to_file("res://Scenes/PuzzleGame.tscn")
+		GLOBAL.change_scene_with_loading("res://Scenes/PuzzleGame.tscn")
 	else:
 		# Si no hay siguiente puzzle, volvemos a la selección
-		get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+		GLOBAL.change_scene_with_loading("res://Scenes/PuzzleSelection.tscn")
 
 func _on_MainMenuButton_pressed():
-	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+	GLOBAL.change_scene_with_loading("res://Scenes/PuzzleSelection.tscn")
 
 # Función para mostrar logros desbloqueados en esta partida
 func show_unlocked_achievements():

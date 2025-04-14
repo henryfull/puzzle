@@ -1,9 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://sc0afjqsuaff"]
+[gd_scene load_steps=13 format=3 uid="uid://sc0afjqsuaff"]
 
 [ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
 [ext_resource type="Texture2D" uid="uid://c8e3l3s0vy870" path="res://Assets/Images/GUID/backgrounds/bg_victory.jpg" id="2_fv7sy"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_i68vf"]
-[ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="3_1mj8m"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="3_8kq2x"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="3_11iis"]
 [ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="4_fv7sy"]
@@ -28,9 +27,6 @@ corner_radius_bottom_left = 50
 bg_color = Color(1, 0.752941, 0.188235, 1)
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fjces"]
-region = Rect2(1990, 487, 87, 103)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fv7sy"]
 atlas = ExtResource("5_j7jqh")
@@ -74,9 +70,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -302.0
-offset_top = 80.0
+offset_top = 90.0
 offset_right = 302.0
-offset_bottom = 183.0
+offset_bottom = 233.0
 grow_horizontal = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Header"]
@@ -248,11 +244,10 @@ path = "res://Scenes/PuzzleSelection.tscn"
 [node name="Repetir" type="Button" parent="CanvasLayer/Footer/HBoxContainer"]
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 tooltip_text = "Repeat"
-theme = ExtResource("3_1mj8m")
 theme_type_variation = &"CircleButtonYellow"
-icon = SubResource("AtlasTexture_fjces")
-icon_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Footer/HBoxContainer/Repetir"]
 layout_mode = 1
@@ -274,6 +269,8 @@ stretch_mode = 5
 [node name="Siguiente" type="Button" parent="CanvasLayer/Footer/HBoxContainer"]
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 tooltip_text = "Next"
 theme_type_variation = &"CircleButtonGreen"
 

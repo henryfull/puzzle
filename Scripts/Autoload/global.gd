@@ -21,6 +21,7 @@ var rows: int = 8
 
 var selected_pack = null
 var selected_puzzle = null
+var change_scene : String
 
 # Variable para almacenar datos de la victoria
 var victory_data = null
@@ -30,6 +31,15 @@ const SETTINGS_FILE = "user://settings.cfg"
 
 # Variable para detectar si estamos en un dispositivo móvil
 var is_mobile = false
+
+# Función para cambiar de escena usando la pantalla de carga
+func change_scene_with_loading(new_scene: String) -> void:
+	change_scene = new_scene
+	get_tree().change_scene_to_file("res://Scenes/LoadingScreen.tscn")
+
+# Función para cambiar de escena directamente (sin pantalla de carga)
+func change_scene_direct(new_scene: String) -> void:
+	get_tree().change_scene_to_file(new_scene)
 
 func _ready():
 	# Detectar si estamos en un dispositivo móvil

@@ -639,7 +639,7 @@ func loadFile(path) -> String:
 		return ''
 
 func _on_BackButton_pressed():
-	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn") 
+	GLOBAL.change_scene_with_loading("res://Scenes/MainMenu.tscn") 
 	
 func updateVolume(field, value):
 	GLOBAL.settings.volume[field] = value

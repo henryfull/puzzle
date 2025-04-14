@@ -62,13 +62,13 @@ func _on_PlayButton_pressed():
 		get_node("/root/OptionsManager").hide_options()
 		await get_tree().create_timer(0.3).timeout  # Esperar a que termine la animación
 	
-	get_tree().change_scene_to_file("res://Scenes/PackSelection.tscn")
+	GLOBAL.change_scene_with_loading("res://Scenes/PackSelection.tscn")
 
 func _on_OptionsButton_pressed():
 	OptionsManager.show_options(self)
 
 func _on_AchievementsButton_pressed():
-	get_tree().change_scene_to_file("res://Scenes/Achievements.tscn")
+	GLOBAL.change_scene_with_loading("res://Scenes/Achievements.tscn")
 
 func _on_ExitButton_pressed():
 	get_tree().quit() 
@@ -78,4 +78,4 @@ func _on_btn_exit_pressed() -> void:
 	get_tree().quit()
 
 func _on_StatsButton_pressed():
-	get_tree().change_scene_to_file("res://Scenes/StatsScreen.tscn")
+	GLOBAL.change_scene_with_loading("res://Scenes/StatsScreen.tscn")
