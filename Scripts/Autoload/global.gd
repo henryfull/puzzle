@@ -22,6 +22,7 @@ var rows: int = 8
 var selected_pack = null
 var selected_puzzle = null
 var change_scene : String
+var gamemode : int = 1
 
 # Variable para almacenar datos de la victoria
 var victory_data = null

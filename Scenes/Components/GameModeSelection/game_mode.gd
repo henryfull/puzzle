@@ -1,22 +1,17 @@
-extends Node
+extends Control
 
 # Señal para notificar cuando se cambia la dificultad
-signal difficulty_changed(columns, rows)
+signal gamemode_changed(gamemode)
 signal show_difficult(is_difficult)
 @export var descriptionLabel: Label
 
 # Estructura para almacenar las dificultades disponibles
 var difficulties = [
-	{"name": "difficulty_learner", "columns": 1, "rows": 1, "color": "ButtonBlue", "description": "difficulty_learner_description"},
-	{"name": "difficulty_very_easy", "columns": 2, "rows": 2, "color": "", "description": "difficulty_very_easy_description"},
-	{"name": "difficulty_easy", "columns": 3, "rows": 3, "color": "", "description": "difficulty_easy_description"},
-	{"name": "difficulty_normal", "columns": 4, "rows": 4, "color": "ButtonYellow", "description": "difficulty_normal_description"},
-	{"name": "difficulty_medium", "columns": 4, "rows": 6, "color": "ButtonYellow", "description": "difficulty_medium_description"},
-	{"name": "difficulty_challenge", "columns": 4, "rows": 8, "color": "ButtonYellow", "description": "difficulty_challenge_description"},
-	{"name": "difficulty_hard", "columns": 6, "rows": 8, "color": "ButtonRed", "description": "difficulty_hard_description"},
-	{"name": "difficulty_very_hard", "columns": 8, "rows": 8, "color": "ButtonRed", "description": "difficulty_very_hard_description"},
-	{"name": "difficulty_expert", "columns": 10, "rows": 10, "color": "ButtonRed", "description": "difficulty_expert_description"}
-]
+	{"name": "Relax", "id": 0, "color": "ButtonBlue", "description": "game_mode_relax"},
+	{"name": "normal", "id": 1, "color": "", "description": "game_mode_normal"},
+	{"name": "common_timetrial", "id": 3, "color": "ButtonYellow", "description": "game_mode_timetrial"},
+	{"name": "common_challenge", "id": 4, "color": "ButtonRed", "description": "game_mode_chagenlle"},
+	]
 @export var difficulty_container: BoxContainer
 
 # Referencias a nodos
@@ -43,7 +38,7 @@ func _ready():
 	self.connect("show_difficult", Callable(self, "_on_toggle_difficult"))
 
 func _on_toggle_difficult(is_difficult: bool):
-	var difLayer = $DifficultyLayer
+	var difLayer = $GameModeLayer
 	difLayer.visible = is_difficult
 	
 	# Si se está mostrando el panel, actualizar el foco
@@ -59,7 +54,7 @@ func _create_difficulty_buttons():
 	for i in range(difficulties.size()):
 		var diff = difficulties[i]
 		var button = Button.new()
-		button.text = tr(diff.name) + " (" + str(diff.columns) + "x" + str(diff.rows) + ")"
+		button.text = tr(diff.name)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.mouse_filter = Control.MOUSE_FILTER_PASS
 		button.custom_minimum_size = Vector2(0, 100)
@@ -83,7 +78,7 @@ func _update_button_text():
 	
 	for i in range(difficulties.size()):
 		var diff = difficulties[i]
-		if diff.columns == GLOBAL.columns and diff.rows == GLOBAL.rows:
+		if diff.id == GLOBAL.gamemode:
 			current_difficulty = diff.name
 			descriptionLabel.text = diff.description
 			selected_index = i
@@ -108,14 +103,14 @@ func _on_difficulty_selected(index):
 	var selected = difficulties[index]
 	
 	# Actualizar las variables globales
-	GLOBAL.columns = selected.columns
-	GLOBAL.rows = selected.rows
+	GLOBAL.gamemode = selected.id
+
 	
 	# Actualizar el texto del botón
 	_update_button_text()
 	
 	# Emitir la señal de cambio de dificultad
-	emit_signal("difficulty_changed", selected.columns, selected.rows)
+	emit_signal("gamemode_changed", selected.id)
 
 
 # Función para limpiar cuando se sale

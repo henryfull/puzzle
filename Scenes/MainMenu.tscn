@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://dh7t7utu076oi"]
+[gd_scene load_steps=10 format=3 uid="uid://dh7t7utu076oi"]
 
 [ext_resource type="Script" uid="uid://cct0rg0djuimx" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
 [ext_resource type="Texture2D" uid="uid://cxp7k35mbdp80" path="res://Assets/Images/GUID/backgrounds/bg_expand.jpg" id="2_8saeu"]
 [ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="3_8saeu"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_ghw46"]
+[ext_resource type="PackedScene" uid="uid://bnl7nqpqlgw5v" path="res://Scenes/Components/GameModeSelection/GameMode.tscn" id="5_df05h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghw46"]
 bg_color = Color(0, 0, 0, 0.341176)
@@ -108,11 +109,10 @@ theme_override_font_sizes/font_size = 32
 text = "Play"
 language = "auto"
 
-[node name="BTN_options" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 70)
+[node name="BTN_gameoptions" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 70)
 layout_mode = 2
-text = "Opciones"
+text = "Modos"
 
 [node name="BTN_exit" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 visible = false
@@ -199,8 +199,10 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_8um5k")
 expand_mode = 1
 
+[node name="GameMode" parent="." instance=ExtResource("5_df05h")]
+
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions" to="." method="_on_show_gameModes"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_exit" to="." method="_on_btn_exit_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_stats" to="." method="_on_StatsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_achievements" to="." method="_on_AchievementsButton_pressed"]

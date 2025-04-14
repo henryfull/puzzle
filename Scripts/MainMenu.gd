@@ -9,7 +9,7 @@ var label_version: Label
 
 func _ready():
 	# Esperar un frame para asegurarnos de que GLOBAL y TranslationLoader estén inicializados
-	btn_options = $CanvasLayer/MarginContainer/VBoxContainer/BTN_options
+	btn_options = $CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions
 	btn_play = $CanvasLayer/MarginContainer/VBoxContainer/BTN_play
 	btn_stats = $CanvasLayer/MarginContainer/VBoxContainer/BTN_stats
 	btn_achievements = $CanvasLayer/MarginContainer/VBoxContainer/BTN_achievements
@@ -42,7 +42,7 @@ func update_version_label():
 
 # Función para actualizar los textos de la UI
 func update_ui_texts():
-	btn_options.text = tr("common_options")
+	btn_options.text = tr("common_modes")
 	btn_play.text = tr("common_play")
 	btn_exit.text = tr("common_exit")
 	print("MainMenu: Textos actualizados con idioma: ", TranslationServer.get_locale())
@@ -79,3 +79,6 @@ func _on_btn_exit_pressed() -> void:
 
 func _on_StatsButton_pressed():
 	GLOBAL.change_scene_with_loading("res://Scenes/StatsScreen.tscn")
+
+func _on_show_gameModes() -> void:
+	$GameMode.get_child(0).visible = true
