@@ -22,6 +22,11 @@ var just_placed_piece: bool = false
 @export var pieces_container: Node2D
 @export var UILayer: CanvasLayer
 @export var movesLabel: Label
+@export var maxMovesLabel: Label
+@export var maxMovesFlipLabel: Label
+@export var maxFlipsPanel: Panel
+@export var maxFlipsLabel: Label
+
 
 # Variables para gestionar el doble toque
 var last_touch_time: float = 0.0
@@ -31,6 +36,7 @@ var double_tap_distance_threshold: float = 50.0  # Distancia máxima para consid
 
 # Variables para el sistema de pausa
 var is_paused: bool = false  # Estado actual de pausa
+var is_flip: bool = false # Estado actual del flip
 var pause_start_time: float = 0.0  # Momento en que se pausó el juego
 var accumulated_time: float = 0.0  # Tiempo acumulado en pausa
 var is_options_menu_open: bool = false  # Estado del menú de opciones
@@ -85,6 +91,22 @@ var pieces := []
 
 # Para contar movimientos o verificar victoria
 var total_moves: int = 0
+
+# === VARIABLES PARA MODOS DE JUEGO ===
+var relax_mode: bool = false
+var normal_mode: bool = false
+var timer_mode: bool = false
+var challenge_mode: bool = false
+
+# Límites y contadores para modos especiales
+var flip_count: int = 0
+var flip_move_count: int = 0
+var max_flips: int = 0
+var max_flip_moves: int = 0
+var max_moves: int = 0
+var time_left: float = 0.0
+var defeat_reason: String = ""
+var timer_countdown: Timer = null
 
 # === VARIABLES PARA GESTIÓN DE PROGRESIÓN ===
 var current_pack_id: String = ""
@@ -213,6 +235,76 @@ func _ready():
 
 	# Iniciar el temporizador para medir el tiempo de juego
 	start_game_timer()
+
+	# --- Lógica de modos de juego ---
+	match GLOBAL.gamemode:
+		0:
+			relax_mode = true
+			# Ocultar contadores y reloj
+			if has_node("UILayer/TimerLabel"):
+				$UILayer/TimerLabel.visible = false
+				movesLabel.visible = false
+				maxMovesLabel.visible = false
+				maxMovesFlipLabel.visible = false
+				maxFlipsPanel.visible = false
+
+			# Si hay otros contadores, ocultar aquí
+			# (por ejemplo, flipsLabel, flipMovesLabel)
+		1:
+			normal_mode = true
+			# Mostrar contadores normales
+			if has_node("UILayer/TimerLabel"):
+				$UILayer/TimerLabel.visible = true
+				movesLabel.visible = true
+				maxMovesLabel.visible = false
+				maxMovesFlipLabel.visible = false
+				maxFlipsPanel.visible = false
+
+
+			# Si hay otros contadores, mostrar aquí
+		3:
+			timer_mode = true
+			# Definir tiempo límite (ejemplo: 180 segundos)
+			time_left = 180.0
+			max_flip_moves = 10 # ejemplo, puedes ajustar
+			max_flips = 5
+			flip_move_count = 0
+			
+			# Mostrar reloj en cuenta atrás
+			if has_node("UILayer/TimerLabel"):
+				$UILayer/TimerLabel.visible = true
+				movesLabel.visible = true
+				maxMovesLabel.visible = false
+				maxMovesFlipLabel.visible = true
+				maxMovesFlipLabel.text = str(max_flip_moves)
+				maxFlipsPanel.visible = true
+				maxFlipsLabel.text = str(max_flips)
+			# Crear un timer para cuenta atrás
+			timer_countdown = Timer.new()
+			timer_countdown.wait_time = 1.0
+			timer_countdown.one_shot = false
+			timer_countdown.connect("timeout", Callable(self, "_on_timer_countdown"))
+			add_child(timer_countdown)
+			timer_countdown.start()
+		4:
+			challenge_mode = true
+			max_moves = 50 # ejemplo, puedes ajustar
+			max_flips = 3 # ejemplo
+			flip_move_count = 0
+			max_flip_moves = 10 # ejemplo
+			maxMovesLabel.text = str(max_moves)
+			maxMovesFlipLabel.text = str(max_flip_moves)
+			maxFlipsLabel.text = str(max_flips)
+			# Mostrar contadores
+			if has_node("UILayer/TimerLabel"):
+				$UILayer/TimerLabel.visible = true
+				movesLabel.visible = false
+				maxMovesLabel.visible = true
+				maxMovesFlipLabel.visible = true
+				maxMovesFlipLabel.text = str(flip_move_count)
+				maxFlipsPanel.visible = true
+
+			# Si hay otros contadores, mostrar aquí
 
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
 	# 1) Cargar la escena del viewport
@@ -1967,6 +2059,16 @@ func on_flip_button_pressed() -> void:
 	# Variable para rastrear si encontramos una pieza seleccionada
 	var target_piece = null
 	
+	if(!is_flip):
+		if(max_flips > 0):
+			max_flips -= 1
+			maxFlipsLabel.text = str(max_flips)
+		else:
+			return
+		
+	
+	is_flip = !is_flip
+	
 	# Animar el botón de flip con una rotación de 360 grados
 	if flip_button:
 		var rotation_direction = 1 if not pieces_flipped else -1
@@ -2000,6 +2102,7 @@ func on_flip_button_pressed() -> void:
 		
 		# Actualizar el estado de las piezas
 		pieces_flipped = !pieces_flipped
+		_increment_flip_count()
 	else:
 		# Si hay una pieza seleccionada, voltear solo su grupo
 		var group_pieces = target_piece.group
@@ -2410,12 +2513,11 @@ func process_piece_release() -> void:
 		
 		# Reproducir sonido de movimiento solo si la posición cambió
 		if old_position != group_leader.current_cell:
-			# AudioManager.play_sfx("res://Assets/Sounds/SFX/plop.mp3")
-			total_moves += 1
+			_increment_move_count()
 			movesLabel.text = str(total_moves)
 		
 		# Verificar y corregir el estado del grid después de cada movimiento
-		verify_and_fix_grid()
+			verify_and_fix_grid()
 		
 		# La verificación de victoria ahora se maneja en place_group() a través de just_placed_piece
 
@@ -2474,6 +2576,7 @@ func process_piece_click(event: InputEvent) -> void:
 				# Asegurar que la pieza esté al frente moviendo su nodo al final del árbol
 				if p.node.get_parent() != null:
 					p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
+
 	else:
 		# Al soltar, procesar el final del arrastre de la pieza
 		process_piece_release()
@@ -3032,3 +3135,64 @@ func _on_button_exit_pressed() -> void:
 
 func _on_button_repeat_pressed() -> void:
 	_on_difficulty_changed(GLOBAL.columns, GLOBAL.rows)
+
+# --- Timer de cuenta atrás para modo contrarreloj ---
+func _on_timer_countdown():
+	if timer_mode:
+		time_left -= 1.0
+		# Actualizar el label del reloj
+		if has_node("UILayer/TimerLabel"):
+			var timer_label = $UILayer/TimerLabel
+			var minutes = int(time_left) / 60
+			var seconds = int(time_left) % 60
+			timer_label.text = "%02d:%02d" % [minutes, seconds]
+		if time_left <= 0:
+			timer_countdown.stop()
+			defeat_reason = "Tiempo agotado"
+			_show_defeat_message(defeat_reason)
+
+# --- Lógica de movimientos y flips ---
+func _increment_move_count():
+	total_moves += 1
+	if maxMovesLabel.visible:
+		maxMovesLabel.text = str(max_moves - total_moves)	
+	if (is_flip):
+		_increment_flip_move_count()
+
+	if movesLabel:
+		movesLabel.text = str(total_moves)
+	if challenge_mode and max_moves > 0 and total_moves >= max_moves:
+		defeat_reason = "Límite de movimientos alcanzado"
+		_show_defeat_message(defeat_reason)
+
+func _increment_flip_count():
+	flip_count += 1
+
+func _increment_flip_move_count():
+	flip_move_count += 1
+	maxMovesFlipLabel.text = str(max_flip_moves - flip_move_count)
+	if (timer_mode or challenge_mode) and max_flip_moves > 0 and flip_move_count > max_flip_moves:
+		defeat_reason = "Límite de movimientos en flip alcanzado"
+		_show_defeat_message(defeat_reason)
+
+# --- Mensaje temporal de derrota (placeholder) ---
+func _show_defeat_message(reason: String):
+	# Preparar los datos de derrota para enviar a la pantalla de derrota
+	var defeat_data = {
+		"total_moves": total_moves,
+		"elapsed_time": elapsed_time,
+		"flip_count": flip_count,
+		"flip_move_count": flip_move_count,
+		"reason": reason,
+		"scene_path": "res://Scenes/PuzzleGame.tscn"
+	}
+	GLOBAL.defeat_data = defeat_data
+
+	# Cambiar a la pantalla de derrota
+	GLOBAL.change_scene_with_loading("res://Scenes/DefeatScreen/DefeatScreen.tscn")
+
+	# Pausar el juego y detener timers (por si acaso)
+	is_paused = true
+	if timer_countdown:
+		timer_countdown.stop()
+	stop_game_timer()

@@ -8,9 +8,9 @@ signal show_difficult(is_difficult)
 # Estructura para almacenar las dificultades disponibles
 var difficulties = [
 	{"name": "difficulty_learner", "columns": 1, "rows": 1, "color": "ButtonBlue", "description": "difficulty_learner_description"},
-	{"name": "difficulty_very_easy", "columns": 2, "rows": 2, "color": "", "description": "difficulty_very_easy_description"},
-	{"name": "difficulty_easy", "columns": 3, "rows": 3, "color": "", "description": "difficulty_easy_description"},
-	{"name": "difficulty_normal", "columns": 4, "rows": 4, "color": "ButtonYellow", "description": "difficulty_normal_description"},
+	{"name": "difficulty_very_easy", "columns": 1, "rows": 8, "color": "", "description": "difficulty_very_easy_description"},
+	{"name": "difficulty_easy", "columns": 2, "rows": 8, "color": "", "description": "difficulty_easy_description"},
+	{"name": "difficulty_normal", "columns": 3, "rows": 8, "color": "ButtonYellow", "description": "difficulty_normal_description"},
 	{"name": "difficulty_medium", "columns": 4, "rows": 6, "color": "ButtonYellow", "description": "difficulty_medium_description"},
 	{"name": "difficulty_challenge", "columns": 4, "rows": 8, "color": "ButtonYellow", "description": "difficulty_challenge_description"},
 	{"name": "difficulty_hard", "columns": 6, "rows": 8, "color": "ButtonRed", "description": "difficulty_hard_description"},
@@ -84,8 +84,8 @@ func _update_button_text():
 	for i in range(difficulties.size()):
 		var diff = difficulties[i]
 		if diff.columns == GLOBAL.columns and diff.rows == GLOBAL.rows:
-			current_difficulty = diff.name
-			descriptionLabel.text = diff.description
+			current_difficulty = tr(diff.name)
+			descriptionLabel.text = tr(diff.description)
 			selected_index = i
 			break
 	

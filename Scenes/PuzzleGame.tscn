@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dh8d4yyjtjjsj"]
+[gd_scene load_steps=30 format=3 uid="uid://dh8d4yyjtjjsj"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
@@ -85,16 +85,32 @@ region_rect = Rect2(1600, 480, 101, 101)
 atlas = ExtResource("4_58pa3")
 region = Rect2(2108, 487, 101, 81)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p2qx1"]
+bg_color = Color(1, 0.267088, 0.207117, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mupxo"]
 bg_color = Color(6.16074e-06, 0.629349, 0.813684, 0.968627)
 
 [sub_resource type="FontVariation" id="FontVariation_u0au7"]
 
-[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer", "movesLabel", "panelPaused", "button_options", "flip_button")]
+[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer", "movesLabel", "maxMovesLabel", "maxMovesFlipLabel", "maxFlipsPanel", "maxFlipsLabel", "panelPaused", "button_options", "flip_button")]
 script = ExtResource("1_0gd45")
 pieces_container = NodePath("PiecesContainer")
 UILayer = NodePath("UILayer")
 movesLabel = NodePath("UILayer/MovesLabel")
+maxMovesLabel = NodePath("UILayer/MaxMovesLabel")
+maxMovesFlipLabel = NodePath("UILayer/MaxMovesFlipLabel")
+maxFlipsPanel = NodePath("UILayer/FlipButton/MaxFlipsPanel")
+maxFlipsLabel = NodePath("UILayer/FlipButton/MaxFlipsPanel/MaxFlipsLabel")
 panelPaused = NodePath("UILayer/PanelPaused")
 button_options = NodePath("UILayer/OptionsButton")
 flip_button = NodePath("UILayer/FlipButton")
@@ -259,6 +275,66 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
+[node name="MaxMovesLabel" type="Label" parent="UILayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -126.0
+offset_top = 91.0
+offset_right = -30.0
+offset_bottom = 134.0
+grow_horizontal = 0
+pivot_offset = Vector2(55, 21)
+theme_override_colors/font_color = Color(0.788235, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_font_sizes/font_size = 42
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="UILayer/MaxMovesLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
+
+[node name="MaxMovesFlipLabel" type="Label" parent="UILayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -126.0
+offset_top = 171.0
+offset_right = -30.0
+offset_bottom = 214.0
+grow_horizontal = 0
+pivot_offset = Vector2(55, 21)
+theme_override_colors/font_color = Color(1, 0.541176, 0, 1)
+theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_font_sizes/font_size = 42
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="UILayer/MaxMovesFlipLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
+
 [node name="OptionsButton" type="Button" parent="UILayer"]
 anchors_preset = 3
 anchor_left = 1.0
@@ -344,6 +420,39 @@ pivot_offset = Vector2(50.5, 40.5)
 mouse_filter = 2
 texture = SubResource("AtlasTexture_mupxo")
 expand_mode = 1
+
+[node name="MaxFlipsPanel" type="Panel" parent="UILayer/FlipButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_p2qx1")
+
+[node name="MaxFlipsLabel" type="Label" parent="UILayer/FlipButton/MaxFlipsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -16.5
+offset_right = 20.0
+offset_bottom = 17.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 17)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PanelPaused" type="Panel" parent="UILayer"]
 visible = false

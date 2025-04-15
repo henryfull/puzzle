@@ -18,6 +18,7 @@ var settings = {
 }
 var columns: int = 6
 var rows: int = 8
+var defeat_data = null
 
 var selected_pack = null
 var selected_puzzle = null

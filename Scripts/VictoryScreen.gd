@@ -249,14 +249,14 @@ func update_ui_with_puzzle_data():
 	if puzzle_data and puzzle_data.has("name"):
 		var name_label = labelNamePuzzle
 		if name_label:
-			name_label.text = puzzle_data.name.to_upper()
+			name_label.text = tr(puzzle_data.name).to_upper()
 			name_label.visible = true
 	
 	# Actualizar el texto descriptivo
 	if puzzle_data and puzzle_data.has("description") and text_view:
 		# Formatear el texto para resaltar el nombre científico si existe
 		var description = puzzle_data.description
-		var formatted_text = description
+		var formatted_text = tr(description)
 		
 		# Buscar posibles nombres científicos (en cursiva o entre comillas)
 		var regex = RegEx.new()

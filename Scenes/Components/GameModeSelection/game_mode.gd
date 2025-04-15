@@ -6,7 +6,7 @@ signal show_difficult(is_difficult)
 @export var descriptionLabel: Label
 
 # Estructura para almacenar las dificultades disponibles
-var difficulties = [
+var modes = [
 	{"name": "Relax", "id": 0, "color": "ButtonBlue", "description": "game_mode_relax"},
 	{"name": "normal", "id": 1, "color": "", "description": "game_mode_normal"},
 	{"name": "common_timetrial", "id": 3, "color": "ButtonYellow", "description": "game_mode_timetrial"},
@@ -27,7 +27,7 @@ func _ready():
 	
 	# Obtener referencias a los nodos
 	difficulty_panel = $"."
-	
+	$GameModeLayer/Panel/MarginContainer/VBoxContainer/PlayButton.text = tr("common_play")
 	# Crear los botones de dificultad
 	_create_difficulty_buttons()
 	
@@ -51,8 +51,8 @@ func _create_difficulty_buttons():
 	difficulty_buttons.clear()
 	
 	# Añadir las opciones de dificultad
-	for i in range(difficulties.size()):
-		var diff = difficulties[i]
+	for i in range(modes.size()):
+		var diff = modes[i]
 		var button = Button.new()
 		button.text = tr(diff.name)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -76,8 +76,8 @@ func _update_button_text():
 	var current_difficulty = "Personalizado"
 	var selected_index = -1
 	
-	for i in range(difficulties.size()):
-		var diff = difficulties[i]
+	for i in range(modes.size()):
+		var diff = modes[i]
 		if diff.id == GLOBAL.gamemode:
 			current_difficulty = diff.name
 			descriptionLabel.text = diff.description
@@ -100,7 +100,7 @@ func _update_button_text():
 	
 # Función llamada cuando se selecciona una dificultad
 func _on_difficulty_selected(index):
-	var selected = difficulties[index]
+	var selected = modes[index]
 	
 	# Actualizar las variables globales
 	GLOBAL.gamemode = selected.id
@@ -117,3 +117,7 @@ func _on_difficulty_selected(index):
 func _exit_tree():
 	# Si el panel es hijo de la raíz, removerlo para evitar errores
 	emit_signal("show_difficult", false)
+
+
+func _on_play_button_pressed() -> void:
+	GLOBAL.change_scene_with_loading("res://Scenes/PackSelection.tscn")

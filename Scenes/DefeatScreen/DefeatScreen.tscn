@@ -1,0 +1,240 @@
+[gd_scene load_steps=9 format=3 uid="uid://ckdctobmksr35"]
+
+[ext_resource type="Texture2D" uid="uid://dslexg7tqua4p" path="res://Assets/Images/GUID/backgrounds/bg_lose.jpg" id="1_fcgru"]
+[ext_resource type="Script" uid="uid://23p5a4rub3hg" path="res://Scenes/DefeatScreen/DefeatScreen.gd" id="1_hwdan"]
+[ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="3_m87g5"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="4_k275s"]
+[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_xhjub"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwdan"]
+bg_color = Color(1, 0.996078, 0.886275, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 0.847059, 0.74902, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8f152"]
+atlas = ExtResource("5_xhjub")
+region = Rect2(1990, 487, 87, 103)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_22hyh"]
+atlas = ExtResource("5_xhjub")
+region = Rect2(1988, 669, 121, 103)
+
+[node name="DefeatScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_hwdan")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_fcgru")
+expand_mode = 1
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = 125.0
+offset_right = 300.0
+offset_bottom = -125.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hwdan")
+
+[node name="LabelTitle" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -196.0
+offset_top = 22.0
+offset_right = 197.0
+offset_bottom = 119.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.123326, 0.0978964, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/font = ExtResource("3_m87g5")
+theme_override_font_sizes/font_size = 96
+text = "Failed"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.05
+anchor_right = 0.9
+anchor_bottom = 0.15
+offset_left = -0.199997
+offset_top = 38.2
+offset_right = -0.200012
+offset_bottom = 38.2
+text = "¡Has estado cerca!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatsTitleLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.18
+anchor_right = 0.9
+anchor_bottom = 0.45
+offset_top = -0.400009
+offset_bottom = -230.5
+theme_override_font_sizes/font_size = 48
+text = "Estadísticas:"
+vertical_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.18
+anchor_right = 0.9
+anchor_bottom = 0.45
+offset_top = 68.6
+offset_bottom = 0.5
+text = "Estadísticas:"
+
+[node name="ReasonTitleLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.48
+anchor_right = 0.9
+anchor_bottom = 0.58
+offset_top = -0.399994
+offset_bottom = -20.4
+theme_override_font_sizes/font_size = 48
+text = "Motivo:"
+vertical_alignment = 1
+
+[node name="ReasonLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.48
+anchor_right = 0.9
+anchor_bottom = 0.58
+offset_top = 95.6
+offset_bottom = 95.6
+text = "La razon"
+autowrap_mode = 2
+
+[node name="RetryButton" type="Button" parent="Panel"]
+visible = false
+layout_mode = 0
+anchor_left = 0.15
+anchor_top = 0.65
+anchor_right = 0.85
+anchor_bottom = 0.75
+text = "Volver a jugar"
+
+[node name="BackButton" type="Button" parent="Panel"]
+visible = false
+layout_mode = 0
+anchor_left = 0.15
+anchor_top = 0.78
+anchor_right = 0.85
+anchor_bottom = 0.88
+text = "Volver a la selección de puzzles"
+
+[node name="Footer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -312.0
+offset_right = 280.0
+offset_bottom = -192.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Footer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 100
+
+[node name="BackButton" parent="Footer/HBoxContainer" instance=ExtResource("4_k275s")]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+path = "res://Scenes/PuzzleSelection.tscn"
+
+[node name="Repetir" type="Button" parent="Footer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "Repeat"
+theme_type_variation = &"CircleButtonYellow"
+
+[node name="TextureRect" type="TextureRect" parent="Footer/HBoxContainer/Repetir"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -31.0
+offset_right = 26.0
+offset_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_8f152")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Siguiente" type="Button" parent="Footer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "Next"
+theme_type_variation = &"CircleButtonGreen"
+
+[node name="TextureRect" type="TextureRect" parent="Footer/HBoxContainer/Siguiente"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -26.0
+offset_right = 26.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_22hyh")
+expand_mode = 1
+
+[connection signal="pressed" from="Footer/HBoxContainer/Repetir" to="." method="_on_retry_pressed"]

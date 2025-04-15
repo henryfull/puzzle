@@ -109,18 +109,16 @@ Cuando se selecciona un puzzle directamente te muestra la imagen y un texto rela
 autowrap_mode = 3
 
 [node name="HSeparator2" type="HSeparator" parent="GameModeLayer/Panel/MarginContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 
-[node name="CloseButton" type="Button" parent="GameModeLayer/Panel/MarginContainer/VBoxContainer"]
-visible = false
+[node name="PlayButton" type="Button" parent="GameModeLayer/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(280, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"ButtonRed"
 toggle_mode = true
-text = "Cancelar"
+text = "Jugar"
 
 [node name="ButtonClose" type="Button" parent="GameModeLayer"]
 custom_minimum_size = Vector2(120, 120)
@@ -147,4 +145,5 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_if33d")
 expand_mode = 1
 
+[connection signal="pressed" from="GameModeLayer/Panel/MarginContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="GameModeLayer/ButtonClose" to="." method="_exit_tree"]
