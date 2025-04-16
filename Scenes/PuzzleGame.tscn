@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dh8d4yyjtjjsj"]
+[gd_scene load_steps=31 format=3 uid="uid://dh8d4yyjtjjsj"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://doif0cexxpv6t" path="res://Assets/Sounds/SFX/flip.wav" id="4_qnp3e"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="5_u0au7"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="5_uvymq"]
+[ext_resource type="Texture2D" uid="uid://bumaj141kr3bw" path="res://Assets/Images/GUID/backgrounds/bg_pausa.png" id="8_p2qx1"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="9_u0au7"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7gbeo"]
@@ -455,13 +456,30 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PanelPaused" type="Panel" parent="UILayer"]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mupxo")
+
+[node name="TextureRect" type="TextureRect" parent="UILayer/PanelPaused"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_p2qx1")
+
+[node name="ColorRect" type="ColorRect" parent="UILayer/PanelPaused/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.717647)
 
 [node name="BackgroundTitle" parent="UILayer/PanelPaused" instance=ExtResource("9_u0au7")]
 layout_mode = 1

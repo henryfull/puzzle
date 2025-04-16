@@ -14,6 +14,11 @@ var settings = {
 		"pan_sensitivity": 1.0,
 		"use_tween_effect": true,
 		"tween_duration": 0.2
+	},
+	"gameplay": {     # Nueva sección para opciones de gameplay
+		"columns": 6,
+		"rows": 8,
+		"progresive_difficulty": false
 	}
 }
 var columns: int = 6
@@ -24,6 +29,8 @@ var selected_pack = null
 var selected_puzzle = null
 var change_scene : String
 var gamemode : int = 1
+var is_learner : bool = false
+var progresive_difficulty : bool = false
 
 # Variable para almacenar datos de la victoria
 var victory_data = null
@@ -75,6 +82,16 @@ func load_settings():
 		settings.puzzle.use_tween_effect = config.get_value("puzzle", "use_tween_effect", true)
 		settings.puzzle.tween_duration = config.get_value("puzzle", "tween_duration", 0.2)
 		
+		# Cargar configuración de gameplay
+		settings.gameplay.columns = config.get_value("gameplay", "columns", 6)
+		settings.gameplay.rows = config.get_value("gameplay", "rows", 8)
+		settings.gameplay.progresive_difficulty = config.get_value("gameplay", "progresive_difficulty", false)
+		
+		# Actualizar variables globales con la configuración cargada
+		columns = settings.gameplay.columns
+		rows = settings.gameplay.rows
+		progresive_difficulty = settings.gameplay.progresive_difficulty
+		
 		print("GLOBAL: Configuración cargada correctamente")
 	else:
 		print("GLOBAL: No se encontró archivo de configuración o hubo un error. Usando valores predeterminados.")
@@ -97,6 +114,11 @@ func save_settings() -> void:
 	if err != OK and err != ERR_FILE_NOT_FOUND:
 		print("Error al cargar el archivo de configuración: ", err)
 	
+	# Actualizar configuración con valores actuales antes de guardar
+	settings.gameplay.columns = columns
+	settings.gameplay.rows = rows
+	settings.gameplay.progresive_difficulty = progresive_difficulty
+	
 	# Guardar idioma
 	config.set_value("settings", "language", settings.language)
 	
@@ -112,6 +134,11 @@ func save_settings() -> void:
 	config.set_value("puzzle", "pan_sensitivity", settings.puzzle.pan_sensitivity)
 	config.set_value("puzzle", "use_tween_effect", settings.puzzle.use_tween_effect)
 	config.set_value("puzzle", "tween_duration", settings.puzzle.tween_duration)
+	
+	# Guardar configuración de gameplay
+	config.set_value("gameplay", "columns", settings.gameplay.columns)
+	config.set_value("gameplay", "rows", settings.gameplay.rows)
+	config.set_value("gameplay", "progresive_difficulty", settings.gameplay.progresive_difficulty)
 	
 	# Guardar el archivo
 	err = config.save(SETTINGS_FILE)

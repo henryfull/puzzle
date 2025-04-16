@@ -7,8 +7,9 @@ signal show_difficult(is_difficult)
 
 # Estructura para almacenar las dificultades disponibles
 var modes = [
-	{"name": "Relax", "id": 0, "color": "ButtonBlue", "description": "game_mode_relax"},
-	{"name": "normal", "id": 1, "color": "", "description": "game_mode_normal"},
+	{"name": "difficulty_learner", "id": 0, "color": "ButtonBlue", "description": "difficulty_learner_description"},
+	{"name": "Relax", "id": 1, "color": "ButtonBlue", "description": "game_mode_relax"},
+	{"name": "normal", "id": 2, "color": "", "description": "game_mode_normal"},
 	{"name": "common_timetrial", "id": 3, "color": "ButtonYellow", "description": "game_mode_timetrial"},
 	{"name": "common_challenge", "id": 4, "color": "ButtonRed", "description": "game_mode_chagenlle"},
 	]
@@ -104,6 +105,12 @@ func _on_difficulty_selected(index):
 	
 	# Actualizar las variables globales
 	GLOBAL.gamemode = selected.id
+	if(selected.id == 0):
+		GLOBAL.columns = 1
+		GLOBAL.rows = 4
+		GLOBAL.is_learner = true
+	else:
+		GLOBAL.is_learner = false
 
 	
 	# Actualizar el texto del botón

@@ -7,7 +7,6 @@ signal show_difficult(is_difficult)
 
 # Estructura para almacenar las dificultades disponibles
 var difficulties = [
-	{"name": "difficulty_learner", "columns": 1, "rows": 1, "color": "ButtonBlue", "description": "difficulty_learner_description"},
 	{"name": "difficulty_very_easy", "columns": 1, "rows": 8, "color": "", "description": "difficulty_very_easy_description"},
 	{"name": "difficulty_easy", "columns": 2, "rows": 8, "color": "", "description": "difficulty_easy_description"},
 	{"name": "difficulty_normal", "columns": 3, "rows": 8, "color": "ButtonYellow", "description": "difficulty_normal_description"},
@@ -38,7 +37,7 @@ func _ready():
 	
 	# Actualizar el texto del botón con la dificultad actual
 	_update_button_text()
-	
+	$DifficultyLayer/Panel/MarginContainer/VBoxContainer/CheckButtonDifficult["button_pressed"] = GLOBAL.progresive_difficulty
 	# Conectar a la señal propia
 	self.connect("show_difficult", Callable(self, "_on_toggle_difficult"))
 
@@ -110,9 +109,16 @@ func _on_difficulty_selected(index):
 	# Actualizar las variables globales
 	GLOBAL.columns = selected.columns
 	GLOBAL.rows = selected.rows
+	GLOBAL.is_learner = false
+	if(GLOBAL.gamemode == 0):
+		# Se establece el modo normal si es learner al cambiar de dificultad
+		GLOBAL.gamemode = 2
 	
 	# Actualizar el texto del botón
 	_update_button_text()
+	
+	# Guardar la configuración
+	GLOBAL.save_settings()
 	
 	# Emitir la señal de cambio de dificultad
 	emit_signal("difficulty_changed", selected.columns, selected.rows)
@@ -122,3 +128,13 @@ func _on_difficulty_selected(index):
 func _exit_tree():
 	# Si el panel es hijo de la raíz, removerlo para evitar errores
 	emit_signal("show_difficult", false)
+
+
+func _on_check_button_pressed() -> void:
+	if(GLOBAL.progresive_difficulty):
+		GLOBAL.progresive_difficulty = false
+	else:
+		GLOBAL.progresive_difficulty = true
+	
+	# Guardar la configuración
+	GLOBAL.save_settings()

@@ -125,6 +125,10 @@ theme_type_variation = &"ButtonRed"
 toggle_mode = true
 text = "Cancelar"
 
+[node name="CheckButtonDifficult" type="CheckButton" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Dificultad progresiva"
+
 [node name="ButtonClose" type="Button" parent="DifficultyLayer"]
 custom_minimum_size = Vector2(120, 120)
 offset_left = 30.0
@@ -151,4 +155,5 @@ texture = SubResource("AtlasTexture_8iy6g")
 expand_mode = 1
 
 [connection signal="pressed" from="DifficultyLayer/Panel/MarginContainer/VBoxContainer/CloseButton" to="." method="_exit_tree"]
+[connection signal="pressed" from="DifficultyLayer/Panel/MarginContainer/VBoxContainer/CheckButtonDifficult" to="." method="_on_check_button_pressed"]
 [connection signal="pressed" from="DifficultyLayer/ButtonClose" to="." method="_exit_tree"]

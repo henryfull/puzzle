@@ -70,6 +70,9 @@ var last_pan_position := Vector2.ZERO
 var board_offset := Vector2.ZERO  # Desplazamiento actual del tablero
 var touch_points := {}  # Para rastrear múltiples puntos de contacto en táctil
 
+var default_rows : int = 0
+var default_columns : int = 0
+
 #
 # === VARIABLES INTERNAS ===
 #
@@ -161,6 +164,8 @@ class Piece:
 #
 func _ready():
 	print("PuzzleGame: Iniciando juego...")
+	default_rows = GLOBAL.rows
+	default_columns = GLOBAL.columns
 	
 	# Asegurarnos que el panel de pausa esté oculto al inicio
 	if panelPaused:
@@ -189,11 +194,7 @@ func _ready():
 		if !options_manager.is_connected("options_closed", Callable(self, "_on_options_closed")):
 			options_manager.connect("options_closed", Callable(self, "_on_options_closed"))
 	
-	# Conectar la señal del botón de dificultad
-	var button_difficult = $UILayer/ButtonDifficult
-	if button_difficult and !button_difficult.is_connected("difficulty_changed", Callable(self, "_on_difficulty_changed")):
-		button_difficult.connect("difficulty_changed", Callable(self, "_on_difficulty_changed"))
-	
+
 	# Configurar el puzzle según los datos seleccionados
 	if GLOBAL.selected_puzzle != null:
 		image_path = GLOBAL.selected_puzzle.image
@@ -247,10 +248,17 @@ func _ready():
 				maxMovesLabel.visible = false
 				maxMovesFlipLabel.visible = false
 				maxFlipsPanel.visible = false
-
-			# Si hay otros contadores, ocultar aquí
-			# (por ejemplo, flipsLabel, flipMovesLabel)
 		1:
+			relax_mode = true
+			# Ocultar contadores y reloj
+			if has_node("UILayer/TimerLabel"):
+				$UILayer/TimerLabel.visible = false
+				movesLabel.visible = false
+				maxMovesLabel.visible = false
+				maxMovesFlipLabel.visible = false
+				maxFlipsPanel.visible = false
+
+		2:
 			normal_mode = true
 			# Mostrar contadores normales
 			if has_node("UILayer/TimerLabel"):
@@ -259,7 +267,6 @@ func _ready():
 				maxMovesLabel.visible = false
 				maxMovesFlipLabel.visible = false
 				maxFlipsPanel.visible = false
-
 
 			# Si hay otros contadores, mostrar aquí
 		3:
@@ -2059,14 +2066,15 @@ func on_flip_button_pressed() -> void:
 	# Variable para rastrear si encontramos una pieza seleccionada
 	var target_piece = null
 	
-	if(!is_flip):
-		if(max_flips > 0):
-			max_flips -= 1
-			maxFlipsLabel.text = str(max_flips)
-		else:
-			return
+	if(maxMovesFlipLabel.visible):
+		if(!is_flip):
+			if(max_flips > 0):
+				max_flips -= 1
+				maxFlipsLabel.text = str(max_flips)
+			else:
+				return
+			
 		
-	
 	is_flip = !is_flip
 	
 	# Animar el botón de flip con una rotación de 360 grados
@@ -2271,6 +2279,10 @@ func _on_puzzle_completed():
 	# Marcar el puzzle como completado en el ProgressManager
 	print("PuzzleGame: Marcando puzzle como completado - Pack: " + current_pack_id + ", Puzzle: " + current_puzzle_id)
 	progress_manager.complete_puzzle(current_pack_id, current_puzzle_id)
+
+	# Restablecer las variables globales
+	GLOBAL.rows = default_rows
+	GLOBAL.columns = default_columns
 	
 	# Guardar estadísticas de la partida
 	var stats = {

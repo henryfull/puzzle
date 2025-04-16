@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=71 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=75 format=3 uid="uid://dyqkx5or01raf"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
 [ext_resource type="Texture2D" uid="uid://dm7j0qpidej4f" path="res://Assets/Images/GUID/circle_slider.svg" id="2_jca5l"]
@@ -115,13 +115,15 @@ region_rect = Rect2(382, 474, 100, 100)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dgikm"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tmf1v"]
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(382, 474, 100, 100)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ht6ax"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8wbtt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m25v8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jca5l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d4acn"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_71gex"]
 texture = ExtResource("2_8wbtt")
@@ -437,7 +439,16 @@ CheckBox/styles/hover = SubResource("StyleBoxTexture_b3pw5")
 CheckBox/styles/hover_pressed = SubResource("StyleBoxTexture_yq2fi")
 CheckBox/styles/normal = SubResource("StyleBoxTexture_84jno")
 CheckBox/styles/pressed = SubResource("StyleBoxTexture_dgikm")
-CheckButton/styles/normal = SubResource("StyleBoxTexture_tmf1v")
+CheckButton/colors/font_color = Color(0.219608, 0.4, 0.498039, 1)
+CheckButton/colors/font_focus_color = Color(0.329412, 0.886275, 0.552941, 1)
+CheckButton/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+CheckButton/colors/font_hover_pressed_color = Color(0.329412, 0.886275, 0.552941, 1)
+CheckButton/colors/font_pressed_color = Color(0.329412, 0.886275, 0.552941, 1)
+CheckButton/styles/focus = SubResource("StyleBoxEmpty_ht6ax")
+CheckButton/styles/hover = SubResource("StyleBoxEmpty_8wbtt")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxEmpty_m25v8")
+CheckButton/styles/normal = SubResource("StyleBoxEmpty_jca5l")
+CheckButton/styles/pressed = SubResource("StyleBoxEmpty_d4acn")
 CircleButtonBlue/base_type = &"Button"
 CircleButtonBlue/styles/focus = SubResource("StyleBoxTexture_71gex")
 CircleButtonBlue/styles/hover = SubResource("StyleBoxTexture_2hadl")

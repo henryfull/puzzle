@@ -85,6 +85,13 @@ func _ready():
 	
 	# Mostrar logros desbloqueados si hay alguno
 	show_unlocked_achievements()
+	if(GLOBAL.progresive_difficulty):
+		if(GLOBAL.rows < 22):
+			GLOBAL.rows += 1
+		else: 
+			if(GLOBAL.columns < 10):
+				GLOBAL.columns += 1
+		
 	
 	# Adaptar la UI para dispositivos móviles
 	# adapt_ui_for_device()
