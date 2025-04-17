@@ -1,135 +1,223 @@
 # Game Design Document: Puzzle
 
+## 0. Portada del Proyecto
+- **Título del juego**: Puzzle  
+- **Versión del documento**: v1.0  
+- **Fecha**: 17 de abril de 2025  
+- **Desarrollador**: Enric Vallribera  
+- **Contacto**: [tu email o perfil de contacto]  
+- *(Logo o imagen del juego si aplica)*
+
+---
+
 ## 1. Información General
 
 ### 1.1 Concepto del Juego
-Puzzle es un juego de rompecabezas para dispositivos móviles y PC donde los jugadores deben reconstruir imágenes divididas en piezas. El juego ofrece varios packs temáticos con múltiples puzzles en cada uno, diferentes niveles de dificultad y varios modos de juego para adaptarse a diferentes estilos de jugadores.
+Puzzle es un juego de rompecabezas para dispositivos móviles y PC donde los jugadores deben reconstruir imágenes divididas en piezas. El juego ofrece varios packs temáticos, diferentes niveles de dificultad y varios modos de juego adaptados a distintos estilos de jugadores.
 
 ### 1.2 Plataformas
-- Dispositivos móviles (iOS, Android)
-- PC (Windows, macOS)
+- iOS  
+- Android  
+- Windows  
+- macOS  
 
 ### 1.3 Público Objetivo
-- Jugadores casuales de todas las edades
-- Aficionados a los juegos de rompecabezas
-- Personas que buscan un entretenimiento relajante o un desafío mental
+- Jugadores casuales de todas las edades  
+- Amantes de rompecabezas y retos mentales  
+- Personas que buscan entretenimiento relajante  
+
+---
 
 ## 2. Gameplay
 
 ### 2.1 Mecánicas Básicas
-- **Arrastrar y Soltar**: Los jugadores pueden arrastrar las piezas y soltarlas en su posición.
-- **Unión de Piezas**: Las piezas que encajan correctamente se unen automáticamente formando grupos.
-- **Paneo del Tablero**: Los jugadores pueden desplazarse por el tablero de juego para ver todas las piezas disponibles.
-- **Volteo de Piezas**: Los jugadores pueden voltear las piezas para ver el diseño trasero como ayuda adicional.
+- **Arrastrar y Soltar**: Para posicionar piezas.
+- **Unión de Piezas**: Piezas encajan y se agrupan automáticamente.
+- **Paneo del Tablero**: Permite desplazarse por el área de juego.
+- **Volteo de Piezas**: Vista alternativa en el reverso de las piezas.
 
 ### 2.2 Modos de Juego
-1. **Modo Principiante (Learner)**: Tutorial y puzles muy simples (1x4) para familiarizarse con el juego.
-2. **Modo Relax**: Sin límites de tiempo ni movimientos, permite disfrutar del juego sin presión.
-3. **Modo Normal**: Contabiliza el tiempo y los movimientos, pero sin límites estrictos.
-4. **Modo Contrarreloj (Time Trial)**: Los jugadores deben completar el puzzle antes de que se acabe el tiempo.
-5. **Modo Desafío (Challenge)**: Límite de movimientos y de volteos de piezas, ofreciendo un mayor reto.
+1. **Modo Principiante (Learner)**  
+2. **Modo Relax**  
+3. **Modo Normal**  
+4. **Modo Contrarreloj (Time Trial)**  
+5. **Modo Desafío (Challenge)**  
 
 ### 2.3 Niveles de Dificultad
-La dificultad se ajusta mediante el número de piezas en el tablero:
-- El tamaño del puzzle puede variar desde configuraciones sencillas (p.ej., 1x4 para el modo principiante)
-- Hasta configuraciones más complejas (por defecto 6x8)
-- El juego permite ajustar el número de columnas y filas según preferencia
+- Desde configuraciones simples (1x4) hasta complejas (6x8).  
+- Ajuste libre del número de filas y columnas.
 
 ### 2.4 Progresión del Juego
-- Packs de puzzles temáticos con múltiples imágenes dentro de cada pack
-- Sistema de desbloqueo progresivo: completar un puzzle desbloquea el siguiente
-- Algunos packs están bloqueados inicialmente y pueden requerir compra o ser desbloqueados por progresión
+- Packs temáticos con desbloqueo progresivo.  
+- Algunos packs requieren compra o logro.
+
+---
 
 ## 3. Contenido del Juego
 
 ### 3.1 Packs de Puzzles
-El juego incluye varios packs temáticos, cada uno con múltiples puzzles:
-1. **Fruits**: Colección de imágenes relacionadas con frutas. (Desbloqueado por defecto)
-2. **Numbers**: Colección de imágenes relacionadas con números. (Requiere desbloqueo)
-3. **Wild Animals**: Colección de imágenes de animales salvajes. (Requiere desbloqueo)
-4. **Farm Animals**: Colección de imágenes de animales de granja. (Requiere desbloqueo)
+- **Fruits** *(desbloqueado)*  
+- **Numbers** *(desbloqueo requerido)*  
+- **Wild Animals** *(desbloqueo requerido)*  
+- **Farm Animals** *(desbloqueo requerido)*  
 
-Cada pack contiene entre 7-10 puzzles relacionados con su temática.
+Cada pack contiene de 7 a 10 puzzles.
 
 ### 3.2 Elementos de Interfaz
-- **Menú Principal**: Acceso a jugar, opciones, logros y estadísticas
-- **Selección de Pack**: Muestra los packs disponibles y su estado (bloqueado/desbloqueado)
-- **Selección de Puzzle**: Muestra los puzzles dentro de un pack y su estado (completado/pendiente)
-- **Pantalla de Juego**: Incluye el tablero de juego, botones de acción y contadores
-- **Pantalla de Victoria**: Muestra estadísticas de la partida y opciones para continuar
+- Menú Principal  
+- Selección de Pack  
+- Selección de Puzzle  
+- Pantalla de Juego  
+- Pantalla de Victoria  
+
+---
 
 ## 4. Características Técnicas
 
 ### 4.1 Estructura del Proyecto
-El proyecto está organizado en varios directorios principales:
-- **Scenes**: Contiene todas las escenas del juego
-- **Scripts**: Contiene toda la lógica de programación
-- **Resources**: Contiene recursos como materiales y configuraciones
-- **Assets**: Contiene activos como audio, fuentes e imágenes
-- **Data**: Contiene datos y esquemas para el juego
-- **Addons**: Contiene plugins adicionales como godotsteam
+- `Scenes/`  
+- `Scripts/`  
+- `Resources/`  
+- `Assets/`  
+- `Data/`  
+- `Addons/`  
 
-### 4.2 Adaptación para Dispositivos Móviles
-- Interfaz escalable que se adapta a diferentes tamaños de pantalla
-- Botones más grandes y espaciados en dispositivos móviles
-- Sistema de desplazamiento táctil mejorado para facilitar el uso en pantallas táctiles
-- Optimizaciones para diferentes resoluciones y orientaciones de pantalla
+### 4.2 Adaptación a Dispositivos Móviles
+- Interfaz escalable y táctil.  
+- Botones optimizados para pantallas pequeñas.  
+- Orientación adaptable.
 
 ### 4.3 Elementos Especiales
-- **Sistema de Z-Index**: Gestión de capas visuales para asegurar que los elementos se muestren correctamente
-- **Contenedor Táctil Personalizado**: Mejora la experiencia de desplazamiento en dispositivos táctiles
-- **Viewport para Texturas**: Generación dinámica de texturas para el lado trasero de las piezas
-- **Sistema de Pausa**: Permite pausar el juego y acceder a opciones sin perder progreso
+- Sistema de Z-Index  
+- Contenedor Táctil Personalizado  
+- Viewport dinámico para texturas  
+- Sistema de Pausa
+
+---
 
 ## 5. Sistema de Progresión y Logros
 
 ### 5.1 Guardado de Progreso
-- El juego guarda automáticamente el progreso de los jugadores
-- Se registran los packs y puzzles completados
-- Se almacenan estadísticas como tiempo total jugado y puzzles resueltos
+- Guardado automático.  
+- Registro de puzzles completados y estadísticas.
 
 ### 5.2 Estadísticas
-El juego registra y muestra varias estadísticas:
-- Número total de puzzles completados
-- Tiempo total de juego
-- Movimientos promedio por puzzle
-- Logros desbloqueados
+- Tiempo jugado  
+- Puzzles resueltos  
+- Movimientos promedio  
+- Logros alcanzados
 
 ### 5.3 Logros
-El juego incluye un sistema de logros que recompensa diferentes hitos:
-- Completar puzzles en diferentes niveles de dificultad
-- Utilizar (o no) la función de volteo
-- Resolver puzzles en un tiempo determinado o con un número limitado de movimientos
+- Resolver en X tiempo o movimientos  
+- Uso/no uso del volteo  
+- Completar packs
+
+---
 
 ## 6. Características Adicionales
 
 ### 6.1 Opciones y Configuración
-- Ajustes de volumen separados para música, efectos y voces
-- Selección de idioma
-- Opciones de accesibilidad como tamaño de fuente
-- Sensibilidad de desplazamiento del tablero
-- Efectos visuales (activar/desactivar)
+- Volumen: música, efectos, voces  
+- Idioma  
+- Accesibilidad  
+- Sensibilidad de desplazamiento  
+- Efectos visuales
 
-### 6.2 Efectos y Respuesta Visual
-- Animaciones para la unión de piezas
-- Efectos para indicar victoria o acciones incorrectas
-- Notificaciones de logros desbloqueados
-- Efectos de transición entre pantallas
+### 6.2 Efectos Visuales
+- Animaciones suaves  
+- Indicadores de acción  
+- Transiciones  
+- Notificaciones emergentes
 
 ### 6.3 Audio
-- Efectos de sonido para mover piezas, unir piezas y completar puzzles
-- Efectos de sonido para voltear piezas
-- Música de fondo ambiental
+- Efectos para todas las interacciones  
+- Música ambiental relajante
+
+---
 
 ## 7. Modelo de Negocio
-El juego puede seguir diferentes modelos:
-- Gratuito con packs adicionales de pago
-- Sistema de desbloqueo progresivo con opción de compra anticipada
-- Sistema de consejos o ayudas adicionales mediante compras in-app
+
+- Gratuito con packs premium  
+- Desbloqueo anticipado opcional  
+- Compras in-app para ayudas o contenido visual  
+
+---
 
 ## 8. Particularidades y Ventajas Competitivas
-- Interfaz intuitiva y accesible para jugadores de todas las edades
-- Sistema de volteo de piezas que añade una capa adicional de estrategia
-- Adaptación optimizada para dispositivos móviles
-- Variedad de modos de juego que ofrecen diferentes experiencias
-- Sistema progresivo de dificultad que mantiene el interés a largo plazo 
+
+- Interfaz amigable para todas las edades  
+- Sistema de volteo único  
+- Modos para relajarse o competir  
+- Progresión ajustada al jugador
+
+---
+
+## 9. Narrativa y Estética
+
+### 9.1 Estilo Visual
+- Estética cartoon, limpia y minimalista  
+- Colores suaves y atractivos  
+- Packs con identidad visual coherente  
+
+### 9.2 Ambientación
+- No hay narrativa lineal, pero los packs reflejan mundos visuales distintos.  
+- Música y arte visual trabajan en conjunto.
+
+---
+
+## 10. UX y Diseño de Jugabilidad
+
+### 10.1 Flujo del Jugador
+1. Inicio  
+2. Menú Principal  
+3. Selección de pack  
+4. Selección de puzzle  
+5. Modo de juego  
+6. Gameplay  
+7. Resultados  
+
+### 10.2 Tutorial
+- Modo principiante con tutorial interactivo.  
+- Ayuda contextual integrada.
+
+---
+
+## 11. IA y Algoritmos
+
+### 11.1 Colocación de Piezas
+- Sistema de validación por proximidad  
+- Detección de agrupamiento y unión automática
+
+### 11.2 Dificultad Dinámica
+- Sugerencias si el jugador se estanca  
+- Parámetros ajustables para un reto justo
+
+---
+
+## 12. Localización
+
+- Idiomas disponibles: Español, Inglés, Francés  
+- Packs y menús localizados  
+- Preparado para internacionalización
+
+---
+
+## 13. Monetización Ética
+
+- Sin anuncios intrusivos  
+- Compras solo para contenido visual o acceso temprano  
+- El contenido principal es accesible sin pagar
+
+---
+
+## 14. Pruebas y Lanzamiento
+
+### 14.1 Fases de Testeo
+- Alpha cerrada  
+- Beta abierta (TestFlight / Google Play Beta)  
+- Test en múltiples resoluciones
+
+### 14.2 Roadmap de Lanzamiento
+- Alpha: Junio 2025  
+- Beta: Agosto 2025  
+- Lanzamiento: Octubre 2025
