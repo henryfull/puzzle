@@ -1,15 +1,21 @@
-[gd_scene load_steps=13 format=3 uid="uid://sc0afjqsuaff"]
+[gd_scene load_steps=15 format=3 uid="uid://sc0afjqsuaff"]
 
 [ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
 [ext_resource type="Texture2D" uid="uid://c8e3l3s0vy870" path="res://Assets/Images/GUID/backgrounds/bg_victory.jpg" id="2_fv7sy"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_i68vf"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="3_8kq2x"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="3_11iis"]
+[ext_resource type="Texture2D" uid="uid://d0hgnlc4lvvps" path="res://Assets/Images/icons/star_3.png" id="4_11iis"]
 [ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="4_fv7sy"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_j7jqh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cek7k"]
 atlas = ExtResource("2_fv7sy")
+
+[sub_resource type="Curve" id="Curve_11iis"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -0.0159942), 0.0, 0.0, 0, 0, Vector2(0.504292, 0.976372), 0.0, 0.0, 0, 0, Vector2(0.976395, 0.0548891), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjces"]
 bg_color = Color(1, 0.996078, 0.886275, 1)
@@ -122,6 +128,27 @@ grow_vertical = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Body"]
 layout_mode = 2
 alignment = 1
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="CanvasLayer/Body/VBoxContainer"]
+position = Vector2(270, 340)
+scale = Vector2(3, 3)
+amount = 20
+texture = ExtResource("4_11iis")
+speed_scale = 1.75
+explosiveness = 0.5
+randomness = 0.4
+fixed_fps = 60
+draw_order = 1
+emission_shape = 3
+emission_rect_extents = Vector2(121, 171)
+gravity = Vector2(0, 2)
+initial_velocity_max = 20.0
+radial_accel_min = 100.0
+radial_accel_max = 100.0
+scale_amount_min = 0.03
+scale_amount_max = 0.03
+hue_variation_max = 0.48
+hue_variation_curve = SubResource("Curve_11iis")
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body/VBoxContainer"]
 clip_contents = true

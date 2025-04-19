@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=75 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=77 format=3 uid="uid://dyqkx5or01raf"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
 [ext_resource type="Texture2D" uid="uid://dm7j0qpidej4f" path="res://Assets/Images/GUID/circle_slider.svg" id="2_jca5l"]
@@ -304,6 +304,12 @@ modulate_color = Color(0.219608, 0.4, 0.498039, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m3e3b"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2al4h"]
+bg_color = Color(0, 0.625296, 0.997006, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gph5t"]
+bg_color = Color(1, 0.146215, 0.795291, 1)
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m3e3b"]
 texture = ExtResource("2_8wbtt")
 texture_margin_left = 20.0
@@ -497,6 +503,8 @@ Label/font_sizes/font_size = 32
 Label/fonts/font = ExtResource("7_ht6ax")
 LabelBox/base_type = &"Label"
 LabelBox/styles/normal = SubResource("StyleBoxFlat_m3e3b")
+MenuButton/styles/hover = SubResource("StyleBoxFlat_2al4h")
+MenuButton/styles/normal = SubResource("StyleBoxFlat_gph5t")
 OptionButton/icons/arrow = null
 OptionButton/icons/icon = null
 OptionButton/styles/disabled = SubResource("StyleBoxTexture_m3e3b")
@@ -510,7 +518,7 @@ PanelContainer/styles/panel = SubResource("StyleBoxFlat_8wbtt")
 PanelInside/base_type = &"Panel"
 PanelInside/styles/panel = SubResource("StyleBoxFlat_epneu")
 Title/base_type = &"Label"
-Title/colors/font_color = Color(0.817999, 0.997152, 0.931849, 1)
+Title/colors/font_color = Color(1, 0.956863, 0.72549, 1)
 Title/colors/font_outline_color = Color(0.884299, 0.228934, 0.0956512, 1)
 Title/colors/font_shadow_color = Color(0, 0, 0, 1)
 Title/constants/line_spacing = 8
