@@ -3233,3 +3233,11 @@ func _show_defeat_message(reason: String):
 	if timer_countdown:
 		timer_countdown.stop()
 	stop_game_timer()
+
+# Manejar el gesto de 'volver atrás' (botón de retroceso Android, gestos de sistema)
+func handle_back_gesture() -> bool:
+	print("PuzzleGame: Manejando gesto de volver atrás")
+	if !puzzle_completed and is_timer_active:
+		show_exit_dialog()
+		return true  # Devolver true para indicar que hemos manejado el gesto
+	return false  # Usar comportamiento por defecto
