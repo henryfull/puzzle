@@ -6,6 +6,7 @@ var btn_stats : Button
 var btn_achievements : Button
 var btn_exit : Button
 var label_version: Label
+var confirm_dialog_scene = preload("res://Scenes/ConfirmExitDialog.tscn")
 
 func _ready():
 	# Esperar un frame para asegurarnos de que GLOBAL y TranslationLoader estén inicializados
@@ -15,6 +16,9 @@ func _ready():
 	btn_achievements = $CanvasLayer/MarginContainer/VBoxContainer/BTN_achievements
 	btn_exit = $CanvasLayer/MarginContainer/VBoxContainer/BTN_exit
 	label_version = $CanvasLayer/LabelVersion
+
+	if OS.has_feature("ios"):
+		btn_exit.visible = false
 	
 	# Mostrar la versión del juego
 	update_version_label()
@@ -70,12 +74,33 @@ func _on_OptionsButton_pressed():
 func _on_AchievementsButton_pressed():
 	GLOBAL.change_scene_with_loading("res://Scenes/Achievements.tscn")
 
-func _on_ExitButton_pressed():
-	get_tree().quit() 
+# Mostrar el diálogo de confirmación para salir directamente
+func show_exit_dialog():
+	# Eliminar diálogos anteriores si existen
+	for child in get_children():
+		if child.is_in_group("exit_dialog"):
+			child.queue_free()
+	
+	# Instanciar nuevo diálogo
+	var dialog = confirm_dialog_scene.instantiate()
+	
+	# Conectar señales
+	dialog.exit_confirmed.connect(func(): get_tree().quit())
+	dialog.exit_canceled.connect(func(): dialog.queue_free())
+	
+	# Añadir a la escena actual
+	add_child(dialog)
+	
+	# Mostrar el diálogo
+	dialog.show_dialog()
 
+func _on_ExitButton_pressed():
+	# Mostrar diálogo de confirmación para salir
+	show_exit_dialog()
 
 func _on_btn_exit_pressed() -> void:
-	get_tree().quit()
+	# Mostrar diálogo de confirmación para salir
+	show_exit_dialog()
 
 func _on_StatsButton_pressed():
 	GLOBAL.change_scene_with_loading("res://Scenes/StatsScreen.tscn")

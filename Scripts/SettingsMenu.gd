@@ -38,5 +38,11 @@ func _notification(what):
 	# Asegurarse de que la configuración se guarde al cerrar la aplicación
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		AudioManager.save_volume_settings()
-		# Permitir que la aplicación se cierre
-		get_tree().quit() 
+		
+		# Usar el diálogo de confirmación en lugar de salir directamente
+		if has_node("/root/BackGestureHandler"):
+			get_node("/root/BackGestureHandler").show_exit_dialog()
+			get_viewport().set_input_as_handled()  # Evitar el cierre automático
+		else:
+			# Si por alguna razón no está el gestor, permitir el cierre normal
+			get_tree().quit() 

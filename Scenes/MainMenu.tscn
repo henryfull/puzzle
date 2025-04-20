@@ -136,10 +136,10 @@ theme_override_font_sizes/font_size = 32
 text = "Modos"
 
 [node name="BTN_exit" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(210, 50)
 layout_mode = 2
 theme_type_variation = &"ButtonYellow"
+theme_override_font_sizes/font_size = 32
 text = "Salir"
 
 [node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer"]

@@ -1,0 +1,99 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5r7ivbvlw6tl"]
+
+[ext_resource type="Script" uid="uid://ca6me2clqoh7j" path="res://Scripts/ConfirmExitDialog.gd" id="1_0v61x"]
+[ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="2_fntwn"]
+
+[node name="ConfirmExitDialog" type="Control"]
+process_mode = 3
+z_index = 100
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0v61x")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.784314)
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CanvasLayer/CenterContainer"]
+custom_minimum_size = Vector2(530, 300)
+layout_mode = 2
+theme = ExtResource("2_fntwn")
+theme_type_variation = &"PanelInside"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/CenterContainer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.5
+offset_top = -111.0
+offset_right = 260.5
+offset_bottom = 111.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer/Panel/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_fntwn")
+theme_override_font_sizes/font_size = 48
+text = "¿Salir del juego?"
+horizontal_alignment = 1
+
+[node name="MessageLabel" type="Label" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_fntwn")
+text = "¿Estás seguro que quieres salir?"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="CancelButton" type="Button" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+theme = ExtResource("2_fntwn")
+theme_type_variation = &"ButtonBlue"
+text = "Cancelar"
+
+[node name="ConfirmButton" type="Button" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+theme = ExtResource("2_fntwn")
+theme_type_variation = &"ButtonRed"
+text = "Salir"
+
+[connection signal="pressed" from="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]

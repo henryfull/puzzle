@@ -11,6 +11,37 @@ config_version=5
 [application]
 
 config/name="puzzle tiki tiki"
+config/description="🧩 Puzzle Tiki Tiki - Aprende Jugando
+
+¡Descubre el juego de rompecabezas perfecto para niños y niñas de 3 a 7 años!
+Con imágenes coloridas, piezas interactivas y temáticas educativas, Puzzle convierte el aprendizaje en una aventura divertida.
+
+🎓 Diseñado para aprender:
+	•	Reconoce números, letras, animales y objetos cotidianos.
+	•	Estimula la memoria, la lógica y la coordinación visomotriz.
+	•	Incluye voz en off educativa que guía a los más pequeños en cada paso.
+
+🧠 Desafíos adaptados a cada edad:
+	•	Desde puzzles simples de 4 piezas hasta retos de 20 piezas.
+	•	Dificultad progresiva para que crezcan aprendiendo.
+	•	Modos Relax y Contrarreloj según la experiencia del niño o niña.
+
+🌟 Características clave:
+	•	Interfaz intuitiva y amigable para todas las edades.
+	•	Efectos sonoros y animaciones que refuerzan el aprendizaje.
+	•	Packs temáticos: frutas, letras, números, animales salvajes y más.
+	•	Sistema de recompensas y logros que motiva a seguir jugando.
+
+⸻
+
+✅ Ideal para:
+	•	Padres que buscan una alternativa educativa y segura.
+	•	Niños que aprenden jugando con diversión y autonomía.
+	•	Momentos de juego familiar o individual.
+
+⸻
+
+Descarga Puzzle ahora y acompaña a tus peques en su aprendizaje mientras se divierten encajando el mundo, una pieza a la vez. 🧩✨"
 config/version="0.76.47"
 run/main_scene="uid://dh7t7utu076oi"
 config/features=PackedStringArray("4.4", "GL Compatibility")
@@ -20,6 +51,7 @@ boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
 boot_splash/image="uid://ctfuu506avefk"
 config/icon="uid://7chqk0fghn6n"
 boot_splash/minimum_display_time=5
+config/quality/msaa_2d=0
 
 [audio]
 
@@ -37,6 +69,7 @@ OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 AudioManager="*res://Scripts/Autoload/AudioManager.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
 PackPurchaseManager="*res://Scripts/PackPurchaseManager.gd"
+BackGestureHandler="*res://Scripts/Autoload/BackGestureHandler.gd"
 
 [debug]
 
@@ -80,5 +113,5 @@ locale/translation_add_builtin_strings_to_pot=true
 
 renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
-anti_aliasing/quality/msaa_2d=2
+anti_aliasing/quality/msaa_2d=3
 environment/defaults/default_clear_color=Color(0.301961, 0.301961, 0.301961, 1)

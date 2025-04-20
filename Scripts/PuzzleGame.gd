@@ -27,6 +27,7 @@ var just_placed_piece: bool = false
 @export var maxFlipsPanel: Panel
 @export var maxFlipsLabel: Label
 
+var confirm_dialog_scene = preload("res://Scenes/ConfirmExitDialog.tscn")
 
 # Variables para gestionar el doble toque
 var last_touch_time: float = 0.0
@@ -312,6 +313,7 @@ func _ready():
 				maxFlipsPanel.visible = true
 
 			# Si hay otros contadores, mostrar aquí
+
 
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
 	# 1) Cargar la escena del viewport
@@ -3141,9 +3143,32 @@ func count_unique_groups():
 
 
 func _on_button_exit_pressed() -> void:
-	resume_game()
-	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+	
+	show_exit_dialog()
+	
 
+# Mostrar el diálogo de confirmación para salir directamente
+func show_exit_dialog():
+	# Eliminar diálogos anteriores si existen
+	for child in get_children():
+		if child.is_in_group("exit_dialog"):
+			child.queue_free()
+	
+	# Instanciar nuevo diálogo
+	var dialog = confirm_dialog_scene.instantiate()
+	dialog.title_text = "¿Salir del Puzzle?"
+	# Conectar señales
+	dialog.exit_confirmed.connect(
+		func(): 
+			resume_game()
+			get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn"))
+	dialog.exit_canceled.connect(func(): dialog.queue_free())
+	
+	# Añadir a la escena actual
+	add_child(dialog)
+	
+	# Mostrar el diálogo
+	dialog.show_dialog()
 
 func _on_button_repeat_pressed() -> void:
 	_on_difficulty_changed(GLOBAL.columns, GLOBAL.rows)
