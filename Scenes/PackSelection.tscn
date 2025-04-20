@@ -1,15 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://pvq1o6wdx44x"]
+[gd_scene load_steps=9 format=3 uid="uid://pvq1o6wdx44x"]
 
 [ext_resource type="Script" uid="uid://db4glnv08qilj" path="res://Scripts/PackSelection.gd" id="1_wswaw"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_6xblp"]
-[ext_resource type="Texture2D" uid="uid://d2vq8rfxw5r3s" path="res://Assets/Images/GUID/banner_green.svg" id="3_ot00g"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_6xblp"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_oq1hd"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="4_ot00g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6xblp"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ot00g"]
 
 [sub_resource type="FontVariation" id="FontVariation_ot00g"]
 
@@ -61,39 +58,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 title = "Packs"
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
-visible = false
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = -2.0
-offset_top = 94.0
-offset_right = 1.26587
-offset_bottom = 306.0
-grow_horizontal = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_ot00g")
-
-[node name="BackgroundTitle" parent="CanvasLayer/PanelContainer" instance=ExtResource("4_6xblp")]
-layout_mode = 2
-title = "Packs"
-
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/PanelContainer"]
-visible = false
-z_index = 1
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("3_ot00g")
-expand_mode = 3
-stretch_mode = 5
-
 [node name="ContainerPacks" type="VBoxContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 223.0
-offset_right = -20.0
-offset_bottom = -64.0
+offset_left = -347.0
+offset_top = 234.0
+offset_right = 347.0
+offset_bottom = -42.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3

@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://b6sg71qs17yj5"]
+[gd_scene load_steps=8 format=3 uid="uid://b6sg71qs17yj5"]
 
 [ext_resource type="Script" uid="uid://c1twov7g0717y" path="res://Scripts/PuzzleSelection.gd" id="1_nt7kx"]
-[ext_resource type="Texture2D" uid="uid://d2vq8rfxw5r3s" path="res://Assets/Images/GUID/banner_green.svg" id="3_lg0oo"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_4mmlg"]
 [ext_resource type="PackedScene" uid="uid://dpw3l7nftx7kg" path="res://Scenes/Components/PuzzleGrid/PuzzleGrid.tscn" id="4_moqol"]
 [ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="4_oehjl"]
@@ -41,63 +40,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 title = "Puzzles"
 
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/PanelContainer"]
-visible = false
-z_index = 1
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("3_lg0oo")
-expand_mode = 3
-stretch_mode = 5
-
-[node name="TitleBanner" type="ColorRect" parent="CanvasLayer"]
-visible = false
-z_index = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 98.0
-offset_bottom = 218.0
-grow_horizontal = 2
-color = Color(1, 1, 1, 0)
-
-[node name="TitleLabel" type="Label" parent="CanvasLayer/TitleBanner"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -194.5
-offset_top = -30.0
-offset_right = 194.5
-offset_bottom = 30.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 48
-text = "PUZZLES"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Subtitle" type="Label" parent="CanvasLayer/TitleBanner"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -177.0
-offset_top = -30.0
-offset_right = 177.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "Selecciona el puzzle"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 10
 anchor_right = 1.0
@@ -127,13 +69,14 @@ layout_mode = 2
 theme_override_constants/margin_right = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 264.0
-offset_right = -20.0
-offset_bottom = -96.0
+offset_left = -344.0
+offset_top = 259.0
+offset_right = 344.0
+offset_bottom = -21.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
