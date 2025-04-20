@@ -32,7 +32,7 @@ func _ready():
 	pack_selector = $CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector/PackDropdown
 	puzzle_selector = $CanvasLayer/MainContainer/ContentContainer/Selectors/PuzzleSelector/PuzzleDropdown
 	difficulty_selector = $CanvasLayer/MainContainer/ContentContainer/Selectors/DifficultySelector/DifficultyDropdown
-	puzzle_image = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel/PuzzleImage
+	puzzle_image = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel/MarginContainer/PuzzleImage
 	
 	# Obtener referencias a los labels de estadísticas
 	var stats_container = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer
@@ -66,6 +66,13 @@ func _ready():
 	if difficulty_selector:
 		difficulty_selector.item_selected.connect(_on_difficulty_selected)
 	
+	# Configurar correctamente el panel y la imagen
+	var panel = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel
+	panel.clip_children = 1 # CLIP_CHILDREN_ONLY
+	
+	var image = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel/MarginContainer/PuzzleImage
+	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
 # Llenar el selector de packs (solo los desbloqueados)
 func populate_pack_selector():
@@ -200,7 +207,7 @@ func show_stats_for_difficulty(difficulty: String):
 		return
 	
 	# Actualizar completado
-	completions_label.text = tr("Veces completado: ") + str(stats.completions)
+	completions_label.text = tr("Veces completado: ") + str(int(stats.completions))
 	completions_label.visible = true
 	
 	# Actualizar mejor tiempo
@@ -218,13 +225,13 @@ func show_stats_for_difficulty(difficulty: String):
 	
 	# Actualizar mejor movimientos
 	if stats.has("best_moves") and stats.best_moves > 0:
-		best_moves_label.text = tr("Mejor movimientos: ") + str(stats.best_moves)
+		best_moves_label.text = tr("Mejor movimientos: ") + str(int(stats.best_moves))
 		best_moves_label.visible = true
 		
 		# Fecha de los mejores movimientos
 		if stats.has("best_moves_date"):
 			var date_str = format_date_time(stats.best_moves_date)
-			best_moves_date_label.text = tr("Conseguido el: ") + date_str
+			best_moves_date_label.text = tr("Conseguido el: ") + str(date_str.to_int())
 			best_moves_date_label.visible = true
 
 # Restablecer la visualización de estadísticas

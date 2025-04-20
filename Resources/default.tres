@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=77 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=84 format=3 uid="uid://dyqkx5or01raf"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
 [ext_resource type="Texture2D" uid="uid://dm7j0qpidej4f" path="res://Assets/Images/GUID/circle_slider.svg" id="2_jca5l"]
@@ -16,13 +16,22 @@ region_rect = Rect2(21, 37, 346, 91)
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(383, 37, 347, 91)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_epneu"]
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ut3e1"]
+resource_local_to_scene = true
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(21, 37, 346, 91)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5ois1"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(21, 39, 346, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_epneu"]
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(21, 37, 346, 91)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x3e76"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1vfkc"]
 texture = ExtResource("2_8wbtt")
@@ -40,6 +49,26 @@ region_rect = Rect2(21, 358, 346, 88)
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(21, 358, 346, 88)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sj5kf"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(383, 358, 347, 88)
+modulate_color = Color(0.792157, 0.341176, 0.854902, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wsgho"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(383, 358, 347, 88)
+modulate_color = Color(0.792157, 0.341176, 0.854902, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tmf1v"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(21, 358, 346, 88)
+modulate_color = Color(0.792157, 0.341176, 0.854902, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xclca"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(21, 358, 346, 88)
+modulate_color = Color(0.792157, 0.341176, 0.854902, 1)
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r7fgh"]
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(21, 145, 346, 91)
@@ -49,6 +78,7 @@ texture = ExtResource("2_8wbtt")
 region_rect = Rect2(383, 145, 347, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d4acn"]
+resource_local_to_scene = true
 texture = ExtResource("2_8wbtt")
 region_rect = Rect2(21, 145, 346, 91)
 
@@ -389,7 +419,12 @@ expand_margin_right = 20.0
 expand_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_epneu"]
-bg_color = Color(0.898039, 0.898039, 1, 1)
+bg_color = Color(1, 0.996078, 0.886275, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 0.847059, 0.74902, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
@@ -412,8 +447,11 @@ Button/fonts/font = ExtResource("8_kwhnq")
 Button/styles/disabled = null
 Button/styles/focus = SubResource("StyleBoxTexture_8wbtt")
 Button/styles/hover = SubResource("StyleBoxTexture_dvb71")
+Button/styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_epneu")
 Button/styles/normal = SubResource("StyleBoxTexture_ut3e1")
+Button/styles/normal_mirrored = SubResource("StyleBoxTexture_5ois1")
 Button/styles/pressed = SubResource("StyleBoxTexture_epneu")
+Button/styles/pressed_mirrored = SubResource("StyleBoxEmpty_x3e76")
 ButtonBlue/base_type = &"Button"
 ButtonBlue/colors/font_focus_color = Color(0.0662241, 0.100506, 0.412412, 1)
 ButtonBlue/colors/font_hover_color = Color(0.0666667, 0.101961, 0.411765, 1)
@@ -423,6 +461,11 @@ ButtonBlue/styles/focus = SubResource("StyleBoxTexture_1vfkc")
 ButtonBlue/styles/hover = SubResource("StyleBoxTexture_ayxdb")
 ButtonBlue/styles/normal = SubResource("StyleBoxTexture_48job")
 ButtonBlue/styles/pressed = SubResource("StyleBoxTexture_j5m7c")
+ButtonPurple/base_type = &"ButtonBlue"
+ButtonPurple/styles/focus = SubResource("StyleBoxTexture_sj5kf")
+ButtonPurple/styles/hover = SubResource("StyleBoxTexture_wsgho")
+ButtonPurple/styles/normal = SubResource("StyleBoxTexture_tmf1v")
+ButtonPurple/styles/pressed = SubResource("StyleBoxTexture_xclca")
 ButtonRed/base_type = &"ButtonBlue"
 ButtonRed/colors/font_color = Color(1, 1, 1, 1)
 ButtonRed/colors/font_focus_color = Color(0.559523, 1.27546e-06, 3.36915e-07, 1)

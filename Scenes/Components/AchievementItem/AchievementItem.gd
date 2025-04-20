@@ -25,6 +25,7 @@ func update_ui() -> void:
 	var progress_value_label = $Panel/MarginContainer/HBoxContainer/InfoContainer/ProgressContainer/ProgressValueLabel
 	var progress_bar = $Panel/MarginContainer/HBoxContainer/InfoContainer/ProgressContainer/ProgressBar
 	var unlocked_date = $Panel/MarginContainer/HBoxContainer/InfoContainer/UnlockedDate
+	var panel = $Panel
 	
 	# Establecer título
 	if _achievement_data.has("name"):
@@ -70,12 +71,23 @@ func update_ui() -> void:
 		var max_progress = _achievement_data.max_progress
 		
 		# Solo mostrar progreso si no está desbloqueado y tiene progreso máximo > 1
-		if not _achievement_data.unlocked and max_progress > 1:
+		if not _achievement_data.unlocked and max_progress > 0:
 			progress_container.visible = true
 			progress_value_label.text = "Progreso: " + str(progress) + "/" + str(max_progress)
 			progress_bar.max_value = max_progress
 			progress_bar.value = progress
 		else:
-			progress_container.visible = false
+			progress_container.visible = true
+			progress_container.get_child(0).visible = false
+			progress_container.get_child(1).visible = false
+			var style = StyleBoxFlat.new()
+			style.bg_color = Color("#FDCF54")
+			style.corner_radius_top_left = 20
+			style.corner_radius_top_right = 20
+			style.corner_radius_bottom_left = 20
+			style.corner_radius_bottom_right = 20
+			panel.add_theme_stylebox_override("panel", style)
+
+			
 	else:
-		progress_container.visible = false 
+		progress_container.visible = true 

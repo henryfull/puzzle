@@ -123,6 +123,7 @@ size_flags_vertical = 4
 [node name="BTN_play" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(210, 60)
 layout_mode = 2
+theme = ExtResource("3_8saeu")
 theme_type_variation = &"ButtonRed"
 theme_override_font_sizes/font_size = 32
 text = "Play"

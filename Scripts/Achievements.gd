@@ -1,16 +1,16 @@
 extends Node2D
 
 # Referencias a componentes de la UI
-@onready var achievements_list = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/AchievementsList
-@onready var no_achievements_label = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/NoAchievementsLabel
-@onready var total_value = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsTotal/Value
-@onready var unlocked_value = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsUnlocked/Value
-@onready var percentage_value = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsPercentage/Value
+@onready var achievements_list = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/AchievementsList
+@onready var no_achievements_label = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/NoAchievementsLabel
+@onready var total_value = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsTotal/StatsTotal/Value
+@onready var unlocked_value = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsUnlocked/StatsUnlocked/Value
+@onready var percentage_value = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/StatsPanel/HBoxContainer/StatsPercentage/StatsPercentage/Value
 
 # Referencias a las pestañas
-@onready var all_tab = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/AllTab
-@onready var unlocked_tab = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/UnlockedTab
-@onready var locked_tab = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/TabsContainer/LockedTab
+@onready var all_tab = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabsContainer/AllTab
+@onready var unlocked_tab = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabsContainer/UnlockedTab
+@onready var locked_tab = $CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabsContainer/LockedTab
 
 # Estilos para las pestañas activas/inactivas
 var active_tab_style: StyleBoxFlat
@@ -29,9 +29,7 @@ func _ready():
 		var achievement = AchievementsManager.get_achievement(achievement_id)
 		print(achievement_id + " : " + achievement["name"] + " - " + achievement["desc"] + " (unlocked: " + str(achievement["unlocked"]) + ")")
 	
-	# Guardar referencias a los estilos de pestaña
-	active_tab_style = all_tab.get_theme_stylebox("normal").duplicate()
-	inactive_tab_style = unlocked_tab.get_theme_stylebox("normal").duplicate()
+
 	
 	# Configurar las pestañas
 	all_tab.add_theme_stylebox_override("normal", active_tab_style)
@@ -82,7 +80,7 @@ func load_achievements(filter: String = "all") -> void:
 	# Ordenar logros (desbloqueados primero, luego por ID)
 	filtered_achievements.sort_custom(func(a, b): 
 		if a.data.unlocked != b.data.unlocked:
-			return a.data.unlocked
+			return not a.data.unlocked
 		return a.id < b.id
 	)
 	

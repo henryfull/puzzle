@@ -45,13 +45,26 @@ grow_vertical = 2
 color = Color(0.72549, 0.854902, 1, 0.784314)
 metadata/_edit_use_anchors_ = true
 
+[node name="BackgroundTitle" parent="GameModeLayer" instance=ExtResource("1_0q03v")]
+custom_minimum_size = Vector2(500, 140)
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 110.0
+offset_top = 62.0
+offset_right = 610.0
+offset_bottom = 202.0
+title = "Modos de juego"
+
 [node name="Panel" type="Panel" parent="GameModeLayer"]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -318.0
-offset_top = 62.0
+offset_top = 216.0
 offset_right = 318.0
 offset_bottom = -62.0
 grow_horizontal = 2
@@ -66,6 +79,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
@@ -73,12 +87,8 @@ theme_override_constants/margin_bottom = 30
 custom_minimum_size = Vector2(280, 380)
 layout_mode = 2
 
-[node name="BackgroundTitle" parent="GameModeLayer/Panel/MarginContainer/VBoxContainer" instance=ExtResource("1_0q03v")]
-custom_minimum_size = Vector2(500, 140)
-layout_mode = 2
-title = "Modos de juego"
-
 [node name="TitleLabel" type="Label" parent="GameModeLayer/Panel/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Selecciona un modo de juego"

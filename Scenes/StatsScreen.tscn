@@ -1,22 +1,32 @@
-[gd_scene load_steps=15 format=3 uid="uid://bdogxe3m1dhw2"]
+[gd_scene load_steps=16 format=3 uid="uid://bdogxe3m1dhw2"]
 
 [ext_resource type="Script" uid="uid://bkpn724tg17tm" path="res://Scripts/Screens/StatsScreen.gd" id="1_57a8p"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="2_5d5ab"]
 [ext_resource type="PackedScene" uid="uid://dvxu5lskx6m10" path="res://Scenes/Components/UI/panel_container.tscn" id="2_djtya"]
+[ext_resource type="Texture2D" uid="uid://bumaj141kr3bw" path="res://Assets/Images/GUID/backgrounds/bg_pausa.png" id="2_s8xri"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="3_2j4m2"]
+[ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_ut8ua"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="5_3mdl3"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_y61kq"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uhr3j"]
-bg_color = Color(0.219608, 0.4, 0.498039, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djtya"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y61kq"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut8ua"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 0.241155, 0.665364, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aer1c"]
 texture = ExtResource("5_y61kq")
@@ -43,43 +53,64 @@ script = ExtResource("1_57a8p")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Background" type="ColorRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.72549, 0.854902, 1, 1)
+texture = ExtResource("2_s8xri")
+expand_mode = 1
+
+[node name="Background" type="ColorRect" parent="CanvasLayer/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.329412)
+
+[node name="BackgroundTitle" parent="CanvasLayer" instance=ExtResource("4_ut8ua")]
+custom_minimum_size = Vector2(280, 140)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -197.0
+offset_top = 30.0
+offset_right = 197.0
+offset_bottom = 170.0
+grow_vertical = 1
+size_flags_vertical = 0
+title = "ESTADÍSTICAS"
 
 [node name="MainContainer" parent="CanvasLayer" instance=ExtResource("2_djtya")]
-custom_minimum_size = Vector2(700, 0)
-offset_left = -315.0
-offset_top = -595.0
-offset_right = 385.0
-offset_bottom = 600.0
-scale = Vector2(0.88, 1)
-
-[node name="Panel2" type="Panel" parent="CanvasLayer/MainContainer"]
-visible = false
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_uhr3j")
+anchors_preset = 13
+anchor_top = 0.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = 198.0
+offset_right = 330.0
+offset_bottom = -44.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
 
 [node name="ContentContainer" type="VBoxContainer" parent="CanvasLayer/MainContainer"]
-layout_mode = 2
-theme_override_constants/separation = 50
-
-[node name="Title" type="Label" parent="CanvasLayer/MainContainer/ContentContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("2_5d5ab")
-theme_override_font_sizes/font_size = 32
-text = "ESTADÍSTICAS"
-horizontal_alignment = 1
-vertical_alignment = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Selectors" type="VBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
 
 [node name="PackSelector" type="HBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/Selectors"]
 custom_minimum_size = Vector2(0, 60)
@@ -135,6 +166,9 @@ size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("2_5d5ab")
 theme_override_font_sizes/font_size = 20
 
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/MainContainer/ContentContainer"]
+layout_mode = 2
+
 [node name="ContentHBox" type="VBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -152,6 +186,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="GeneralStatsLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
+visible = false
 layout_mode = 2
 text = "ESTADÍSTICAS GENERALES"
 horizontal_alignment = 1
@@ -204,17 +239,26 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="PuzzleImagePanel" type="PanelContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox"]
+clip_children = 2
 clip_contents = true
 custom_minimum_size = Vector2(360, 450)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_y61kq")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ut8ua")
 
-[node name="PuzzleImage" type="TextureRect" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel"]
+clip_children = 1
+clip_contents = true
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="PuzzleImage" type="TextureRect" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel/MarginContainer"]
 layout_mode = 2
 texture = ExtResource("3_2j4m2")
-expand_mode = 1
+expand_mode = 5
 stretch_mode = 5
 
 [node name="MainContainer3" type="MarginContainer" parent="CanvasLayer"]
@@ -234,8 +278,14 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="BackButton2" parent="CanvasLayer" instance=ExtResource("5_3mdl3")]
-offset_left = 50.0
-offset_right = 170.0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 30.0
+offset_top = 40.0
+offset_right = 150.0
+offset_bottom = 160.0
+grow_vertical = 1
 path = "res://Scenes/MainMenu.tscn"
 
 [node name="BackButton" type="Button" parent="CanvasLayer"]

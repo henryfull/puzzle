@@ -29,9 +29,9 @@ buses/General=0.0
 
 [autoload]
 
+ThemeManager="*res://Scripts/Autoload/ThemeManager.gd"
 GLOBAL="*res://Scripts/Autoload/global.gd"
 TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
-ThemeManager="*res://Scripts/Autoload/ThemeManager.gd"
 ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
 OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 AudioManager="*res://Scripts/Autoload/AudioManager.gd"
@@ -67,6 +67,7 @@ theme/custom_font="uid://nsb7mxocp6o3"
 
 [input_devices]
 
+compatibility/legacy_just_pressed_behavior=true
 pointing/emulate_touch_from_mouse=true
 
 [internationalization]

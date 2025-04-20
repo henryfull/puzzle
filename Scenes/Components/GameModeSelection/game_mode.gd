@@ -8,7 +8,7 @@ signal show_difficult(is_difficult)
 # Estructura para almacenar las dificultades disponibles
 var modes = [
 	{"name": "difficulty_learner", "id": 0, "color": "ButtonBlue", "description": "difficulty_learner_description"},
-	{"name": "Relax", "id": 1, "color": "ButtonBlue", "description": "game_mode_relax"},
+	{"name": "Relax", "id": 1, "color": "ButtonPurple", "description": "game_mode_relax"},
 	{"name": "normal", "id": 2, "color": "", "description": "game_mode_normal"},
 	{"name": "common_timetrial", "id": 3, "color": "ButtonYellow", "description": "game_mode_timetrial"},
 	{"name": "common_challenge", "id": 4, "color": "ButtonRed", "description": "game_mode_chagenlle"},
@@ -58,7 +58,7 @@ func _create_difficulty_buttons():
 		button.text = tr(diff.name)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.mouse_filter = Control.MOUSE_FILTER_PASS
-		button.custom_minimum_size = Vector2(0, 100)
+		button.custom_minimum_size = Vector2(0, 120)
 		button.tooltip_text = tr(diff.description)
 		
 		# Aplicar el tema de color si está definido
