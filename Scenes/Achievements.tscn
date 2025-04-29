@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dw5mocbogi4aj"]
+[gd_scene load_steps=11 format=3 uid="uid://dw5mocbogi4aj"]
 
 [ext_resource type="Script" uid="uid://81itimgdqoxk" path="res://Scripts/Achievements.gd" id="1_fqdyt"]
 [ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="2_dta62"]
@@ -7,21 +7,6 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqpw6"]
 bg_color = Color(0.898039, 0.85098, 0.733333, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_67yd4"]
-bg_color = Color(1, 0.996078, 0.886275, 1)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color(1, 0.847059, 0.74902, 1)
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-shadow_color = Color(0, 0, 0, 0.2)
-shadow_size = 5
-shadow_offset = Vector2(2, 2)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qcdn0"]
 
@@ -81,12 +66,9 @@ grow_vertical = 2
 texture = ExtResource("2_dta62")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -360.0
-offset_right = 360.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -99,6 +81,8 @@ layout_mode = 2
 theme_override_constants/separation = 15
 
 [node name="BackgroundTitle" parent="CanvasLayer/MarginContainer/VBoxContainer" instance=ExtResource("3_qcdn0")]
+z_index = 1
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 title = "Logros"
 
@@ -122,7 +106,7 @@ layout_mode = 2
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_67yd4")
+theme_type_variation = &"PanelYellow"
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
@@ -316,6 +300,58 @@ offset_bottom = 250.0
 grow_vertical = 1
 scale = Vector2(0.8, 0.8)
 path = "res://Scenes/MainMenu.tscn"
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = -1
+anchor_left = 0.397
+anchor_top = 0.411
+anchor_right = 0.931
+anchor_bottom = 0.558
+offset_left = 0.160004
+offset_top = -0.0800171
+offset_right = -0.320068
+offset_bottom = 19.7599
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"PanelHeaderBlue"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -85.0
+offset_right = 113.0
+offset_bottom = 82.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Super Facil"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label2" type="Label" parent="CanvasLayer/Panel/VBoxContainer"]
+layout_mode = 2
+text = "1 x 8"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Label3" type="Label" parent="CanvasLayer/Panel/VBoxContainer"]
+layout_mode = 2
+text = "nivel 20"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabsContainer/AllTab" to="." method="_on_all_tab_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabsContainer/UnlockedTab" to="." method="_on_unlocked_tab_pressed"]

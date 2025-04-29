@@ -24,8 +24,8 @@ func _ready():
 	purchase_manager.connect("purchase_confirmed", Callable(self, "_on_purchase_confirmed"))
 	purchase_manager.connect("purchase_canceled", Callable(self, "_on_purchase_canceled"))
 	
-	scroll_container = $CanvasLayer/ContainerPacks/ScrollContainer
-	packs_container = $CanvasLayer/ContainerPacks/ScrollContainer/PacksContainer
+	scroll_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer
+	packs_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/PacksContainer
 	
 	# Ajustar el layout según el tipo de dispositivo
 	# adjust_layout_for_device()
@@ -37,10 +37,10 @@ func _ready():
 func adjust_layout_for_device():
 	
 	# Asegurar que el título y subtítulo queden en la parte superior
-	var title_label = $CanvasLayer/ContainerPacks/TitleLabel
+	var title_label = $CanvasLayer/PanelContainer/ContainerPacks/TitleLabel
 	title_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	
-	var subtitle_label = $CanvasLayer/ContainerPacks/SubtitleLabel
+	var subtitle_label = $CanvasLayer/PanelContainer/ContainerPacks/SubtitleLabel
 	subtitle_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	
 	print("PackSelection: Layout ajustado")

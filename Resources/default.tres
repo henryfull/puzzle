@@ -1,31 +1,31 @@
-[gd_resource type="Theme" load_steps=84 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=86 format=3 uid="uid://dyqkx5or01raf"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
-[ext_resource type="Texture2D" uid="uid://dm7j0qpidej4f" path="res://Assets/Images/GUID/circle_slider.svg" id="2_jca5l"]
-[ext_resource type="Texture2D" uid="uid://c1jd7rfsp0cgx" path="res://Assets/Images/GUID/circle_slider.png" id="3_d4acn"]
-[ext_resource type="Texture2D" uid="uid://2v7k8ur8sbch" path="res://Assets/Images/GUID/circle_slider_disabled.png" id="4_d4acn"]
-[ext_resource type="Texture2D" uid="uid://c0ioy14250j4j" path="res://Assets/Images/GUID/circle_slider_highlight.png" id="5_d4acn"]
 [ext_resource type="FontFile" uid="uid://nsb7mxocp6o3" path="res://Assets/Fonts/Galano Grotesque Medium.otf" id="7_ht6ax"]
 [ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="8_kwhnq"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wbtt"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 37, 346, 91)
+expand_margin_bottom = 10.0
+region_rect = Rect2(728, 39, 304, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dvb71"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(383, 37, 347, 91)
+expand_margin_bottom = 10.0
+region_rect = Rect2(728, 39, 304, 88)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_epneu"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ut3e1"]
 resource_local_to_scene = true
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 37, 346, 91)
+expand_margin_bottom = 10.0
+region_rect = Rect2(728, 39, 304, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5ois1"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 39, 346, 89)
+expand_margin_bottom = 10.0
+region_rect = Rect2(728, 39, 304, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_epneu"]
 texture = ExtResource("2_8wbtt")
@@ -35,115 +35,91 @@ region_rect = Rect2(21, 37, 346, 91)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1vfkc"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(383, 358, 347, 88)
+expand_margin_bottom = 10.0
+region_rect = Rect2(729, 360, 302, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ayxdb"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(383, 358, 347, 88)
+expand_margin_bottom = 10.0
+region_rect = Rect2(729, 360, 302, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_48job"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 358, 346, 88)
+expand_margin_bottom = 10.0
+region_rect = Rect2(729, 360, 302, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j5m7c"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 358, 346, 88)
+expand_margin_bottom = 10.0
+region_rect = Rect2(729, 360, 302, 88)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sj5kf"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(383, 358, 347, 88)
-modulate_color = Color(0.792157, 0.341176, 0.854902, 1)
+region_rect = Rect2(374, 39, 347, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wsgho"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(383, 358, 347, 88)
-modulate_color = Color(0.792157, 0.341176, 0.854902, 1)
+region_rect = Rect2(374, 39, 347, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tmf1v"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 358, 346, 88)
-modulate_color = Color(0.792157, 0.341176, 0.854902, 1)
+region_rect = Rect2(374, 39, 347, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xclca"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 358, 346, 88)
-modulate_color = Color(0.792157, 0.341176, 0.854902, 1)
+region_rect = Rect2(374, 39, 347, 89)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r7fgh"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 145, 346, 91)
+region_rect = Rect2(729, 147, 302, 87)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m25v8"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(383, 145, 347, 91)
+region_rect = Rect2(729, 147, 302, 87)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d4acn"]
 resource_local_to_scene = true
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 145, 346, 91)
+region_rect = Rect2(729, 147, 302, 87)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_72ols"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 145, 346, 91)
+region_rect = Rect2(729, 147, 302, 87)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t3sfe"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(383, 251, 347, 89)
+expand_margin_bottom = 10.0
+region_rect = Rect2(729, 254, 302, 87)
 modulate_color = Color(1, 0.968202, 0.984414, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lw0x0"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(383, 251, 347, 89)
+expand_margin_bottom = 10.0
+region_rect = Rect2(729, 254, 302, 87)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iong3"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 251, 346, 89)
+expand_margin_bottom = 10.0
+region_rect = Rect2(729, 254, 302, 87)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jjsnl"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(21, 251, 346, 89)
+expand_margin_bottom = 10.0
+region_rect = Rect2(729, 254, 302, 87)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q7fk7"]
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(382, 474, 100, 100)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bke4e"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w5grb"]
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(382, 474, 100, 100)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vq864"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b3pw5"]
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(803, 659, 100, 100)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yiway"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yq2fi"]
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(382, 474, 100, 100)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m3e3b"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_84jno"]
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(382, 474, 100, 100)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_quunw"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dgikm"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dvb71"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2al4h"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ht6ax"]
 
@@ -157,65 +133,80 @@ region_rect = Rect2(382, 474, 100, 100)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_71gex"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 360, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 360, 83, 86)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2hadl"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1928, 360, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 360, 83, 86)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_edf7j"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 360, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 360, 83, 86)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_op2to"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 360, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 360, 83, 86)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kwhnq"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ngowj"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 37, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 40, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uo4bp"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1925, 37, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 40, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8l01e"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 37, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 40, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8bygn"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 37, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 40, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pvq7r"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 144, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 148, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1hkqs"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1926, 144, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 148, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rgs6e"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 144, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 148, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_26d0h"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 144, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 148, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ql1t6"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 252, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 254, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yiobe"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1926, 252, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 254, 83, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j01br"]
 texture = ExtResource("2_8wbtt")
-region_rect = Rect2(1801, 252, 102, 102)
+expand_margin_bottom = 5.0
+region_rect = Rect2(1040, 254, 83, 85)
 
 [sub_resource type="ImageTexture" id="ImageTexture_vq864"]
 
@@ -289,48 +280,49 @@ expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ht6ax"]
-atlas = ExtResource("3_d4acn")
-region = Rect2(0, 0, 29, 30)
+atlas = ExtResource("2_8wbtt")
+region = Rect2(1040, 40, 83, 85)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m3e3b"]
-atlas = ExtResource("4_d4acn")
+atlas = ExtResource("2_8wbtt")
+region = Rect2(1131, 254, 84, 85)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dvb71"]
-atlas = ExtResource("5_d4acn")
+atlas = ExtResource("2_8wbtt")
+region = Rect2(1040, 40, 83, 85)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_epneu"]
-atlas = ExtResource("2_jca5l")
+atlas = ExtResource("2_8wbtt")
+region = Rect2(1223, 148, 84, 85)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kwhnq"]
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 13.0
-texture_margin_top = 13.0
-texture_margin_right = 13.0
-texture_margin_bottom = 13.0
-expand_margin_left = 13.0
-region_rect = Rect2(482, 592, 64, 26)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iong3"]
+bg_color = Color(0, 0.718197, 0.365513, 1)
+corner_radius_top_left = 50
+corner_radius_bottom_left = 50
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ht6ax"]
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 13.0
-texture_margin_top = 13.0
-texture_margin_right = 13.0
-texture_margin_bottom = 13.0
-expand_margin_left = 10.0
-region_rect = Rect2(484, 592, 62, 26)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_72ols"]
+bg_color = Color(0, 0.648568, 0.327182, 1)
+corner_radius_top_left = 50
+corner_radius_bottom_left = 50
+expand_margin_top = 20.0
+expand_margin_bottom = 20.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_quunw"]
-content_margin_left = 18.0
-texture = ExtResource("2_8wbtt")
-texture_margin_left = 23.0
-texture_margin_top = 13.0
-texture_margin_right = 23.0
-texture_margin_bottom = 13.0
-expand_margin_left = 10.0
-expand_margin_right = 10.0
-axis_stretch_vertical = 2
-region_rect = Rect2(404, 592, 64, 26)
-modulate_color = Color(0.219608, 0.4, 0.498039, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r7fgh"]
+bg_color = Color(1.20327e-08, 0.198846, 0.215024, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.790324, 0.686175, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+expand_margin_top = 20.0
+expand_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m3e3b"]
 
@@ -342,81 +334,104 @@ bg_color = Color(1, 0.146215, 0.795291, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m3e3b"]
 texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(918, 498, 360, 66)
-modulate_color = Color(0.479834, 0.479834, 0.479834, 1)
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(1591, 40, 200, 47)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tf533"]
 texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(918, 498, 360, 66)
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(1591, 40, 200, 47)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2al4h"]
 content_margin_left = 20.0
 texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(918, 498, 360, 66)
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(1591, 40, 200, 47)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gph5t"]
 content_margin_left = 20.0
 texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(918, 498, 360, 66)
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(1591, 40, 200, 47)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lfami"]
 content_margin_left = 20.0
 texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(918, 498, 360, 66)
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(1591, 40, 200, 47)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jca5l"]
 content_margin_left = 20.0
 texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(918, 498, 360, 66)
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(1590, 40, 201, 47)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_parne"]
 content_margin_left = 20.0
 texture = ExtResource("2_8wbtt")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
-region_rect = Rect2(918, 498, 360, 66)
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(1591, 40, 200, 47)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8wbtt"]
-bg_color = Color(0.0156863, 0.803922, 0.921569, 1)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 4
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lfami"]
+bg_color = Color(0.764706, 0.811765, 1, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.282353, 0.419608, 1, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
 expand_margin_left = 20.0
-expand_margin_top = 20.0
+expand_margin_top = 50.0
 expand_margin_right = 20.0
 expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8wbtt"]
+bg_color = Color(0.843137, 1, 0.905882, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.329412, 0.992157, 0.592157, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+corner_detail = 10
+expand_margin_left = 20.0
+expand_margin_top = 50.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+shadow_color = Color(0, 0, 0, 0.196078)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bke4e"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1802, 40, 298, 122)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_epneu"]
 bg_color = Color(1, 0.996078, 0.886275, 1)
@@ -436,12 +451,66 @@ expand_margin_bottom = 10.0
 shadow_color = Color(0, 0, 0, 0.219608)
 shadow_size = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_parne"]
+bg_color = Color(0.905882, 0.815686, 1, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.639216, 0.282353, 1, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+expand_margin_left = 20.0
+expand_margin_top = 50.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut3e1"]
+bg_color = Color(1, 0.819608, 0.85098, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 0.282353, 0.4, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+expand_margin_left = 20.0
+expand_margin_top = 50.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+shadow_color = Color(0, 0, 0, 0.196078)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quunw"]
+bg_color = Color(1, 0.996078, 0.886275, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.992157, 0.811765, 0.329412, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+expand_margin_left = 20.0
+expand_margin_top = 50.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvb71"]
 
 [resource]
 Button/colors/font_color = Color(1, 1, 1, 1)
-Button/colors/font_focus_color = Color(2.03352e-06, 0.453848, 9.62615e-08, 1)
-Button/colors/font_hover_color = Color(0, 0.454902, 0, 1)
+Button/colors/font_hover_color = Color(0, 0, 0, 0)
+Button/constants/outline_size = 2
 Button/font_sizes/font_size = 42
 Button/fonts/font = ExtResource("8_kwhnq")
 Button/styles/disabled = null
@@ -482,12 +551,13 @@ ButtonYellow/styles/focus = SubResource("StyleBoxTexture_t3sfe")
 ButtonYellow/styles/hover = SubResource("StyleBoxTexture_lw0x0")
 ButtonYellow/styles/normal = SubResource("StyleBoxTexture_iong3")
 ButtonYellow/styles/pressed = SubResource("StyleBoxTexture_jjsnl")
-CheckBox/styles/disabled = SubResource("StyleBoxTexture_q7fk7")
-CheckBox/styles/focus = SubResource("StyleBoxTexture_w5grb")
-CheckBox/styles/hover = SubResource("StyleBoxTexture_b3pw5")
-CheckBox/styles/hover_pressed = SubResource("StyleBoxTexture_yq2fi")
-CheckBox/styles/normal = SubResource("StyleBoxTexture_84jno")
-CheckBox/styles/pressed = SubResource("StyleBoxTexture_dgikm")
+CheckBox/styles/disabled = SubResource("StyleBoxEmpty_bke4e")
+CheckBox/styles/disabled_mirrored = SubResource("StyleBoxEmpty_vq864")
+CheckBox/styles/focus = SubResource("StyleBoxEmpty_yiway")
+CheckBox/styles/hover = SubResource("StyleBoxEmpty_m3e3b")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxEmpty_quunw")
+CheckBox/styles/normal = SubResource("StyleBoxEmpty_dvb71")
+CheckBox/styles/pressed = SubResource("StyleBoxEmpty_2al4h")
 CheckButton/colors/font_color = Color(0.219608, 0.4, 0.498039, 1)
 CheckButton/colors/font_focus_color = Color(0.329412, 0.886275, 0.552941, 1)
 CheckButton/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
@@ -532,22 +602,26 @@ HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_kwhnq")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_ht6ax")
 HScrollBar/styles/scroll = SubResource("StyleBoxFlat_m25v8")
 HScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_d4acn")
-HSlider/constants/center_grabber = 1
+HSlider/constants/center_grabber = 0
 HSlider/constants/grabber_offset = 1
 HSlider/icons/grabber = SubResource("AtlasTexture_ht6ax")
 HSlider/icons/grabber_disabled = SubResource("AtlasTexture_m3e3b")
 HSlider/icons/grabber_highlight = SubResource("AtlasTexture_dvb71")
 HSlider/icons/tick = SubResource("AtlasTexture_epneu")
-HSlider/styles/grabber_area = SubResource("StyleBoxTexture_kwhnq")
-HSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_ht6ax")
-HSlider/styles/slider = SubResource("StyleBoxTexture_quunw")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_iong3")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_72ols")
+HSlider/styles/slider = SubResource("StyleBoxFlat_r7fgh")
 Label/colors/font_color = Color(0.219608, 0.4, 0.498039, 1)
 Label/font_sizes/font_size = 32
-Label/fonts/font = ExtResource("7_ht6ax")
+Label/fonts/font = ExtResource("8_kwhnq")
 LabelBox/base_type = &"Label"
 LabelBox/styles/normal = SubResource("StyleBoxFlat_m3e3b")
+LabelFields/base_type = &"Label"
 MenuButton/styles/hover = SubResource("StyleBoxFlat_2al4h")
 MenuButton/styles/normal = SubResource("StyleBoxFlat_gph5t")
+OptionButton/colors/font_color = Color(1, 1, 1, 1)
+OptionButton/colors/font_focus_color = Color(0.980392, 0.643137, 0.0627451, 1)
+OptionButton/colors/font_hover_color = Color(0.980392, 0.643137, 0.0627451, 1)
 OptionButton/icons/arrow = null
 OptionButton/icons/icon = null
 OptionButton/styles/disabled = SubResource("StyleBoxTexture_m3e3b")
@@ -557,12 +631,24 @@ OptionButton/styles/hover_pressed = SubResource("StyleBoxTexture_gph5t")
 OptionButton/styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_lfami")
 OptionButton/styles/normal = SubResource("StyleBoxTexture_jca5l")
 OptionButton/styles/pressed = SubResource("StyleBoxTexture_parne")
+PanelBlue/base_type = &"PanelContainer"
+PanelBlue/styles/panel = SubResource("StyleBoxFlat_lfami")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_8wbtt")
+PanelHeaderBlue/base_type = &"Panel"
+PanelHeaderBlue/styles/panel = SubResource("StyleBoxTexture_bke4e")
 PanelInside/base_type = &"Panel"
 PanelInside/styles/panel = SubResource("StyleBoxFlat_epneu")
+PanelPurple/base_type = &"PanelContainer"
+PanelPurple/styles/panel = SubResource("StyleBoxFlat_parne")
+PanelRed/base_type = &"PanelContainer"
+PanelRed/styles/panel = SubResource("StyleBoxFlat_ut3e1")
+PanelYellow/base_type = &"PanelContainer"
+PanelYellow/styles/panel = SubResource("StyleBoxFlat_quunw")
+TextLabel/base_type = &"Label"
+TextLabel/fonts/font = ExtResource("7_ht6ax")
 Title/base_type = &"Label"
-Title/colors/font_color = Color(1, 0.956863, 0.72549, 1)
-Title/colors/font_outline_color = Color(0.884299, 0.228934, 0.0956512, 1)
+Title/colors/font_color = Color(0.999683, 0.939477, 0.878037, 1)
+Title/colors/font_outline_color = Color(0.425476, 0.429294, 0.440752, 0.827451)
 Title/colors/font_shadow_color = Color(0, 0, 0, 1)
 Title/constants/line_spacing = 8
 Title/font_sizes/font_size = 48

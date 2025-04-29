@@ -2,6 +2,8 @@ extends Control
 
 @onready var purchase_manager = get_node("/root/PackPurchaseManager")
 
+@export var imagePuzzle = TextureRect
+@export var labelPuzzle = Label
 # Señal que se emite cuando se selecciona un pack
 signal pack_selected(pack_data)
 # Señal que se emite cuando se quiere comprar un pack
@@ -20,7 +22,7 @@ var parent_node
 func setup(data):
 	pack_data = data
 	# Configurar el título
-	$MarginContainer/VBoxContainer/TitleBackground/TitleLabel.text = data.name.to_upper()
+	labelPuzzle.text = data.name.to_upper()
 	
 	# Cargar la imagen del pack si está disponible
 	_load_pack_image()
@@ -33,7 +35,7 @@ func _load_pack_image():
 	if pack_data.has("image_path") and pack_data.image_path != "":
 		var image = load(pack_data.image_path)
 		if image:
-			$MarginContainer/VBoxContainer/ImageContainer/PackImage.texture = image
+			imagePuzzle.texture = image
 	else:
 		# Intentar encontrar una imagen basada en el ID o nombre
 		_find_and_set_pack_image()
@@ -57,7 +59,7 @@ func _find_and_set_pack_image():
 		if file:
 			var image = load(path)
 			if image:
-				$MarginContainer/VBoxContainer/ImageContainer/PackImage.texture = image
+				imagePuzzle.texture = image
 				pack_data.image_path = path
 			file.close()
 			break

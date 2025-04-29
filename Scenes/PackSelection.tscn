@@ -1,22 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://pvq1o6wdx44x"]
+[gd_scene load_steps=6 format=3 uid="uid://pvq1o6wdx44x"]
 
 [ext_resource type="Script" uid="uid://db4glnv08qilj" path="res://Scripts/PackSelection.gd" id="1_wswaw"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_6xblp"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_6xblp"]
-[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_oq1hd"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="4_ot00g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6xblp"]
-
-[sub_resource type="FontVariation" id="FontVariation_ot00g"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cyp3e"]
-texture = ExtResource("4_oq1hd")
-texture_margin_left = 35.0
-texture_margin_right = 25.0
-expand_margin_top = 20.0
-expand_margin_bottom = 20.0
-region_rect = Rect2(788, 250, 344, 88)
 
 [node name="PackSelection" type="Node2D"]
 script = ExtResource("1_wswaw")
@@ -45,68 +34,36 @@ stretch_mode = 6
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = -4.0
-offset_top = 78.0
-offset_right = 3.0
-offset_bottom = 218.0
+offset_top = 80.0
+offset_right = 7.0
+offset_bottom = 220.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_6xblp")
 
 [node name="BackgroundTitle" parent="CanvasLayer/TextureRect/PanelContainer" instance=ExtResource("4_6xblp")]
+z_index = 1
 layout_mode = 2
 size_flags_horizontal = 3
 title = "Packs"
 
-[node name="ContainerPacks" type="VBoxContainer" parent="CanvasLayer"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -347.0
-offset_top = 234.0
-offset_right = 347.0
-offset_bottom = -42.0
+offset_left = -300.0
+offset_top = 220.0
+offset_right = 300.0
+offset_bottom = -51.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="TitleLabel" type="Label" parent="CanvasLayer/ContainerPacks"]
-visible = false
-z_index = 1
-custom_minimum_size = Vector2(0, 60)
+[node name="ContainerPacks" type="VBoxContainer" parent="CanvasLayer/PanelContainer"]
 layout_mode = 2
-size_flags_vertical = 0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = SubResource("FontVariation_ot00g")
-theme_override_font_sizes/font_size = 42
-text = "PACKS"
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="TitleBanner" type="ColorRect" parent="CanvasLayer/ContainerPacks/TitleLabel"]
-z_index = -1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.196078, 0.741176, 0.196078, 1)
-
-[node name="Panel" type="Panel" parent="CanvasLayer/ContainerPacks/TitleLabel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_cyp3e")
-
-[node name="SubtitleLabel" type="Label" parent="CanvasLayer/ContainerPacks"]
+[node name="SubtitleLabel" type="Label" parent="CanvasLayer/PanelContainer/ContainerPacks"]
+visible = false
 z_index = 1
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -117,23 +74,23 @@ text = "Selecciona un pack"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="CanvasLayer/ContainerPacks"]
-visible = false
-z_index = -1
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/ContainerPacks"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/PanelContainer/ContainerPacks"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 0
 
-[node name="PacksContainer" type="VBoxContainer" parent="CanvasLayer/ContainerPacks/ScrollContainer"]
+[node name="PacksContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 20
+theme_override_constants/separation = 50
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/PacksContainer"]
+visible = false
+z_index = -1
+layout_mode = 2
+size_flags_vertical = 0
 
 [node name="BackButton" parent="CanvasLayer" instance=ExtResource("4_ot00g")]
 anchors_preset = 0

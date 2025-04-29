@@ -9,15 +9,15 @@ region_rect = Rect2(2106, 144, 102, 102)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gj1nx"]
 texture = ExtResource("1_1e6wr")
-region_rect = Rect2(2231, 144, 102, 102)
+region_rect = Rect2(1315, 42, 84, 84)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ot00g"]
 texture = ExtResource("1_1e6wr")
-region_rect = Rect2(2106, 144, 102, 102)
+region_rect = Rect2(1315, 42, 84, 84)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7pjev"]
 texture = ExtResource("1_1e6wr")
-region_rect = Rect2(2106, 144, 102, 102)
+region_rect = Rect2(1315, 42, 84, 84)
 
 [node name="BackButton" type="Button"]
 anchors_preset = 2

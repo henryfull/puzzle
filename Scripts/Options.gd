@@ -13,13 +13,13 @@ var labelTweenEffect: Label
 var labelTweenDuration: Label
 var buttonClose: Button
 var buttonRestore: Button
-var sliderVolumeGeneral = HSlider
-var sliderVolumeSFX = HSlider
-var sliderVolumeMusic = HSlider
+@export var sliderVolumeGeneral = HSlider
+@export var sliderVolumeSFX = HSlider
+@export var sliderVolumeMusic = HSlider
 # Nuevos sliders para opciones de sensibilidad
-var sliderPanSensitivity = HSlider
-var sliderTweenDuration = HSlider
-var checkTweenEffect = CheckBox
+@export var sliderPanSensitivity = HSlider
+@export var sliderTweenDuration = HSlider
+@export var checkTweenEffect = CheckBox
 var selectLanguage = OptionButton
 var selectResolution = OptionButton
 var sliderOptionGeneral = null
@@ -45,13 +45,8 @@ func _ready():
 	
 	buttonClose = %ButtonClose
 	buttonRestore = %RestoreButton
-	sliderVolumeGeneral = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_General
-	sliderVolumeMusic = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_Musica
-	sliderVolumeSFX = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Volumen_VFX
+
 	# Inicializar nuevos controles
-	sliderPanSensitivity = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Pan_Sensitivity
-	checkTweenEffect = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/CheckBox_Tween_Effect
-	sliderTweenDuration = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/HSlider_Tween_Duration
 	
 	selectLanguage = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/LangSelector
 	selectResolution = $CanvasLayer/PanelContainer/VBoxContainer/MarginContainer/GridContainer/ResolutionButton

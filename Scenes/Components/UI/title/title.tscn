@@ -5,7 +5,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6xblp"]
 atlas = ExtResource("1_ktd2v")
-region = Rect2(788, 250, 344, 88)
+region = Rect2(22, 773, 297, 105)
 
 [node name="BackgroundTitle" type="TextureButton"]
 texture_repeat = 1

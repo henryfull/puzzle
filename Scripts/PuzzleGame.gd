@@ -2278,7 +2278,7 @@ func _on_puzzle_completed():
 		print("ERROR: No se pueden guardar el progreso, faltan los IDs del pack o puzzle")
 		return
 	
-	# Marcar el puzzle como completado en el ProgressManager
+	# Marcar el puzzle como completdaado en el ProgressManager
 	print("PuzzleGame: Marcando puzzle como completado - Pack: " + current_pack_id + ", Puzzle: " + current_puzzle_id)
 	progress_manager.complete_puzzle(current_pack_id, current_puzzle_id)
 

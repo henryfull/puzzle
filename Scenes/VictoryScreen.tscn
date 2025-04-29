@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://sc0afjqsuaff"]
+[gd_scene load_steps=26 format=3 uid="uid://sc0afjqsuaff"]
 
 [ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
 [ext_resource type="Texture2D" uid="uid://c8e3l3s0vy870" path="res://Assets/Images/GUID/backgrounds/bg_victory.jpg" id="2_fv7sy"]
@@ -8,14 +8,59 @@
 [ext_resource type="Texture2D" uid="uid://d0hgnlc4lvvps" path="res://Assets/Images/icons/star_3.png" id="4_11iis"]
 [ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="4_fv7sy"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_j7jqh"]
+[ext_resource type="PackedScene" uid="uid://ps3gg6vw4h7f" path="res://Scenes/Components/BestResult/panel_container_result.tscn" id="9_cek7k"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cek7k"]
 atlas = ExtResource("2_fv7sy")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rg3ah"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(643, 773, 472, 95)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ua571"]
+texture = SubResource("AtlasTexture_rg3ah")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_11iis"]
 
 [sub_resource type="Curve" id="Curve_11iis"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, -0.0159942), 0.0, 0.0, 0, 0, Vector2(0.504292, 0.976372), 0.0, 0.0, 0, 0, Vector2(0.976395, 0.0548891), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r53cv"]
+bg_color = Color(0.282353, 0.419608, 1, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cek7k"]
+bg_color = Color(0.764706, 0.811765, 1, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.282353, 0.419608, 1, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rg3ah"]
+bg_color = Color(0.764706, 0.811765, 1, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjnxs"]
+content_margin_left = 30.0
+content_margin_right = 30.0
+bg_color = Color(0.282353, 0.419608, 1, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjces"]
 bg_color = Color(1, 0.996078, 0.886275, 1)
@@ -29,10 +74,9 @@ corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjnxs"]
-bg_color = Color(1, 0.752941, 0.188235, 1)
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
+[sub_resource type="AtlasTexture" id="AtlasTexture_r53cv"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(2108, 487, 101, 81)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fv7sy"]
 atlas = ExtResource("5_j7jqh")
@@ -42,14 +86,46 @@ region = Rect2(1990, 487, 87, 103)
 atlas = ExtResource("5_j7jqh")
 region = Rect2(1988, 669, 121, 103)
 
-[node name="VictoryScreen" type="Node2D" node_paths=PackedStringArray("labelNamePuzzle", "labelInfo", "statsLabel", "puzzleImage2D", "textView", "labelTitle")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ua571"]
+resource_local_to_scene = true
+bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dxs6"]
+resource_local_to_scene = true
+bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c5778"]
+resource_local_to_scene = true
+bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(0, 1)
+
+[node name="VictoryScreen" type="Control" node_paths=PackedStringArray("labelNamePuzzle", "labelInfo", "statsLabel", "puzzleImage2D", "textView", "labelTitle", "moves", "time_panel", "flips_panel")]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_g6yxt")
-labelNamePuzzle = NodePath("CanvasLayer/Body/VBoxContainer/PanelContainer/PanelContainer/LabelNamePuzzle")
-labelInfo = NodePath("CanvasLayer/Header/VBoxContainer/LabelInfo")
-statsLabel = NodePath("CanvasLayer/Header/VBoxContainer/StatsLabel")
-puzzleImage2D = NodePath("CanvasLayer/Body/VBoxContainer/PanelContainer/ImageView/PuzzleImage2D")
-textView = NodePath("CanvasLayer/Body/VBoxContainer/PanelContainer/TextView")
-labelTitle = NodePath("CanvasLayer/Header/VBoxContainer/LabelTitle")
+labelNamePuzzle = NodePath("CanvasLayer/Body/PanelContainer/LabelNamePuzzle")
+labelInfo = NodePath("CanvasLayer/Header/Panel2/LabelInfo")
+statsLabel = NodePath("CanvasLayer/Header/Panel2/StatsLabel")
+puzzleImage2D = NodePath("CanvasLayer/Body/MarginContainer/Panel2/PuzzleImage2D")
+textView = NodePath("CanvasLayer/Body/MarginContainer/Panel2/Panel/TextView")
+labelTitle = NodePath("CanvasLayer/Header/Panel/LabelTitle")
+moves = NodePath("CanvasLayer/Movimientos")
+time_panel = NodePath("CanvasLayer/Tiempo")
+flips_panel = NodePath("CanvasLayer/Flips")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
@@ -72,20 +148,35 @@ grow_vertical = 2
 color = Color(0, 0, 1, 0.188235)
 
 [node name="Header" type="MarginContainer" parent="CanvasLayer"]
+z_index = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -302.0
 offset_top = 90.0
 offset_right = 302.0
-offset_bottom = 233.0
+offset_bottom = 288.0
 grow_horizontal = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Header"]
+[node name="Panel" type="Panel" parent="CanvasLayer/Header"]
+custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_ua571")
 
-[node name="LabelTitle" type="Label" parent="CanvasLayer/Header/VBoxContainer"]
-layout_mode = 2
+[node name="LabelTitle" type="Label" parent="CanvasLayer/Header/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -302.0
+offset_top = -34.5
+offset_right = 302.0
+offset_bottom = 34.5
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -98,39 +189,34 @@ text = "COMPLETADO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelInfo" type="Label" parent="CanvasLayer/Header/VBoxContainer"]
+[node name="Panel2" type="Panel" parent="CanvasLayer/Header"]
+visible = false
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxEmpty_11iis")
+
+[node name="LabelInfo" type="Label" parent="CanvasLayer/Header/Panel2"]
+layout_mode = 2
+offset_right = 604.0
+offset_bottom = 22.0
 theme_override_font_sizes/font_size = 16
 text = "Has completado el puzzle en 0 movimientos"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StatsLabel" type="Label" parent="CanvasLayer/Header/VBoxContainer"]
+[node name="StatsLabel" type="Label" parent="CanvasLayer/Header/Panel2"]
 layout_mode = 2
+offset_top = 42.0
+offset_right = 604.0
+offset_bottom = 64.0
 theme_override_font_sizes/font_size = 16
 text = "No hay estadísticas previas"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Body" type="MarginContainer" parent="CanvasLayer"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -288.0
-offset_top = -377.0
-offset_right = 288.0
-offset_bottom = 476.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Body"]
-layout_mode = 2
-alignment = 1
-
-[node name="CPUParticles2D" type="CPUParticles2D" parent="CanvasLayer/Body/VBoxContainer"]
-position = Vector2(270, 340)
+[node name="CPUParticles2D" type="CPUParticles2D" parent="CanvasLayer"]
+position = Vector2(342, 603)
 scale = Vector2(3, 3)
 amount = 20
 texture = ExtResource("4_11iis")
@@ -150,36 +236,59 @@ scale_amount_max = 0.03
 hue_variation_max = 0.48
 hue_variation_curve = SubResource("Curve_11iis")
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body/VBoxContainer"]
-clip_contents = true
-layout_mode = 2
+[node name="Body" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -288.0
+offset_top = -307.0
+offset_right = 288.0
+offset_bottom = 459.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_fjces")
 
-[node name="ImageView" type="VBoxContainer" parent="CanvasLayer/Body/VBoxContainer/PanelContainer"]
-clip_contents = true
-custom_minimum_size = Vector2(520, 640)
+[node name="Panel" type="Panel" parent="CanvasLayer/Body"]
 layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 6
-alignment = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_r53cv")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Body/VBoxContainer/PanelContainer/ImageView"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Body"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Panel2" type="PanelContainer" parent="CanvasLayer/Body/MarginContainer"]
+clip_children = 1
 clip_contents = true
 layout_mode = 2
-size_flags_vertical = 3
-expand_mode = 1
-stretch_mode = 5
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cek7k")
 
-[node name="PuzzleImage2D" type="Sprite2D" parent="CanvasLayer/Body/VBoxContainer/PanelContainer/ImageView"]
-position = Vector2(256, 300)
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("2_i68vf")
-
-[node name="TextView" type="RichTextLabel" parent="CanvasLayer/Body/VBoxContainer/PanelContainer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Body/MarginContainer/Panel2"]
 visible = false
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_i68vf")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Body/MarginContainer/Panel2"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rg3ah")
+
+[node name="TextView" type="RichTextLabel" parent="CanvasLayer/Body/MarginContainer/Panel2/Panel"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
+offset_left = 8.0
+offset_top = 103.0
+offset_right = 508.0
+offset_bottom = 603.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 theme_override_colors/default_color = Color(0, 0, 0, 1)
@@ -202,30 +311,56 @@ autowrap_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body/VBoxContainer/PanelContainer"]
+[node name="PuzzleImage2D" type="Sprite2D" parent="CanvasLayer/Body/MarginContainer/Panel2"]
+position = Vector2(274, 336)
+texture = ExtResource("2_i68vf")
+
+[node name="PackImage" type="TextureRect" parent="CanvasLayer/Body/MarginContainer/Panel2"]
+visible = false
+clip_contents = true
+layout_mode = 2
+texture = ExtResource("2_i68vf")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_yjnxs")
 
-[node name="LabelNamePuzzle" type="Label" parent="CanvasLayer/Body/VBoxContainer/PanelContainer/PanelContainer"]
+[node name="LabelNamePuzzle" type="Label" parent="CanvasLayer/Body/PanelContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
 text = "NOMBRE DEL PUZZLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BlockButtonChange" type="HBoxContainer" parent="CanvasLayer/Body/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Body"]
+visible = false
 layout_mode = 2
 alignment = 1
 
-[node name="Button" type="Button" parent="CanvasLayer/Body/VBoxContainer/BlockButtonChange"]
-custom_minimum_size = Vector2(280, 80)
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body/VBoxContainer"]
+clip_contents = true
 layout_mode = 2
-size_flags_horizontal = 4
-theme_type_variation = &"ButtonBlue"
-text = "Texto"
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_fjces")
+
+[node name="ImageView" type="VBoxContainer" parent="CanvasLayer/Body/VBoxContainer/PanelContainer"]
+visible = false
+clip_contents = true
+custom_minimum_size = Vector2(520, 640)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+alignment = 1
+
+[node name="BlockButtonChange" type="HBoxContainer" parent="CanvasLayer/Body/VBoxContainer"]
+visible = false
+layout_mode = 2
+alignment = 1
 
 [node name="LabelPuzzle" type="Label" parent="CanvasLayer/Body/VBoxContainer"]
 visible = false
@@ -242,6 +377,41 @@ visible = false
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 text = "Volver"
+
+[node name="FlipButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 226.0
+offset_top = -344.0
+offset_right = 306.0
+offset_bottom = -264.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+mouse_default_cursor_shape = 2
+theme_type_variation = &"CircleButtonBlue"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/FlipButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.5
+offset_top = -40.5
+offset_right = 50.5
+offset_bottom = 40.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(50.5, 40.5)
+mouse_filter = 2
+texture = SubResource("AtlasTexture_r53cv")
+expand_mode = 1
 
 [node name="Footer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = -1
@@ -317,7 +487,46 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_11iis")
 expand_mode = 1
 
-[connection signal="pressed" from="CanvasLayer/Body/VBoxContainer/BlockButtonChange/Button" to="." method="_on_toggle_view_pressed"]
+[node name="Movimientos" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -275.0
+offset_top = 186.0
+offset_right = -100.0
+offset_bottom = 326.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ua571")
+title = "Movimientos"
+color = Color(0.101961, 0.768627, 0.372549, 1)
+
+[node name="Tiempo" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -87.5
+offset_top = 188.0
+offset_right = 87.5
+offset_bottom = 328.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5dxs6")
+title = "Tiempo"
+color = Color(0.447059, 0.101961, 0.768627, 1)
+
+[node name="Flips" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 101.0
+offset_top = 188.0
+offset_right = 276.0
+offset_bottom = 328.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c5778")
+title = "Flips"
+color = Color(0.329412, 0.65098, 0.992157, 1)
+
 [connection signal="pressed" from="CanvasLayer/Body/VBoxContainer/HBoxContainer/Volver" to="." method="_on_MainMenuButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/FlipButton" to="." method="_on_toggle_view_pressed"]
 [connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/Repetir" to="." method="_on_RepeatButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/Siguiente" to="." method="_on_NextPuzzleButton_pressed"]

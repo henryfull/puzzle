@@ -1,0 +1,63 @@
+[gd_scene load_steps=3 format=3 uid="uid://ps3gg6vw4h7f"]
+
+[ext_resource type="Script" uid="uid://bjcjo24sam7ij" path="res://Scenes/Components/BestResult/panel_container_result.gd" id="1_lavai"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_id1qx"]
+resource_local_to_scene = true
+bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(0, 1)
+
+[node name="PanelContainerResult" type="PanelContainer" node_paths=PackedStringArray("titleLabel", "value", "bestValue")]
+offset_right = 175.0
+offset_bottom = 140.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_id1qx")
+script = ExtResource("1_lavai")
+titleLabel = NodePath("MarginContainer/TitleLabel")
+value = NodePath("MarginContainer/ValueLabel")
+bestValue = NodePath("MarginContainer/BestValueLabel")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 0
+
+[node name="TitleLabel" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 24
+text = "movimientos"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="ValueLabel" type="Label" parent="MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 5
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 48
+text = "38"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="BestValueLabel" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "37"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0

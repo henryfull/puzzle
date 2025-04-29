@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 @export var labelNamePuzzle: Label
 @export var labelInfo: Label
@@ -6,6 +6,9 @@ extends Node2D
 @export var puzzleImage2D: Sprite2D
 @export var textView: RichTextLabel
 @export var labelTitle : Label
+@export var moves : PanelContainer
+@export var time_panel : PanelContainer  # Panel para el tiempo
+@export var flips_panel : PanelContainer  # Panel para los flips
 
 # Variables para almacenar los datos del puzzle
 var puzzle_data = null
@@ -91,7 +94,9 @@ func _ready():
 		else: 
 			if(GLOBAL.columns < 10):
 				GLOBAL.columns += 1
-		
+	
+	# Configurar todos los paneles de resultados
+	setup_result_panels()
 	
 	# Adaptar la UI para dispositivos móviles
 	# adapt_ui_for_device()
@@ -220,6 +225,9 @@ func update_ui_with_puzzle_data():
 			stats_label.text = stats_text
 		else:
 			stats_label.text = tr("No hay estadísticas previas")
+	
+	# Actualizar todos los paneles de resultados
+	setup_result_panels()
 	
 	# Actualizar la imagen
 	if puzzle_data and puzzle_data.has("image"):
@@ -385,3 +393,138 @@ func show_unlocked_achievements():
 	# Hacer visible la sección de logros
 	if stats_label:
 		stats_label.visible = true 
+
+# Función para configurar todos los paneles de resultados
+func setup_result_panels():
+	var puzzle_stats = progress_manager.get_puzzle_stats(current_pack_id, current_puzzle_id)
+	var difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
+	
+	# Estructura para definir los paneles y sus datos
+	var panels_data = [
+		{
+			"panel": moves,
+			"title": "MOVIMIENTOS",
+			"current_value": total_moves,
+			"stat_key": "best_moves",
+			"is_time": false,
+			"color": Color(0.2, 0.9, 0.4, 1),  # Verde
+			"compare_less": true  # Menor es mejor
+		},
+		{
+			"panel": time_panel,
+			"title": "TIEMPO",
+			"current_value": elapsed_time,
+			"stat_key": "best_time",
+			"is_time": true,
+			"color": Color(0.1, 0.5, 0.9, 1),  # Azul
+			"compare_less": true  # Menor es mejor
+		},
+		{
+			"panel": flips_panel,
+			"title": "FLIPS",
+			"current_value": GLOBAL.flip_count if "flip_count" in GLOBAL else 0,
+			"stat_key": "best_flips",
+			"is_time": false,
+			"color": Color(0.3, 0.65, 0.99, 1),  # Azul claro
+			"compare_less": true  # Menor es mejor
+		}
+	]
+	
+	# Configurar cada panel
+	for panel_data in panels_data:
+		var panel = panel_data.panel
+		if panel:
+			var current_value = panel_data.current_value
+			var is_time = panel_data.is_time
+			var compare_less = panel_data.compare_less
+			
+			# Determinar el mejor valor
+			var best_value = current_value  # Por defecto, valor actual
+			var is_new_record = false
+			
+			if puzzle_stats.has(difficulty_key) and puzzle_stats[difficulty_key].has(panel_data.stat_key):
+				best_value = puzzle_stats[difficulty_key][panel_data.stat_key]
+				
+				# Determinar si es un nuevo récord según el criterio de comparación
+				if compare_less:
+					# Menor es mejor (movimientos, tiempo)
+					if current_value < best_value:
+						is_new_record = true
+				else:
+					# Mayor es mejor (puntuación)
+					if current_value > best_value:
+						is_new_record = true
+			else:
+				# Si no hay estadísticas previas, es un nuevo récord
+				is_new_record = true
+			
+			# Configurar el panel
+			configure_result_panel(
+				panel, 
+				panel_data.title, 
+				current_value, 
+				best_value, 
+				is_new_record, 
+				is_time, 
+				panel_data.color
+			)
+
+# Función genérica para configurar un panel de resultados
+func configure_result_panel(panel: PanelContainer, title_text: String, current_value, best_value, is_new_record: bool, is_time: bool = false, panel_color: Color = Color(0.1, 0.7, 0.3, 1)):
+	if panel:
+		# Establecer el título
+		panel.titleLabel.text = tr(title_text)
+		
+		# Establecer el color del panel
+		# panel.color = panel_color
+		
+		# Formatear y establecer el valor actual
+		var value_text = ""
+		if is_time:
+			var minutes = int(current_value) / 60
+			var seconds = int(current_value) % 60
+			value_text = "%02d:%02d" % [minutes, seconds]
+		else:
+			value_text = str(current_value)
+		
+		panel.value.text = value_text
+		
+		# Configurar el aspecto y texto según el resultado
+		if is_new_record:
+			# Es un nuevo récord - lo destacamos
+			panel.bestValue.text = tr("¡NUEVO!")
+			panel.bestValue.add_theme_color_override("font_color", Color(1, 0.8, 0, 1))  # Color dorado
+			panel.bestValue.add_theme_font_size_override("font_size", 24)
+			
+			# Cambiar el color del panel para destacarlo
+			var panel_style = panel.get("theme_override_styles/panel")
+			if panel_style is StyleBoxFlat:
+				# Guardar el color original para la animación
+				var original_color = panel_style.bg_color
+				
+				# Establecer un color más brillante
+				panel_style.bg_color = panel_color
+				
+				# Crear una animación sencilla de pulso
+				var tween = create_tween().set_loops(3)
+				var highlight_color = panel_color.lightened(0.2)
+				tween.tween_property(panel_style, "bg_color", highlight_color, 0.5)
+				tween.tween_property(panel_style, "bg_color", original_color, 0.5)
+		elif (is_time and abs(current_value - best_value) < 0.5) or (!is_time and current_value == best_value):
+			# Igualó su mejor marca
+			panel.bestValue.text = tr("IGUAL")
+			panel.bestValue.add_theme_color_override("font_color", Color(0.2, 0.6, 1, 1))  # Azul
+			panel.bestValue.add_theme_font_size_override("font_size", 18)
+		else:
+			# No superó su mejor marca
+			var best_text = ""
+			if is_time:
+				var best_minutes = int(best_value) / 60
+				var best_seconds = int(best_value) % 60
+				best_text = "%02d:%02d" % [best_minutes, best_seconds]
+			else:
+				best_text = str(best_value)
+				
+			panel.bestValue.text = best_text
+			panel.bestValue.add_theme_color_override("font_color", Color(1, 1, 1, 1))  # Blanco normal
+			panel.bestValue.add_theme_font_size_override("font_size", 18)

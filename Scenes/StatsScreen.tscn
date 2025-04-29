@@ -72,6 +72,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.329412)
 
 [node name="BackgroundTitle" parent="CanvasLayer" instance=ExtResource("4_ut8ua")]
+z_index = 1
 custom_minimum_size = Vector2(280, 140)
 anchors_preset = 5
 anchor_left = 0.5
@@ -90,24 +91,15 @@ title = "ESTADÍSTICAS"
 anchors_preset = 13
 anchor_top = 0.0
 anchor_bottom = 1.0
-offset_left = -330.0
-offset_top = 198.0
-offset_right = 330.0
-offset_bottom = -44.0
+offset_left = -310.0
+offset_top = 192.0
+offset_right = 310.0
+offset_bottom = -37.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="ContentContainer" type="VBoxContainer" parent="CanvasLayer/MainContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 15.0
-offset_top = 15.0
-offset_right = -15.0
-offset_bottom = -14.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="Selectors" type="VBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer"]
 layout_mode = 2
@@ -123,6 +115,7 @@ layout_mode = 2
 text = "Pack:"
 horizontal_alignment = 2
 vertical_alignment = 1
+uppercase = true
 
 [node name="PackDropdown" type="OptionButton" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector"]
 layout_mode = 2
@@ -141,6 +134,7 @@ layout_mode = 2
 text = "Puzzle:"
 horizontal_alignment = 2
 vertical_alignment = 1
+uppercase = true
 
 [node name="PuzzleDropdown" type="OptionButton" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PuzzleSelector"]
 layout_mode = 2
@@ -159,6 +153,7 @@ layout_mode = 2
 text = "Dificultad:"
 horizontal_alignment = 2
 vertical_alignment = 1
+uppercase = true
 
 [node name="DifficultyDropdown" type="OptionButton" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/DifficultySelector"]
 layout_mode = 2

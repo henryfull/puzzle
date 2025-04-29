@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://by6tdey6sc6uw"]
+[gd_scene load_steps=13 format=3 uid="uid://by6tdey6sc6uw"]
 
 [ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_bdxpv"]
@@ -6,28 +6,35 @@
 [ext_resource type="Script" uid="uid://1epn1mhu0fwt" path="res://Scripts/Utils.gd" id="2_qqjs0"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="3_6f4k2"]
 [ext_resource type="Script" uid="uid://do1o3ww8nd3mq" path="res://Scripts/ResolutionButton.gd" id="3_p0ibv"]
+[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="7_bdxpv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cja8r"]
 atlas = ExtResource("2_bdxpv")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6f4k2"]
-bg_color = Color(1, 0.996078, 0.886275, 1)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color(1, 0.847059, 0.74902, 1)
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bdxpv"]
 content_margin_left = 15.0
 content_margin_right = 1.0
 
-[node name="Options" type="Node2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_pke3u"]
+atlas = ExtResource("7_bdxpv")
+region = Rect2(2114, 669, 101, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdxpv"]
+atlas = ExtResource("7_bdxpv")
+region = Rect2(150, 473, 102, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kfnrp"]
+atlas = ExtResource("7_bdxpv")
+region = Rect2(272, 474, 101, 101)
+
+[node name="Options" type="Node2D" node_paths=PackedStringArray("sliderVolumeGeneral", "sliderVolumeSFX", "sliderVolumeMusic", "sliderPanSensitivity", "sliderTweenDuration", "checkTweenEffect")]
 script = ExtResource("1_7s1ry")
+sliderVolumeGeneral = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral/HSlider_Volumen_General")
+sliderVolumeSFX = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX/HSlider_Volumen_VFX")
+sliderVolumeMusic = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic/HSlider_Volumen_Musica")
+sliderPanSensitivity = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive/HSlider_Pan_Sensitivity")
+sliderTweenDuration = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2/HSlider_Tween_Duration")
+checkTweenEffect = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Tween_Effect")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -51,6 +58,7 @@ grow_vertical = 2
 color = Color(0.72549, 0.854902, 1, 0.356863)
 
 [node name="BackgroundTitle" parent="CanvasLayer" instance=ExtResource("3_6f4k2")]
+z_index = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_top = 0.0
@@ -74,7 +82,7 @@ offset_right = 311.0
 offset_bottom = -53.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_6f4k2")
+theme_type_variation = &"PanelYellow"
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer2"]
 custom_minimum_size = Vector2(0, 881)
@@ -100,6 +108,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Resolución"
 vertical_alignment = 1
+uppercase = true
 language = "es"
 
 [node name="ResolutionButton" type="OptionButton" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
@@ -112,6 +121,7 @@ script = ExtResource("3_p0ibv")
 unique_name_in_owner = true
 layout_mode = 2
 text = "Idioma"
+uppercase = true
 language = "es"
 
 [node name="LangSelector" type="OptionButton" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
@@ -129,26 +139,49 @@ popup/item_2/text = "ca"
 popup/item_2/id = 2
 script = ExtResource("2_kgki5")
 
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="Label_general" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "General"
+uppercase = true
 
-[node name="HSlider_Volumen_General" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+[node name="HBoxContainerGeneral" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_pke3u")
+expand_mode = 3
+
+[node name="HSlider_Volumen_General" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral"]
+custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
 size_flags_vertical = 4
-value = 80.0
+value = 100.0
 script = ExtResource("2_qqjs0")
 
 [node name="LabelMusic" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Música"
+uppercase = true
 language = "es"
 
-[node name="HSlider_Volumen_Musica" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+[node name="HBoxContainerMusic" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_pke3u")
+expand_mode = 3
+
+[node name="HSlider_Volumen_Musica" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 value = 1.0
 script = ExtResource("2_qqjs0")
@@ -157,21 +190,40 @@ script = ExtResource("2_qqjs0")
 unique_name_in_owner = true
 layout_mode = 2
 text = "Efectos"
+uppercase = true
 language = "es"
 
-[node name="HSlider_Volumen_VFX" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+[node name="HBoxContainerSFX" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_bdxpv")
+
+[node name="HSlider_Volumen_VFX" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 script = ExtResource("2_qqjs0")
+
+[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 
 [node name="LabelPanSensitivity" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Sensibilidad"
+uppercase = true
 language = "es"
 
-[node name="HSlider_Pan_Sensitivity" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+[node name="HBoxContainerSensitive" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_kfnrp")
+
+[node name="HSlider_Pan_Sensitivity" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 min_value = 0.1
 max_value = 2.0
@@ -183,6 +235,7 @@ script = ExtResource("2_qqjs0")
 unique_name_in_owner = true
 layout_mode = 2
 text = "Efecto suave"
+uppercase = true
 language = "es"
 
 [node name="CheckBox_Tween_Effect" type="CheckBox" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
@@ -193,10 +246,18 @@ button_pressed = true
 unique_name_in_owner = true
 layout_mode = 2
 text = "Duración efecto"
+uppercase = true
 language = "es"
 
-[node name="HSlider_Tween_Duration" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+[node name="HBoxContainerSensitive2" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_kfnrp")
+
+[node name="HSlider_Tween_Duration" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 min_value = 0.1
 max_value = 1.0
@@ -211,7 +272,7 @@ size_flags_vertical = 8
 
 [node name="RestoreButton" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(250, 80)
+custom_minimum_size = Vector2(280, 80)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Restaurar compras"
@@ -221,17 +282,17 @@ text = "Restaurar"
 [node name="ButtonClose" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 clip_contents = true
-custom_minimum_size = Vector2(250, 80)
+custom_minimum_size = Vector2(280, 90)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"ButtonRed"
 text = "Cerrar"
 
-[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HSlider_Volumen_General" to="." method="_on_HSlider_Volumen_General_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HSlider_Volumen_Musica" to="." method="_on_HSlider_Volumen_Musica_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HSlider_Volumen_VFX" to="." method="_on_HSlider_Volumen_VFX_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HSlider_Pan_Sensitivity" to="." method="_on_pan_sensitivity_changed"]
+[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral/HSlider_Volumen_General" to="." method="_on_HSlider_Volumen_General_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic/HSlider_Volumen_Musica" to="." method="_on_HSlider_Volumen_Musica_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX/HSlider_Volumen_VFX" to="." method="_on_HSlider_Volumen_VFX_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive/HSlider_Pan_Sensitivity" to="." method="_on_pan_sensitivity_changed"]
 [connection signal="toggled" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Tween_Effect" to="." method="_on_tween_effect_toggled"]
-[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HSlider_Tween_Duration" to="." method="_on_tween_duration_changed"]
+[connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2/HSlider_Tween_Duration" to="." method="_on_tween_duration_changed"]
 [connection signal="pressed" from="CanvasLayer/PanelContainer2/MarginContainer/HBoxContainer/RestoreButton" to="." method="_on_restore_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/PanelContainer2/MarginContainer/HBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]
