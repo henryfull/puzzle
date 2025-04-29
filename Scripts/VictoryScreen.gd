@@ -70,6 +70,9 @@ func _ready():
 		
 		if victory_data.has("puzzle_id"):
 			current_puzzle_id = victory_data.puzzle_id
+			
+		# Guardar las estadísticas en el ProgressManager
+		save_stats_to_progress_manager(victory_data)
 		
 		# Limpiar los datos de victoria para evitar problemas si se vuelve a esta escena
 		GLOBAL.victory_data = null
@@ -528,3 +531,27 @@ func configure_result_panel(panel: PanelContainer, title_text: String, current_v
 			panel.bestValue.text = best_text
 			panel.bestValue.add_theme_color_override("font_color", Color(1, 1, 1, 1))  # Blanco normal
 			panel.bestValue.add_theme_font_size_override("font_size", 18)
+
+# Nueva función para guardar todas las estadísticas en el ProgressManager
+func save_stats_to_progress_manager(victory_data):
+	if not progress_manager:
+		return
+		
+	# Preparar la estructura de estadísticas
+	var stats = {
+		"time": elapsed_time,
+		"moves": total_moves,
+		"columns": difficulty.columns,
+		"rows": difficulty.rows,
+		"flips": victory_data.get("flip_count", 0),  # Nuevo - número de flips
+		"flip_moves": victory_data.get("flip_move_count", 0),  # Nuevo - movimientos durante flips
+		"gamemode": victory_data.get("gamemode", 0),  # Nuevo - modalidad de juego
+		"date": Time.get_datetime_string_from_system()
+	}
+	var difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
+
+	if(GLOBAL.progresive_difficulty):
+		difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
+	# Crear la clave de dificultad basada en las dimensiones del puzzle
+	# Guardar las estadísticas con los 4 parámetros en el orden correcto
+	progress_manager.save_puzzle_stats(stats, current_pack_id, current_puzzle_id, difficulty_key)

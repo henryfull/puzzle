@@ -2259,77 +2259,59 @@ func safe_change_scene(scene_path: String) -> void:
 		push_error("No se pudo cambiar a la escena: " + scene_path)
 
 
-# Función llamada cuando se completa el puzzle
+# Función llamada cuando se ha completado el puzzle
 func _on_puzzle_completed():
-	# Evitar que se ejecute múltiples veces
+	# Evitar que se llame múltiples veces
 	if puzzle_completed:
 		return
-		
+	
 	# Marcar como completado
 	puzzle_completed = true
 	
-	print("¡Puzzle completado!")
-	
-	# Detener el temporizador de juego
+	# Detener el temporizador
 	stop_game_timer()
 	
-	# Verificar que tenemos los IDs necesarios
-	if current_pack_id.is_empty() or current_puzzle_id.is_empty():
-		print("ERROR: No se pueden guardar el progreso, faltan los IDs del pack o puzzle")
-		return
+	# Reproducir sonido de victoria
+	if audio_merge:
+		audio_merge.play()
 	
-	# Marcar el puzzle como completdaado en el ProgressManager
-	print("PuzzleGame: Marcando puzzle como completado - Pack: " + current_pack_id + ", Puzzle: " + current_puzzle_id)
-	progress_manager.complete_puzzle(current_pack_id, current_puzzle_id)
-
-	# Restablecer las variables globales
-	GLOBAL.rows = default_rows
-	GLOBAL.columns = default_columns
+	# Mostrar mensaje de victoria
+	show_success_message("¡Puzzle Completado!", 1.0)
 	
-	# Guardar estadísticas de la partida
-	var stats = {
-		"time": elapsed_time,
-		"moves": total_moves,
-		"columns": GLOBAL.columns,
-		"rows": GLOBAL.rows
+	# Determinar la modalidad de juego actual
+	var gamemode = 0  # Modo normal por defecto
+	if relax_mode:
+		gamemode = 1  # Modo relajado
+	elif timer_mode:
+		gamemode = 3  # Modo contrarreloj
+	elif challenge_mode:
+		gamemode = 4  # Modo desafío
+	
+	# Preparar los datos para la pantalla de victoria
+	var victory_data = {
+		"puzzle": GLOBAL.selected_puzzle,
+		"pack": GLOBAL.selected_pack,
+		"total_moves": total_moves,
+		"elapsed_time": elapsed_time,
+		"difficulty": {"columns": GLOBAL.columns, "rows": GLOBAL.rows},
+		"pack_id": current_pack_id,
+		"puzzle_id": current_puzzle_id,
+		"flip_count": flip_count,           # Nuevo: número de flips realizados
+		"flip_move_count": flip_move_count, # Nuevo: movimientos durante flips
+		"gamemode": gamemode                # Nuevo: modalidad de juego
 	}
-	progress_manager.save_puzzle_stats(current_pack_id, current_puzzle_id, stats)
-	print("PuzzleGame: Estadísticas de la partida guardadas")
 	
-	# Registrar logros - Nueva integración con AchievementsManager
-	var difficulty_level = {
-		"columns": GLOBAL.columns,
-		"rows": GLOBAL.rows
-	}
+	# Guardar los datos para la pantalla de victoria
+	GLOBAL.victory_data = victory_data
 	
-	# Comprobar si se usó la función de volteo (flip)
-	var used_flip = false
-	for piece in pieces:
-		if piece.node.rotation != 0:
-			used_flip = true
-			break
-		
-	# Registrar la finalización del puzzle para los logros
-	AchievementsManager.register_puzzle_completed(
-		difficulty_level, 
-		total_moves, 
-		elapsed_time, 
-		used_flip
-	)
+	# Marcar el puzzle como completado en el ProgressManager
+	if progress_manager:
+		progress_manager.complete_puzzle(current_pack_id, current_puzzle_id)
 	
-	# Desbloquear el siguiente puzzle inmediatamente
-	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
-	if next_puzzle != null:
-		print("PuzzleGame: Siguiente puzzle desbloqueado: " + next_puzzle.name)
-	else:
-		print("PuzzleGame: No hay siguiente puzzle disponible")
-	
-	# Forzar el guardado de los datos de progresión
-	progress_manager.save_progress_data()
-	print("PuzzleGame: Datos de progresión guardados")
-	
-	# Mostrar pantalla de victoria
-	show_victory_screen()
+	# Cambiar a la pantalla de victoria después de un breve retraso
+	get_tree().change_scene_to_file("res://Scenes/VictoryScreen.tscn")
+	#await get_tree().create_timer(1.5).timeout
+	#GLOBAL.change_scene_with_loading("res://Scenes/VictoryScreen.tscn")
 
 # Función para mostrar la pantalla de victoria
 func show_victory_screen():

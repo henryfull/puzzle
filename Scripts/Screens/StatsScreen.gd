@@ -200,39 +200,108 @@ func show_stats_for_difficulty(difficulty: String):
 	general_stats_label.visible = true
 	
 	# Verificar si hay datos de récords
-	var has_records = (stats.has("best_time") and stats.best_time > 0) or (stats.has("best_moves") and stats.best_moves > 0)
+	var has_records = (stats.has("best_time") and stats["best_time"] > 0) or (stats.has("best_moves") and stats["best_moves"] > 0) or (stats.has("best_flips") and stats["best_flips"] < 99999) or (stats.has("best_flip_moves") and stats["best_flip_moves"] < 99999)
 	
 	if not has_records:
 		no_records_label.visible = true
 		return
 	
 	# Actualizar completado
-	completions_label.text = tr("Veces completado: ") + str(int(stats.completions))
+	completions_label.text = tr("Veces completado: ") + str(int(stats["completions"]))
 	completions_label.visible = true
 	
 	# Actualizar mejor tiempo
-	if stats.has("best_time") and stats.best_time > 0:
-		var best_time_minutes = int(stats.best_time) / 60
-		var best_time_seconds = int(stats.best_time) % 60
+	if stats.has("best_time") and stats["best_time"] > 0:
+		var best_time_minutes = int(stats["best_time"]) / 60
+		var best_time_seconds = int(stats["best_time"]) % 60
 		best_time_label.text = tr("Mejor tiempo: ") + "%02d:%02d" % [best_time_minutes, best_time_seconds]
 		best_time_label.visible = true
 		
 		# Fecha del mejor tiempo
 		if stats.has("best_time_date"):
-			var date_str = format_date_time(stats.best_time_date)
+			var date_str = format_date_time(stats["best_time_date"])
 			best_time_date_label.text = tr("Conseguido el: ") + date_str
 			best_time_date_label.visible = true
 	
 	# Actualizar mejor movimientos
-	if stats.has("best_moves") and stats.best_moves > 0:
-		best_moves_label.text = tr("Mejor movimientos: ") + str(int(stats.best_moves))
+	if stats.has("best_moves") and stats["best_moves"] > 0:
+		best_moves_label.text = tr("Mejor movimientos: ") + str(int(stats["best_moves"]))
 		best_moves_label.visible = true
 		
 		# Fecha de los mejores movimientos
 		if stats.has("best_moves_date"):
-			var date_str = format_date_time(stats.best_moves_date)
-			best_moves_date_label.text = tr("Conseguido el: ") + str(date_str.to_int())
+			var date_str = format_date_time(stats["best_moves_date"])
+			best_moves_date_label.text = tr("Conseguido el: ") + date_str
 			best_moves_date_label.visible = true
+	
+	# Nuevas estadísticas: Flips
+	if stats.has("best_flips") and stats["best_flips"] < 99999:
+		var flips_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipsLabel
+		if flips_label:
+			flips_label.text = tr("Menor número de flips: ") + str(int(stats["best_flips"]))
+			flips_label.visible = true
+		
+		# Fecha de los mejores flips
+		if stats.has("best_flips_date"):
+			var flips_date_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipsDateLabel
+			if flips_date_label:
+				var date_str = format_date_time(stats["best_flips_date"])
+				flips_date_label.text = tr("Conseguido el: ") + date_str
+				flips_date_label.visible = true
+	
+	# Nuevas estadísticas: Movimientos durante flips
+	if stats.has("best_flip_moves") and stats["best_flip_moves"] < 99999:
+		var flip_moves_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipMovesLabel
+		if flip_moves_label:
+			flip_moves_label.text = tr("Menor movimientos con flip: ") + str(int(stats["best_flip_moves"]))
+			flip_moves_label.visible = true
+		
+		# Fecha de los mejores movimientos en flip
+		if stats.has("best_flip_moves_date"):
+			var flip_moves_date_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipMovesDateLabel
+			if flip_moves_date_label:
+				var date_str = format_date_time(stats["best_flip_moves_date"])
+				flip_moves_date_label.text = tr("Conseguido el: ") + date_str
+				flip_moves_date_label.visible = true
+	
+	# Mostrar historial si hay entradas
+	if stats.has("history") and stats["history"].size() > 0:
+		var history_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/HistoryLabel
+		if history_label:
+			var history_text = tr("Historial de partidas:") + "\n"
+			
+			for i in range(min(5, stats["history"].size())):
+				var entry = stats["history"][i]
+				var entry_time = "%02d:%02d" % [int(entry["time"]) / 60, int(entry["time"]) % 60]
+				
+				# Añadir información del modo de juego
+				var gamemode_name = "Normal"
+				if entry.has("gamemode"):
+					match entry["gamemode"]:
+						1: gamemode_name = "Relax"
+						3: gamemode_name = "Contrarreloj"
+						4: gamemode_name = "Desafío"
+				
+				history_text += "\n" + format_date_time(entry["date"]) + " - " + tr("Modo: ") + gamemode_name
+				history_text += "\n  " + tr("Tiempo: ") + entry_time + ", " + tr("Movimientos: ") + str(entry["moves"])
+				
+				# Añadir información sobre flips si está disponible
+				var flips_info = ""
+				if entry.has("flips"):
+					flips_info = tr("Flips: ") + str(entry["flips"])
+				
+				if entry.has("flip_moves"):
+					if flips_info != "":
+						flips_info += ", "
+					flips_info += tr("Mov. flip: ") + str(entry["flip_moves"])
+				
+				if flips_info != "":
+					history_text += "\n  " + flips_info
+				
+				history_text += "\n"
+			
+			history_label.text = history_text
+			history_label.visible = true
 
 # Restablecer la visualización de estadísticas
 func reset_stats_display():
@@ -244,6 +313,24 @@ func reset_stats_display():
 	best_moves_date_label.visible = false
 	no_records_label.visible = false
 	no_stats_label.visible = false
+	
+	# Ocultar también los nuevos labels
+	var flips_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipsLabel
+	var flips_date_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipsDateLabel
+	var flip_moves_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipMovesLabel
+	var flip_moves_date_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipMovesDateLabel
+	var history_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/HistoryLabel
+	
+	if flips_label:
+		flips_label.visible = false
+	if flips_date_label:
+		flips_date_label.visible = false
+	if flip_moves_label:
+		flip_moves_label.visible = false
+	if flip_moves_date_label:
+		flip_moves_date_label.visible = false
+	if history_label:
+		history_label.visible = false
 
 # Formatea una fecha ISO como una cadena legible
 func format_date_time(date_str: String) -> String:

@@ -468,53 +468,72 @@ func get_next_unlocked_puzzle(pack_id: String, current_puzzle_id: String):
 	return null
 
 # Nueva función para guardar estadísticas de una partida
-func save_puzzle_stats(pack_id: String, puzzle_id: String, stats: Dictionary):
-	print("ProgressManager: Guardando estadísticas para el puzzle - Pack: " + pack_id + ", Puzzle: " + puzzle_id)
-	
-	# Asegurar que la estructura existe
+func save_puzzle_stats(stats: Dictionary, pack_id: String, puzzle_id: String, difficulty_key: String) -> void:
 	if not progress_data.statistics.has(pack_id):
 		progress_data.statistics[pack_id] = {}
 	
 	if not progress_data.statistics[pack_id].has(puzzle_id):
 		progress_data.statistics[pack_id][puzzle_id] = {}
 	
-	# Determinamos clave basada en dificultad
-	var difficulty_key = str(stats.columns) + "x" + str(stats.rows)
-	
 	if not progress_data.statistics[pack_id][puzzle_id].has(difficulty_key):
 		progress_data.statistics[pack_id][puzzle_id][difficulty_key] = {
-			"completions": 0,
 			"best_time": 99999,
 			"best_moves": 99999,
+			"completions": 0,
+			"best_time_date": "",
+			"best_moves_date": "",
+			"best_flips": 99999,
+			"best_flips_date": "",
+			"best_flip_moves": 99999,
+			"best_flip_moves_date": "",
 			"history": []
 		}
 	
-	# Incrementar contador de completaciones
-	progress_data.statistics[pack_id][puzzle_id][difficulty_key].completions += 1
+	# Asegurar que todas las propiedades necesarias existen
+	if not progress_data.statistics[pack_id][puzzle_id][difficulty_key].has("best_flips"):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flips"] = 99999
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flips_date"] = ""
 	
-	# Actualizar mejores tiempos y movimientos si corresponde
-	if stats.time < progress_data.statistics[pack_id][puzzle_id][difficulty_key].best_time:
-		progress_data.statistics[pack_id][puzzle_id][difficulty_key].best_time = stats.time
+	if not progress_data.statistics[pack_id][puzzle_id][difficulty_key].has("best_flip_moves"):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves"] = 99999
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves_date"] = ""
+		
+	if not progress_data.statistics[pack_id][puzzle_id][difficulty_key].has("history"):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["history"] = []
 	
-	if stats.moves < progress_data.statistics[pack_id][puzzle_id][difficulty_key].best_moves:
-		progress_data.statistics[pack_id][puzzle_id][difficulty_key].best_moves = stats.moves
+	# Asegurar que existe completions (antes era completion_count)
+	if not progress_data.statistics[pack_id][puzzle_id][difficulty_key].has("completions"):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["completions"] = 0
+		
+	# Incrementar contador de completados con notación de diccionario
+	progress_data.statistics[pack_id][puzzle_id][difficulty_key]["completions"] += 1
 	
-	# Guardar registro en el historial (limitamos a los últimos 10 intentos)
-	var history_entry = {
-		"date": Time.get_datetime_string_from_system(),
-		"time": stats.time,
-		"moves": stats.moves
-	}
+	if stats.has("time") and (stats.time < progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_time"] or progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_time"] == 99999):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_time"] = stats.time
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_time_date"] = stats.date
+		
+	if stats.has("moves") and (stats.moves < progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_moves"] or progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_moves"] == 99999):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_moves"] = stats.moves
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_moves_date"] = stats.date
 	
-	progress_data.statistics[pack_id][puzzle_id][difficulty_key].history.push_front(history_entry)
+	# Nuevas estadísticas para flips y flip_moves
+	if stats.has("flips") and (stats.flips < progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flips"] or progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flips"] == 99999):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flips"] = stats.flips
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flips_date"] = stats.date
 	
-	# Limitar el historial a 10 entradas
-	if progress_data.statistics[pack_id][puzzle_id][difficulty_key].history.size() > 10:
-		progress_data.statistics[pack_id][puzzle_id][difficulty_key].history.resize(10)
+	if stats.has("flip_moves") and (stats.flip_moves < progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves"] or progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves"] == 99999):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves"] = stats.flip_moves
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves_date"] = stats.date
 	
-	# Guardar los datos
+	# Guardar historial de partidas
+	var history_entry = stats.duplicate()
+	progress_data.statistics[pack_id][puzzle_id][difficulty_key]["history"].append(history_entry)
+	
+	# Limitar historial a las últimas 20 partidas
+	if progress_data.statistics[pack_id][puzzle_id][difficulty_key]["history"].size() > 20:
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["history"].pop_front()
+	
 	save_progress_data()
-	print("ProgressManager: Estadísticas guardadas correctamente")
 
 # Nueva función para obtener estadísticas de un puzzle
 func get_puzzle_stats(pack_id: String, puzzle_id: String) -> Dictionary:
@@ -522,6 +541,27 @@ func get_puzzle_stats(pack_id: String, puzzle_id: String) -> Dictionary:
 	
 	if progress_data.statistics.has(pack_id) and progress_data.statistics[pack_id].has(puzzle_id):
 		stats = progress_data.statistics[pack_id][puzzle_id].duplicate(true)
+		
+		# Asegurar que todas las dificultades tienen las propiedades nuevas
+		for difficulty_key in stats.keys():
+			if not stats[difficulty_key].has("best_flips"):
+				stats[difficulty_key]["best_flips"] = 99999
+				stats[difficulty_key]["best_flips_date"] = ""
+			if not stats[difficulty_key].has("best_flip_moves"):
+				stats[difficulty_key]["best_flip_moves"] = 99999
+				stats[difficulty_key]["best_flip_moves_date"] = ""
+			if not stats[difficulty_key].has("history"):
+				stats[difficulty_key]["history"] = []
+				
+			# Verificar el historial
+			if stats[difficulty_key].has("history"):
+				for entry in stats[difficulty_key].history:
+					if not entry.has("flips"):
+						entry["flips"] = 0
+					if not entry.has("flip_moves"):
+						entry["flip_moves"] = 0
+					if not entry.has("gamemode"):
+						entry["gamemode"] = 0
 	
 	return stats
 
@@ -539,16 +579,21 @@ func get_player_stats() -> Dictionary:
 		for puzzle_id in progress_data.statistics[pack_id].keys():
 			for difficulty in progress_data.statistics[pack_id][puzzle_id].keys():
 				var puzzle_stats = progress_data.statistics[pack_id][puzzle_id][difficulty]
-				player_stats.total_puzzles_completed += puzzle_stats.completions
+				# Usar notación de diccionario
+				if puzzle_stats.has("completions"):
+					player_stats["total_puzzles_completed"] += puzzle_stats["completions"]
 				
 				# Sumar el tiempo de todas las partidas en el historial
-				for entry in puzzle_stats.history:
-					player_stats.total_time_played += entry.time
-					player_stats.total_moves += entry.moves
+				if puzzle_stats.has("history"):
+					for entry in puzzle_stats["history"]:
+						if entry.has("time"):
+							player_stats["total_time_played"] += entry["time"]
+						if entry.has("moves"):
+							player_stats["total_moves"] += entry["moves"]
 	
 	# Contar packs completados
 	for pack_id in progress_data.packs.keys():
-		if progress_data.packs[pack_id].completed:
-			player_stats.packs_completed += 1
+		if progress_data.packs[pack_id].has("completed") and progress_data.packs[pack_id]["completed"]:
+			player_stats["packs_completed"] += 1
 	
 	return player_stats 
