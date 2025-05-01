@@ -2300,6 +2300,7 @@ func _on_puzzle_completed():
 		"flip_move_count": flip_move_count, # Nuevo: movimientos durante flips
 		"gamemode": gamemode                # Nuevo: modalidad de juego
 	}
+	GLOBAL.rows = original_rows
 	
 	# Guardar los datos para la pantalla de victoria
 	GLOBAL.victory_data = victory_data
@@ -2313,27 +2314,6 @@ func _on_puzzle_completed():
 	#await get_tree().create_timer(1.5).timeout
 	#GLOBAL.change_scene_with_loading("res://Scenes/VictoryScreen.tscn")
 
-# Función para mostrar la pantalla de victoria
-func show_victory_screen():
-	print("Cambiando a la pantalla de victoria")
-	
-	# Guardar los datos necesarios en GLOBAL para que la escena de victoria pueda acceder a ellos
-	GLOBAL.victory_data = {
-		"puzzle": GLOBAL.selected_puzzle,
-		"pack": GLOBAL.selected_pack,
-		"total_moves": total_moves,
-		"elapsed_time": elapsed_time,
-		"pack_id": current_pack_id,
-		"puzzle_id": current_puzzle_id,
-		"is_mobile": is_mobile,  # Añadir información sobre el dispositivo
-		"difficulty": {
-			"columns": GLOBAL.columns,
-			"rows": GLOBAL.rows
-		}
-	}
-	
-	# Usar la función de cambio de escena con pantalla de carga
-	GLOBAL.change_scene_with_loading("res://Scenes/VictoryScreen.tscn")
 
 # Función para mostrar un mensaje de error temporal
 func show_error_message(message: String, duration: float = 2.0):

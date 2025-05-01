@@ -1,18 +1,32 @@
-[gd_scene load_steps=5 format=3 uid="uid://d10aevwkwvh1y"]
+[gd_scene load_steps=9 format=3 uid="uid://d10aevwkwvh1y"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="1_235xj"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_i74rg"]
+atlas = ExtResource("1_235xj")
+region = Rect2(1223, 40, 84, 85)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_isiab"]
+texture = SubResource("AtlasTexture_i74rg")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_isiab"]
+atlas = ExtResource("1_235xj")
+region = Rect2(1223, 40, 84, 85)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nhr5o"]
+texture = SubResource("AtlasTexture_isiab")
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gj1nx"]
 texture = ExtResource("1_235xj")
-region_rect = Rect2(2352, 150, 110, 90)
+region_rect = Rect2(1223, 40, 84, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ot00g"]
 texture = ExtResource("1_235xj")
-region_rect = Rect2(2228, 150, 108, 90)
+region_rect = Rect2(1223, 40, 84, 85)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7pjev"]
 texture = ExtResource("1_235xj")
-region_rect = Rect2(2100, 148, 114, 94)
+region_rect = Rect2(1223, 40, 84, 85)
 
 [node name="BackButton" type="Button"]
 anchors_preset = 2
@@ -23,6 +37,8 @@ offset_top = -180.0
 offset_right = 260.0
 offset_bottom = -60.0
 grow_vertical = 0
+theme_override_styles/focus = SubResource("StyleBoxTexture_isiab")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_nhr5o")
 theme_override_styles/hover = SubResource("StyleBoxTexture_gj1nx")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_ot00g")
 theme_override_styles/normal = SubResource("StyleBoxTexture_7pjev")

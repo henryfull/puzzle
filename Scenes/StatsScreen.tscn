@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bdogxe3m1dhw2"]
+[gd_scene load_steps=20 format=3 uid="uid://bdogxe3m1dhw2"]
 
 [ext_resource type="Script" uid="uid://bkpn724tg17tm" path="res://Scripts/Screens/StatsScreen.gd" id="1_57a8p"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="2_5d5ab"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_ut8ua"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="5_3mdl3"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_y61kq"]
+[ext_resource type="PackedScene" uid="uid://ps3gg6vw4h7f" path="res://Scenes/Components/BestResult/panel_container_result.tscn" id="7_6gjew"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djtya"]
 
@@ -27,6 +28,33 @@ corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycpkl"]
+resource_local_to_scene = true
+bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lcxb8"]
+resource_local_to_scene = true
+bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8jbb3"]
+resource_local_to_scene = true
+bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(0, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aer1c"]
 texture = ExtResource("5_y61kq")
@@ -80,9 +108,9 @@ anchor_top = 0.0
 anchor_right = 0.5
 anchor_bottom = 0.0
 offset_left = -197.0
-offset_top = 30.0
+offset_top = 100.0
 offset_right = 197.0
-offset_bottom = 170.0
+offset_bottom = 240.0
 grow_vertical = 1
 size_flags_vertical = 0
 title = "ESTADÍSTICAS"
@@ -235,7 +263,6 @@ autowrap_mode = 3
 
 [node name="PuzzleImagePanel" type="PanelContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox"]
 clip_children = 2
-clip_contents = true
 custom_minimum_size = Vector2(360, 450)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -251,10 +278,38 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="PuzzleImage" type="TextureRect" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel/MarginContainer"]
+clip_contents = true
 layout_mode = 2
 texture = ExtResource("3_2j4m2")
 expand_mode = 5
 stretch_mode = 5
+
+[node name="Movimientos" parent="CanvasLayer" instance=ExtResource("7_6gjew")]
+offset_left = 56.0
+offset_top = 441.0
+offset_right = 231.0
+offset_bottom = 591.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ycpkl")
+title = "Movimientos"
+color = Color(0.101961, 0.768627, 0.372549, 1)
+
+[node name="Tiempo" parent="CanvasLayer" instance=ExtResource("7_6gjew")]
+offset_left = 267.0
+offset_top = 441.0
+offset_right = 442.0
+offset_bottom = 591.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_lcxb8")
+title = "Tiempo"
+color = Color(0.447059, 0.101961, 0.768627, 1)
+
+[node name="Flips" parent="CanvasLayer" instance=ExtResource("7_6gjew")]
+offset_left = 495.0
+offset_top = 441.0
+offset_right = 670.0
+offset_bottom = 591.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_8jbb3")
+title = "Flips"
+color = Color(0.329412, 0.65098, 0.992157, 1)
 
 [node name="MainContainer3" type="MarginContainer" parent="CanvasLayer"]
 visible = false
@@ -262,9 +317,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -20.0
-offset_top = 17.5
-offset_right = -20.0
-offset_bottom = -57.5
+offset_top = 421.0
+offset_right = 14.0
+offset_bottom = -571.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -277,9 +332,9 @@ anchors_preset = 0
 anchor_top = 0.0
 anchor_bottom = 0.0
 offset_left = 30.0
-offset_top = 40.0
+offset_top = 104.0
 offset_right = 150.0
-offset_bottom = 160.0
+offset_bottom = 224.0
 grow_vertical = 1
 path = "res://Scenes/MainMenu.tscn"
 

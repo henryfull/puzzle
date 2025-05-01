@@ -9,6 +9,7 @@ extends Control
 @export var moves : PanelContainer
 @export var time_panel : PanelContainer  # Panel para el tiempo
 @export var flips_panel : PanelContainer  # Panel para los flips
+@export var expanseImagePanel : Panel
 
 # Variables para almacenar los datos del puzzle
 var puzzle_data = null
@@ -19,6 +20,8 @@ var difficulty = {"columns": 0, "rows": 0}  # Nueva variable para la dificultad
 var current_pack_id = ""
 var current_puzzle_id = ""
 var progress_manager = null
+var flip_count = 0      # Número de flips realizados
+var flip_move_count = 0  # Movimientos durante flips
 
 # Referencias a nodos de la interfaz
 var image_view = null
@@ -67,15 +70,20 @@ func _ready():
 		# Cargar los IDs para la navegación
 		if victory_data.has("pack_id"):
 			current_pack_id = victory_data.pack_id
-		
+
+		# Cargar datos de flips
+		if victory_data.has("flip_count"):
+			flip_count = victory_data.flip_count
+
+		if victory_data.has("flip_move_count"):
+			flip_move_count = victory_data.flip_move_count
+
 		if victory_data.has("puzzle_id"):
 			current_puzzle_id = victory_data.puzzle_id
 			
-		# Guardar las estadísticas en el ProgressManager
-		save_stats_to_progress_manager(victory_data)
-		
+	
 		# Limpiar los datos de victoria para evitar problemas si se vuelve a esta escena
-		GLOBAL.victory_data = null
+
 	
 	# Configurar la interfaz básica
 	setup_ui()
@@ -91,18 +99,25 @@ func _ready():
 	
 	# Mostrar logros desbloqueados si hay alguno
 	show_unlocked_achievements()
-	if(GLOBAL.progresive_difficulty):
-		if(GLOBAL.rows < 22):
+	
+	# Verificar si la dificultad progresiva está habilitada y aumentarla si es el caso
+	if GLOBAL.progresive_difficulty == true:
+		if GLOBAL.rows < 22:
 			GLOBAL.rows += 1
-		else: 
-			if(GLOBAL.columns < 10):
-				GLOBAL.columns += 1
+		elif GLOBAL.columns < 10:
+			GLOBAL.columns += 1
+		# Guardar la configuración actualizada
+		GLOBAL.save_settings()
 	
 	# Configurar todos los paneles de resultados
 	setup_result_panels()
 	
 	# Adaptar la UI para dispositivos móviles
 	# adapt_ui_for_device()
+	if GLOBAL.has_method("get") and GLOBAL.get("victory_data") != null:
+		# Guardar las estadísticas en el ProgressManager
+		save_stats_to_progress_manager(GLOBAL.victory_data)
+		
 
 # Función para configurar la interfaz básica
 func setup_ui():
@@ -234,9 +249,9 @@ func update_ui_with_puzzle_data():
 	
 	# Actualizar la imagen
 	if puzzle_data and puzzle_data.has("image"):
-		var image_path = puzzle_data.image
-		var image_texture = load(image_path)
-		
+		var image_texture = load(puzzle_data.image)
+		$CanvasLayer/ExpanseImage/PanelContainer/ImageExpanse.texture = image_texture
+
 		if image_view is Sprite2D:
 			image_view.texture = image_texture
 			
@@ -425,13 +440,26 @@ func setup_result_panels():
 		{
 			"panel": flips_panel,
 			"title": "FLIPS",
-			"current_value": GLOBAL.flip_count if "flip_count" in GLOBAL else 0,
+			"current_value": flip_move_count,
 			"stat_key": "best_flips",
 			"is_time": false,
 			"color": Color(0.3, 0.65, 0.99, 1),  # Azul claro
 			"compare_less": true  # Menor es mejor
 		}
 	]
+	
+	# Si existe un panel específico para movimientos durante flips, agregarlo
+	if has_node("FlipMovesPanel"):
+		var flip_moves_panel = get_node("FlipMovesPanel")
+		panels_data.append({
+			"panel": flip_moves_panel,
+			"title": "MOV. FLIPS",
+			"current_value": flip_move_count,
+			"stat_key": "best_flip_moves",
+			"is_time": false,
+			"color": Color(0.6, 0.3, 0.9, 1),  # Púrpura
+			"compare_less": true  # Menor es mejor
+		})
 	
 	# Configurar cada panel
 	for panel_data in panels_data:
@@ -549,9 +577,13 @@ func save_stats_to_progress_manager(victory_data):
 		"date": Time.get_datetime_string_from_system()
 	}
 	var difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
-
-	if(GLOBAL.progresive_difficulty):
-		difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
 	# Crear la clave de dificultad basada en las dimensiones del puzzle
 	# Guardar las estadísticas con los 4 parámetros en el orden correcto
 	progress_manager.save_puzzle_stats(stats, current_pack_id, current_puzzle_id, difficulty_key)
+	GLOBAL.victory_data = null
+
+
+func showExpaneseImage():
+	# Primero se muestra el fondo negro del expanseImage
+	expanseImagePanel.visible = true
+	

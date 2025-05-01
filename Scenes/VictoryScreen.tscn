@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://sc0afjqsuaff"]
+[gd_scene load_steps=28 format=3 uid="uid://sc0afjqsuaff"]
 
 [ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
 [ext_resource type="Texture2D" uid="uid://c8e3l3s0vy870" path="res://Assets/Images/GUID/backgrounds/bg_victory.jpg" id="2_fv7sy"]
@@ -9,6 +9,7 @@
 [ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="4_fv7sy"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_j7jqh"]
 [ext_resource type="PackedScene" uid="uid://ps3gg6vw4h7f" path="res://Scenes/Components/BestResult/panel_container_result.tscn" id="9_cek7k"]
+[ext_resource type="PackedScene" uid="uid://dfyoip8j6ru34" path="res://Scenes/Components/ExpanseImage/ExpanseImage.tscn" id="10_r53cv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cek7k"]
 atlas = ExtResource("2_fv7sy")
@@ -78,6 +79,10 @@ corner_radius_bottom_left = 50
 atlas = ExtResource("5_j7jqh")
 region = Rect2(2108, 487, 101, 81)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ua571"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(272, 474, 101, 101)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_fv7sy"]
 atlas = ExtResource("5_j7jqh")
 region = Rect2(1990, 487, 87, 103)
@@ -113,7 +118,7 @@ shadow_color = Color(0, 0, 0, 1)
 shadow_size = 4
 shadow_offset = Vector2(0, 1)
 
-[node name="VictoryScreen" type="Control" node_paths=PackedStringArray("labelNamePuzzle", "labelInfo", "statsLabel", "puzzleImage2D", "textView", "labelTitle", "moves", "time_panel", "flips_panel")]
+[node name="VictoryScreen" type="Control" node_paths=PackedStringArray("labelNamePuzzle", "labelInfo", "statsLabel", "puzzleImage2D", "textView", "labelTitle", "moves", "time_panel", "flips_panel", "expanseImagePanel")]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_g6yxt")
@@ -126,6 +131,7 @@ labelTitle = NodePath("CanvasLayer/Header/Panel/LabelTitle")
 moves = NodePath("CanvasLayer/Movimientos")
 time_panel = NodePath("CanvasLayer/Tiempo")
 flips_panel = NodePath("CanvasLayer/Flips")
+expanseImagePanel = NodePath("CanvasLayer/ExpanseImage")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
@@ -243,7 +249,7 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -290.0
-offset_top = -286.0
+offset_top = -290.0
 offset_right = 290.0
 offset_bottom = 464.0
 grow_horizontal = 2
@@ -270,7 +276,6 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cek7k")
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Body/MarginContainer/Panel2"]
-visible = false
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -414,6 +419,42 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_r53cv")
 expand_mode = 1
 
+[node name="ButtonExpanse" type="Button" parent="CanvasLayer"]
+z_index = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -322.0
+offset_top = -317.0
+offset_right = -242.0
+offset_bottom = -237.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(40, 40)
+mouse_default_cursor_shape = 2
+theme_type_variation = &"CircleButtonYellow"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/ButtonExpanse"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.5
+offset_top = -40.5
+offset_right = 50.5
+offset_bottom = 40.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(50.5, 40.5)
+mouse_filter = 2
+texture = SubResource("AtlasTexture_ua571")
+expand_mode = 1
+
 [node name="Footer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = -1
 anchor_left = 0.084
@@ -527,7 +568,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_c5778")
 title = "Flips"
 color = Color(0.329412, 0.65098, 0.992157, 1)
 
+[node name="ExpanseImage" parent="CanvasLayer" instance=ExtResource("10_r53cv")]
+visible = false
+
 [connection signal="pressed" from="CanvasLayer/Body/VBoxContainer/HBoxContainer/Volver" to="." method="_on_MainMenuButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/FlipButton" to="." method="_on_toggle_view_pressed"]
+[connection signal="pressed" from="CanvasLayer/ButtonExpanse" to="." method="showExpaneseImage"]
 [connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/Repetir" to="." method="_on_RepeatButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/Siguiente" to="." method="_on_NextPuzzleButton_pressed"]

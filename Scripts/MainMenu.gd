@@ -25,6 +25,13 @@ func _ready():
 	
 	await get_tree().process_frame
 	
+	# Inicializar ConnectStores para los servicios de plataforma
+	if has_node("/root/ConnectStores"):
+		var connect_stores = get_node("/root/ConnectStores")
+		if not connect_stores.connection_initialized:
+			print("MainMenu: Inicializando servicios de plataforma...")
+			connect_stores.initialize_connection()
+	
 	# Actualizar los textos según el idioma actual
 	update_ui_texts()
 	

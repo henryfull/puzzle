@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=86 format=3 uid="uid://dyqkx5or01raf"]
+[gd_resource type="Theme" load_steps=90 format=3 uid="uid://dyqkx5or01raf"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_8wbtt"]
 [ext_resource type="FontFile" uid="uid://nsb7mxocp6o3" path="res://Assets/Fonts/Galano Grotesque Medium.otf" id="7_ht6ax"]
@@ -52,6 +52,20 @@ region_rect = Rect2(729, 360, 302, 88)
 texture = ExtResource("2_8wbtt")
 expand_margin_bottom = 10.0
 region_rect = Rect2(729, 360, 302, 88)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vq864"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1223, 148, 84, 85)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yiway"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1223, 148, 84, 85)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_quunw"]
+texture = ExtResource("2_8wbtt")
+region_rect = Rect2(1223, 148, 84, 85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjsnl"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sj5kf"]
 texture = ExtResource("2_8wbtt")
@@ -530,6 +544,11 @@ ButtonBlue/styles/focus = SubResource("StyleBoxTexture_1vfkc")
 ButtonBlue/styles/hover = SubResource("StyleBoxTexture_ayxdb")
 ButtonBlue/styles/normal = SubResource("StyleBoxTexture_48job")
 ButtonBlue/styles/pressed = SubResource("StyleBoxTexture_j5m7c")
+ButtonClose/base_type = &"Button"
+ButtonClose/styles/focus = SubResource("StyleBoxTexture_vq864")
+ButtonClose/styles/hover = SubResource("StyleBoxTexture_yiway")
+ButtonClose/styles/normal = SubResource("StyleBoxTexture_quunw")
+ButtonClose/styles/pressed = SubResource("StyleBoxFlat_jjsnl")
 ButtonPurple/base_type = &"ButtonBlue"
 ButtonPurple/styles/focus = SubResource("StyleBoxTexture_sj5kf")
 ButtonPurple/styles/hover = SubResource("StyleBoxTexture_wsgho")

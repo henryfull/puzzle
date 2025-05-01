@@ -1,0 +1,83 @@
+[gd_scene load_steps=7 format=3 uid="uid://dfyoip8j6ru34"]
+
+[ext_resource type="Script" uid="uid://dqg2j70qnmhkq" path="res://Scenes/Components/ExpanseImage/expanse_image.gd" id="1_263as"]
+[ext_resource type="Texture2D" uid="uid://dxtmuh7tejufw" path="res://Assets/Images/arte2.jpg" id="2_xxs0c"]
+[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="3_xxs0c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xuyag"]
+bg_color = Color(0, 0, 0, 0.772549)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xxs0c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2p2p7"]
+atlas = ExtResource("3_xxs0c")
+region = Rect2(1989, 487, 88, 103)
+
+[node name="ExpanseImage" type="Panel"]
+z_index = 4
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xuyag")
+script = ExtResource("1_263as")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_xxs0c")
+
+[node name="ImageExpanse" type="TextureRect" parent="PanelContainer"]
+layout_mode = 2
+texture = ExtResource("2_xxs0c")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonClose" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 228.0
+offset_top = 101.0
+offset_right = 308.0
+offset_bottom = 181.0
+grow_horizontal = 2
+theme_type_variation = &"ButtonClose"
+
+[node name="ButtonReset" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -294.0
+offset_top = 101.0
+offset_right = -214.0
+offset_bottom = 181.0
+grow_horizontal = 2
+theme_type_variation = &"CircleButtonYellow"
+
+[node name="TextureRect" type="TextureRect" parent="ButtonReset"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -26.0
+offset_right = 30.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_2p2p7")
+expand_mode = 3
+stretch_mode = 4
+
+[connection signal="pressed" from="ButtonClose" to="." method="_on_button_close_pressed"]
+[connection signal="pressed" from="ButtonReset" to="." method="_on_button_reset_pressed"]
