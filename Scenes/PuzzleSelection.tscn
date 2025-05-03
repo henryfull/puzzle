@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://b6sg71qs17yj5"]
+[gd_scene load_steps=7 format=3 uid="uid://b6sg71qs17yj5"]
 
 [ext_resource type="Script" uid="uid://c1twov7g0717y" path="res://Scripts/PuzzleSelection.gd" id="1_nt7kx"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_4mmlg"]
 [ext_resource type="PackedScene" uid="uid://dpw3l7nftx7kg" path="res://Scenes/Components/PuzzleGrid/PuzzleGrid.tscn" id="4_moqol"]
 [ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="4_oehjl"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="6_jmjrx"]
-[ext_resource type="PackedScene" uid="uid://b186xtyh83l2s" path="res://Scenes/Components/PanelDifficult/DifficultPanel.tscn" id="8_jmjrx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_moqol"]
 
@@ -30,7 +29,7 @@ anchor_right = 1.0
 offset_left = -4.0
 offset_top = 78.0
 offset_right = 3.0
-offset_bottom = 218.0
+offset_bottom = 248.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_moqol")
@@ -131,34 +130,4 @@ grow_vertical = 1
 scale = Vector2(0.8, 0.8)
 path = "res://Scenes/PackSelection.tscn"
 
-[node name="ButtonDifficult" type="Button" parent="CanvasLayer"]
-custom_minimum_size = Vector2(280, 80)
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -320.0
-offset_top = -120.0
-offset_right = -40.0
-offset_bottom = -40.0
-grow_horizontal = 0
-grow_vertical = 0
-pivot_offset = Vector2(140, 40)
-theme_type_variation = &"ButtonYellow"
-text = "Difficult"
-
-[node name="DifficultyPanel" parent="." instance=ExtResource("8_jmjrx")]
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 1
-grow_vertical = 1
-
 [connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginLeft/Volver" to="." method="_on_BackButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/ButtonDifficult" to="." method="_on_show_difficult"]

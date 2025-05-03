@@ -1,20 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b186xtyh83l2s"]
+[gd_scene load_steps=6 format=3 uid="uid://b186xtyh83l2s"]
 
-[ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="1_o7gpr"]
 [ext_resource type="Script" uid="uid://n0jjwxfxxpdu" path="res://Scenes/Components/PanelDifficult/DifficultPanel.gd" id="1_pfj52"]
+[ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="2_8iy6g"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="3_j5n5s"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pfj52"]
-bg_color = Color(1, 0.996078, 0.886275, 1)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 0.847059, 0.74902, 1)
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pfj52"]
 
@@ -49,27 +37,69 @@ grow_vertical = 2
 color = Color(0.72549, 0.854902, 1, 0.784314)
 metadata/_edit_use_anchors_ = true
 
-[node name="Panel" type="Panel" parent="DifficultyLayer"]
+[node name="HeaderPanelColor" type="Panel" parent="DifficultyLayer"]
+z_index = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 93.0
+offset_right = 200.0
+offset_bottom = 275.0
+grow_horizontal = 2
+theme_type_variation = &"PanelHeaderYellow"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DifficultyLayer/HeaderPanelColor"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -43.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TitleLabel" type="Label" parent="DifficultyLayer/HeaderPanelColor/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_8iy6g")
+theme_override_font_sizes/font_size = 51
+text = "common_difficulty"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="SubTitleLabel" type="Label" parent="DifficultyLayer/HeaderPanelColor/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_8iy6g")
+text = "common_select_mode"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Panel" type="PanelContainer" parent="DifficultyLayer"]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -318.0
-offset_top = 62.0
+offset_top = 225.0
 offset_right = 318.0
 offset_bottom = -62.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_pfj52")
+theme_type_variation = &"PanelYellow"
 
 [node name="MarginContainer" type="MarginContainer" parent="DifficultyLayer/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
@@ -77,11 +107,8 @@ theme_override_constants/margin_bottom = 30
 custom_minimum_size = Vector2(280, 380)
 layout_mode = 2
 
-[node name="BackgroundTitle" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer" instance=ExtResource("1_o7gpr")]
-layout_mode = 2
-title = "Difficultad"
-
 [node name="TitleLabel" type="Label" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Selecciona la Dificultad"
@@ -132,9 +159,9 @@ text = "Dificultad progresiva"
 [node name="ButtonClose" type="Button" parent="DifficultyLayer"]
 custom_minimum_size = Vector2(120, 120)
 offset_left = 30.0
-offset_top = 80.0
+offset_top = 100.0
 offset_right = 150.0
-offset_bottom = 200.0
+offset_bottom = 220.0
 pivot_offset = Vector2(60, 60)
 theme_type_variation = &"CircleButtonRed"
 

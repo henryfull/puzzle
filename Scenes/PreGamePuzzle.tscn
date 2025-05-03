@@ -1,0 +1,215 @@
+[gd_scene load_steps=10 format=3 uid="uid://dr0k8dkmdl6c6"]
+
+[ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="1_s60dh"]
+[ext_resource type="Script" uid="uid://b3v3xjtf02c0d" path="res://Scripts/PreGamePuzzle.gd" id="1_yjkc0"]
+[ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="5_4pyv4"]
+[ext_resource type="Texture2D" uid="uid://ds3ugdkfawct4" path="res://Assets/Images/tikis/tiki-stayed.png" id="6_h5dmi"]
+[ext_resource type="PackedScene" uid="uid://1yijsaj7tgnr" path="res://Scenes/Components/GoalPuzzle/GoalPuzzle.tscn" id="6_yjkc0"]
+[ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="7_asu85"]
+[ext_resource type="PackedScene" uid="uid://b186xtyh83l2s" path="res://Scenes/Components/PanelDifficult/DifficultPanel.tscn" id="7_yjkc0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xq7c6"]
+atlas = ExtResource("1_s60dh")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmlu8"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.529067, 0.529067, 0.529066, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[node name="PreGamePuzzle" type="Node2D" node_paths=PackedStringArray("panelColor", "headerColor", "title", "subtitle", "size", "tiki", "description", "playButton")]
+script = ExtResource("1_yjkc0")
+panelColor = NodePath("CanvasLayer/PanelContainerColor")
+headerColor = NodePath("CanvasLayer/PanelHeader")
+title = NodePath("CanvasLayer/PanelHeader/VBoxContainer/TitleLabel")
+subtitle = NodePath("CanvasLayer/PanelHeader/VBoxContainer/SubTitleLabel")
+size = NodePath("CanvasLayer/PanelHeader/VBoxContainer/OptionLabel")
+tiki = NodePath("CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/ImageTiki")
+description = NodePath("CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/PanelContainer/Description")
+playButton = NodePath("CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer/PlayButton")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1200.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_xq7c6")
+expand_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.72549, 0.854902, 1, 0.356863)
+
+[node name="PanelHeader" type="Panel" parent="CanvasLayer"]
+z_index = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 97.0
+offset_right = 200.0
+offset_bottom = 279.0
+grow_horizontal = 2
+theme_type_variation = &"PanelHeaderGreen"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelHeader"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -43.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/PanelHeader/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_4pyv4")
+theme_override_font_sizes/font_size = 51
+text = "Super difícil"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="SubTitleLabel" type="Label" parent="CanvasLayer/PanelHeader/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_4pyv4")
+text = "NAranja"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="OptionLabel" type="Label" parent="CanvasLayer/PanelHeader/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.990522, 0.733629, 0.429086, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_4pyv4")
+text = "4 x 6"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="ButtonClose" type="Button" parent="CanvasLayer"]
+z_index = 2
+clip_contents = true
+custom_minimum_size = Vector2(80, 80)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 210.0
+offset_top = 130.0
+offset_right = 290.0
+offset_bottom = 210.0
+grow_horizontal = 2
+size_flags_vertical = 0
+theme_type_variation = &"ButtonClose"
+
+[node name="PanelContainerColor" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -294.0
+offset_top = 218.0
+offset_right = 294.0
+offset_bottom = -166.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainerColor"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainerColor/MarginContainer"]
+layout_mode = 2
+
+[node name="ImageTiki" type="TextureRect" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 380)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("6_h5dmi")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_kmlu8")
+
+[node name="GoalPuzzle" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/PanelContainer" instance=ExtResource("6_yjkc0")]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(280, 170)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_asu85")
+text = "Relájate mientras descubres maravillosos puzzles"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonDifficult" type="Button" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(280, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"ButtonYellow"
+text = "Difficult"
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(280, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "JUGAR"
+
+[node name="DifficultyPanel" parent="CanvasLayer" instance=ExtResource("7_yjkc0")]
+custom_minimum_size = Vector2(100, 60)
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 100.0
+offset_bottom = 60.0
+grow_horizontal = 1
+grow_vertical = 1
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[connection signal="pressed" from="CanvasLayer/ButtonClose" to="." method="_on_button_close_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer/ButtonDifficult" to="." method="_on_button_difficult_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

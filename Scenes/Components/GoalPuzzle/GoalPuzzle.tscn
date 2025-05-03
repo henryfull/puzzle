@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://1yijsaj7tgnr"]
+
+[ext_resource type="Script" uid="uid://cuv6ma0661ufw" path="res://Scenes/Components/GoalPuzzle/goal_puzzle.gd" id="1_jya46"]
+[ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="2_0a1ue"]
+
+[node name="GoalPuzzle" type="Label" node_paths=PackedStringArray("description")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_0a1ue")
+autowrap_mode = 2
+script = ExtResource("1_jya46")
+description = NodePath(".")

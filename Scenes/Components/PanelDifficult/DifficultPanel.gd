@@ -4,18 +4,9 @@ extends Node
 signal difficulty_changed(columns, rows)
 signal show_difficult(is_difficult)
 @export var descriptionLabel: Label
-
+var current_difficulty
 # Estructura para almacenar las dificultades disponibles
-var difficulties = [
-	{"name": "difficulty_very_easy", "columns": 1, "rows": 8, "color": "", "description": "difficulty_very_easy_description"},
-	{"name": "difficulty_easy", "columns": 2, "rows": 8, "color": "", "description": "difficulty_easy_description"},
-	{"name": "difficulty_normal", "columns": 3, "rows": 8, "color": "ButtonYellow", "description": "difficulty_normal_description"},
-	{"name": "difficulty_medium", "columns": 4, "rows": 6, "color": "ButtonYellow", "description": "difficulty_medium_description"},
-	{"name": "difficulty_challenge", "columns": 4, "rows": 8, "color": "ButtonYellow", "description": "difficulty_challenge_description"},
-	{"name": "difficulty_hard", "columns": 6, "rows": 8, "color": "ButtonRed", "description": "difficulty_hard_description"},
-	{"name": "difficulty_very_hard", "columns": 8, "rows": 8, "color": "ButtonRed", "description": "difficulty_very_hard_description"},
-	{"name": "difficulty_expert", "columns": 10, "rows": 10, "color": "ButtonRed", "description": "difficulty_expert_description"}
-]
+
 @export var difficulty_container: BoxContainer
 
 # Referencias a nodos
@@ -39,6 +30,7 @@ func _ready():
 	_update_button_text()
 	$DifficultyLayer/Panel/MarginContainer/VBoxContainer/CheckButtonDifficult["button_pressed"] = GLOBAL.progresive_difficulty
 	# Conectar a la señal propia
+	updateColumRows()
 	self.connect("show_difficult", Callable(self, "_on_toggle_difficult"))
 
 func _on_toggle_difficult(is_difficult: bool):
@@ -55,8 +47,8 @@ func _create_difficulty_buttons():
 	difficulty_buttons.clear()
 	
 	# Añadir las opciones de dificultad
-	for i in range(difficulties.size()):
-		var diff = difficulties[i]
+	for i in range(GLOBAL.difficulties.size()):
+		var diff = GLOBAL.difficulties[i]
 		var button = Button.new()
 		button.text = tr(diff.name) + " (" + str(diff.columns) + "x" + str(diff.rows) + ")"
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -77,34 +69,22 @@ func _create_difficulty_buttons():
 # Función para actualizar el texto del botón con la dificultad actual
 func _update_button_text():
 	# Buscar la dificultad actual
-	var current_difficulty = "Personalizado"
+	current_difficulty = "Personalizado"
 	var selected_index = -1
 	
-	for i in range(difficulties.size()):
-		var diff = difficulties[i]
+	for i in range(GLOBAL.difficulties.size()):
+		var diff = GLOBAL.difficulties[i]
 		if diff.columns == GLOBAL.columns and diff.rows == GLOBAL.rows:
 			current_difficulty = tr(diff.name)
 			descriptionLabel.text = tr(diff.description)
 			selected_index = i
 			break
 	
-	# Si encontramos el índice de la dificultad seleccionada
-	if selected_index != -1 and selected_index < difficulty_buttons.size():
-		# Dar foco al botón seleccionado
-		difficulty_buttons[selected_index].grab_focus()
-		
-		# Asegurar que el botón está visible en el scroll (si el contenedor es ScrollContainer)
-		var parent = difficulty_container.get_parent()
-		if parent is ScrollContainer:
-			# Calcular la posición del botón dentro del ScrollContainer
-			var button_position = difficulty_buttons[selected_index].position.y
-			
-			# Ajustar el scroll para mostrar el botón
-			parent.scroll_vertical = button_position
-	
+
 # Función llamada cuando se selecciona una dificultad
 func _on_difficulty_selected(index):
-	var selected = difficulties[index]
+	var selected = GLOBAL.difficulties[index]
+	GLOBAL.current_difficult = index
 	
 	# Actualizar las variables globales
 	GLOBAL.columns = selected.columns
@@ -122,6 +102,7 @@ func _on_difficulty_selected(index):
 	
 	# Emitir la señal de cambio de dificultad
 	emit_signal("difficulty_changed", selected.columns, selected.rows)
+	updateColumRows()
 
 
 # Función para limpiar cuando se sale
@@ -138,3 +119,6 @@ func _on_check_button_pressed() -> void:
 	
 	# Guardar la configuración
 	GLOBAL.save_settings()
+
+func updateColumRows():
+	$DifficultyLayer/HeaderPanelColor/VBoxContainer/SubTitleLabel.text = current_difficulty + " (" +str(GLOBAL.columns) + " x " + str(GLOBAL.rows) + ")"

@@ -273,9 +273,9 @@ func _ready():
 		3:
 			timer_mode = true
 			# Definir tiempo límite (ejemplo: 180 segundos)
-			time_left = 180.0
-			max_flip_moves = 10 # ejemplo, puedes ajustar
-			max_flips = 5
+			time_left = GLOBAL.puzzle_limits.max_time
+			max_flip_moves = GLOBAL.puzzle_limits.max_flip_moves # ejemplo, puedes ajustar
+			max_flips = GLOBAL.puzzle_limits.max_flips
 			flip_move_count = 0
 			
 			# Mostrar reloj en cuenta atrás
@@ -296,10 +296,10 @@ func _ready():
 			timer_countdown.start()
 		4:
 			challenge_mode = true
-			max_moves = 50 # ejemplo, puedes ajustar
-			max_flips = 3 # ejemplo
+			max_moves = GLOBAL.puzzle_limits.max_moves # ejemplo, puedes ajustar
+			max_flips = GLOBAL.puzzle_limits.max_flips # ejemplo
 			flip_move_count = 0
-			max_flip_moves = 10 # ejemplo
+			max_flip_moves = GLOBAL.puzzle_limits.max_flip_moves # ejemplo
 			maxMovesLabel.text = str(max_moves)
 			maxMovesFlipLabel.text = str(max_flip_moves)
 			maxFlipsLabel.text = str(max_flips)

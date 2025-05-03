@@ -53,9 +53,9 @@ func update_version_label():
 
 # Función para actualizar los textos de la UI
 func update_ui_texts():
-	btn_options.text = tr("common_modes")
-	btn_play.text = tr("common_play")
-	btn_exit.text = tr("common_exit")
+	btn_options.text = tr("common_modes").to_upper()
+	btn_play.text = tr("common_play").to_upper()
+	btn_exit.text = tr("common_exit").to_upper()
 	print("MainMenu: Textos actualizados con idioma: ", TranslationServer.get_locale())
 
 

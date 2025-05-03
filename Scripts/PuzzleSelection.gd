@@ -191,5 +191,26 @@ func ensure_pack_selected():
 		print("PuzzleSelection: Ya hay un pack seleccionado: ", GLOBAL.selected_pack.id)
 
 
-func _on_show_difficult() -> void:
-	$DifficultyPanel.get_child(0).visible = true
+
+func _on_PuzzleSelected(puzzle) -> void:
+	print("PuzzleSelection: Puzzle seleccionado - ID: ", puzzle.get("id", "NO ID"), ", Nombre: ", puzzle.get("name", "NO NAME"))
+	
+	# Guardar el puzzle seleccionado en la variable global
+	GLOBAL.selected_puzzle = puzzle
+	
+	# Si ya existe una instancia previa de PreGamePuzzle, la eliminamos
+	if has_node("PreGamePuzzle"):
+		get_node("PreGamePuzzle").queue_free()
+	
+	# Crear una nueva instancia de PreGamePuzzle
+	var pre_game_scene = load("res://Scenes/PreGamePuzzle.tscn")
+	var pre_game_instance = pre_game_scene.instantiate()
+	
+	# Agregar la instancia a la escena
+	add_child(pre_game_instance)
+	
+	# Hacer visible el panel
+	pre_game_instance.get_node("CanvasLayer").visible = true
+	
+	# Actualizar la información del puzzle en la instancia
+	pre_game_instance.updateLayout()

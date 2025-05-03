@@ -61,6 +61,8 @@ common_completed;Completado;Completed;Completat
 common_unlocked;Desbloqueado;Unlocked;Desbloquejat
 common_unlocked_all;Todos los modos desbloqueados;All modes unlocked;Tots els modes desbloquejats
 common_text;Texto;Text;Text
+common_difficulty;Dificultad;Difficulty;Dificultat
+common_select_mode;Seleccionar Modo;Select Mode;Seleccionar Mode
 ;;;
 options_restore_purchases;Restaurar;Reset;Restaurar
 options_restore_purchases_tooltip;Restaurar compras;Reset buy;Restaurar compres
