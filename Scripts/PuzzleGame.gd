@@ -6,6 +6,7 @@ class_name PuzzleGame
 
 # Acceso al singleton ProgressManager
 @onready var progress_manager = get_node("/root/ProgressManager")
+var VictoryCheckerScene = preload("res://Scripts/VictoryChecker.gd")
 
 # Variable para rastrear si una pieza fue colocada
 var just_placed_piece: bool = false
@@ -136,6 +137,10 @@ var is_timer_active: bool = false  # Para controlar si el temporizador está act
 # Nueva variable para controlar si el puzzle ya ha sido completado
 var puzzle_completed = false
 
+# Preload de VictoryChecker
+
+var victory_checker: VictoryChecker # Instancia de VictoryChecker
+
 #
 # === SUBCLASE: Piece ===
 # Representa cada pieza del puzzle como un Node2D con Sprite2D integrado.
@@ -189,6 +194,11 @@ func _ready():
 	# Cargar preferencias del usuario
 	load_user_preferences()
 	
+	# Inicializar VictoryChecker
+	victory_checker = VictoryCheckerScene.new()
+	add_child(victory_checker)
+	victory_checker.puzzle_is_complete.connect(_handle_puzzle_really_completed)
+	
 	# Conectar la señal "options_closed" del OptionsManager para reanudar el juego
 	if has_node("/root/OptionsManager"):
 		var options_manager = get_node("/root/OptionsManager")
@@ -227,6 +237,8 @@ func _ready():
 	
 	# Guardar el número original de filas
 	original_rows = GLOBAL.rows
+	# Actualizar original_rows en victory_checker después de que se haya establecido
+	victory_checker.original_rows_ref = original_rows
 
 	# Primero, obtenemos la textura trasera usando la escena del Viewport y esperando un frame
 	var puzzle_back = await generate_back_texture_from_viewport(viewport_scene_path)
@@ -396,6 +408,23 @@ func load_and_create_pieces(puzzle_back: Texture2D):
 
 	# 4) Calcular offset para centrar el puzzle
 	puzzle_offset = (viewport_size - Vector2(puzzle_width, puzzle_height)) * 0.5
+
+	# Construir el diccionario de parámetros aquí con los valores actualizados
+	var current_victory_params = {
+		"pieces": pieces,
+		"puzzle_offset": puzzle_offset,
+		"cell_size": cell_size,
+		"grid": grid,
+		"original_rows": original_rows, 
+		"progress_manager": progress_manager,
+		"audio_merge": audio_merge,
+		"show_success_message_func": Callable(self, "show_success_message"),
+		"update_piece_position_state_func": Callable(self, "update_piece_position_state"),
+		"change_scene_func": Callable(get_tree(), "change_scene_to_file"),
+		"stop_game_timer_func": Callable(self, "stop_game_timer"),
+		"get_game_state_for_victory_func": Callable(self, "_get_current_game_state_for_victory")
+	}
+	victory_checker.initialize(current_victory_params)
 
 	# 5) Generar la lista de celdas y "desordenarlas" (solo columnas por fila)
 	grid.clear()
@@ -685,69 +714,6 @@ func is_mouse_over_piece(piece_obj: Piece, mouse_pos: Vector2) -> bool:
 	# Verificar si el punto local está dentro del rectángulo
 	return tex_rect.has_point(local_pos)
 
-#
-# === COLOCAR LA PIEZA (SNAP A CELDA) ===
-#
-func place_piece(piece_obj: Piece):
-	# Indicar que se acaba de colocar una pieza
-	just_placed_piece = true
-	
-	# 1) Calcular la celda según la posición actual
-	var cell = get_cell_of_piece(piece_obj)  # Usamos get_cell_of_piece que ya tiene en cuenta el desplazamiento
-	
-	# Clampeamos para que no se salga de la grid
-	var cell_x = clamp(int(cell.x), 0, GLOBAL.columns - 1)
-	var cell_y = clamp(int(cell.y), 0, GLOBAL.rows - 1)
-	var new_cell = Vector2(cell_x, cell_y)
-
-	# 2) Ver si hay otra pieza en esa celda
-	var occupant = get_piece_at(new_cell)
-	if occupant != null and occupant != piece_obj:
-		# Verificar si pueden fusionarse
-		if are_pieces_mergeable(piece_obj, occupant):
-			merge_pieces(piece_obj, occupant)
-			return
-		else:
-			# Verificar si la pieza está en un grupo con otras piezas
-			if piece_obj.group.size() > 1:
-				# Si está en un grupo, mantener el comportamiento actual
-				# (no intercambiar, solo mover el grupo completo)
-				# audio_move.play()
-				show_error_message("No se puede intercambiar: la pieza está en un grupo")
-				return
-			
-			# Si el ocupante está en un grupo con otras piezas, no intercambiar
-			if occupant.group.size() > 1:
-				# Generar un error para depuración
-				push_warning("No se puede intercambiar con una pieza que está en un grupo")
-				show_error_message("No se puede intercambiar: la pieza destino está en un grupo")
-				return
-			
-			# Si ninguna está en un grupo, intercambiar las piezas
-			swap_pieces(piece_obj, occupant)
-			return
-
-	# 3) Si no hay ocupante, simplemente colocar la pieza
-	remove_piece_at(piece_obj.current_cell)
-	set_piece_at(new_cell, piece_obj)
-	
-	# Calcular la posición física de la pieza teniendo en cuenta el desplazamiento del tablero
-	var target_position = puzzle_offset + new_cell * cell_size
-	
-	# Actualizar el estado de la pieza (si está en la posición correcta o no)
-	update_piece_position_state(piece_obj)
-	
-	# Aplicar efecto de Tween si está activado
-	if use_tween_effect:
-		apply_tween_effect(piece_obj.node, target_position)
-	else:
-		piece_obj.node.position = target_position
-
-	# 4) Fusionar con piezas adyacentes, si es posible
-	var adjacent = find_adjacent_pieces(piece_obj, new_cell)
-	for adj in adjacent:
-		if are_pieces_mergeable(piece_obj, adj):
-			merge_pieces(piece_obj, adj)
 
 # Función para aplicar el efecto de Tween
 func apply_tween_effect(node: Node2D, target_position: Vector2):
@@ -790,40 +756,6 @@ func are_pieces_mergeable(piece1: Piece, piece2: Piece) -> bool:
 		var epsilon = 0.1
 		return abs(current_diff.x - diff.x) < epsilon and abs(current_diff.y - diff.y) < epsilon
 	return false
-
-#
-# === INTERCAMBIAR DOS PIEZAS ===
-#
-func swap_pieces(a: Piece, b: Piece):
-	var cell_a = a.current_cell
-	var cell_b = b.current_cell
-
-	remove_piece_at(cell_a)
-	remove_piece_at(cell_b)
-
-	set_piece_at(cell_b, a)
-	set_piece_at(cell_a, b)
-
-	# Reposicionar con efecto Tween
-	var target_pos_a = puzzle_offset + cell_b * cell_size
-	var target_pos_b = puzzle_offset + cell_a * cell_size
-	
-	# Actualizar el estado de posición de ambas piezas
-	update_piece_position_state(a)
-	update_piece_position_state(b)
-	
-	if use_tween_effect:
-		apply_tween_effect(a.node, target_pos_a)
-		apply_tween_effect(b.node, target_pos_b)
-	else:
-		a.node.position = target_pos_a
-		b.node.position = target_pos_b
-	
-	# Mostrar mensaje de éxito
-	show_success_message("¡Piezas intercambiadas!")
-	
-	# Generar un error para depuración
-	push_warning("Intercambiando pieza en " + str(cell_a) + " con pieza en " + str(cell_b))
 
 #
 # === GRID: GET/SET/REMOVE PIEZA EN CELDA ===
@@ -970,7 +902,9 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 				
 		if all_pieces_in_one_group:
 			print("¡Victoria por agrupación completa de piezas!")
-			call_deferred("_on_puzzle_completed")
+			# Llamar a VictoryChecker para manejar la finalización
+			var game_state = _get_current_game_state_for_victory()
+			victory_checker._resolve_puzzle_completion(game_state) # Llamada directa ya que estamos en el flujo de merge
 		else:
 			# Recalcular la cantidad real de grupos
 			count_unique_groups()
@@ -1800,8 +1734,7 @@ func place_group(piece: Piece):
 	
 	# Verificar victoria solo cuando realmente se ha colocado una pieza
 	if just_placed_piece:
-		call_deferred("check_victory_deferred")
-		call_deferred("check_victory_by_position")
+		call_deferred("call_victory_checker_deferred") # Usar el nuevo método diferido
 		just_placed_piece = false  # Reiniciar el flag después de verificar
 
 # Nueva función para verificar que todas las piezas estén en el grid
@@ -1829,56 +1762,6 @@ func verify_all_pieces_in_grid():
 					if free_cells.size() > 0:
 						set_piece_at(free_cells[0], piece)
 						piece.node.position = puzzle_offset + free_cells[0] * cell_size
-
-func check_victory():
-	# Primero verificar y corregir el estado del grid
-	verify_and_fix_grid()
-	
-	# Verificar si todas las piezas están en su posición original
-	var all_in_place = true
-	var pieces_close_to_original = 0
-	var total_pieces = pieces.size()
-	
-	for piece_obj in pieces:
-		# Actualizar el estado de posición de la pieza
-		update_piece_position_state(piece_obj)
-		
-		if piece_obj.current_cell != piece_obj.original_pos:
-			all_in_place = false
-			
-			# Verificar si la pieza está cerca de su posición original
-			var expected_position = puzzle_offset + piece_obj.original_pos * cell_size
-			var distance = piece_obj.node.position.distance_to(expected_position)
-			
-			if distance <= cell_size.length() * 0.4:  # 40% del tamaño de celda como margen de error
-				pieces_close_to_original += 1
-	
-	# Si todas las piezas están en su posición original
-	if all_in_place:
-		print("¡Victoria por posición exacta en el grid!")
-		_on_puzzle_completed()
-		return true
-	
-	# Si más del 90% de las piezas están cerca de su posición original, consideramos victoria
-	if pieces_close_to_original >= total_pieces * 0.9:
-		print("¡Victoria! Más del 90% de las piezas están cerca de su posición original")
-		
-		# Ajustar todas las piezas a su posición exacta
-		for piece_obj in pieces:
-			var expected_position = puzzle_offset + piece_obj.original_pos * cell_size
-			piece_obj.node.position = expected_position
-			remove_piece_at(piece_obj.current_cell)
-			piece_obj.current_cell = piece_obj.original_pos
-			set_piece_at(piece_obj.original_pos, piece_obj)
-			
-			# Marcar todas las piezas como en posición correcta
-			if piece_obj.node.has_method("set_correct_position"):
-				piece_obj.node.set_correct_position(true)
-		
-		_on_puzzle_completed()
-		return true
-	
-	return false
 
 # Función diferida para verificar victoria (evita problemas de recursión)
 func check_victory_deferred():
@@ -2018,8 +1901,7 @@ func check_all_groups() -> void:
 	
 	# Verificar victoria solo cuando realmente se ha colocado una pieza
 	if just_placed_piece:
-		call_deferred("check_victory_deferred")
-		call_deferred("check_victory_by_position")
+		call_deferred("call_victory_checker_deferred") # Usar el nuevo método diferido
 		just_placed_piece = false  # Reiniciar el flag después de verificar
 
 # Nueva función para identificar las piezas de borde en un grupo
@@ -2232,22 +2114,12 @@ func verify_and_fix_grid():
 			occupied_positions[pos_key] = piece
 	
 	# Verificar victoria después de corregir el grid
-	call_deferred("check_victory_deferred")
+	call_deferred("call_victory_checker_deferred") # Nueva llamada diferida
 	
 	# También verificar por posición visual
 	call_deferred("check_victory_by_position")
 
-# Función para alternar entre la vista de imagen y texto
-func _on_toggle_view_pressed():
-	# Invertir la visibilidad de las vistas
-	victory_image_view.visible = !victory_image_view.visible
-	victory_text_view.visible = !victory_text_view.visible
-	
-	# Actualizar el texto del botón según la vista actual
-	if victory_text_view.visible:
-		victory_toggle_button.text = "Imagen"
-	else:
-		victory_toggle_button.text = "Texto"
+
 
 # Función para cambiar de escena de manera segura
 func safe_change_scene(scene_path: String) -> void:
@@ -3097,9 +2969,11 @@ func count_unique_groups():
 	
 	# Verificar si todas las piezas están en un solo grupo grande
 	if unique_groups.size() == 1 and unique_groups[0].size() == pieces.size():
-		ungrouped_pieces = 1
+		ungrouped_pieces = 1 # Asegurar que ungrouped_pieces es 1 para la condición de victoria
 		print("¡Victoria por agrupación completa de piezas!")
-		call_deferred("_on_puzzle_completed")
+		# Llamar a VictoryChecker para manejar la finalización
+		var game_state = _get_current_game_state_for_victory()
+		victory_checker._resolve_puzzle_completion(game_state) # Llamada directa
 	
 	return unique_groups.size()
 
@@ -3203,3 +3077,28 @@ func handle_back_gesture() -> bool:
 		show_exit_dialog()
 		return true  # Devolver true para indicar que hemos manejado el gesto
 	return false  # Usar comportamiento por defecto
+
+# Nuevo método para llamar a victory_checker de forma diferida
+func call_victory_checker_deferred():
+	if victory_checker:
+		victory_checker.run_check_victory_deferred()
+
+# Funciones para VictoryChecker
+func _get_current_game_state_for_victory() -> Dictionary:
+	return {
+		"total_moves": total_moves,
+		"elapsed_time": elapsed_time,
+		"current_pack_id": current_pack_id,
+		"current_puzzle_id": current_puzzle_id,
+		"flip_count": flip_count,
+		"flip_move_count": flip_move_count,
+		"relax_mode": relax_mode,
+		"normal_mode": normal_mode,
+		"timer_mode": timer_mode,
+		"challenge_mode": challenge_mode
+		# GLOBAL.selected_puzzle, GLOBAL.selected_pack, GLOBAL.columns, GLOBAL.rows se acceden directamente en VictoryChecker
+	}
+
+func _handle_puzzle_really_completed():
+	puzzle_completed = true
+	print("PuzzleGame: Puzzle marcado como completado internamente tras señal de VictoryChecker.")

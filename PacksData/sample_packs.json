@@ -836,6 +836,361 @@
 					"completed": false
 				}
 			]
+		},
+		{
+			"id": "wild-animals-cartoon",
+			"name": "Wild Animals Cartoon",
+			"description": "Puzzles inspirados en animales salvajes en formato cartoon.",
+			"image_path": "res://Assets/Images/packs/wild-animals-cartoon/thumbnail.png",
+			"unlocked": false,
+			"purchased": false,
+			"completed": false,
+			"difficulty": "easy",
+			"puzzles": [
+				{
+					"id": "wild-animal-cartoon-zebra",
+					"name": "zebra.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/zebra.jpg",
+					"description": "pack_wild_animals_cartoon_description_zebra",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-wolf",
+					"name": "wolf.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/wolf.jpg",
+					"description": "pack_wild_animals_cartoon_description_wolf",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-wildebeest",
+					"name": "wildebeest.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/wildebeest.jpg",
+					"description": "pack_wild_animals_cartoon_description_wildebeest",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-tasmanian",
+					"name": "tasmanian.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/tasmanian.jpg",
+					"description": "pack_wild_animals_cartoon_description_tasmanian",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-tarsier",
+					"name": "tarsier.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/tarsier.jpg",
+					"description": "pack_wild_animals_cartoon_description_tarsier",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-tapir",
+					"name": "tapir.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/tapir.jpg",
+					"description": "pack_wild_animals_cartoon_description_tapir",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-snake",
+					"name": "snake.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/snake.jpg",
+					"description": "pack_wild_animals_cartoon_description_snake",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-sloth",
+					"name": "sloth.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/sloth.jpg",
+					"description": "pack_wild_animals_cartoon_description_sloth",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-rhinoceros",
+					"name": "rhinoceros.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/rhinoceros.jpg",
+					"description": "pack_wild_animals_cartoon_description_rhinoceros",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-red-panda",
+					"name": "red-panda.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/red-panda.jpg",
+					"description": "pack_wild_animals_cartoon_description_red_panda",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-raccoon",
+					"name": "raccoon.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/raccoon.jpg",
+					"description": "pack_wild_animals_cartoon_description_raccoon",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-peacock",
+					"name": "peacock.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/peacock.jpg",
+					"description": "pack_wild_animals_cartoon_description_peacock",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-panda",
+					"name": "panda.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/panda.jpg",
+					"description": "pack_wild_animals_cartoon_description_panda",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-owl",
+					"name": "owl.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/owl.jpg",
+					"description": "pack_wild_animals_cartoon_description_owl",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-otter",
+					"name": "otter.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/otter.jpg",
+					"description": "pack_wild_animals_cartoon_description_otter",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-ostrich",
+					"name": "ostrich.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/ostrich.jpg",
+					"description": "pack_wild_animals_cartoon_description_ostrich",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-moose",
+					"name": "moose.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/moose.jpg",
+					"description": "pack_wild_animals_cartoon_description_moose",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-monkey",
+					"name": "monkey.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/monkey.jpg",
+					"description": "pack_wild_animals_cartoon_description_monkey",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-mongoose",
+					"name": "mongoose.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/mongoose.jpg",
+					"description": "pack_wild_animals_cartoon_description_mongoose",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-meerkat",
+					"name": "meerkat.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/meerkat.jpg",
+					"description": "pack_wild_animals_cartoon_description_meerkat",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-lynx",
+					"name": "lynx.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/lynx.jpg",
+					"description": "pack_wild_animals_cartoon_description_lynx",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-lion",
+					"name": "lion.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/lion.jpg",
+					"description": "pack_wild_animals_cartoon_description_lion",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-koala",
+					"name": "koala.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/koala.jpg",
+					"description": "pack_wild_animals_cartoon_description_koala",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-kangaroo",
+					"name": "kangaroo.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/kangaroo.jpg",
+					"description": "pack_wild_animals_cartoon_description_kangaroo",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-jaguar",
+					"name": "jaguar.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/jaguar.jpg",
+					"description": "pack_wild_animals_cartoon_description_jaguar",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-ibex",
+					"name": "ibex.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/ibex.jpg",
+					"description": "pack_wild_animals_cartoon_description_ibex",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-hyena",
+					"name": "hyena.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/hyena.jpg",
+					"description": "pack_wild_animals_cartoon_description_hyena",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-hippopotamus",
+					"name": "hippopotamus.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/hippopotamus.jpg",
+					"description": "pack_wild_animals_cartoon_description_hippopotamus",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-gorilla",
+					"name": "gorilla.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/gorilla.jpg",
+					"description": "pack_wild_animals_cartoon_description_gorilla",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-goat",
+					"name": "goat.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/goat.jpg",
+					"description": "pack_wild_animals_cartoon_description_goat",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-giraffe",
+					"name": "giraffe.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/giraffe.jpg",
+					"description": "pack_wild_animals_cartoon_description_giraffe",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-gazelle",
+					"name": "gazelle.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/gazelle.jpg",
+					"description": "pack_wild_animals_cartoon_description_gazelle",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-fox",
+					"name": "fox.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/fox.jpg",
+					"description": "pack_wild_animals_cartoon_description_fox",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-echidna",
+					"name": "echidna.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/echidna.jpg",
+					"description": "pack_wild_animals_cartoon_description_echidna",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-eagle",
+					"name": "eagle.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/eagle.jpg",
+					"description": "pack_wild_animals_cartoon_description_eagle",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-deer",
+					"name": "deer.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/deer.jpg",
+					"description": "pack_wild_animals_cartoon_description_deer",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-crocodile",
+					"name": "crocodile.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/crocodile.jpg",
+					"description": "pack_wild_animals_cartoon_description_crocodile",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-coyote",
+					"name": "coyote.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/coyote.jpg",
+					"description": "pack_wild_animals_cartoon_description_coyote",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-cougar",
+					"name": "cougar.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/cougar.jpg",
+					"description": "pack_wild_animals_cartoon_description_cougar",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-chimpanzee",
+					"name": "chimpanzee.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/chimpanzee.jpg",
+					"description": "pack_wild_animals_cartoon_description_chimpanzee",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-cheetah",
+					"name": "cheetah.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/cheetah.jpg",
+					"description": "pack_wild_animals_cartoon_description_cheetah",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-caracal",
+					"name": "caracal.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/caracal.jpg",
+					"description": "pack_wild_animals_cartoon_description_caracal",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-camel",
+					"name": "camel.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/camel.jpg",
+					"description": "pack_wild_animals_cartoon_description_camel",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-buffalo",
+					"name": "buffalo.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/buffalo.jpg",
+					"description": "pack_wild_animals_cartoon_description_buffalo",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-black-wolf",
+					"name": "black-wolf.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/black-wolf.jpg",
+					"description": "pack_wild_animals_cartoon_description_black_wolf",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-bison",
+					"name": "bison.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/bison.jpg",
+					"description": "pack_wild_animals_cartoon_description_bison",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-black-bear",
+					"name": "black-bear.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/black-bear.jpg",
+					"description": "pack_wild_animals_cartoon_description_black_bear",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-antelope",
+					"name": "antelope.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/antelope.jpg",
+					"description": "pack_wild_animals_cartoon_description_antelope",
+					"completed": false
+				},
+				{
+					"id": "wild-animal-cartoon-armadillo",
+					"name": "armadillo.jpg",
+					"image": "res://Assets/Images/packs/wild-animals-cartoon/armadillo.jpg",
+					"description": "pack_wild_animals_cartoon_description_armadillo",
+					"completed": false
+				}
+			]
 		}
 	]
 }
