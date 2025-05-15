@@ -49,7 +49,6 @@ run/max_fps=60
 run/low_processor_mode=true
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
 boot_splash/image="uid://ctfuu506avefk"
-config/icon="uid://7chqk0fghn6n"
 boot_splash/minimum_display_time=5
 config/quality/msaa_2d=0
 
@@ -69,7 +68,7 @@ OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 AudioManager="*res://Scripts/Autoload/AudioManager.gd"
 ConnectStores="*res://Scripts/utils/connectStores.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
-PackPurchaseManager="*res://Scripts/PackPurchaseManager.gd"
+PackPurchaseManager="*res://Scripts/utils/PackPurchaseManager.gd"
 BackGestureHandler="*res://Scripts/Autoload/BackGestureHandler.gd"
 
 [debug]
@@ -78,8 +77,8 @@ file_logging/enable_file_logging=true
 
 [display]
 
-window/size/viewport_width=720
-window/size/viewport_height=1280
+window/size/viewport_width=1080
+window/size/viewport_height=1920
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/handheld/orientation=5
@@ -106,7 +105,7 @@ pointing/emulate_touch_from_mouse=true
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://data/localization/translation.csv", "res://data/localization/translation.ca.translation", "res://data/localization/translation.en.translation", "res://data/localization/translation.es.translation")
+locale/translations=PackedStringArray("res://data/localization/translation.ca.translation", "res://data/localization/translation.en.translation", "res://data/localization/translation.es.translation")
 locale/translations_pot_files=PackedStringArray("res://data/localization/translations.csv")
 locale/translation_add_builtin_strings_to_pot=true
 

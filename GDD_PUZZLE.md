@@ -1,7 +1,7 @@
 # Game Design Document: Puzzle
 
 ## 0. Portada del Proyecto
-- **Título del juego**: Puzzle  
+- **Título del juego**: Puzzle Tiki Tiki 
 - **Versión del documento**: v1.0  
 - **Fecha**: 17 de abril de 2025  
 - **Desarrollador**: Enric Vallribera  

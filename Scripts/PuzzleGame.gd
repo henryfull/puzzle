@@ -6,7 +6,7 @@ class_name PuzzleGame
 
 # Acceso al singleton ProgressManager
 @onready var progress_manager = get_node("/root/ProgressManager")
-var VictoryCheckerScene = preload("res://Scripts/VictoryChecker.gd")
+var VictoryCheckerScene = preload("res://Scripts/gameplay/VictoryChecker.gd")
 
 # Variable para rastrear si una pieza fue colocada
 var just_placed_piece: bool = false
@@ -28,7 +28,7 @@ var just_placed_piece: bool = false
 @export var maxFlipsPanel: Panel
 @export var maxFlipsLabel: Label
 
-var confirm_dialog_scene = preload("res://Scenes/ConfirmExitDialog.tscn")
+var confirm_dialog_scene = preload("res://Scenes/Components/ConfirmExitDialog/ConfirmExitDialog.tscn")
 
 # Variables para gestionar el doble toque
 var last_touch_time: float = 0.0

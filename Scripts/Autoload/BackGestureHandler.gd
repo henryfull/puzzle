@@ -6,7 +6,7 @@ extends Node
 @export var swipe_time_threshold: float = 0.5  # Tiempo máximo para completar el gesto (en segundos)
 
 # Variable para el diálogo de confirmación
-var confirm_dialog_scene := preload("res://Scenes/ConfirmExitDialog.tscn")
+var confirm_dialog_scene := preload("res://Scenes/Components/ConfirmExitDialog/ConfirmExitDialog.tscn")
 
 # Variables para seguimiento del gesto
 var touch_start_position = Vector2.ZERO

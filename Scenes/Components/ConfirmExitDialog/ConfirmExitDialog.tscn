@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c20tpcjnpoob4"]
+[gd_scene load_steps=3 format=3 uid="uid://c5r7ivbvlw6tl"]
 
-[ext_resource type="Script" uid="uid://ca6me2clqoh7j" path="res://Scripts/ConfirmExitDialog.gd" id="1_0v61x"]
+[ext_resource type="Script" uid="uid://mx1oco1pjg1l" path="res://Scenes/Components/ConfirmExitDialog/ConfirmExitDialog.gd" id="1_7pf8o"]
 [ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="2_fntwn"]
 
 [node name="ConfirmExitDialog" type="Control"]
@@ -12,7 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_0v61x")
+script = ExtResource("1_7pf8o")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

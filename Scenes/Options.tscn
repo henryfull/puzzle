@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_bdxpv"]
-[ext_resource type="Script" uid="uid://dv7ssdl7hhf3r" path="res://Scripts/LangSelector.gd" id="2_kgki5"]
-[ext_resource type="Script" uid="uid://1epn1mhu0fwt" path="res://Scripts/Utils.gd" id="2_qqjs0"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="3_6f4k2"]
-[ext_resource type="Script" uid="uid://do1o3ww8nd3mq" path="res://Scripts/ResolutionButton.gd" id="3_p0ibv"]
+[ext_resource type="Script" uid="uid://bfsv4bnm2nfdr" path="res://Scripts/utils/ResolutionButton.gd" id="4_bdxpv"]
+[ext_resource type="Script" uid="uid://2a11lixfguhu" path="res://Scripts/utils/LangSelector.gd" id="5_bdxpv"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="7_bdxpv"]
+[ext_resource type="Script" uid="uid://bn86bemvfy21f" path="res://Scripts/utils/Utils.gd" id="8_cja8r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cja8r"]
 atlas = ExtResource("2_bdxpv")
@@ -132,7 +132,7 @@ language = "es"
 layout_mode = 2
 size_flags_vertical = 4
 allow_reselect = true
-script = ExtResource("3_p0ibv")
+script = ExtResource("4_bdxpv")
 
 [node name="LabelIdioma" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -154,7 +154,7 @@ popup/item_1/text = "en"
 popup/item_1/id = 1
 popup/item_2/text = "ca"
 popup/item_2/id = 2
-script = ExtResource("2_kgki5")
+script = ExtResource("5_bdxpv")
 
 [node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -179,8 +179,9 @@ expand_mode = 3
 custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
 size_flags_vertical = 4
-value = 100.0
-script = ExtResource("2_qqjs0")
+max_value = 80.0
+value = 80.0
+script = ExtResource("8_cja8r")
 
 [node name="LabelMusic" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -200,8 +201,8 @@ expand_mode = 3
 [node name="HSlider_Volumen_Musica" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
-value = 1.0
-script = ExtResource("2_qqjs0")
+step = 2.0
+value = 2.0
 
 [node name="LabelSFX" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -220,7 +221,7 @@ texture = SubResource("AtlasTexture_bdxpv")
 [node name="HSlider_Volumen_VFX" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
-script = ExtResource("2_qqjs0")
+step = 5.0
 
 [node name="HSeparator2" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -246,7 +247,6 @@ min_value = 0.1
 max_value = 2.0
 step = 0.1
 value = 1.0
-script = ExtResource("2_qqjs0")
 
 [node name="LabelTweenEffect" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -280,7 +280,6 @@ min_value = 0.1
 max_value = 1.0
 step = 0.05
 value = 0.2
-script = ExtResource("2_qqjs0")
 
 [node name="HSeparator3" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2

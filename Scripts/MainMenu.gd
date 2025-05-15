@@ -6,7 +6,7 @@ var btn_stats : Button
 var btn_achievements : Button
 var btn_exit : Button
 var label_version: Label
-var confirm_dialog_scene = preload("res://Scenes/ConfirmExitDialog.tscn")
+var confirm_dialog_scene = preload("res://Scenes/Components/ConfirmExitDialog/ConfirmExitDialog.tscn")
 
 func _ready():
 	# Esperar un frame para asegurarnos de que GLOBAL y TranslationLoader estén inicializados

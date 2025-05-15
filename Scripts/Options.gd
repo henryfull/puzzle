@@ -485,6 +485,16 @@ func _on_HSlider_Volumen_VFX_value_changed(value):
 		global.settings.volume.sfx = value
 		audio_manager.update_volumes()
 		global.save_settings()
+			# Reproducir sonido de ejemplo para que el usuario escuche el volumen actual
+		var sound = AudioStreamPlayer.new()
+		sound.stream = load("res://Assets/Sounds/SFX/bubble.wav")
+		sound.volume_db = linear_to_db(value)
+		add_child(sound)
+		sound.play()
+		
+		# Eliminar el nodo de sonido después de reproducirse
+		await sound.finished
+		sound.queue_free()
 
 # Nuevas funciones para manejar las opciones de sensibilidad
 func _on_pan_sensitivity_changed(value):
