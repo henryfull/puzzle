@@ -173,6 +173,9 @@ func _ready():
 	default_rows = GLOBAL.rows
 	default_columns = GLOBAL.columns
 	
+	if OS.has_feature("mobile"):
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+	
 	# Asegurarnos que el panel de pausa esté oculto al inicio
 	if panelPaused:
 		panelPaused.visible = false

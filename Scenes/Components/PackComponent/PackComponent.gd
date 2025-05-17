@@ -105,13 +105,16 @@ func _on_button_pressed():
 	if is_locked:
 		# Si está bloqueado, mostrar mensaje o animación
 		print("PackComponent: Pack bloqueado: ", pack_data.name)
+		if pack_data.demo:
+			emit_signal("pack_purchase_requested")
+			
 		_show_locked_feedback()
 		return
 	
 	if requires_purchase:
 		# Si requiere compra, emitir señal para mostrar diálogo de compra
 		print("PackComponent: Pack requiere compra: ", pack_data.name)
-		emit_signal("pack_purchase_requested", pack_data)
+		emit_signal("pack_purchase_requested")
 		return
 	
 	# Si el pack está disponible, emitir señal de selección

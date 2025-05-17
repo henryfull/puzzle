@@ -1,0 +1,70 @@
+{
+	"packs": [
+		{
+			"id": "fruits",
+			"name": "Fruits",
+			"description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+			"image_path": "res://Assets/Images/packs/fruits/thumbnail.png",
+			"unlocked": true,
+			"purchased": true,
+			"completed": false,
+			"difficulty": "easy",
+			"puzzles": []
+		},
+		{
+			"id": "artistic-cities",
+			"name": "Artistic Cities",
+			"description": "Puzzles inspirados en ciudades artísticas del mundo.",
+			"image_path": "res://Assets/Images/packs/artistic-cities/thumbnail.png",
+			"unlocked": true,
+			"purchased": true,
+			"completed": false,
+			"difficulty": "medium",
+			"puzzles": []
+		},
+		{
+			"id": "numbers",
+			"name": "Numbers",
+			"description": "Puzzles inspirados en números y matemáticas.",
+			"image_path": "res://Assets/Images/packs/numbers/thumbnail.png",
+			"unlocked": false,
+			"purchased": false,
+			"completed": false,
+			"difficulty": "easy",
+			"puzzles": []
+		},
+		{
+			"id": "wild-animals",
+			"name": "Wild Animals",
+			"description": "Puzzles inspirados en animales salvajes.",
+			"image_path": "res://Assets/Images/packs/wild-animals/thumbnail.png",
+			"unlocked": false,
+			"purchased": false,
+			"completed": false,
+			"difficulty": "easy",
+			"puzzles": []
+		},
+		{
+			"id": "farm-animals",
+			"name": "Farm Animals",
+			"description": "Puzzles inspirados en animales de granja.",
+			"image_path": "res://Assets/Images/packs/farm-animals/thumbnail.png",
+			"unlocked": false,
+			"purchased": false,
+			"completed": false,
+			"difficulty": "easy",
+			"puzzles": []
+		},
+		{
+			"id": "wild-animals-cartoon",
+			"name": "Wild Animals Cartoon",
+			"description": "Puzzles inspirados en animales salvajes en formato cartoon.",
+			"image_path": "res://Assets/Images/packs/wild-animals-cartoon/thumbnail.png",
+			"unlocked": false,
+			"purchased": false,
+			"completed": false,
+			"difficulty": "easy",
+			"puzzles": []
+		}
+	]
+} 

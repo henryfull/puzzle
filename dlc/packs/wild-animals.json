@@ -1,0 +1,222 @@
+{
+	"id": "wild-animals",
+	"name": "Wild Animals",
+	"description": "Puzzles inspirados en animales salvajes.",
+	"image_path": "res://dlc/packs/wild-animals/thumbnail.png",
+	"unlocked": false,
+	"purchased": false,
+	"completed": false,
+	"difficulty": "easy",
+	"puzzles": [
+		{
+			"id": "wild-animal1",
+			"name": "wild_animal1",
+			"image": "res://dlc/packs/wild-animals/image1.jpeg",
+			"description": "pack_wild_animals_description_1",
+			"completed": false
+		},
+		{
+			"id": "wild-animal2",
+			"name": "wild_animal2",
+			"image": "res://dlc/packs/wild-animals/image2.jpeg",
+			"description": "pack_wild_animals_description_2",
+			"completed": false
+		},
+		{
+			"id": "wild-animal3",
+			"name": "wild_animal3",
+			"image": "res://dlc/packs/wild-animals/image3.jpeg",
+			"description": "pack_wild_animals_description_3",
+			"completed": false
+		},
+		{
+			"id": "wild-animal4",
+			"name": "wild_animal4",
+			"image": "res://dlc/packs/wild-animals/image4.jpeg",
+			"description": "pack_wild_animals_description_4",
+			"completed": false
+		},
+		{
+			"id": "wild-animal5",
+			"name": "wild_animal5",
+			"image": "res://dlc/packs/wild-animals/image5.jpeg",
+			"description": "pack_wild_animals_description_5",
+			"completed": false
+		},
+		{
+			"id": "wild-animal6",
+			"name": "wild_animal6",
+			"image": "res://dlc/packs/wild-animals/image6.jpeg",
+			"description": "pack_wild_animals_description_6",
+			"completed": false
+		},
+		{
+			"id": "wild-animal7",
+			"name": "wild_animal7",
+			"image": "res://dlc/packs/wild-animals/image7.jpeg",
+			"description": "pack_wild_animals_description_7",
+			"completed": false
+		},
+		{
+			"id": "wild-animal8",
+			"name": "wild_animal8",
+			"image": "res://dlc/packs/wild-animals/image8.jpeg",
+			"description": "pack_wild_animals_description_8",
+			"completed": false
+		},
+		{
+			"id": "wild-animal9",
+			"name": "wild_animal9",
+			"image": "res://dlc/packs/wild-animals/image9.jpeg",
+			"description": "pack_wild_animals_description_9",
+			"completed": false
+		},
+		{
+			"id": "wild-animal10",
+			"name": "wild_animal10",
+			"image": "res://dlc/packs/wild-animals/image10.jpeg",
+			"description": "pack_wild_animals_description_10",
+			"completed": false
+		},
+		{
+			"id": "wild-animal11",
+			"name": "wild_animal11",
+			"image": "res://dlc/packs/wild-animals/image11.jpeg",
+			"description": "pack_wild_animals_description_11",
+			"completed": false
+		},
+		{
+			"id": "wild-animal12",
+			"name": "wild_animal12",
+			"image": "res://dlc/packs/wild-animals/image12.jpeg",
+			"description": "pack_wild_animals_description_12",
+			"completed": false
+		},
+		{
+			"id": "wild-animal13",
+			"name": "wild_animal13",
+			"image": "res://dlc/packs/wild-animals/image13.jpeg",
+			"description": "pack_wild_animals_description_13",
+			"completed": false
+		},
+		{
+			"id": "wild-animal14",
+			"name": "wild_animal14",
+			"image": "res://dlc/packs/wild-animals/image14.jpeg",
+			"description": "pack_wild_animals_description_14",
+			"completed": false
+		},
+		{
+			"id": "wild-animal15",
+			"name": "wild_animal15",
+			"image": "res://dlc/packs/wild-animals/image15.jpeg",
+			"description": "pack_wild_animals_description_15",
+			"completed": false
+		},
+		{
+			"id": "wild-animal16",
+			"name": "wild_animal16",
+			"image": "res://dlc/packs/wild-animals/image16.jpeg",
+			"description": "pack_wild_animals_description_16",
+			"completed": false
+		},
+		{
+			"id": "wild-animal17",
+			"name": "wild_animal17",
+			"image": "res://dlc/packs/wild-animals/image17.jpeg",
+			"description": "pack_wild_animals_description_17",
+			"completed": false
+		},
+		{
+			"id": "wild-animal18",
+			"name": "wild_animal18",
+			"image": "res://dlc/packs/wild-animals/image18.jpeg",
+			"description": "pack_wild_animals_description_18",
+			"completed": false
+		},
+		{
+			"id": "wild-animal19",
+			"name": "wild_animal19",
+			"image": "res://dlc/packs/wild-animals/image19.jpeg",
+			"description": "pack_wild_animals_description_19",
+			"completed": false
+		},
+		{
+			"id": "wild-animal20",
+			"name": "wild_animal20",
+			"image": "res://dlc/packs/wild-animals/image20.jpeg",
+			"description": "pack_wild_animals_description_20",
+			"completed": false
+		},
+		{
+			"id": "wild-animal21",
+			"name": "wild_animal21",
+			"image": "res://dlc/packs/wild-animals/image21.jpeg",
+			"description": "pack_wild_animals_description_21",
+			"completed": false
+		},
+		{
+			"id": "wild-animal22",
+			"name": "wild_animal22",
+			"image": "res://dlc/packs/wild-animals/image22.jpeg",
+			"description": "pack_wild_animals_description_22",
+			"completed": false
+		},
+		{
+			"id": "wild-animal23",
+			"name": "wild_animal23",
+			"image": "res://dlc/packs/wild-animals/image23.jpeg",
+			"description": "pack_wild_animals_description_23",
+			"completed": false
+		},
+		{
+			"id": "wild-animal24",
+			"name": "wild_animal24",
+			"image": "res://dlc/packs/wild-animals/image24.jpeg",
+			"description": "pack_wild_animals_description_24",
+			"completed": false
+		},
+		{
+			"id": "wild-animal25",
+			"name": "wild_animal25",
+			"image": "res://dlc/packs/wild-animals/image25.jpeg",
+			"description": "pack_wild_animals_description_25",
+			"completed": false
+		},
+		{
+			"id": "wild-animal26",
+			"name": "wild_animal26",
+			"image": "res://dlc/packs/wild-animals/image26.jpeg",
+			"description": "pack_wild_animals_description_26",
+			"completed": false
+		},
+		{
+			"id": "wild-animal27",
+			"name": "wild_animal27",
+			"image": "res://dlc/packs/wild-animals/image27.jpeg",
+			"description": "pack_wild_animals_description_27",
+			"completed": false
+		},
+		{
+			"id": "wild-animal28",
+			"name": "wild_animal28",
+			"image": "res://dlc/packs/wild-animals/image28.jpeg",
+			"description": "pack_wild_animals_description_28",
+			"completed": false
+		},
+		{
+			"id": "wild-animal29",
+			"name": "wild_animal29",
+			"image": "res://dlc/packs/wild-animals/image29.jpeg",
+			"description": "pack_wild_animals_description_29",
+			"completed": false
+		},
+		{
+			"id": "wild-animal30",
+			"name": "wild_animal30",
+			"image": "res://dlc/packs/wild-animals/image30.jpeg",
+			"description": "pack_wild_animals_description_30",
+			"completed": false
+		}
+	]
+}

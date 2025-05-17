@@ -62,13 +62,12 @@ buses/General=0.0
 
 ThemeManager="*res://Scripts/Autoload/ThemeManager.gd"
 GLOBAL="*res://Scripts/Autoload/global.gd"
-TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
-ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
+ConnectStores="*res://Scripts/utils/connectStores.gd"
 OptionsManager="*res://Scripts/Autoload/OptionsManager.gd"
 AudioManager="*res://Scripts/Autoload/AudioManager.gd"
-ConnectStores="*res://Scripts/utils/connectStores.gd"
+TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
-PackPurchaseManager="*res://Scripts/utils/PackPurchaseManager.gd"
+ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
 BackGestureHandler="*res://Scripts/Autoload/BackGestureHandler.gd"
 
 [debug]
@@ -77,8 +76,8 @@ file_logging/enable_file_logging=true
 
 [display]
 
-window/size/viewport_width=1080
-window/size/viewport_height=1920
+window/size/viewport_width=720
+window/size/viewport_height=1280
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/handheld/orientation=5

@@ -1,0 +1,222 @@
+{
+	"id": "numbers",
+	"name": "Numbers",
+	"description": "Puzzles inspirados en números y matemáticas.",
+	"image_path": "res://dlc/packs/numbers/thumbnail.png",
+	"unlocked": false,
+	"purchased": false,
+	"completed": false,
+	"difficulty": "easy",
+	"puzzles": [
+		{
+			"id": "number0",
+			"name": "number_zero",
+			"image": "res://dlc/packs/numbers/image0.jpeg",
+			"description": "pack_numbers_description_0",
+			"completed": false
+		},
+		{
+			"id": "number1",
+			"name": "number_one",
+			"image": "res://dlc/packs/numbers/image1.jpeg",
+			"description": "pack_numbers_description_1",
+			"completed": false
+		},
+		{
+			"id": "number2",
+			"name": "number_two",
+			"image": "res://dlc/packs/numbers/image2.jpeg",
+			"description": "pack_numbers_description_2",
+			"completed": false
+		},
+		{
+			"id": "number3",
+			"name": "number_three",
+			"image": "res://dlc/packs/numbers/image3.jpeg",
+			"description": "pack_numbers_description_3",
+			"completed": false
+		},
+		{
+			"id": "number4",
+			"name": "number_four",
+			"image": "res://dlc/packs/numbers/image4.jpeg",
+			"description": "pack_numbers_description_4",
+			"completed": false
+		},
+		{
+			"id": "number5",
+			"name": "number_five",
+			"image": "res://dlc/packs/numbers/image5.jpeg",
+			"description": "pack_numbers_description_5",
+			"completed": false
+		},
+		{
+			"id": "number6",
+			"name": "number_six",
+			"image": "res://dlc/packs/numbers/image6.jpeg",
+			"description": "pack_numbers_description_6",
+			"completed": false
+		},
+		{
+			"id": "number7",
+			"name": "number_seven",
+			"image": "res://dlc/packs/numbers/image7.jpeg",
+			"description": "pack_numbers_description_7",
+			"completed": false
+		},
+		{
+			"id": "number8",
+			"name": "number_eight",
+			"image": "res://dlc/packs/numbers/image8.jpeg",
+			"description": "pack_numbers_description_8",
+			"completed": false
+		},
+		{
+			"id": "number9",
+			"name": "number_nine",
+			"image": "res://dlc/packs/numbers/image9.jpeg",
+			"description": "pack_numbers_description_9",
+			"completed": false
+		},
+		{
+			"id": "number10",
+			"name": "number_ten",
+			"image": "res://dlc/packs/numbers/image10.jpeg",
+			"description": "pack_numbers_description_10",
+			"completed": false
+		},
+		{
+			"id": "number11",
+			"name": "number_eleven",
+			"image": "res://dlc/packs/numbers/image11.jpeg",
+			"description": "pack_numbers_description_11",
+			"completed": false
+		},
+		{
+			"id": "number12",
+			"name": "number_twelve",
+			"image": "res://dlc/packs/numbers/image12.jpeg",
+			"description": "pack_numbers_description_12",
+			"completed": false
+		},
+		{
+			"id": "number13",
+			"name": "number_thirteen",
+			"image": "res://dlc/packs/numbers/image13.jpeg",
+			"description": "pack_numbers_description_13",
+			"completed": false
+		},
+		{
+			"id": "number14",
+			"name": "number_fourteen",
+			"image": "res://dlc/packs/numbers/image14.jpeg",
+			"description": "pack_numbers_description_14",
+			"completed": false
+		},
+		{
+			"id": "number15",
+			"name": "number_fifteen",
+			"image": "res://dlc/packs/numbers/image15.jpeg",
+			"description": "pack_numbers_description_15",
+			"completed": false
+		},
+		{
+			"id": "number16",
+			"name": "number_sixteen",
+			"image": "res://dlc/packs/numbers/image16.jpeg",
+			"description": "pack_numbers_description_16",
+			"completed": false
+		},
+		{
+			"id": "number17",
+			"name": "number_seventeen",
+			"image": "res://dlc/packs/numbers/image17.jpeg",
+			"description": "pack_numbers_description_17",
+			"completed": false
+		},
+		{
+			"id": "number18",
+			"name": "number_eighteen",
+			"image": "res://dlc/packs/numbers/image18.jpeg",
+			"description": "pack_numbers_description_18",
+			"completed": false
+		},
+		{
+			"id": "number19",
+			"name": "number_nineteen",
+			"image": "res://dlc/packs/numbers/image19.jpeg",
+			"description": "pack_numbers_description_19",
+			"completed": false
+		},
+		{
+			"id": "number20",
+			"name": "number_twenty",
+			"image": "res://dlc/packs/numbers/image20.jpeg",
+			"description": "pack_numbers_description_20",
+			"completed": false
+		},
+		{
+			"id": "number30",
+			"name": "number_thirty",
+			"image": "res://dlc/packs/numbers/image30.jpeg",
+			"description": "pack_numbers_description_30",
+			"completed": false
+		},
+		{
+			"id": "number40",
+			"name": "number_forty",
+			"image": "res://dlc/packs/numbers/image40.jpeg",
+			"description": "pack_numbers_description_40",
+			"completed": false
+		},
+		{
+			"id": "number50",
+			"name": "number_fifty",
+			"image": "res://dlc/packs/numbers/image50.jpeg",
+			"description": "pack_numbers_description_50",
+			"completed": false
+		},
+		{
+			"id": "number60",
+			"name": "number_sixty",
+			"image": "res://dlc/packs/numbers/image60.jpeg",
+			"description": "pack_numbers_description_60",
+			"completed": false
+		},
+		{
+			"id": "number70",
+			"name": "number_seventy",
+			"image": "res://dlc/packs/numbers/image70.jpeg",
+			"description": "pack_numbers_description_70",
+			"completed": false
+		},
+		{
+			"id": "number80",
+			"name": "number_eighty",
+			"image": "res://dlc/packs/numbers/image80.jpeg",
+			"description": "pack_numbers_description_80",
+			"completed": false
+		},
+		{
+			"id": "number90",
+			"name": "number_ninety",
+			"image": "res://dlc/packs/numbers/image90.jpeg",
+			"description": "pack_numbers_description_90",
+			"completed": false
+		},
+		{
+			"id": "number100",
+			"name": "number_hundred",
+			"image": "res://dlc/packs/numbers/image100.jpeg",
+			"description": "pack_numbers_description_100",
+			"completed": false
+		},
+		{
+			"id": "number1000",
+			"name": "number_thousand",
+			"image": "res://dlc/packs/numbers/image1000.jpeg",
+			"description": "pack_numbers_description_1000",
+			"completed": false
+		}
+	]
+}

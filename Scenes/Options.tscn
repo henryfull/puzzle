@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://by6tdey6sc6uw"]
+[gd_scene load_steps=12 format=3 uid="uid://by6tdey6sc6uw"]
 
 [ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_bdxpv"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://bfsv4bnm2nfdr" path="res://Scripts/utils/ResolutionButton.gd" id="4_bdxpv"]
 [ext_resource type="Script" uid="uid://2a11lixfguhu" path="res://Scripts/utils/LangSelector.gd" id="5_bdxpv"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="7_bdxpv"]
-[ext_resource type="Script" uid="uid://bn86bemvfy21f" path="res://Scripts/utils/Utils.gd" id="8_cja8r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cja8r"]
 atlas = ExtResource("2_bdxpv")
@@ -181,7 +180,6 @@ layout_mode = 2
 size_flags_vertical = 4
 max_value = 80.0
 value = 80.0
-script = ExtResource("8_cja8r")
 
 [node name="LabelMusic" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true

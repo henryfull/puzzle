@@ -1,0 +1,64 @@
+[gd_scene load_steps=2 format=3 uid="uid://cvh7vhv5yu0wl"]
+
+[ext_resource type="Script" uid="uid://bhlpdym60bn3x" path="res://Scripts/Components/DialogBuy/dialog_buy.gd" id="1_lr7nn"]
+
+[node name="DialogBuy" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lr7nn")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.772549)
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+custom_minimum_size = Vector2(600, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -250.0
+offset_right = 300.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer"]
+layout_mode = 2
+text = "¿Quieres comprar el pack?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="CancelButton" type="Button" parent="CanvasLayer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(280, 80)
+layout_mode = 2
+theme_type_variation = &"ButtonBlue"
+text = "CANCELAR"
+
+[node name="BuyButton" type="Button" parent="CanvasLayer/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(280, 80)
+layout_mode = 2
+theme_type_variation = &"ButtonRed"
+text = "COMPRAR"
+
+[connection signal="pressed" from="CanvasLayer/PanelContainer/MarginContainer/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelContainer/MarginContainer/HBoxContainer/BuyButton" to="." method="_on_buy_button_pressed"]

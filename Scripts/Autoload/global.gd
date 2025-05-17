@@ -40,6 +40,7 @@ var change_scene : String
 var gamemode : int = 1
 var is_learner : bool = false
 var progresive_difficulty : bool = false
+var dlc_packs = []
 
 var modes = [
 	{"name": "difficulty_learner", "id": 0, "color": "ButtonBlue", "HeaderColor": "PanelHeaderBlue", "PanelColor": "PanelBlue", "description": "difficulty_learner_description", "tiki": "tiki-learn"},
@@ -121,6 +122,9 @@ func load_settings():
 		settings.gameplay.gamemode = config.get_value("gameplay","gamemode", 2)
 		settings.gameplay.progresive_difficulty = config.get_value("gameplay", "progresive_difficulty", false)
 		
+		# Cargar información de DLCs comprados
+		dlc_packs = config.get_value("dlc", "purchased_packs", [])
+		
 		# Actualizar variables globales con la configuración cargada
 		columns = settings.gameplay.columns
 		rows = settings.gameplay.rows
@@ -184,6 +188,9 @@ func save_settings() -> void:
 	config.set_value("gameplay", "rows", settings.gameplay.rows)
 	config.set_value("gameplay", "gamemode", settings.gameplay.gamemode)
 	config.set_value("gameplay", "progresive_difficulty", settings.gameplay.progresive_difficulty)
+	
+	# Guardar información de DLCs comprados
+	config.set_value("dlc", "purchased_packs", dlc_packs)
 	
 	# Guardar el archivo
 	err = config.save(SETTINGS_FILE)

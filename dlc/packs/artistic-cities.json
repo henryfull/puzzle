@@ -1,0 +1,159 @@
+{
+	"id": "artistic-cities",
+	"name": "Artistic Cities",
+	"description": "Puzzles inspirados en ciudades artísticas del mundo.",
+	"image_path": "res://dlc/packs/artistic-cities/thumbnail.png",
+	"unlocked": true,
+	"purchased": true,
+	"completed": false,
+	"difficulty": "medium",
+	"puzzles": [
+		{
+			"id": "atlantis",
+			"name": "Atlantis",
+			"image": "res://dlc/packs/artistic-cities/atlantis.jpg",
+			"description": "Una vista artística de la mítica ciudad perdida de Atlantis.",
+			"completed": false
+		},
+		{
+			"id": "bankok",
+			"name": "Bankok",
+			"image": "res://dlc/packs/artistic-cities/bankok.jpg",
+			"description": "Una representación colorida de Bangkok, capital de Tailandia.",
+			"completed": false
+		},
+		{
+			"id": "barcelona",
+			"name": "Barcelona",
+			"image": "res://dlc/packs/artistic-cities/barcelona.png",
+			"description": "Una vista artística de Barcelona, mostrando su arquitectura única.",
+			"completed": false
+		},
+		{
+			"id": "cadiz",
+			"name": "Cadiz",
+			"image": "res://dlc/packs/artistic-cities/cadiz.jpg",
+			"description": "Una perspectiva artística de la histórica ciudad portuaria de Cádiz, España.",
+			"completed": false
+		},
+		{
+			"id": "cannes",
+			"name": "Cannes",
+			"image": "res://dlc/packs/artistic-cities/cannes.jpg",
+			"description": "La elegante ciudad costera de Cannes, famosa por su festival de cine.",
+			"completed": false
+		},
+		{
+			"id": "cartagena",
+			"name": "Cartagena",
+			"image": "res://dlc/packs/artistic-cities/cartagena.png",
+			"description": "Una representación colorida de la ciudad colonial de Cartagena, Colombia.",
+			"completed": false
+		},
+		{
+			"id": "chengde",
+			"name": "Chengde",
+			"image": "res://dlc/packs/artistic-cities/chengde.jpg",
+			"description": "La histórica ciudad de Chengde, China, con sus impresionantes paisajes.",
+			"completed": false
+		},
+		{
+			"id": "dublin",
+			"name": "Dublin",
+			"image": "res://dlc/packs/artistic-cities/dublin.jpg",
+			"description": "La vibrante capital de Irlanda, conocida por su rica cultura literaria.",
+			"completed": false
+		},
+		{
+			"id": "edinburgh",
+			"name": "Edinburgh",
+			"image": "res://dlc/packs/artistic-cities/edinburgh.jpg",
+			"description": "La histórica capital escocesa con su imponente castillo y arquitectura.",
+			"completed": false
+		},
+		{
+			"id": "edinburgh-2",
+			"name": "Edinburgh (Atardecer)",
+			"image": "res://dlc/packs/artistic-cities/edinburgh-2.jpg",
+			"description": "Edimburgo al atardecer, mostrando otra perspectiva de esta hermosa ciudad.",
+			"completed": false
+		},
+		{
+			"id": "gungzhou",
+			"name": "Guangzhou",
+			"image": "res://dlc/packs/artistic-cities/gungzhou.jpg",
+			"description": "La moderna y dinámica ciudad de Guangzhou en China.",
+			"completed": false
+		},
+		{
+			"id": "helsinki",
+			"name": "Helsinki",
+			"image": "res://dlc/packs/artistic-cities/helsinki.jpg",
+			"description": "La capital de Finlandia, conocida por su diseño y arquitectura moderna.",
+			"completed": false
+		},
+		{
+			"id": "india",
+			"name": "India",
+			"image": "res://dlc/packs/artistic-cities/india.jpg",
+			"description": "Una representación artística de una ciudad india con su colorida cultura.",
+			"completed": false
+		},
+		{
+			"id": "istanbul",
+			"name": "Istanbul",
+			"image": "res://dlc/packs/artistic-cities/istanbul.jpg",
+			"description": "La histórica ciudad de Estambul, puente entre Europa y Asia.",
+			"completed": false
+		},
+		{
+			"id": "new-york-day",
+			"name": "New York (Día)",
+			"image": "res://dlc/packs/artistic-cities/new-york-day.png",
+			"description": "La vibrante ciudad de Nueva York durante el día, mostrando su icónico horizonte.",
+			"completed": false
+		},
+		{
+			"id": "new-york-night",
+			"name": "New York (Noche)",
+			"image": "res://dlc/packs/artistic-cities/new-york-night.png",
+			"description": "Nueva York de noche, con sus características luces y rascacielos iluminados.",
+			"completed": false
+		},
+		{
+			"id": "pandang",
+			"name": "Padang",
+			"image": "res://dlc/packs/artistic-cities/pandang.jpg",
+			"description": "Una vista de la ciudad costera de Padang en Indonesia.",
+			"completed": false
+		},
+		{
+			"id": "paris",
+			"name": "Paris",
+			"image": "res://dlc/packs/artistic-cities/paris.png",
+			"description": "La romántica capital francesa con su emblemática Torre Eiffel.",
+			"completed": false
+		},
+		{
+			"id": "riga",
+			"name": "Riga",
+			"image": "res://dlc/packs/artistic-cities/riga.jpg",
+			"description": "La capital de Letonia, conocida por su arquitectura Art Nouveau.",
+			"completed": false
+		},
+		{
+			"id": "san-jose",
+			"name": "San José",
+			"image": "res://dlc/packs/artistic-cities/san-jose.jpg",
+			"description": "La capital de Costa Rica, rodeada de montañas y naturaleza.",
+			"completed": false
+		},
+		{
+			"id": "sydney",
+			"name": "Sydney",
+			"image": "res://dlc/packs/artistic-cities/sydney.jpg",
+			"description": "La icónica ciudad australiana con su famosa Ópera y puente del puerto.",
+			"completed": false
+		}
+	]
+}

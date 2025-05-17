@@ -3,7 +3,6 @@ extends Node2D
 # Acceso al singleton ProgressManager
 @onready var progress_manager = get_node("/root/ProgressManager")
 # Referencia al administrador de compras (singleton)
-@onready var purchase_manager = get_node("/root/PackPurchaseManager")
 
 # Variables para controlar el desplazamiento táctil
 var is_scrolling = false
@@ -20,13 +19,9 @@ var pack_component_scene = preload("res://Scenes/Components/PackComponent/PackCo
 func _ready():
 	print("PackSelection: inicialización de los packs disponibles")
 	
-	# Conectar señales del administrador de compras
-	purchase_manager.connect("purchase_confirmed", Callable(self, "_on_purchase_confirmed"))
-	purchase_manager.connect("purchase_canceled", Callable(self, "_on_purchase_canceled"))
-	
 	scroll_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer
 	packs_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/PacksContainer
-	
+
 	# Ajustar el layout según el tipo de dispositivo
 	# adjust_layout_for_device()
 	
@@ -102,15 +97,47 @@ func load_packs():
 		pack_component.parent_node = self  # Pasar referencia a este nodo para control de scroll
 		pack_component.setup(pack)
 		pack_component.connect("pack_selected", Callable(self, "_on_PackSelected"))
-		pack_component.connect("pack_purchase_requested", Callable(self, "_on_PackPurchaseRequested"))
+		pack_component.connect("pack_purchase_requested", Callable(self, "_on_buy_button_pressed"))
 		
 		# Añadir el componente al contenedor
 		packs_container.add_child(pack_component)
 		print("Componente añadido para pack: ", pack.name)
-	
+	if (GLOBAL.dlc_packs.size() == 0):
+		addNoPack()
 	# Desplazar automáticamente al último pack disponible por desbloquear
 	await get_tree().process_frame
 	scroll_to_last_available_pack()
+
+func addNoPack():
+	var packs = []
+	# Intentar cargar directamente del archivo JSON
+	var file = FileAccess.open("res://PacksData/sample_packs.json", FileAccess.READ)
+	if file:
+		var json_text = file.get_as_text()
+		file.close()
+		var json_result = JSON.parse_string(json_text)
+		if json_result and json_result.has("dlc_packs"):
+			packs = json_result.dlc_packs
+			print("PackSelection: Cargados ", packs.size(), " packs directamente del archivo JSON")
+		else:
+			print("PackSelection: ERROR - No se pudo analizar el JSON de packs")
+	else:
+		print("PackSelection: ERROR - No se pudo abrir el archivo JSON de packs")
+		
+	# Crear componentes de pack para cada pack disponible	
+	for pack in packs:
+		print("PackSelection: Procesando pack: ", pack.name)
+		
+		# Instanciar el componente de pack
+		var pack_component = pack_component_scene.instantiate()
+		pack_component.parent_node = self  # Pasar referencia a este nodo para control de scroll
+		pack_component.setup(pack)
+		pack_component.connect("pack_selected", Callable(self, "_on_buy_button_pressed"))
+		pack_component.connect("pack_purchase_requested", Callable(self, "_on_buy_button_pressed"))
+
+		# Añadir el componente al contenedor
+		packs_container.add_child(pack_component)
+		print("Preview DLC añadido para pack: ", pack.name)
 
 # Función para desplazar automáticamente al último pack disponible por desbloquear
 func scroll_to_last_available_pack():
@@ -149,11 +176,6 @@ func scroll_to_last_available_pack():
 	else:
 		print("PackSelection: No se encontró ningún pack disponible por desbloquear")
 
-# Función llamada cuando un componente de pack emite la señal de solicitud de compra
-func _on_PackPurchaseRequested(pack):
-	print("Se solicitó la compra del pack: " + pack.name)
-	# Delegar la gestión de compra al administrador de compras
-	purchase_manager.request_purchase(pack)
 
 # Función llamada cuando se confirma una compra
 func _on_purchase_confirmed(pack):
@@ -166,3 +188,20 @@ func _on_purchase_confirmed(pack):
 # Función llamada cuando se cancela una compra
 func _on_purchase_canceled():
 	print("Compra cancelada por el usuario")
+
+func _on_buy_button_pressed() -> void:
+	print("PackSelection: Iniciando proceso de compra de packs DLC")
+	# Crear una nueva instancia de DialogBuy
+	var dialogBuy = load("res://Scripts/Components/DialogBuy/DialogBuy.tscn")
+	var dialogBuy_instance = dialogBuy.instantiate()
+	# Agregar la instancia a la escena
+	add_child(dialogBuy_instance)
+	# Conectar la señal de compra completada
+	dialogBuy_instance.connect("purchase_completed", Callable(self, "_on_purchase_completed"))
+
+# Función que se ejecuta cuando se completa una compra
+func _on_purchase_completed() -> void:
+	print("PackSelection: Compra de DLC completada, recargando packs...")
+	# Recargar los packs para mostrar los nuevos
+	load_packs()
+	

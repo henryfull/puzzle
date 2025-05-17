@@ -2,7 +2,9 @@ extends Node
 
 # Constantes para el archivo de guardado
 const SAVE_FILE = "user://progress.json"
+const ROUTE_DLC = "res://dlc"
 const PACKS_DATA_FILE = "res://PacksData/sample_packs.json"
+const DLC_PACKS_DIR = ROUTE_DLC + "/dlc_metadata.json"
 
 # Datos de progresión
 var progress_data = {
@@ -47,6 +49,13 @@ func _ready():
 	# Inicializar la progresión si es necesario
 	initialize_progress_if_needed()
 	
+	# Sincronizar lista de DLCs con GLOBAL
+	if has_node("/root/GLOBAL"):
+		if (GLOBAL.dlc_packs.size() > 0):
+			load_dlc_packs()
+	else:
+		print("ProgressManager: ADVERTENCIA - No se encontró el nodo GLOBAL, no se cargarán los DLCs")
+	
 	print("ProgressManager: Inicialización completada")
 
 # Carga los datos de progresión desde el archivo de guardado
@@ -77,7 +86,10 @@ func save_progress_data():
 # Carga los datos de packs desde el archivo JSON
 func load_packs_data():
 	print("ProgressManager: Intentando cargar packs desde: ", PACKS_DATA_FILE)
+	print("ProgressManager: Intentando cargar DLCs desde: ", DLC_PACKS_DIR)
 	var file = FileAccess.open(PACKS_DATA_FILE, FileAccess.READ)
+	var dlc_file = FileAccess.open(DLC_PACKS_DIR, FileAccess.READ)
+	
 	if file:
 		var json_text = file.get_as_text()
 		file.close()
@@ -87,12 +99,36 @@ func load_packs_data():
 			packs_data = json_result
 			print("ProgressManager: Datos de packs cargados correctamente. Número de packs: ", packs_data.packs.size())
 			
+			# Si hay archivo de DLC, cargar también esos packs
+			if dlc_file:
+				var dlc_json_text = dlc_file.get_as_text()
+				dlc_file.close()
+				var dlc_json_result = JSON.parse_string(dlc_json_text)
+				if dlc_json_result and dlc_json_result.has("packs"):
+					print("ProgressManager: Encontrados ", dlc_json_result.packs.size(), " packs DLC")
+					
+					# Integrar los packs DLC con los packs normales
+					for dlc_pack in dlc_json_result.packs:
+						# Verificar si ya existe para evitar duplicados
+						var already_exists = false
+						for i in range(packs_data.packs.size()):
+							if packs_data.packs[i].id == dlc_pack.id:
+								already_exists = true
+								break
+						
+						if not already_exists:
+							# Marcar como DLC para identificación
+							dlc_pack["is_dlc"] = true
+							packs_data.packs.append(dlc_pack)
+							print("ProgressManager: Añadido pack DLC: ", dlc_pack.id)
+			
 			# Imprimir información básica de cada pack para diagnóstico
 			for i in range(packs_data.packs.size()):
 				var pack = packs_data.packs[i]
+				var dlc_tag = " (DLC)" if pack.get("is_dlc", false) else ""
 				print("ProgressManager: Pack ", i, " - ID: ", pack.id, ", Name: ", pack.name, 
 					", Unlocked: ", pack.get("unlocked", false), ", Puzzles: ", 
-					pack.puzzles.size() if pack.has("puzzles") else "No puzzles")
+					pack.puzzles.size() if pack.has("puzzles") else "No puzzles", dlc_tag)
 		else:
 			print("ProgressManager: ERROR - No se pudo analizar el JSON de packs o no tiene la estructura esperada")
 			
@@ -289,37 +325,6 @@ func unlock_next_pack(current_pack_id: String):
 		# Guardar los cambios
 		save_progress_data()
 
-# Marca un pack como comprado y desbloquea su primer puzzle
-func purchase_pack(pack_id: String):
-	if not progress_data.packs.has(pack_id):
-		print("ProgressManager: El pack no existe en los datos de progresión")
-		return
-	
-	# Marcar el pack como comprado
-	progress_data.packs[pack_id].purchased = true
-	
-	# Buscar el pack en los datos originales
-	var pack_index = -1
-	if packs_data.has("packs"):
-		for i in range(packs_data.packs.size()):
-			if packs_data.packs[i].id == pack_id:
-				pack_index = i
-				break
-	
-	# Si el pack está desbloqueado y tiene puzzles, desbloquear el primero
-	if progress_data.packs[pack_id].unlocked and pack_index >= 0 and packs_data.packs[pack_index].puzzles.size() > 0:
-		var first_puzzle_id = packs_data.packs[pack_index].puzzles[0].id
-		
-		if not progress_data.packs[pack_id].puzzles.has(first_puzzle_id):
-			progress_data.packs[pack_id].puzzles[first_puzzle_id] = {
-				"completed": false,
-				"unlocked": true
-			}
-		else:
-			progress_data.packs[pack_id].puzzles[first_puzzle_id].unlocked = true
-	
-	# Guardar los cambios
-	save_progress_data()
 
 # Obtiene los datos de un pack con información de progresión
 func get_pack_with_progress(pack_id: String) -> Dictionary:
@@ -597,3 +602,152 @@ func get_player_stats() -> Dictionary:
 			player_stats["packs_completed"] += 1
 	
 	return player_stats 
+
+# Funciones para gestionar packs DLC
+# ----------------------------------
+
+# Carga los packs DLC disponibles desde el directorio de DLC
+func load_dlc_packs() -> Array:
+	print("ProgressManager: Cargando packs DLC desde: ", DLC_PACKS_DIR)
+	var dlc_packs = []
+	
+	# Verificar primero si tenemos el nodo GLOBAL
+	if not has_node("/root/GLOBAL"):
+		print("ProgressManager: No se encontró el nodo GLOBAL, no se pueden comprobar los DLCs")
+		return []
+	
+	var global_node = get_node("/root/GLOBAL")
+	
+	var file = FileAccess.open(DLC_PACKS_DIR, FileAccess.READ)
+	if file:
+		var json_text = file.get_as_text()
+		file.close()
+		
+		var list_packs = JSON.parse_string(json_text)
+		var json_result = []
+		
+		# Verificar cada pack DLC antes de cargarlo
+		for pack in list_packs.dlc_packs:
+			# Comprobar si el pack está comprado
+			var is_purchased = pack in global_node.dlc_packs
+			
+			# Comprobar si está en settings (guardado como comprado)
+			var is_in_settings = false
+			for saved_pack_id in progress_data.packs:
+				if saved_pack_id == pack and progress_data.packs[saved_pack_id].purchased:
+					is_in_settings = true
+					break
+			
+			# Solo cargar el pack si cumple todas las condiciones
+			if is_purchased and is_in_settings:
+				print("ProgressManager: Pack DLC '" + pack + "' verificado, cargando...")
+				var new_pack = ROUTE_DLC + "/packs/" + pack + ".json"
+				var new_file = FileAccess.open(new_pack, FileAccess.READ)
+				if new_file:
+					var json_text_pack = new_file.get_as_text()
+					new_file.close()
+					var json_result_pack = JSON.parse_string(json_text_pack)
+					json_result.append(json_result_pack)
+			else:
+				print("ProgressManager: Pack DLC '" + pack + "' no verificado, no se cargará (comprado: " + str(is_purchased) + ", en settings: " + str(is_in_settings) + ")")
+
+		if json_result.size() > 0:
+			dlc_packs = json_result
+			print("ProgressManager: Cargados ", dlc_packs.size(), " packs DLC")
+			
+			# Comprobar si los DLCs ya están incluidos para evitar duplicados
+			for dlc_pack in dlc_packs:
+				var already_included = false
+				for existing_pack in packs_data.packs:
+					if existing_pack.id == dlc_pack.id:
+						already_included = true
+						break
+				
+				# Si no está incluido, añadirlo
+				if not already_included:
+					packs_data.packs.append(dlc_pack)
+					print("ProgressManager: Añadido pack DLC: ", dlc_pack.id)
+		
+			# Inicializar la progresión para los nuevos packs
+			for dlc_pack in dlc_packs:
+				initialize_dlc_pack_progress(dlc_pack.id)
+		else:
+			print("ProgressManager: No se cargaron packs DLC (no hay packs verificados)")
+	else:
+		print("ProgressManager: No se encontró el archivo de packs DLC en: ", DLC_PACKS_DIR)
+	
+	return dlc_packs
+
+# Inicializa la progresión de un pack DLC específico
+func initialize_dlc_pack_progress(pack_id: String) -> void:
+	if not progress_data.packs.has(pack_id):
+		print("ProgressManager: Inicializando progresión para pack DLC: ", pack_id)
+		
+		# Buscar datos del pack en packs_data
+		var pack_data = null
+		if packs_data.has("packs"):
+			for pack in packs_data.packs:
+				if pack.id == pack_id:
+					pack_data = pack
+					break
+		
+		if pack_data:
+			progress_data.packs[pack_id] = {
+				"unlocked": pack_data.get("unlocked", true),  # Por defecto desbloqueado
+				"purchased": pack_data.get("purchased", false), # Por defecto no comprado
+				"completed": false,
+				"puzzles": {}
+			}
+			
+			# Si el pack está desbloqueado y comprado, desbloquear el primer puzzle
+			if progress_data.packs[pack_id].unlocked and progress_data.packs[pack_id].purchased and pack_data.puzzles.size() > 0:
+				progress_data.packs[pack_id].puzzles[pack_data.puzzles[0].id] = {
+					"completed": false,
+					"unlocked": true
+				}
+				
+			save_progress_data()
+			print("ProgressManager: Progresión inicializada para pack DLC: ", pack_id)
+		else:
+			print("ProgressManager: No se encontraron datos del pack DLC: ", pack_id)
+
+
+# Comprueba si tenemos acceso a algún pack DLC específico
+func has_dlc_access(pack_id: String) -> bool:
+	return is_pack_purchased(pack_id) && is_pack_unlocked(pack_id)
+
+# Devuelve una lista de todos los packs DLC comprados
+func get_purchased_dlc_packs() -> Array:
+	var purchased_dlcs = []
+	
+	for pack_id in progress_data.packs:
+		if progress_data.packs[pack_id].purchased:
+			# Verificar si es un pack DLC
+			if packs_data.has("packs"):
+				for pack in packs_data.packs:
+					if pack.id == pack_id and pack.get("is_dlc", false):
+						purchased_dlcs.append(pack_id)
+						break
+	
+	return purchased_dlcs
+
+# Actualiza y refresca los datos de los packs DLC
+func refresh_dlc_packs() -> void:
+	print("ProgressManager: Actualizando datos de packs DLC")
+	
+	# Verificar primero si tenemos el nodo GLOBAL
+	if not has_node("/root/GLOBAL"):
+		print("ProgressManager: No se encontró el nodo GLOBAL, no se pueden comprobar los DLCs")
+		return
+	
+	# Cargar solo los packs DLC verificados
+	var dlc_packs = load_dlc_packs()
+	
+	# Si hay packs DLC cargados, inicializar su progresión
+	if dlc_packs.size() > 0:
+		# Inicializar la progresión para los packs verificados
+		for dlc_pack in dlc_packs:
+			initialize_dlc_pack_progress(dlc_pack.id)
+
+	else:
+		print("ProgressManager: No hay packs DLC verificados para actualizar") 

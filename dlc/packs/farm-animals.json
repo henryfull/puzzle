@@ -1,0 +1,152 @@
+{
+	"id": "farm-animals",
+	"name": "Farm Animals",
+	"description": "Puzzles inspirados en animales de granja.",
+	"image_path": "res://dlc/packs/farm-animals/thumbnail.png",
+	"unlocked": false,
+	"purchased": false,
+	"completed": false,
+	"difficulty": "easy",
+	"puzzles": [
+		{
+			"id": "farm-animal1",
+			"name": "farm_animal1",
+			"image": "res://dlc/packs/farm-animals/image1.jpeg",
+			"description": "pack_farm_animals_description_1",
+			"completed": false
+		},
+		{
+			"id": "farm-animal2",
+			"name": "farm_animal2",
+			"image": "res://dlc/packs/farm-animals/image2.jpeg",
+			"description": "pack_farm_animals_description_2",
+			"completed": false
+		},
+		{
+			"id": "farm-animal3",
+			"name": "farm_animal3",
+			"image": "res://dlc/packs/farm-animals/image3.jpeg",
+			"description": "pack_farm_animals_description_3",
+			"completed": false
+		},
+		{
+			"id": "farm-animal4",
+			"name": "farm_animal4",
+			"image": "res://dlc/packs/farm-animals/image4.jpeg",
+			"description": "pack_farm_animals_description_4",
+			"completed": false
+		},
+		{
+			"id": "farm-animal5",
+			"name": "farm_animal5",
+			"image": "res://dlc/packs/farm-animals/image5.jpeg",
+			"description": "pack_farm_animals_description_5",
+			"completed": false
+		},
+		{
+			"id": "farm-animal6",
+			"name": "farm_animal6",
+			"image": "res://dlc/packs/farm-animals/image6.jpeg",
+			"description": "pack_farm_animals_description_6",
+			"completed": false
+		},
+		{
+			"id": "farm-animal7",
+			"name": "farm_animal7",
+			"image": "res://dlc/packs/farm-animals/image7.jpeg",
+			"description": "pack_farm_animals_description_7",
+			"completed": false
+		},
+		{
+			"id": "farm-animal8",
+			"name": "farm_animal8",
+			"image": "res://dlc/packs/farm-animals/image8.jpeg",
+			"description": "pack_farm_animals_description_8",
+			"completed": false
+		},
+		{
+			"id": "farm-animal9",
+			"name": "farm_animal9",
+			"image": "res://dlc/packs/farm-animals/image9.jpeg",
+			"description": "pack_farm_animals_description_9",
+			"completed": false
+		},
+		{
+			"id": "farm-animal10",
+			"name": "farm_animal10",
+			"image": "res://dlc/packs/farm-animals/image10.jpeg",
+			"description": "pack_farm_animals_description_10",
+			"completed": false
+		},
+		{
+			"id": "farm-animal11",
+			"name": "farm_animal11",
+			"image": "res://dlc/packs/farm-animals/image11.jpeg",
+			"description": "pack_farm_animals_description_11",
+			"completed": false
+		},
+		{
+			"id": "farm-animal12",
+			"name": "farm_animal12",
+			"image": "res://dlc/packs/farm-animals/image12.jpeg",
+			"description": "pack_farm_animals_description_12",
+			"completed": false
+		},
+		{
+			"id": "farm-animal13",
+			"name": "farm_animal13",
+			"image": "res://dlc/packs/farm-animals/image13.jpeg",
+			"description": "pack_farm_animals_description_13",
+			"completed": false
+		},
+		{
+			"id": "farm-animal14",
+			"name": "farm_animal14",
+			"image": "res://dlc/packs/farm-animals/image14.jpeg",
+			"description": "pack_farm_animals_description_14",
+			"completed": false
+		},
+		{
+			"id": "farm-animal15",
+			"name": "farm_animal15",
+			"image": "res://dlc/packs/farm-animals/image15.jpeg",
+			"description": "pack_farm_animals_description_15",
+			"completed": false
+		},
+		{
+			"id": "farm-animal16",
+			"name": "farm_animal16",
+			"image": "res://dlc/packs/farm-animals/image16.jpeg",
+			"description": "pack_farm_animals_description_16",
+			"completed": false
+		},
+		{
+			"id": "farm-animal17",
+			"name": "farm_animal17",
+			"image": "res://dlc/packs/farm-animals/image17.jpeg",
+			"description": "pack_farm_animals_description_17",
+			"completed": false
+		},
+		{
+			"id": "farm-animal18",
+			"name": "farm_animal18",
+			"image": "res://dlc/packs/farm-animals/image18.jpeg",
+			"description": "pack_farm_animals_description_18",
+			"completed": false
+		},
+		{
+			"id": "farm-animal19",
+			"name": "farm_animal19",
+			"image": "res://dlc/packs/farm-animals/image19.jpeg",
+			"description": "pack_farm_animals_description_19",
+			"completed": false
+		},
+		{
+			"id": "farm-animal20",
+			"name": "farm_animal20",
+			"image": "res://dlc/packs/farm-animals/image20.jpeg",
+			"description": "pack_farm_animals_description_20",
+			"completed": false
+		}
+	]
+}
