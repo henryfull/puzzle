@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://dw5mocbogi4aj"]
+[gd_scene load_steps=12 format=3 uid="uid://dw5mocbogi4aj"]
 
 [ext_resource type="Script" uid="uid://81itimgdqoxk" path="res://Scripts/Achievements.gd" id="1_fqdyt"]
 [ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="2_dta62"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="3_qcdn0"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="4_qcdn0"]
+[ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="5_ag4b3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqpw6"]
 bg_color = Color(0.898039, 0.85098, 0.733333, 1)
@@ -69,6 +70,7 @@ texture = ExtResource("2_dta62")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -127.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -352,6 +354,15 @@ text = "nivel 20"
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
+
+[node name="FooterMenu" parent="CanvasLayer" instance=ExtResource("5_ag4b3")]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabsContainer/AllTab" to="." method="_on_all_tab_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabsContainer/UnlockedTab" to="." method="_on_unlocked_tab_pressed"]

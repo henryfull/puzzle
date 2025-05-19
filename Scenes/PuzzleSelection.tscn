@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://b6sg71qs17yj5"]
+[gd_scene load_steps=8 format=3 uid="uid://b6sg71qs17yj5"]
 
 [ext_resource type="Script" uid="uid://c1twov7g0717y" path="res://Scripts/PuzzleSelection.gd" id="1_nt7kx"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_4mmlg"]
 [ext_resource type="PackedScene" uid="uid://dpw3l7nftx7kg" path="res://Scenes/Components/PuzzleGrid/PuzzleGrid.tscn" id="4_moqol"]
 [ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="4_oehjl"]
+[ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="5_moqol"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="6_jmjrx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_moqol"]
@@ -117,6 +118,15 @@ max_value = 130.0
 [node name="HScrollBar" type="HScrollBar" parent="CanvasLayer/VBoxContainer"]
 visible = false
 layout_mode = 2
+
+[node name="FooterMenu" parent="CanvasLayer" instance=ExtResource("5_moqol")]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
 
 [node name="BackButton" parent="CanvasLayer" instance=ExtResource("6_jmjrx")]
 anchors_preset = 0

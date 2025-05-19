@@ -172,7 +172,7 @@ func _ready():
 	print("PuzzleGame: Iniciando juego...")
 	default_rows = GLOBAL.rows
 	default_columns = GLOBAL.columns
-	
+		
 	if OS.has_feature("mobile"):
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	

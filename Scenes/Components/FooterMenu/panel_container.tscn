@@ -1,0 +1,309 @@
+[gd_scene load_steps=6 format=3 uid="uid://dy820u4d0bxw6"]
+
+[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="1_ltfgy"]
+[ext_resource type="Script" uid="uid://cbmxmo2mo7q0o" path="res://Scenes/Components/FooterMenu/panel_container.gd" id="1_svwfg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_svwfg"]
+bg_color = Color(0.517647, 0.6, 0.94902, 0.784314)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r0bep"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tvbgl"]
+atlas = ExtResource("1_ltfgy")
+region = Rect2(1719, 474, 45, 47)
+
+[node name="FooterMenu" type="PanelContainer" node_paths=PackedStringArray("labelInit", "labelPack", "labelPuzzle", "labelAchivement", "labelStats")]
+theme_override_styles/panel = SubResource("StyleBoxFlat_svwfg")
+script = ExtResource("1_svwfg")
+labelInit = NodePath("MarginContainer/HBoxContainer/PanelInit/VBoxContainer/Label")
+labelPack = NodePath("MarginContainer/HBoxContainer/PanelPack/VBoxContainer/Label")
+labelPuzzle = NodePath("MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer/Label")
+labelAchivement = NodePath("MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer/Label")
+labelStats = NodePath("MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer/Label")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 40
+
+[node name="PanelStatistics" type="Panel" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelStatistics"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -84.0
+offset_top = -101.0
+offset_right = 84.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"CircleButtonRed"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -21.5
+offset_right = 20.0
+offset_bottom = 21.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_tvbgl")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "estadisticas"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="PanelAchivement" type="Panel" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelAchivement"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -84.0
+offset_top = -101.0
+offset_right = 84.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"CircleButtonBlue"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -21.5
+offset_right = 20.0
+offset_bottom = 21.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_tvbgl")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Logros"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="PanelInit" type="Panel" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelInit"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -84.0
+offset_top = -101.0
+offset_right = 84.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"CircleButtonRed"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -21.5
+offset_right = 20.0
+offset_bottom = 21.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_tvbgl")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "inicio"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="PanelPack" type="Panel" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelPack"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -84.0
+offset_top = -101.0
+offset_right = 84.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"CircleButtonYellow"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -21.5
+offset_right = 20.0
+offset_bottom = 21.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_tvbgl")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "packs"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="PanelPuzzle" type="Panel" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelPuzzle"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -84.0
+offset_top = -101.0
+offset_right = 84.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"CircleButtonGreen"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -21.5
+offset_right = 20.0
+offset_bottom = 21.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_tvbgl")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Puzzles"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer/Button" to="." method="_on_button_pressed_statistics"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer/Button" to="." method="_on_button_pressed_achivements"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/PanelInit/VBoxContainer/Button" to="." method="_on_button_pressed_init"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/PanelPack/VBoxContainer/Button" to="." method="_on_button_pressed_packs"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer/Button" to="." method="_on_button_pressed_puzzles"]

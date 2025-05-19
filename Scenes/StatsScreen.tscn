@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bdogxe3m1dhw2"]
+[gd_scene load_steps=21 format=3 uid="uid://bdogxe3m1dhw2"]
 
 [ext_resource type="Script" uid="uid://bkpn724tg17tm" path="res://Scripts/Screens/StatsScreen.gd" id="1_57a8p"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="2_5d5ab"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="5_3mdl3"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_y61kq"]
 [ext_resource type="PackedScene" uid="uid://ps3gg6vw4h7f" path="res://Scenes/Components/BestResult/panel_container_result.tscn" id="7_6gjew"]
+[ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="8_ycpkl"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djtya"]
 
@@ -285,6 +286,7 @@ expand_mode = 5
 stretch_mode = 5
 
 [node name="Movimientos" parent="CanvasLayer" instance=ExtResource("7_6gjew")]
+visible = false
 offset_left = 56.0
 offset_top = 441.0
 offset_right = 231.0
@@ -294,6 +296,7 @@ title = "Movimientos"
 color = Color(0.101961, 0.768627, 0.372549, 1)
 
 [node name="Tiempo" parent="CanvasLayer" instance=ExtResource("7_6gjew")]
+visible = false
 offset_left = 267.0
 offset_top = 441.0
 offset_right = 442.0
@@ -303,6 +306,7 @@ title = "Tiempo"
 color = Color(0.447059, 0.101961, 0.768627, 1)
 
 [node name="Flips" parent="CanvasLayer" instance=ExtResource("7_6gjew")]
+visible = false
 offset_left = 495.0
 offset_top = 441.0
 offset_right = 670.0
@@ -326,6 +330,15 @@ theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
+
+[node name="FooterMenu" parent="CanvasLayer" instance=ExtResource("8_ycpkl")]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
 
 [node name="BackButton2" parent="CanvasLayer" instance=ExtResource("5_3mdl3")]
 anchors_preset = 0

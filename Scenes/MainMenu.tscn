@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dh7t7utu076oi"]
+[gd_scene load_steps=13 format=3 uid="uid://dh7t7utu076oi"]
 
 [ext_resource type="Script" uid="uid://cct0rg0djuimx" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
 [ext_resource type="Texture2D" uid="uid://cg6madwi8etli" path="res://Assets/Images/GUID/backgrounds/fondo 4.png" id="2_8um5k"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cvketyxjld53v" path="res://Assets/Images/tikitiki logo.png" id="3_8um5k"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_ghw46"]
 [ext_resource type="PackedScene" uid="uid://bnl7nqpqlgw5v" path="res://Scenes/Components/GameModeSelection/GameMode.tscn" id="5_df05h"]
+[ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="6_xim88"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghw46"]
 bg_color = Color(0, 0, 0, 0.341176)
@@ -29,6 +30,9 @@ region = Rect2(1473, 669, 101, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_8um5k"]
 atlas = ExtResource("4_ghw46")
 region = Rect2(1854, 664, 116, 112)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xim88"]
+bg_color = Color(0.517647, 0.6, 0.94902, 0.784314)
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_pl40w")
@@ -143,6 +147,7 @@ theme_override_font_sizes/font_size = 32
 text = "Salir"
 
 [node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer"]
+visible = false
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -219,6 +224,16 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_8um5k")
 expand_mode = 1
+
+[node name="FooterMenu" parent="CanvasLayer" instance=ExtResource("6_xim88")]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -120.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xim88")
 
 [node name="GameMode" parent="." instance=ExtResource("5_df05h")]
 

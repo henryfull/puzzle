@@ -99,6 +99,7 @@ theme/custom_font="uid://nsb7mxocp6o3"
 
 [input_devices]
 
+pointing/android/enable_pan_and_scale_gestures=true
 compatibility/legacy_just_pressed_behavior=true
 pointing/emulate_touch_from_mouse=true
 
