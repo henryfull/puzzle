@@ -25,6 +25,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+z_index = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = -4.0
@@ -37,7 +38,6 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_moqol")
 
 [node name="BackgroundTitle" parent="CanvasLayer/PanelContainer" instance=ExtResource("4_4mmlg")]
 layout_mode = 2
-size_flags_horizontal = 3
 title = "Puzzles"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
@@ -74,7 +74,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -344.0
-offset_top = 259.0
+offset_top = 110.0
 offset_right = 344.0
 offset_bottom = -141.0
 grow_horizontal = 2
@@ -92,7 +92,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
 theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 50
+theme_override_constants/margin_top = 150
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 50
 

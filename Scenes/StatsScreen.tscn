@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bdogxe3m1dhw2"]
+[gd_scene load_steps=29 format=3 uid="uid://bdogxe3m1dhw2"]
 
 [ext_resource type="Script" uid="uid://bkpn724tg17tm" path="res://Scripts/Screens/StatsScreen.gd" id="1_57a8p"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="2_5d5ab"]
@@ -10,8 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_y61kq"]
 [ext_resource type="PackedScene" uid="uid://ps3gg6vw4h7f" path="res://Scenes/Components/BestResult/panel_container_result.tscn" id="7_6gjew"]
 [ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="8_ycpkl"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djtya"]
+[ext_resource type="PackedScene" uid="uid://dfyoip8j6ru34" path="res://Scenes/Components/ExpanseImage/ExpanseImage.tscn" id="11_lcxb8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ut8ua"]
 content_margin_left = 0.0
@@ -29,6 +28,24 @@ corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 corner_detail = 20
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lcxb8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8jbb3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l1lfm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ojlk7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a3a47"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jeceg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lcxb8"]
+atlas = ExtResource("5_y61kq")
+region = Rect2(272, 474, 101, 101)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djtya"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycpkl"]
 resource_local_to_scene = true
@@ -77,8 +94,10 @@ region_rect = Rect2(2105, 151, 105, 88)
 texture = ExtResource("5_y61kq")
 region_rect = Rect2(2105, 151, 105, 88)
 
-[node name="StatsScreen" type="Node2D"]
+[node name="StatsScreen" type="Node2D" node_paths=PackedStringArray("puzzle_panel", "stats_container")]
 script = ExtResource("1_57a8p")
+puzzle_panel = NodePath("CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/PuzzleImagePanel")
+stats_container = NodePath("CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/StatsPanel")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -113,6 +132,7 @@ offset_top = 100.0
 offset_right = 197.0
 offset_bottom = 240.0
 grow_vertical = 1
+size_flags_horizontal = 4
 size_flags_vertical = 0
 title = "ESTADÍSTICAS"
 
@@ -121,9 +141,9 @@ anchors_preset = 13
 anchor_top = 0.0
 anchor_bottom = 1.0
 offset_left = -310.0
-offset_top = 192.0
+offset_top = 232.0
 offset_right = 310.0
-offset_bottom = -37.0
+offset_bottom = -182.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -136,55 +156,39 @@ layout_mode = 2
 [node name="PackSelector" type="HBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/Selectors"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="PackLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PackLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 text = "Pack:"
-horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="PackDropdown" type="OptionButton" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector"]
+[node name="PackDropdown" type="OptionButton" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("2_5d5ab")
 theme_override_font_sizes/font_size = 20
 
-[node name="PuzzleSelector" type="HBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/Selectors"]
-custom_minimum_size = Vector2(0, 60)
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector"]
 layout_mode = 2
-theme_override_constants/separation = 10
+size_flags_horizontal = 3
 
-[node name="PuzzleLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PuzzleSelector"]
+[node name="PuzzleLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector/VBoxContainer2"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Puzzle:"
-horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="PuzzleDropdown" type="OptionButton" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PuzzleSelector"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("2_5d5ab")
-theme_override_font_sizes/font_size = 20
-
-[node name="DifficultySelector" type="HBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/Selectors"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="DifficultyLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/DifficultySelector"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-text = "Dificultad:"
-horizontal_alignment = 2
-vertical_alignment = 1
-uppercase = true
-
-[node name="DifficultyDropdown" type="OptionButton" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/DifficultySelector"]
+[node name="PuzzleDropdown" type="OptionButton" parent="CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector/VBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("2_5d5ab")
@@ -198,79 +202,26 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 15
 
-[node name="StatsPanel" type="PanelContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox"]
-custom_minimum_size = Vector2(600, 200)
+[node name="ScrollContainerV" type="ScrollContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox"]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_djtya")
 
-[node name="StatsContainer" type="VBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV"]
 layout_mode = 2
-alignment = 1
 
-[node name="GeneralStatsLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer"]
 layout_mode = 2
-text = "ESTADÍSTICAS GENERALES"
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="CompletionsLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
-layout_mode = 2
-text = "Veces completado: 0"
-vertical_alignment = 1
-
-[node name="BestTimeLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
-layout_mode = 2
-text = "Mejor tiempo: 00:00"
-vertical_alignment = 1
-
-[node name="BestTimeDateLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
-layout_mode = 2
-text = "Conseguido el: -"
-vertical_alignment = 1
-
-[node name="BestMovesLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
-layout_mode = 2
-text = "Mejor movimientos: 0"
-vertical_alignment = 1
-
-[node name="BestMovesDateLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
-layout_mode = 2
-text = "Conseguido el: -"
-vertical_alignment = 1
-
-[node name="NoRecordsLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.215686, 0.215686, 0.215686, 1)
-theme_override_fonts/font = ExtResource("2_5d5ab")
-theme_override_font_sizes/font_size = 16
-text = "No hay récords registrados"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NoStatsLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.215686, 0.215686, 0.215686, 1)
-theme_override_fonts/font = ExtResource("2_5d5ab")
-theme_override_font_sizes/font_size = 16
-text = "Selecciona un pack, un puzzle y una dificultad para ver sus estadísticas"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="PuzzleImagePanel" type="PanelContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox"]
+[node name="PuzzleImagePanel" type="PanelContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer"]
 clip_children = 2
 custom_minimum_size = Vector2(360, 450)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_ut8ua")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/PuzzleImagePanel"]
 clip_children = 1
+z_index = 8
 clip_contents = true
 layout_mode = 2
 theme_override_constants/margin_left = 10
@@ -278,12 +229,72 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="PuzzleImage" type="TextureRect" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel/MarginContainer"]
+[node name="PuzzleImage" type="TextureRect" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/PuzzleImagePanel/MarginContainer"]
+unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
 texture = ExtResource("3_2j4m2")
 expand_mode = 5
 stretch_mode = 5
+
+[node name="ButtonExpanse" type="Button" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/PuzzleImagePanel"]
+z_index = 1
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lcxb8")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_8jbb3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_l1lfm")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ojlk7")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_a3a47")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jeceg")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/PuzzleImagePanel/ButtonExpanse"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.5
+offset_top = -40.5
+offset_right = 50.5
+offset_bottom = 40.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(50.5, 40.5)
+mouse_filter = 2
+texture = SubResource("AtlasTexture_lcxb8")
+expand_mode = 1
+
+[node name="StatsPanel" type="PanelContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(600, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_djtya")
+
+[node name="StatsScrollContainer" type="ScrollContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/StatsPanel"]
+layout_mode = 2
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 0
+
+[node name="StatsTableContainer" type="VBoxContainer" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/StatsPanel/StatsScrollContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="NoStatsLabel" type="Label" parent="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/StatsPanel"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.215686, 0.215686, 0.215686, 1)
+theme_override_fonts/font = ExtResource("2_5d5ab")
+theme_override_font_sizes/font_size = 16
+text = "Selecciona un pack y un puzzle para ver sus estadísticas"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="Movimientos" parent="CanvasLayer" instance=ExtResource("7_6gjew")]
 visible = false
@@ -370,4 +381,9 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_7wc4q")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_vtt34")
 theme_override_styles/normal = SubResource("StyleBoxTexture_1w1yt")
 
+[node name="ExpanseImage" parent="CanvasLayer" instance=ExtResource("11_lcxb8")]
+visible = false
+z_index = 10
+
+[connection signal="pressed" from="CanvasLayer/MainContainer/ContentContainer/ContentHBox/ScrollContainerV/MarginContainer/VBoxContainer/PuzzleImagePanel/ButtonExpanse" to="." method="_on_button_expanse_pressed"]
 [connection signal="pressed" from="CanvasLayer/BackButton" to="." method="_on_back_button_pressed"]

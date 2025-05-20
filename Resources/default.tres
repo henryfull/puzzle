@@ -715,5 +715,6 @@ TooltipLabel/colors/font_color = Color(0.875, 0.875, 0.875, 1)
 TooltipLabel/constants/line_spacing = 1
 TooltipLabel/font_sizes/font_size = 24
 TooltipLabel/styles/normal = SubResource("StyleBoxFlat_dvb71")
-Tree/font_sizes/font_size = 28
+Tree/font_sizes/font_size = 37
+Tree/font_sizes/title_button_font_size = 28
 VBoxContainer/constants/separation = 20

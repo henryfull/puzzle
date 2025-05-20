@@ -3,25 +3,29 @@ extends Node2D
 # Referencias a nodos de la interfaz
 var pack_selector: OptionButton = null
 var puzzle_selector: OptionButton = null
-var difficulty_selector: OptionButton = null
 var puzzle_image: TextureRect = null
+@export var puzzle_panel: PanelContainer = null
+@export var stats_container: PanelContainer = null
 
-# Labels de estadísticas
-var completions_label: Label = null
-var best_time_label: Label = null
-var best_time_date_label: Label = null
-var best_moves_label: Label = null
-var best_moves_date_label: Label = null
-var no_records_label: Label = null
+# Contenedores para tabla de estadísticas
+var stats_scroll_container: ScrollContainer = null
+var stats_table_container: VBoxContainer = null
 var no_stats_label: Label = null
-var general_stats_label: Label = null
+
+# Constantes para identificar filas de estadísticas
+const STAT_DIFFICULTY = "difficulty"
+const STAT_COMPLETIONS = "completions"
+const STAT_BEST_TIME = "best_time"
+const STAT_BEST_MOVES = "best_moves"
+const STAT_BEST_FLIPS = "best_flips"
+const STAT_BEST_FLIP_MOVES = "best_flip_moves"
+const STAT_HISTORY = "history"
 
 var progress_manager = null
 
 # Datos actuales
 var current_pack_id: String = ""
 var current_puzzle_id: String = ""
-var current_difficulty: String = ""
 var packs_data = []
 
 func _ready():
@@ -29,20 +33,13 @@ func _ready():
 	progress_manager = get_node("/root/ProgressManager")
 	
 	# Obtener referencias a los nodos de la interfaz
-	pack_selector = $CanvasLayer/MainContainer/ContentContainer/Selectors/PackSelector/PackDropdown
-	puzzle_selector = $CanvasLayer/MainContainer/ContentContainer/Selectors/PuzzleSelector/PuzzleDropdown
-	difficulty_selector = $CanvasLayer/MainContainer/ContentContainer/Selectors/DifficultySelector/DifficultyDropdown
-	puzzle_image = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel/MarginContainer/PuzzleImage
+	pack_selector = %PackDropdown
+	puzzle_selector = %PuzzleDropdown
+	puzzle_image = %PuzzleImage
 	
-	# Obtener referencias a los labels de estadísticas
-	var stats_container = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer
-	general_stats_label = stats_container.get_node("GeneralStatsLabel")
-	completions_label = stats_container.get_node("CompletionsLabel")
-	best_time_label = stats_container.get_node("BestTimeLabel")
-	best_time_date_label = stats_container.get_node("BestTimeDateLabel")
-	best_moves_label = stats_container.get_node("BestMovesLabel")
-	best_moves_date_label = stats_container.get_node("BestMovesDateLabel")
-	no_records_label = stats_container.get_node("NoRecordsLabel")
+	# Obtener referencias a los contenedores de estadísticas
+	stats_scroll_container = stats_container.get_node("StatsScrollContainer")
+	stats_table_container = stats_scroll_container.get_node("StatsTableContainer")
 	no_stats_label = stats_container.get_node("NoStatsLabel")
 	
 	# Cargar todos los packs con su progreso
@@ -63,14 +60,11 @@ func _ready():
 	if puzzle_selector:
 		puzzle_selector.item_selected.connect(_on_puzzle_selected)
 	
-	if difficulty_selector:
-		difficulty_selector.item_selected.connect(_on_difficulty_selected)
-	
 	# Configurar correctamente el panel y la imagen
-	var panel = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel
+	var panel = puzzle_panel
 	panel.clip_children = 1 # CLIP_CHILDREN_ONLY
 	
-	var image = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/PuzzleImagePanel/MarginContainer/PuzzleImage
+	var image = puzzle_image
 	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
@@ -114,46 +108,6 @@ func populate_puzzle_selector(pack_id: String):
 			puzzle_selector.select(0)
 			_on_puzzle_selected(0)
 
-# Llenar el selector de dificultades para un puzzle
-func populate_difficulty_selector(puzzle_id: String):
-	if not difficulty_selector:
-		return
-	
-	difficulty_selector.clear()
-	current_puzzle_id = puzzle_id
-	
-	# Cargar la imagen del puzzle seleccionado
-	load_puzzle_image(current_pack_id, puzzle_id)
-	
-	# Obtener estadísticas del puzzle
-	var puzzle_stats = progress_manager.get_puzzle_stats(current_pack_id, puzzle_id)
-	
-	# Ordenar las dificultades para que se muestren de menor a mayor
-	var difficulties = puzzle_stats.keys()
-	difficulties.sort_custom(func(a, b): 
-		var a_parts = a.split("x")
-		var b_parts = b.split("x")
-		var a_cols = int(a_parts[0])
-		var a_rows = int(a_parts[1])
-		var b_cols = int(b_parts[0])
-		var b_rows = int(b_parts[1])
-		
-		# Comparar por número total de celdas
-		var a_cells = a_cols * a_rows
-		var b_cells = b_cols * b_rows
-		
-		return a_cells < b_cells
-	)
-	
-	for difficulty in difficulties:
-		difficulty_selector.add_item(difficulty)
-		difficulty_selector.set_item_metadata(difficulty_selector.get_item_count() - 1, difficulty)
-	
-	# Seleccionar automáticamente la primera dificultad
-	if difficulty_selector.item_count > 0:
-		difficulty_selector.select(0)
-		_on_difficulty_selected(0)
-
 # Cargar la imagen del puzzle
 func load_puzzle_image(pack_id: String, puzzle_id: String):
 	if not puzzle_image:
@@ -172,6 +126,8 @@ func load_puzzle_image(pack_id: String, puzzle_id: String):
 	if puzzle_data and puzzle_data.has("image"):
 		var image_path = puzzle_data.image
 		var texture = load(image_path)
+		var image_texture = load(puzzle_data.image)
+		$CanvasLayer/ExpanseImage/PanelContainer/ImageExpanse.texture = image_texture
 		if texture:
 			puzzle_image.texture = texture
 	else:
@@ -180,157 +136,176 @@ func load_puzzle_image(pack_id: String, puzzle_id: String):
 		if default_texture:
 			puzzle_image.texture = default_texture
 
-# Mostrar estadísticas para una dificultad específica
-func show_stats_for_difficulty(difficulty: String):
-	current_difficulty = difficulty
+# Mostrar tabla de estadísticas para todas las dificultades
+func show_stats_table():
+	current_puzzle_id = puzzle_selector.get_item_metadata(puzzle_selector.selected)
 	
-	# Resetear todos los labels
-	reset_stats_display()
+	# Limpiar tabla existente
+	for child in stats_table_container.get_children():
+		stats_table_container.remove_child(child)
+		child.queue_free()
 	
-	# Obtener estadísticas
+	# Obtener estadísticas del puzzle
 	var puzzle_stats = progress_manager.get_puzzle_stats(current_pack_id, current_puzzle_id)
-	if not puzzle_stats.has(difficulty):
+	
+	if puzzle_stats.size() == 0:
 		no_stats_label.visible = true
-		general_stats_label.visible = false
+		stats_scroll_container.visible = false
 		return
 	
-	var stats = puzzle_stats[difficulty]
-	
-	# Mostrar estadísticas generales
-	general_stats_label.visible = true
-	
-	# Verificar si hay datos de récords
-	var has_records = (stats.has("best_time") and stats["best_time"] > 0) or (stats.has("best_moves") and stats["best_moves"] > 0) or (stats.has("best_flips") and stats["best_flips"] < 99999) or (stats.has("best_flip_moves") and stats["best_flip_moves"] < 99999)
-	
-	if not has_records:
-		no_records_label.visible = true
-		return
-	
-	# Actualizar completado
-	completions_label.text = tr("Veces completado: ") + str(int(stats["completions"]))
-	completions_label.visible = true
-	
-	# Actualizar mejor tiempo
-	if stats.has("best_time") and stats["best_time"] > 0:
-		var best_time_minutes = int(stats["best_time"]) / 60
-		var best_time_seconds = int(stats["best_time"]) % 60
-		best_time_label.text = tr("Mejor tiempo: ") + "%02d:%02d" % [best_time_minutes, best_time_seconds]
-		best_time_label.visible = true
-		
-		# Fecha del mejor tiempo
-		if stats.has("best_time_date"):
-			var date_str = format_date_time(stats["best_time_date"])
-			best_time_date_label.text = tr("Conseguido el: ") + date_str
-			best_time_date_label.visible = true
-	
-	# Actualizar mejor movimientos
-	if stats.has("best_moves") and stats["best_moves"] > 0:
-		best_moves_label.text = tr("Mejor movimientos: ") + str(int(stats["best_moves"]))
-		best_moves_label.visible = true
-		
-		# Fecha de los mejores movimientos
-		if stats.has("best_moves_date"):
-			var date_str = format_date_time(stats["best_moves_date"])
-			best_moves_date_label.text = tr("Conseguido el: ") + date_str
-			best_moves_date_label.visible = true
-	
-	# Nuevas estadísticas: Flips
-	if stats.has("best_flips") and stats["best_flips"] < 99999:
-		var flips_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipsLabel
-		if flips_label:
-			flips_label.text = tr("Menor número de flips: ") + str(int(stats["best_flips"]))
-			flips_label.visible = true
-		
-		# Fecha de los mejores flips
-		if stats.has("best_flips_date"):
-			var flips_date_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipsDateLabel
-			if flips_date_label:
-				var date_str = format_date_time(stats["best_flips_date"])
-				flips_date_label.text = tr("Conseguido el: ") + date_str
-				flips_date_label.visible = true
-	
-	# Nuevas estadísticas: Movimientos durante flips
-	if stats.has("best_flip_moves") and stats["best_flip_moves"] < 99999:
-		var flip_moves_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipMovesLabel
-		if flip_moves_label:
-			flip_moves_label.text = tr("Menor movimientos con flip: ") + str(int(stats["best_flip_moves"]))
-			flip_moves_label.visible = true
-		
-		# Fecha de los mejores movimientos en flip
-		if stats.has("best_flip_moves_date"):
-			var flip_moves_date_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipMovesDateLabel
-			if flip_moves_date_label:
-				var date_str = format_date_time(stats["best_flip_moves_date"])
-				flip_moves_date_label.text = tr("Conseguido el: ") + date_str
-				flip_moves_date_label.visible = true
-	
-	# Mostrar historial si hay entradas
-	if stats.has("history") and stats["history"].size() > 0:
-		var history_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/HistoryLabel
-		if history_label:
-			var history_text = tr("Historial de partidas:") + "\n"
-			
-			for i in range(min(5, stats["history"].size())):
-				var entry = stats["history"][i]
-				var entry_time = "%02d:%02d" % [int(entry["time"]) / 60, int(entry["time"]) % 60]
-				
-				# Añadir información del modo de juego
-				var gamemode_name = "Normal"
-				if entry.has("gamemode"):
-					match entry["gamemode"]:
-						1: gamemode_name = "Relax"
-						3: gamemode_name = "Contrarreloj"
-						4: gamemode_name = "Desafío"
-				
-				history_text += "\n" + format_date_time(entry["date"]) + " - " + tr("Modo: ") + gamemode_name
-				history_text += "\n  " + tr("Tiempo: ") + entry_time + ", " + tr("Movimientos: ") + str(entry["moves"])
-				
-				# Añadir información sobre flips si está disponible
-				var flips_info = ""
-				if entry.has("flips"):
-					flips_info = tr("Flips: ") + str(entry["flips"])
-				
-				if entry.has("flip_moves"):
-					if flips_info != "":
-						flips_info += ", "
-					flips_info += tr("Mov. flip: ") + str(entry["flip_moves"])
-				
-				if flips_info != "":
-					history_text += "\n  " + flips_info
-				
-				history_text += "\n"
-			
-			history_label.text = history_text
-			history_label.visible = true
-
-# Restablecer la visualización de estadísticas
-func reset_stats_display():
-	general_stats_label.visible = false
-	completions_label.visible = false
-	best_time_label.visible = false
-	best_time_date_label.visible = false
-	best_moves_label.visible = false
-	best_moves_date_label.visible = false
-	no_records_label.visible = false
 	no_stats_label.visible = false
+	stats_scroll_container.visible = true
 	
-	# Ocultar también los nuevos labels
-	var flips_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipsLabel
-	var flips_date_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipsDateLabel
-	var flip_moves_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipMovesLabel
-	var flip_moves_date_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/FlipMovesDateLabel
-	var history_label = $CanvasLayer/MainContainer/ContentContainer/ContentHBox/StatsPanel/StatsContainer/HistoryLabel
+	# Ordenar las dificultades para que se muestren de menor a mayor
+	var difficulties = puzzle_stats.keys()
+	difficulties.sort_custom(func(a, b): 
+		var a_parts = a.split("x")
+		var b_parts = b.split("x")
+		var a_cols = int(a_parts[0])
+		var a_rows = int(a_parts[1])
+		var b_cols = int(b_parts[0])
+		var b_rows = int(b_parts[1])
+		
+		# Comparar por número total de celdas
+		var a_cells = a_cols * a_rows
+		var b_cells = b_cols * b_rows
+		
+		return a_cells < b_cells
+	)
 	
-	if flips_label:
-		flips_label.visible = false
-	if flips_date_label:
-		flips_date_label.visible = false
-	if flip_moves_label:
-		flip_moves_label.visible = false
-	if flip_moves_date_label:
-		flip_moves_date_label.visible = false
-	if history_label:
-		history_label.visible = false
+	# Crear la tabla de estadísticas con formato de filas y columnas
+	create_stats_table(difficulties, puzzle_stats)
+
+# Crear tabla de estadísticas con formato de filas y columnas
+func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
+	# Crear fila de encabezados
+	var header_row = create_header_row(difficulties)
+	stats_table_container.add_child(header_row)
+	
+	# Fila de veces completado
+	var completions_row = create_stat_row(tr("Veces completado"), difficulties, puzzle_stats, 
+		func(stats): 
+			if stats.has("completions"):
+				return str(int(stats["completions"]))
+			return "-"
+	)
+	stats_table_container.add_child(completions_row)
+	
+	# Fila de mejor tiempo
+	var best_time_row = create_stat_row(tr("Mejor tiempo"), difficulties, puzzle_stats, 
+		func(stats):
+			if stats.has("best_time") and stats["best_time"] > 0:
+				var minutes = int(stats["best_time"]) / 60
+				var seconds = int(stats["best_time"]) % 60
+				return "%02d:%02d" % [minutes, seconds]
+			return "-"
+	)
+	stats_table_container.add_child(best_time_row)
+	
+	# Fila de fecha mejor tiempo
+	var best_time_date_row = create_stat_row(tr("Fecha"), difficulties, puzzle_stats, 
+		func(stats):
+			if stats.has("best_time_date"):
+				return format_date_time(stats["best_time_date"])
+			return "-"
+	)
+	stats_table_container.add_child(best_time_date_row)
+	
+	# Fila de mejor movimientos
+	var best_moves_row = create_stat_row(tr("Mejor movimientos"), difficulties, puzzle_stats, 
+		func(stats):
+			if stats.has("best_moves") and stats["best_moves"] > 0:
+				return str(int(stats["best_moves"]))
+			return "-"
+	)
+	stats_table_container.add_child(best_moves_row)
+	
+
+	
+	# Fila de mejor flips
+	var best_flips_row = create_stat_row(tr("Menor flips"), difficulties, puzzle_stats, 
+		func(stats):
+			if stats.has("best_flips") and stats["best_flips"] < 99999:
+				return str(int(stats["best_flips"]))
+			return "-"
+	)
+	stats_table_container.add_child(best_flips_row)
+	
+
+	
+	# Fila de mejor movimientos con flip
+	var best_flip_moves_row = create_stat_row(tr("Menor mov. flip"), difficulties, puzzle_stats, 
+		func(stats):
+			if stats.has("best_flip_moves") and stats["best_flip_moves"] < 99999:
+				return str(int(stats["best_flip_moves"]))
+			return "-"
+	)
+	stats_table_container.add_child(best_flip_moves_row)
+	
+	
+	# Separador antes de historial
+	var separator = HSeparator.new()
+	stats_table_container.add_child(separator)
+	
+	
+	# Historial de partidas (3 últimas partidas para cada dificultad)
+	# create_history_rows(difficulties, puzzle_stats)
+
+# Crear fila de encabezados
+func create_header_row(difficulties: Array) -> HBoxContainer:
+	var row = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 20)
+	
+	# Celda vacía para el nombre de estadística
+	var empty_cell = create_cell("", true)
+	empty_cell.custom_minimum_size.x = 150
+	row.add_child(empty_cell)
+	
+	# Celdas de encabezado para cada dificultad
+	for difficulty in difficulties:
+		var cell = create_cell(difficulty, true)
+		cell.custom_minimum_size.x = 150
+		row.add_child(cell)
+	
+	return row
+
+# Crear fila de estadística
+func create_stat_row(stat_name: String, difficulties: Array, puzzle_stats: Dictionary, value_getter: Callable) -> HBoxContainer:
+	var row = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 20)
+	
+	# Celda para el nombre de la estadística
+	var name_cell = create_cell(stat_name, false)
+	name_cell.custom_minimum_size.x = 150
+	row.add_child(name_cell)
+	
+	# Celdas para los valores de cada dificultad
+	for difficulty in difficulties:
+		var stats = puzzle_stats[difficulty]
+		var value = value_getter.call(stats)
+		
+		var cell = create_cell(value, false)
+		cell.custom_minimum_size.x = 150
+		row.add_child(cell)
+	
+	return row
+
+
+
+
+# Crear una celda para la tabla
+func create_cell(text: String, is_header: bool = false) -> Label:
+	var label = Label.new()
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if !is_header else HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.clip_text = true
+	
+	if is_header:
+		label.add_theme_font_size_override("font_size", 34)
+		label.add_theme_color_override("font_color", Color(0.2, 0.6, 1.0))
+	
+	return label
 
 # Formatea una fecha ISO como una cadena legible
 func format_date_time(date_str: String) -> String:
@@ -345,20 +320,20 @@ func format_date_time(date_str: String) -> String:
 func _on_pack_selected(index: int):
 	var pack_id = pack_selector.get_item_metadata(index)
 	populate_puzzle_selector(pack_id)
-	
-	# No necesitamos limpiar el selector de dificultades aquí ya que
-	# se llenará automáticamente al seleccionar el primer puzzle
 
 func _on_puzzle_selected(index: int):
 	var puzzle_id = puzzle_selector.get_item_metadata(index)
-	populate_difficulty_selector(puzzle_id)
+	current_puzzle_id = puzzle_id
 	
-	# No necesitamos limpiar el contenedor de estadísticas aquí ya que
-	# se llenará automáticamente al seleccionar la primera dificultad
-
-func _on_difficulty_selected(index: int):
-	var difficulty = difficulty_selector.get_item_metadata(index)
-	show_stats_for_difficulty(difficulty)
+	# Cargar la imagen del puzzle seleccionado
+	load_puzzle_image(current_pack_id, puzzle_id)
+	
+	# Mostrar la tabla de estadísticas para todas las dificultades
+	show_stats_table()
 
 func _on_back_button_pressed():
 	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn") 
+
+
+func _on_button_expanse_pressed() -> void:
+	$CanvasLayer/ExpanseImage.visible = true

@@ -23,7 +23,7 @@ func _ready():
 	print("PackSelection: inicialización de los packs disponibles")
 	
 	scroll_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer
-	packs_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/PacksContainer
+	packs_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/MarginContainer/PacksContainer
 
 	# Ajustar el layout según el tipo de dispositivo
 	# adjust_layout_for_device()
