@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dy820u4d0bxw6"]
+[gd_scene load_steps=10 format=3 uid="uid://dy820u4d0bxw6"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="1_ltfgy"]
 [ext_resource type="Script" uid="uid://cbmxmo2mo7q0o" path="res://Scenes/Components/FooterMenu/panel_container.gd" id="1_svwfg"]
@@ -8,11 +8,30 @@ bg_color = Color(0.517647, 0.6, 0.94902, 0.784314)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r0bep"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_svwfg"]
+atlas = ExtResource("1_ltfgy")
+region = Rect2(1599, 669, 100, 100)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_tvbgl"]
 atlas = ExtResource("1_ltfgy")
-region = Rect2(1719, 474, 45, 47)
+region = Rect2(1467, 667, 109, 103)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r0bep"]
+atlas = ExtResource("1_ltfgy")
+region = Rect2(2138, 880, 79, 109)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ojsni"]
+atlas = ExtResource("1_ltfgy")
+region = Rect2(1353, 669, 97, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehmef"]
+atlas = ExtResource("1_ltfgy")
+region = Rect2(2247, 884, 79, 101)
 
 [node name="FooterMenu" type="PanelContainer" node_paths=PackedStringArray("labelInit", "labelPack", "labelPuzzle", "labelAchivement", "labelStats")]
+offset_top = -24.0
+offset_right = 660.0
+offset_bottom = 100.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_svwfg")
 script = ExtResource("1_svwfg")
 labelInit = NodePath("MarginContainer/HBoxContainer/PanelInit/VBoxContainer/Label")
@@ -24,6 +43,10 @@ labelStats = NodePath("MarginContainer/HBoxContainer/PanelStatistics/VBoxContain
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 30
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 custom_minimum_size = Vector2(0, 100)
@@ -54,26 +77,26 @@ grow_vertical = 0
 theme_override_constants/separation = 12
 
 [node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_type_variation = &"CircleButtonRed"
+theme_type_variation = &"CircleButtonGreen"
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer/Button"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer/Button"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -21.5
-offset_right = 20.0
-offset_bottom = 21.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_tvbgl")
+texture = SubResource("AtlasTexture_svwfg")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer"]
@@ -108,7 +131,7 @@ grow_vertical = 0
 theme_override_constants/separation = 12
 
 [node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -162,26 +185,26 @@ grow_vertical = 0
 theme_override_constants/separation = 12
 
 [node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"CircleButtonRed"
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer/Button"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer/Button"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -21.5
-offset_right = 20.0
-offset_bottom = 21.5
+offset_left = -18.0
+offset_top = -25.0
+offset_right = 18.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_tvbgl")
+texture = SubResource("AtlasTexture_r0bep")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer"]
@@ -216,26 +239,26 @@ grow_vertical = 0
 theme_override_constants/separation = 12
 
 [node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"CircleButtonYellow"
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer/Button"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer/Button"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -21.5
-offset_right = 20.0
-offset_bottom = 21.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_tvbgl")
+texture = SubResource("AtlasTexture_ojsni")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer"]
@@ -270,13 +293,13 @@ grow_vertical = 0
 theme_override_constants/separation = 12
 
 [node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"CircleButtonGreen"
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer/Button"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer/Button"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -284,12 +307,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -20.0
-offset_top = -21.5
-offset_right = 20.0
-offset_bottom = 21.5
+offset_top = -26.0
+offset_right = 21.0
+offset_bottom = 26.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_tvbgl")
+texture = SubResource("AtlasTexture_ehmef")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer"]

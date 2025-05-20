@@ -119,8 +119,8 @@ func _on_button_pressed():
 	
 	# Si el pack está disponible, emitir señal de selección
 	print("PackComponent: Pack seleccionado: ", pack_data.name)
-	GLOBAL.selected_pack = pack_data	
-	get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn")
+	GLOBAL.selected_pack = pack_data
+	GLOBAL.change_scene_direct("res://Scenes/PuzzleSelection.tscn")
 
 # Muestra algún tipo de feedback cuando se intenta acceder a un pack bloqueado
 func _show_locked_feedback():

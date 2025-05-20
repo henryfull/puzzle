@@ -4,6 +4,9 @@ extends Node2D
 @onready var progress_manager = get_node("/root/ProgressManager")
 # Referencia al administrador de compras (singleton)
 
+signal change_scene(puzzle_data)
+
+
 # Variables para controlar el desplazamiento táctil
 var is_scrolling = false
 var scroll_start_position = Vector2.ZERO

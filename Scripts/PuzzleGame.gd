@@ -3000,7 +3000,7 @@ func show_exit_dialog():
 	dialog.exit_confirmed.connect(
 		func(): 
 			resume_game()
-			get_tree().change_scene_to_file("res://Scenes/PuzzleSelection.tscn"))
+			GLOBAL.change_scene_direct("res://Scenes/PuzzleSelection.tscn"))
 	dialog.exit_canceled.connect(func(): dialog.queue_free())
 	
 	# Añadir a la escena actual

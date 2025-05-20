@@ -1,5 +1,7 @@
 extends Node
 
+signal change_scenes(new_scene: String)
+
 var settings = {
 	"language": "es",
 	"font_size" : 14,
@@ -68,14 +70,20 @@ const SETTINGS_FILE = "user://settings.cfg"
 # Variable para detectar si estamos en un dispositivo móvil
 var is_mobile = false
 
+
+
 # Función para cambiar de escena usando la pantalla de carga
 func change_scene_with_loading(new_scene: String) -> void:
 	change_scene = new_scene
 	get_tree().change_scene_to_file("res://Scenes/LoadingScreen.tscn")
+	emit_signal("change_scenes", new_scene)
 
 # Función para cambiar de escena directamente (sin pantalla de carga)
 func change_scene_direct(new_scene: String) -> void:
+	change_scene = new_scene
 	get_tree().change_scene_to_file(new_scene)
+	emit_signal("change_scenes", new_scene)
+
 
 func _ready():
 	# Detectar si estamos en un dispositivo móvil

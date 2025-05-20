@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dh7t7utu076oi"]
+[gd_scene load_steps=21 format=3 uid="uid://dh7t7utu076oi"]
 
 [ext_resource type="Script" uid="uid://cct0rg0djuimx" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
 [ext_resource type="Texture2D" uid="uid://cg6madwi8etli" path="res://Assets/Images/GUID/backgrounds/fondo 4.png" id="2_8um5k"]
@@ -32,7 +32,25 @@ atlas = ExtResource("4_ghw46")
 region = Rect2(1854, 664, 116, 112)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xim88"]
-bg_color = Color(0.517647, 0.6, 0.94902, 0.784314)
+bg_color = Color(0.27867, 0.716963, 0.564163, 0.784314)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xim88"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_koqhg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmrfp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_loo7a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_if7li"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rrcx7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fh7cp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8e205"]
+atlas = ExtResource("4_ghw46")
+region = Rect2(1988, 880, 109, 109)
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_pl40w")
@@ -231,9 +249,44 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -120.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_xim88")
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+custom_minimum_size = Vector2(50, 50)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 250.0
+offset_top = 164.0
+offset_right = 300.0
+offset_bottom = 214.0
+grow_horizontal = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xim88")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_koqhg")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_cmrfp")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_loo7a")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_if7li")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_rrcx7")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_fh7cp")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.5
+offset_top = -54.5
+offset_right = 54.5
+offset_bottom = 54.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_8e205")
 
 [node name="GameMode" parent="." instance=ExtResource("5_df05h")]
 
@@ -243,3 +296,4 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_xim88")
 [connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_stats" to="." method="_on_StatsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_achievements" to="." method="_on_AchievementsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_OptionsButton_pressed"]

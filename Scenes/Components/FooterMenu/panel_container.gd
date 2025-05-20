@@ -6,15 +6,34 @@ extends Control
 @export var labelAchivement: Label
 @export var labelStats: Label
 
+
+
 # Variable estática para mantener el label activo entre instancias
 static var active_label: String = "init"
 
 func _ready() -> void:
 	# Al iniciar, aplicamos el label que estaba activo
-	set_active_label(active_label)
+	set_active_label(GLOBAL.change_scene)
+	
+
+
 
 # Activa solo el label especificado y oculta los demás
-func set_active_label(label_name: String) -> void:
+func set_active_label(scene_path: String) -> void:
+	var label_name = "init"
+	
+	# Determinar el tipo de label según la ruta
+	if "PackSelection" in scene_path:
+		label_name = "pack"
+	elif "PuzzleSelection" in scene_path:
+		label_name = "puzzle"
+	elif "Achievements" in scene_path:
+		label_name = "achievement"
+	elif "StatsScreen" in scene_path:
+		label_name = "stats"
+	elif "MainMenu" in scene_path:
+		label_name = "init"
+	
 	# Guardamos el label activo para futuras instancias
 	active_label = label_name
 	
@@ -55,13 +74,12 @@ func _on_button_pressed_statistics() -> void:
 
 func go(path: String, label_name: String = "init"):
 	# Guardamos el label que debe estar activo antes de cambiar la escena
-	active_label = label_name
+	active_label = GLOBAL.change_scene
 	
-	if has_node("/root/OptionsManager") and get_node("/root/OptionsManager").is_visible():
-		get_node("/root/OptionsManager").hide_options()
-		await get_tree().create_timer(0.3).timeout  # Esperar a que termine la animación
-	await get_tree().process_frame
+	if GLOBAL.change_scene in path:
+		return
+
 		
-	GLOBAL.change_scene_with_loading(path)
+	GLOBAL.change_scene_direct(path)
 	
 	

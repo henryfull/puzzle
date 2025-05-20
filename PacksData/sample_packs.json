@@ -12,71 +12,148 @@
 			"puzzles": [
 				{
 					"id": "fruit1",
-					"name": "fruit_1",
-					"image": "res://Assets/Images/packs/fruits/image1.jpeg",
+					"name": "lemon",
+					"image": "res://Assets/Images/packs/fruits/lemon.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit2",
-					"name": "fruit_2",
-					"image": "res://Assets/Images/packs/fruits/image2.jpeg",
+					"name": "green_apple",
+					"image": "res://Assets/Images/packs/fruits/green-apple.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit3",
-					"name": "fruit_3",
-					"image": "res://Assets/Images/packs/fruits/image3.jpeg",
+					"name": "strawberry",
+					"image": "res://Assets/Images/packs/fruits/strawberry.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit4",
-					"name": "fruit_4",
-					"image": "res://Assets/Images/packs/fruits/image4.jpeg",
+					"name": "banana",
+					"image": "res://Assets/Images/packs/fruits/banana.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit5",
-					"name": "fruit_5",
-					"image": "res://Assets/Images/packs/fruits/image5.jpeg",
+					"name": "orange",
+					"image": "res://Assets/Images/packs/fruits/orange.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit6",
-					"name": "fruit_6",
-					"image": "res://Assets/Images/packs/fruits/image6.jpeg",
+					"name": "watermelon",
+					"image": "res://Assets/Images/packs/fruits/watermelon.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit7",
-					"name": "fruit_7",
-					"image": "res://Assets/Images/packs/fruits/image7.jpeg",
+					"name": "blueberries",
+					"image": "res://Assets/Images/packs/fruits/blueberries.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit8",
-					"name": "fruit_8",
-					"image": "res://Assets/Images/packs/fruits/image8.jpeg",
+					"name": "cherry",
+					"image": "res://Assets/Images/packs/fruits/cherry.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit9",
-					"name": "fruit_9",
-					"image": "res://Assets/Images/packs/fruits/image9.jpeg",
+					"name": "raspberry",
+					"image": "res://Assets/Images/packs/fruits/raspberry.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				},
 				{
 					"id": "fruit10",
-					"name": "fruit_10",
-					"image": "res://Assets/Images/packs/fruits/image10.jpeg",
+					"name": "kiwi",
+					"image": "res://Assets/Images/packs/fruits/kiwi.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit11",
+					"name": "red_apple",
+					"image": "res://Assets/Images/packs/fruits/red-apple.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit12",
+					"name": "blackberry",
+					"image": "res://Assets/Images/packs/fruits/blackberry.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit13",
+					"name": "passionfruit",
+					"image": "res://Assets/Images/packs/fruits/passionfruit.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit14",
+					"name": "coconut",
+					"image": "res://Assets/Images/packs/fruits/coconut.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit15",
+					"name": "peach",
+					"image": "res://Assets/Images/packs/fruits/peach.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit16",
+					"name": "mango",
+					"image": "res://Assets/Images/packs/fruits/mango.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit17",
+					"name": "grapes",
+					"image": "res://Assets/Images/packs/fruits/grapes.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit18",
+					"name": "mandarin",
+					"image": "res://Assets/Images/packs/fruits/mandarin.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit19",
+					"name": "pomegranate",
+					"image": "res://Assets/Images/packs/fruits/pomegranate.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit20",
+					"name": "pineapple",
+					"image": "res://Assets/Images/packs/fruits/pinneapple.jpeg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit21",
+					"name": "pear",
+					"image": "res://Assets/Images/packs/fruits/pear.jpeg",
 					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
 					"completed": false
 				}
