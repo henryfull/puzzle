@@ -53,7 +53,7 @@ func load_volume_settings():
 		# Cargar valores de volumen desde el archivo de configuración
 		var general_volume = config.get_value("audio", "general_volume", 50)
 		var music_volume = config.get_value("audio", "music_volume", 10)
-		var sfx_volume = config.get_value("audio", "sfx_volume", 30)
+		var sfx_volume = config.get_value("audio", "sfx_volume", 80)
 		
 		# Actualizar la configuración global
 		GLOBAL.settings.volume.general = general_volume
@@ -92,7 +92,7 @@ func save_volume_settings():
 		get_node("/root/GLOBAL").save_settings()
 
 func update_volumes():
-	var volume_settings = GLOBAL.settings.volume if GLOBAL.settings.has("volume") else {"general": 100, "music": 100, "sfx": 100}
+	var volume_settings = GLOBAL.settings.volume if GLOBAL.settings.has("volume") else {"general": 100, "music": 100, "sfx": 80}
 	
 	# Actualizar bus General
 	var general_bus_index = AudioServer.get_bus_index("Master")

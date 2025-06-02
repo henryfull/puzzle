@@ -138,6 +138,7 @@ wait_time = 5.0
 layer = -1
 
 [node name="TextureRect" type="TextureRect" parent="BackgroundLayer"]
+visible = false
 z_index = -1
 anchors_preset = 15
 anchor_right = 1.0
@@ -163,7 +164,7 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
 mouse_filter = 2
-color = Color(0.784314, 0.909804, 1, 0.388235)
+color = Color(0.933713, 0.937972, 0.882672, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="ButtonHideHUD" type="Button" parent="BackgroundLayer"]

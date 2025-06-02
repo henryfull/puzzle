@@ -275,8 +275,8 @@ func calculate_puzzle_limits(game_mode: int = -1) -> void:
 	puzzle_limits.max_time = total_tiles * time_per_tile
 	
 	# Calcular máximos de volteos
-	puzzle_limits.max_flips = int(total_tiles * 0.3)  # ~30% del total
-	puzzle_limits.max_flip_moves = int(total_tiles * 0.45)  # ~45% del total
+	puzzle_limits.max_flips = int(total_tiles * 0.05)  # ~30% del total
+	puzzle_limits.max_flip_moves = int(total_tiles * 0.1)  # ~45% del total
 	
 	# Ajustes según el modo de juego
 	match game_mode:
@@ -289,7 +289,7 @@ func calculate_puzzle_limits(game_mode: int = -1) -> void:
 			puzzle_limits.max_time *= 0.7  # 30% menos de tiempo
 			puzzle_limits.max_moves = 0  # Sin límite de movimientos
 		4:  # Desafío (Challenge)
-			puzzle_limits.max_moves = int(puzzle_limits.max_moves * move_multiplier)  # 20% menos de movimientos
+			puzzle_limits.max_moves = int(puzzle_limits.max_moves * 1.05)  # 20% menos de movimientos
 			puzzle_limits.max_time *= 0.8  # 20% menos de tiempo
 			puzzle_limits.max_flips = int(puzzle_limits.max_flips * 0.85)  # 15% menos de volteos
 	

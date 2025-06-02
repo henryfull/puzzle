@@ -21,13 +21,17 @@ var order_number: int = 0  # Número de orden de la pieza
 
 var only_vertical: bool = false  # Si true, el grupo solo se mueve verticalmente
 
-# Variables para el borde
-var border_color: Color = Color(1, 1, 1, 0.8)  # Blanco semitransparente por defecto
-var border_width: float = 3.0
+# Variables para efectos visuales (reemplazando el sistema de bordes)
 var is_correct_position: bool = false
-var border_node: Line2D
 var group_id: int = -1  # Para identificar a qué grupo pertenece
 var is_edge_piece: bool = false  # Si es pieza de borde en un grupo
+
+# Variables para efectos visuales de agrupación
+var grouped_opacity: float = 1.0  # Opacidad para piezas agrupadas (color vivo)
+var single_opacity: float = 0.8   # Opacidad para piezas sueltas (más apagado)
+var grouped_brightness: float = 1.1  # Brillo para piezas agrupadas
+var single_brightness: float = 0.9   # Brillo para piezas sueltas
+var correct_position_glow: float = 1.1  # Brillo extra para posición correcta
 
 # Nuevas variables para los colores de los grupos
 var single_piece_color: Color = Color(0.2, 0.2, 0.2, 1.0)  # Color para piezas sueltas
@@ -51,6 +55,23 @@ var group_colors: Array = [
 @export var use_color_groups: bool = true  # Si es false, se usará el color por defecto para todas las piezas
 @export var single_piece_color_override: Color = Color(0.2, 0.2, 0.2, 1.0)  # Color para piezas sueltas (configurable desde el editor)
 
+# Variables para efectos visuales exportables - CONFIGURACIÓN FÁCIL
+@export_group("Efectos Visuales")
+@export var enable_visual_effects: bool = true  # Activar/desactivar efectos visuales
+
+@export_subgroup("Opacidad")
+@export_range(0.1, 1.0, 0.05) var single_piece_opacity: float = 0.7   # Opacidad para piezas sueltas
+@export_range(0.1, 1.0, 0.05) var grouped_piece_opacity: float = 1.0  # Opacidad para piezas agrupadas
+
+@export_subgroup("Brillo y Contraste")
+@export_range(0.3, 1.5, 0.05) var single_piece_brightness: float = 0.85   # Brillo para piezas sueltas
+@export_range(0.3, 1.5, 0.05) var grouped_piece_brightness: float = 1.0   # Brillo para piezas agrupadas
+@export_range(1.0, 2.0, 0.05) var correct_position_brightness: float = 1.15  # Brillo extra para posición correcta
+@export_range(1.0, 2.0, 0.05) var dragging_brightness: float = 1.1     # Brillo cuando se arrastra
+
+@export_subgroup("Configuración Avanzada")
+@export var brightness_variation: float = 0.4   # Variación de brillo (OBSOLETO - usar variables específicas arriba)
+
 func _ready():
 	# Ajustar para recibir eventos de entrada
 	# El Area2D está para colisiones, pero usaremos _input_event
@@ -62,8 +83,8 @@ func _ready():
 	if single_piece_color_override != Color(0.2, 0.2, 0.2, 1.0):
 		single_piece_color = single_piece_color_override
 	
-	# Crear el borde
-	create_border()
+	# Configurar efectos visuales iniciales
+	setup_visual_effects()
 	
 	# Configurar label del número
 	setup_number_label()
@@ -80,6 +101,16 @@ func _ready():
 		number_label.z_index = 11  # El número debe estar encima del fondo
 		# Asegurarse de que el Label no bloquee los eventos de entrada
 		number_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+func setup_visual_effects():
+	# Configurar los valores de efectos visuales desde las variables exportables
+	single_opacity = single_piece_opacity
+	grouped_opacity = grouped_piece_opacity
+	single_brightness = single_piece_brightness
+	grouped_brightness = grouped_piece_brightness
+	
+	# Aplicar efectos iniciales (pieza suelta al inicio)
+	update_visual_effects()
 
 func setup_number_label():
 	# Configurar el Label del número (ya debe existir en la escena)
@@ -106,7 +137,6 @@ func set_piece_data(front_tex: Texture2D, back_tex: Texture2D, region: Rect2):
 	puzzle_back = back_tex
 	fragment_region = region
 	update_visual()
-	update_border()
 
 func update_visual():
 	var atlas_tex = AtlasTexture.new()
@@ -128,21 +158,73 @@ func update_visual():
 		if background_rect:
 			background_rect.visible = false
 	atlas_tex.region = fragment_region
+	
+	# Configurar filtrado de textura para evitar bordes (Godot 4)
+	# En Godot 4, el filtrado se controla a nivel del sprite, no de la textura
+	
 	sprite.texture = atlas_tex
 	
-	# Asegurar que el tamaño del número y el fondo se ajusten al tamaño del sprite
+	# Asegurar que el sprite no tenga filtrado
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	
+	# Asegurar que el tamaño del número y el fondo se ajusten al tamaño del sprite escalado
 	if sprite.texture:
 		var texture_size = sprite.texture.get_size() * sprite.scale
 		if background_rect:
+			# Usar el tamaño escalado completo para cubrir exactamente la misma área que el sprite
 			background_rect.size = texture_size
-			background_rect.position = sprite.position - texture_size/2
+			# Centrar el background_rect ya que el sprite está en (0,0)
+			background_rect.position = -texture_size * 0.5
 		if number_label:
+			# El número debe cubrir la misma área que el sprite escalado
 			number_label.size = texture_size
-			number_label.position = sprite.position - texture_size/2
+			# Centrar el number_label ya que el sprite está en (0,0)
+			number_label.position = -texture_size * 0.5
 			
-	# Actualizar la posición del área de colisión para asegurar que coincida con el sprite
+	# Actualizar el área de colisión para que coincida exactamente con el sprite
 	if area2d and sprite.texture:
-		area2d.position = sprite.position
+		var texture_size = sprite.texture.get_size() * sprite.scale
+		# El área de colisión debe estar centrada en el nodo padre (posición 0,0)
+		area2d.position = Vector2.ZERO
+		
+		# Actualizar el CollisionShape2D para que coincida con el tamaño del sprite
+		var collision_shape = area2d.get_node("CollisionShape2D")
+		if collision_shape and collision_shape.shape is RectangleShape2D:
+			var rect_shape = collision_shape.shape as RectangleShape2D
+			rect_shape.size = texture_size
+			# Centrar la forma de colisión
+			collision_shape.position = Vector2.ZERO
+			collision_shape.scale = Vector2.ONE
+	
+	# Actualizar efectos visuales después de cambiar la textura
+	update_visual_effects()
+
+# Nueva función para actualizar efectos visuales basados en agrupación
+func update_visual_effects():
+	if not enable_visual_effects or not is_instance_valid(sprite):
+		return
+	
+	var is_grouped = pieces_group.size() > 1
+	var target_opacity = grouped_opacity if is_grouped else single_opacity
+	var target_brightness = grouped_brightness if is_grouped else single_brightness
+	
+	# Aplicar brillo extra si está en posición correcta
+	if is_correct_position:
+		target_brightness *= correct_position_brightness
+	
+	# Aplicar opacidad al sprite
+	sprite.modulate.a = target_opacity
+	
+	# Aplicar brillo/contraste modificando los valores RGB
+	var brightness_color = Color(target_brightness, target_brightness, target_brightness, target_opacity)
+	sprite.modulate = brightness_color
+	
+	# Si está volteado, también aplicar efectos al fondo y número
+	if flipped:
+		if is_instance_valid(background_rect):
+			background_rect.modulate.a = target_opacity
+		if is_instance_valid(number_label):
+			number_label.modulate.a = target_opacity
 
 # Nueva función para actualizar el color del fondo según el grupo
 func update_background_color():
@@ -170,108 +252,33 @@ func flip_piece():
 	if get_parent().has_method("play_flip_sound"):
 		get_parent().play_flip_sound()
 
-# Función para crear el borde de la pieza
-func create_border():
-	# Crear un nodo Line2D para el borde
-	border_node = Line2D.new()
-	border_node.width = border_width
-	border_node.default_color = border_color
-	border_node.z_index = 1  # Para que se dibuje por encima del sprite normalmente
-	add_child(border_node)
-	
-	# Actualizar el borde
-	update_border()
-
-# Función para actualizar el borde según la posición y tamaño del sprite
-func update_border():
-	if not is_instance_valid(border_node) or not is_instance_valid(sprite) or sprite.texture == null:
-		return
-	
-	# Si la pieza no es de borde en un grupo, no mostramos su borde
-	if not is_edge_piece:
-		border_node.visible = false
-		return
-	
-	# Obtener el tamaño del sprite
-	var texture_size = sprite.texture.get_size() * sprite.scale
-	
-	# Calcular las coordenadas del borde
-	var half_width = texture_size.x / 2
-	var half_height = texture_size.y / 2
-	var center = sprite.position
-	
-	# Crear los puntos del borde (rectángulo)
-	var points = [
-		center + Vector2(-half_width, -half_height),  # Esquina superior izquierda
-		center + Vector2(half_width, -half_height),   # Esquina superior derecha
-		center + Vector2(half_width, half_height),    # Esquina inferior derecha
-		center + Vector2(-half_width, half_height),   # Esquina inferior izquierda
-		center + Vector2(-half_width, -half_height)   # Cerrar el rectángulo (volver al inicio)
-	]
-	
-	# Asignar los puntos al borde
-	border_node.points = points
-	border_node.visible = true
-	
-	# Actualizar el color del borde según si está en la posición correcta
-	update_border_color()
-	
-	# Actualizar el área de colisión para que coincida con el sprite
-	if area2d and area2d.has_node("CollisionShape2D"):
-		var collision_shape = area2d.get_node("CollisionShape2D")
-		if collision_shape:
-			# Ajustar la posición del área de colisión
-			area2d.position = center
-			
-			# Ajustar el tamaño de la colisión para que coincida con el sprite
-			# Convertir el tamaño del sprite a la escala del CollisionShape2D
-			var shape_scale = collision_shape.scale
-			collision_shape.scale.x = texture_size.x / 336.38  # Dividir por el tamaño base en la escena
-			collision_shape.scale.y = texture_size.y / 308.67  # Dividir por el tamaño base en la escena
-
-# Función para actualizar el color del borde según la posición
-func update_border_color():
-	if not is_instance_valid(border_node):
-		return
-	
-	# Si la pieza está en un grupo (más de una pieza), el borde es transparente
-	if pieces_group.size() > 1:
-		border_node.default_color = Color(0, 1, 0, 0) if is_correct_position else Color(1, 0.3, 0.3, 0)
-	else:
-		# Si es una pieza individual, mostrar el borde normal
-		border_node.default_color = Color(10, 10, 10, 0.7) if is_correct_position else Color(20, 20, 20, 0.7)
-
 # Función para establecer si la pieza está en la posición correcta
 func set_correct_position(correct: bool):
 	is_correct_position = correct
-	update_border_color()
+	update_visual_effects()
 
 # Función para establecer el identificador del grupo
 func set_group_id(id: int):
 	group_id = id
-	update_border()
 	# También actualizamos el color del fondo siempre (independientemente de si está volteado)
 	update_background_color()
+	update_visual_effects()
 
 # Función para establecer si es una pieza de borde en un grupo
 func set_edge_piece(is_edge: bool):
 	is_edge_piece = is_edge
-	update_border()
+	# Ya no necesitamos actualizar bordes, pero mantenemos la función por compatibilidad
 
-# Sobreescribir _process para asegurar que el borde se actualiza si cambia la escala o posición
+# Sobreescribir _process para asegurar que los efectos se mantienen actualizados
 func _process(_delta):
-	if is_instance_valid(border_node) and is_instance_valid(sprite) and sprite.texture != null:
-		update_border()
-		
-	# Verificar que el color del fondo es correcto si la pieza está volteada
+	# Verificar que los efectos visuales son correctos si la pieza está volteada
 	if flipped and is_instance_valid(background_rect):
 		update_background_color()
 
 # Función para actualizar el grupo de piezas
 func update_pieces_group(new_group: Array):
 	pieces_group = new_group
-	update_border()
-	update_border_color()
+	update_visual_effects()
 	# Actualizar el color del fondo si la pieza está volteada
 	if flipped:
 		update_background_color()
@@ -289,8 +296,6 @@ func set_dragging(is_dragging: bool):
 	dragging = is_dragging
 	if is_dragging:
 		z_index = 2000  # Poner la pieza al frente con z-index de 2000
-		if is_instance_valid(border_node):
-			border_node.z_index = 1999  # El borde justo debajo de la pieza, pero visible
 		
 		# Actualizar z-index del fondo y número si la pieza está volteada
 		if flipped:
@@ -298,10 +303,12 @@ func set_dragging(is_dragging: bool):
 				background_rect.z_index = 2010  # Por encima de la pieza
 			if is_instance_valid(number_label):
 				number_label.z_index = 2011  # Por encima del fondo
+		
+		# Aplicar efecto visual de "levantado" cuando se arrastra
+		if enable_visual_effects:
+			sprite.modulate = Color(dragging_brightness, dragging_brightness, dragging_brightness, 1.0)  # Más brillante cuando se arrastra
 	else:
 		z_index = 0  # Valor normal cuando no se arrastra
-		if is_instance_valid(border_node):
-			border_node.z_index = 1  # El borde vuelve a estar por encima del sprite
 		
 		# Restaurar z-index normal del fondo y número
 		if flipped:
@@ -309,16 +316,19 @@ func set_dragging(is_dragging: bool):
 				background_rect.z_index = 10
 			if is_instance_valid(number_label):
 				number_label.z_index = 11
+		
+		# Restaurar efectos visuales normales
+		update_visual_effects()
 	
 	# Actualizar visualmente
 	if is_instance_valid(sprite):
 		sprite.z_index = z_index
 
-# Método para actualizar toda la visualización de la pieza (incluido bordes y colores)
+# Método para actualizar toda la visualización de la pieza (incluido efectos visuales)
 func update_all_visuals():
 	update_visual()
-	update_border()
 	update_background_color()
+	update_visual_effects()
 	
 	# Asegurar que los z-index son correctos
 	if flipped:
@@ -330,3 +340,16 @@ func update_all_visuals():
 	# Actualizar si está en modo de arrastre
 	if dragging:
 		set_dragging(true)
+
+# Funciones de compatibilidad (para mantener la API existente)
+func create_border():
+	# Ya no creamos bordes, pero mantenemos la función por compatibilidad
+	pass
+
+func update_border():
+	# Ya no actualizamos bordes, pero mantenemos la función por compatibilidad
+	pass
+
+func update_border_color():
+	# Ya no actualizamos colores de borde, pero mantenemos la función por compatibilidad
+	pass
