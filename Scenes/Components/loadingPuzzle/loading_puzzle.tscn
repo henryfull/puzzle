@@ -5,9 +5,7 @@
 [node name="LoadingPuzzle" type="Node2D" node_paths=PackedStringArray("container")]
 z_index = 99
 script = ExtResource("1_bn5ra")
-cols = 6
-rows = 8
-fall_speed = 20000.0
+fall_speed = 40000.0
 container = NodePath("CanvasLayer/Container")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

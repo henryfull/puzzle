@@ -5,12 +5,11 @@
 [node name="TestLoadingPuzzle" type="Node2D"]
 
 [node name="LoadingPuzzle" parent="." instance=ExtResource("1_2kfv9")]
-position = Vector2(100, 100)
 
 [node name="Label" type="Label" parent="."]
 offset_right = 600
 offset_bottom = 50
-text = "Animación de Puzzle Tipo Tetris - Las piezas caerán automáticamente"
+text = "Animación de Puzzle Tipo Tetris - Las piezas caerán automáticamente (CENTRADO)"
 horizontal_alignment = 1
 
 [node name="RestartButton" type="Button" parent="."]

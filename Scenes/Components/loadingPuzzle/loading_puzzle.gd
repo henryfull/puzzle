@@ -5,6 +5,7 @@ extends Node2D
 @export_group("Control Tetris")
 @export var fall_speed: float = 400.0  # Píxeles por segundo de caída
 @export var piece_scale: float = 0.8
+@export var time_between_pieces: float = 0.01  # Tiempo entre cada pieza
 @export var container : Node2D 
 
 # Señal que se emite cuando se completa el puzzle
@@ -30,10 +31,33 @@ var piece_width : float
 var piece_height : float
 var is_running : bool = false
 
+# Variables para centrado automático
+var puzzle_center_x : float
+var puzzle_center_y : float
+var screen_size : Vector2
+
+# Variables para animaciones más suaves
+var landing_animation_duration : float = 0.4
+var landing_scale_bounce : float = 1.2
+
 func _ready():
 	debug_label.text = "Sistema Tetris Real"
 	status_label.text = "Preparando..."
+	# Obtener el tamaño de la pantalla para centrado
+	update_screen_size()
+	# Conectar señal para actualizar cuando cambie el tamaño de ventana
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	start_tetris_puzzle()
+
+func update_screen_size():
+	screen_size = get_viewport().get_visible_rect().size
+	print("LoadingPuzzle: Tamaño de pantalla actualizado: ", screen_size)
+
+func _on_viewport_size_changed():
+	update_screen_size()
+	# Si está corriendo, reiniciar para recentrar
+	if is_running:
+		restart_animation()
 
 func start_tetris_puzzle():
 	# Limpiar todo
@@ -108,11 +132,17 @@ func calculate_final_position(col: int, row: int) -> Vector2:
 	var scaled_width = piece_width * piece_scale
 	var scaled_height = piece_height * piece_scale
 	
-	var total_width = cols * scaled_width
-	var offset_x = (730 - total_width) / 2
+	# Calcular el tamaño total del puzzle
+	var total_puzzle_width = cols * scaled_width
+	var total_puzzle_height = rows * scaled_height
 	
-	var final_x = offset_x + (col * scaled_width) + (scaled_width / 2)
-	var final_y = 200 + (row * scaled_height) + (scaled_height / 2)
+	# Centrar el puzzle perfectamente en la pantalla
+	var puzzle_start_x = (screen_size.x - total_puzzle_width) / 2
+	var puzzle_start_y = (screen_size.y - total_puzzle_height) / 2
+	
+	# Calcular la posición específica de esta pieza
+	var final_x = puzzle_start_x + (col * scaled_width) + (scaled_width / 2)
+	var final_y = puzzle_start_y + (row * scaled_height) + (scaled_height / 2)
 	
 	return Vector2(final_x, final_y)
 
@@ -128,7 +158,7 @@ func tetris_loop():
 		await piece_landed
 		
 		# Pequeña pausa entre piezas (como Tetris)
-		await get_tree().create_timer(0.1)
+		await get_tree().create_timer(time_between_pieces)
 	
 	# Todas las piezas han caído
 	if is_running:
@@ -143,20 +173,32 @@ func drop_next_piece(piece_data: Dictionary):
 	
 	var sprite = Sprite2D.new()
 	sprite.texture = piece_data.texture
-	sprite.scale = Vector2(piece_scale, piece_scale)
+	sprite.scale = Vector2.ZERO  # Empezar desde escala 0 para animación natural
 	sprite.centered = true
+	sprite.modulate = Color(1, 1, 1, 0)  # Empezar transparente
 	
 	current_falling_piece.add_child(sprite)
 	
-	# Posición inicial: arriba de la pantalla, en su columna correcta
-	var start_pos = Vector2(piece_data.final_pos.x, -100)
+	# Posición inicial: arriba de la pantalla, en la columna correcta de la pieza
+	# Usar un offset proporcional al tamaño de pantalla
+	var start_y = -screen_size.y * 0.1  # 10% de la altura de pantalla por encima
+	var start_pos = Vector2(piece_data.final_pos.x, start_y)
 	current_falling_piece.position = start_pos
 	
-	# Guardar destino
+	# Guardar destino y escala final
 	current_falling_piece.set_meta("target_y", piece_data.final_pos.y)
 	current_falling_piece.set_meta("piece_data", piece_data)
+	current_falling_piece.set_meta("final_scale", piece_scale)
 	
 	container.add_child(current_falling_piece)
+	
+	# Animación natural: aparece de pequeño a grande con fade-in suave
+	var sprite_ref = sprite
+	var appear_tween = create_tween()
+	appear_tween.set_ease(Tween.EASE_OUT)
+	appear_tween.set_trans(Tween.TRANS_BACK)
+	appear_tween.parallel().tween_property(sprite_ref, "modulate", Color.WHITE, 0.5)
+	appear_tween.parallel().tween_property(sprite_ref, "scale", Vector2(piece_scale, piece_scale), 0.5)
 	
 	debug_label.text = "Pieza " + str(pieces_landed.size() + 1) + "/" + str(pieces_landed.size() + all_pieces_data.size() + 1) + " cayendo..."
 
@@ -187,11 +229,13 @@ func piece_has_landed():
 	# Agregar a piezas aterrizadas
 	pieces_landed.append(current_falling_piece)
 	
-	# Efecto visual de aterrizaje
+	# SIN efectos visuales - la pieza simplemente se queda en su lugar
 	var sprite = current_falling_piece.get_child(0)
-	var tween = create_tween()
-	tween.tween_property(sprite, "modulate", Color(1.2, 1.2, 0.9), 0.1)
-	tween.tween_property(sprite, "modulate", Color.WHITE, 0.1)
+	var final_scale = current_falling_piece.get_meta("final_scale")
+	
+	# Asegurar que la pieza esté en su tamaño correcto y completamente visible
+	sprite.scale = Vector2(final_scale, final_scale)
+	sprite.modulate = Color.WHITE
 	
 	# Limpiar referencia
 	current_falling_piece = null
@@ -206,14 +250,7 @@ func puzzle_complete():
 	status_label.text = "¡LISTO!"
 	count_label.text = "Todas las " + str(pieces_landed.size()) + " piezas aterrizaron"
 	
-	# Efecto final
-	for piece in pieces_landed:
-		var sprite = piece.get_child(0)
-		var tween = create_tween()
-		await get_tree().create_timer(0.05)  # Efecto escalonado
-		tween.tween_property(sprite, "modulate", Color(1.3, 1.3, 1.3), 0.15)
-		tween.tween_property(sprite, "modulate", Color.WHITE, 0.15)
-	
+	# SIN efectos visuales - las piezas se quedan exactamente como están
 	puzzle_completed.emit()
 
 func restart_animation():

@@ -408,10 +408,13 @@ func add_extra_row():
 	var viewport_size = puzzle_game.get_viewport_rect().size
 	var puzzle_height = puzzle_data.cell_size.y * current_rows  # Usar las filas actuales del puzzle
 	
-	# Recalcular el offset para centrar el puzzle con su nuevo tamaño
-	var puzzle_offset = (viewport_size - Vector2(puzzle_data.width, puzzle_height)) * 0.5
+	# 🔧 FIX: MANTENER el offset actual sin recalcularlo para evitar movimiento no deseado
+	# El puzzle debe mantener su posición actual cuando se expande
+	var puzzle_offset = puzzle_data.offset  # Mantener offset actual
 	
-	# Actualizar datos del puzzle
+	print("PuzzlePieceManager: Manteniendo offset actual para expansión: ", puzzle_offset)
+	
+	# Actualizar datos del puzzle con la nueva altura pero el mismo offset
 	puzzle_game.set_puzzle_data(puzzle_data.texture, puzzle_data.width, puzzle_height, puzzle_data.cell_size, puzzle_offset)
 	
 	# Actualizar la posición de todas las piezas para reflejar el nuevo offset
@@ -457,13 +460,17 @@ func add_extra_row_top():
 	var viewport_size = puzzle_game.get_viewport_rect().size
 	var puzzle_height = puzzle_data.cell_size.y * current_rows  # Usar las filas actuales del puzzle
 	
-	# Recalcular el offset para centrar el puzzle con su nuevo tamaño usando el mismo cálculo simplificado
-	var puzzle_offset = (viewport_size - Vector2(puzzle_data.width, puzzle_height)) * 0.5
+	# 🔧 FIX: MANTENER el offset actual sin recalcularlo
+	# Cuando se añade una fila arriba, el offset debe ajustarse hacia arriba por una celda
+	# para compensar que las piezas se mueven hacia abajo pero queremos mantener el puzzle en la misma posición visual
+	var puzzle_offset = puzzle_data.offset
+	puzzle_offset.y -= puzzle_data.cell_size.y  # Ajustar offset hacia arriba por el tamaño de una celda
 	
-	print("PuzzlePieceManager: Recalculando centrado después de añadir fila hacia abajo:")
+	print("PuzzlePieceManager: Ajustando offset para fila superior:")
+	print("  - Offset anterior: ", puzzle_data.offset)
+	print("  - Nuevo offset: ", puzzle_offset)
 	print("  - Viewport size: ", viewport_size)
 	print("  - New puzzle size: ", Vector2(puzzle_data.width, puzzle_height))
-	print("  - New offset: ", puzzle_offset)
 	
 	# Actualizar datos del puzzle
 	puzzle_game.set_puzzle_data(puzzle_data.texture, puzzle_data.width, puzzle_height, puzzle_data.cell_size, puzzle_offset)
