@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://dbndrtfatgaxi"]
+
+[ext_resource type="Script" uid="uid://b3mnweh0lkjx8" path="res://Scenes/Components/loadingPuzzle/loading_puzzle.gd" id="1_bn5ra"]
+
+[node name="LoadingPuzzle" type="Node2D" node_paths=PackedStringArray("container")]
+z_index = 99
+script = ExtResource("1_bn5ra")
+cols = 6
+rows = 8
+fall_speed = 20000.0
+container = NodePath("CanvasLayer/Container")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Background" type="ColorRect" parent="CanvasLayer"]
+z_index = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+color = Color(0.10642, 0.0994648, 0.287894, 1)
+
+[node name="Container" type="Node2D" parent="CanvasLayer"]
+z_index = 2
+
+[node name="DebugLabel" type="Label" parent="."]
+visible = false
+offset_right = 600.0
+offset_bottom = 100.0
+text = "Iniciando sistema de puzzle..."
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="."]
+visible = false
+modulate = Color(1, 1, 0, 1)
+offset_top = 60.0
+offset_right = 600.0
+offset_bottom = 120.0
+text = "Estado: Iniciando..."
+horizontal_alignment = 1
+
+[node name="CountLabel" type="Label" parent="."]
+visible = false
+modulate = Color(0, 1, 1, 1)
+offset_top = 120.0
+offset_right = 600.0
+offset_bottom = 180.0
+text = "Piezas: 0/0"
+horizontal_alignment = 1

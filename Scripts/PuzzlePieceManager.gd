@@ -27,7 +27,7 @@ var flip_speed: float = 0.01  # Velocidad de la animación de flip
 
 # 🎯 CONFIGURACIÓN DE CENTRADO AUTOMÁTICO - AJUSTABLE PARA PRUEBAS
 # Incrementa este valor si el puzzle sigue apareciendo mal centrado al cargar
-var auto_center_delay: float = 2.0  # Retraso en segundos antes del centrado automático
+var auto_center_delay: float = 1.5  # Retraso en segundos antes del centrado automático
 
 # Variables para límites visuales
 var border_areas: Array = []

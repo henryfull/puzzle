@@ -115,6 +115,7 @@ maxFlipsLabel = NodePath("UILayer/FlipButton/MaxFlipsPanel/MaxFlipsLabel")
 panelPaused = NodePath("UILayer/PanelPaused")
 button_options = NodePath("UILayer/OptionsButton")
 flip_button = NodePath("UILayer/FlipButton")
+max_extra_rows = 6
 
 [node name="AudioMove" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_xo7l2")

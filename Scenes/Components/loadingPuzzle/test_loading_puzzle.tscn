@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8lahm2e7qwp5"]
+
+[ext_resource type="PackedScene" uid="uid://dbndrtfatgaxi" path="res://Scenes/Components/loadingPuzzle/loading_puzzle.tscn" id="1_2kfv9"]
+
+[node name="TestLoadingPuzzle" type="Node2D"]
+
+[node name="LoadingPuzzle" parent="." instance=ExtResource("1_2kfv9")]
+position = Vector2(100, 100)
+
+[node name="Label" type="Label" parent="."]
+offset_right = 600
+offset_bottom = 50
+text = "Animación de Puzzle Tipo Tetris - Las piezas caerán automáticamente"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="."]
+offset_left = 250
+offset_top = 600
+offset_right = 350
+offset_bottom = 631
+text = "Reiniciar"
+
+[connection signal="pressed" from="RestartButton" to="LoadingPuzzle" method="restart_animation"] 

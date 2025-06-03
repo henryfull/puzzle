@@ -8,6 +8,10 @@ class_name PuzzleGame
 @onready var progress_manager = get_node("/root/ProgressManager")
 var VictoryCheckerScene = preload("res://Scripts/gameplay/VictoryChecker.gd")
 
+# Precargar la escena de loading puzzle
+var LoadingPuzzleScene = preload("res://Scenes/Components/loadingPuzzle/loading_puzzle.tscn")
+var loading_puzzle_instance: Node2D
+
 # Referencias a nodos de audio preexistentes en la escena
 # NOTA: Ahora se usa AudioManager en lugar de estos nodos directos
 # para respetar la configuración de volumen del usuario
@@ -70,6 +74,13 @@ var current_puzzle_id: String = ""
 
 func _ready():
 	print("PuzzleGame: Iniciando juego...")
+	
+	# PASO 1: Instanciar y mostrar el loading puzzle INMEDIATAMENTE
+	_show_loading_puzzle()
+	
+	# PASO 1.5: Ocultar UI temporalmente como medida de seguridad
+	_hide_ui_for_loading()
+	
 	default_rows = GLOBAL.rows
 	default_columns = GLOBAL.columns
 		
@@ -118,6 +129,21 @@ func _ready():
 	
 	# Conectar botón de centrado si existe en la escena
 	_connect_center_button()
+	
+	# PASO 2: Esperar un momento adicional para asegurar que todo esté completamente listo
+	await get_tree().create_timer(0.5).timeout
+	
+	# PASO 3: Ocultar y eliminar el loading puzzle
+	_hide_loading_puzzle()
+	
+	# PASO 4: Verificación de seguridad - asegurar que el loading se eliminó
+	await get_tree().create_timer(0.2).timeout
+	if loading_puzzle_instance != null:
+		print("PuzzleGame: ⚠️ Loading puzzle no se eliminó correctamente, forzando eliminación...")
+		force_remove_loading_puzzle()
+	
+	# PASO 5: Restaurar la UI después de eliminar el loading
+	_restore_ui_after_loading()
 	
 	# Mostrar mensaje de bienvenida con opciones de centrado
 	_show_centering_welcome_message()
@@ -405,7 +431,7 @@ func _test_audio_nodes():
 # Función para probar la reproducción de sonidos
 func _test_play_sounds():
 	print("PuzzleGame: Iniciando test de sonidos via AudioManager en 2 segundos...")
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(1.5).timeout
 	
 	print("🔊 Probando sonido de movimiento...")
 	play_move_sound()
@@ -446,3 +472,135 @@ func _show_centering_welcome_message():
 		show_success_message("💡 Triple tap o botón 🎯 para centrar puzzle", 3.0)
 	else:
 		show_success_message("💡 Presiona 'C' para centrar puzzle 🎯", 3.0)
+
+# Función para mostrar el loading puzzle
+func _show_loading_puzzle():
+	print("PuzzleGame: Mostrando loading puzzle...")
+	
+	# Debug: Verificar layers existentes
+	if UILayer:
+		print("PuzzleGame: UILayer detectado con layer: ", UILayer.layer)
+	
+	# Buscar otros CanvasLayers y sus prioridades
+	for child in get_children():
+		if child is CanvasLayer:
+			print("PuzzleGame: CanvasLayer encontrado: ", child.name, " - Layer: ", child.layer)
+	
+	# Instanciar el loading puzzle
+	loading_puzzle_instance = LoadingPuzzleScene.instantiate()
+	
+	# Crear un CanvasLayer específico para el loading con prioridad MÁXIMA
+	var loading_canvas_layer = CanvasLayer.new()
+	loading_canvas_layer.name = "LoadingCanvasLayer"
+	loading_canvas_layer.layer = 9999  # Prioridad MÁXIMA para estar por encima de absolutamente todo
+	
+	# Agregar el CanvasLayer al nodo principal
+	add_child(loading_canvas_layer)
+	
+	# Agregar el loading puzzle al CanvasLayer
+	loading_canvas_layer.add_child(loading_puzzle_instance)
+	
+	# Asegurar z_index alto dentro del CanvasLayer también
+	loading_puzzle_instance.z_index = 1000
+	
+	print("PuzzleGame: Loading puzzle instanciado en CanvasLayer con prioridad 9999")
+	print("PuzzleGame: Loading puzzle z_index: ", loading_puzzle_instance.z_index)
+
+# Función para ocultar y eliminar el loading puzzle
+func _hide_loading_puzzle():
+	print("PuzzleGame: Ocultando loading puzzle...")
+	
+	if loading_puzzle_instance != null:
+		print("PuzzleGame: Loading puzzle instance encontrada, procediendo a eliminar...")
+		
+		# Obtener el CanvasLayer padre del loading puzzle
+		var loading_canvas_layer = loading_puzzle_instance.get_parent()
+		
+		# Intentar hacer fade out si el método existe
+		if loading_puzzle_instance.has_method("fade_out"):
+			print("PuzzleGame: Ejecutando fade_out...")
+			await loading_puzzle_instance.fade_out()
+			print("PuzzleGame: Fade out completado exitosamente")
+		else:
+			print("PuzzleGame: Método fade_out no encontrado, eliminando directamente")
+			# Pequeña pausa para simular transición
+			await get_tree().create_timer(0.3).timeout
+		
+		# Asegurar que la instancia se elimine
+		if is_instance_valid(loading_puzzle_instance):
+			print("PuzzleGame: Eliminando loading_puzzle_instance...")
+			loading_puzzle_instance.queue_free()
+			
+			# Esperar un frame para asegurar que se procese el queue_free
+			await get_tree().process_frame
+			
+			# Limpiar la referencia
+			loading_puzzle_instance = null
+			print("PuzzleGame: Loading puzzle eliminado correctamente")
+		else:
+			print("PuzzleGame: Loading puzzle instance ya no es válida")
+			loading_puzzle_instance = null
+		
+		# Eliminar también el CanvasLayer contenedor
+		if loading_canvas_layer != null and is_instance_valid(loading_canvas_layer):
+			print("PuzzleGame: Eliminando LoadingCanvasLayer...")
+			loading_canvas_layer.queue_free()
+			await get_tree().process_frame
+			print("PuzzleGame: LoadingCanvasLayer eliminado")
+	else:
+		print("PuzzleGame: Warning - No hay loading puzzle para eliminar (referencia es null)")
+
+# Función alternativa para forzar la eliminación del loading puzzle
+func force_remove_loading_puzzle():
+	print("PuzzleGame: Forzando eliminación del loading puzzle...")
+	
+	if loading_puzzle_instance != null:
+		# Obtener el CanvasLayer padre antes de eliminarlo
+		var loading_canvas_layer = loading_puzzle_instance.get_parent()
+		
+		# Hacer invisible inmediatamente
+		loading_puzzle_instance.visible = false
+		
+		# Llamar stop_immediately si existe
+		if loading_puzzle_instance.has_method("stop_immediately"):
+			loading_puzzle_instance.stop_immediately()
+		
+		# Eliminar inmediatamente
+		loading_puzzle_instance.queue_free()
+		loading_puzzle_instance = null
+		
+		# Eliminar también el CanvasLayer contenedor
+		if loading_canvas_layer != null and is_instance_valid(loading_canvas_layer):
+			loading_canvas_layer.queue_free()
+			print("PuzzleGame: LoadingCanvasLayer también eliminado forzosamente")
+		
+		print("PuzzleGame: Loading puzzle eliminado forzosamente")
+	else:
+		print("PuzzleGame: No hay loading puzzle para forzar eliminación")
+
+# Función de debug para verificar el estado del loading puzzle
+func debug_loading_puzzle_status():
+	print("=== DEBUG LOADING PUZZLE ===")
+	print("loading_puzzle_instance: ", loading_puzzle_instance)
+	if loading_puzzle_instance != null:
+		print("is_instance_valid: ", is_instance_valid(loading_puzzle_instance))
+		print("visible: ", loading_puzzle_instance.visible)
+		print("name: ", loading_puzzle_instance.name)
+		print("parent: ", loading_puzzle_instance.get_parent())
+		print("parent name: ", loading_puzzle_instance.get_parent().name if loading_puzzle_instance.get_parent() else "null")
+		print("parent layer: ", loading_puzzle_instance.get_parent().layer if loading_puzzle_instance.get_parent() is CanvasLayer else "not CanvasLayer")
+	print("============================")
+
+# Función para ocultar temporalmente la UI durante el loading
+func _hide_ui_for_loading():
+	print("PuzzleGame: Ocultando UI temporalmente para loading...")
+	if UILayer:
+		UILayer.visible = false
+		print("PuzzleGame: UILayer ocultado")
+
+# Función para restaurar la UI después del loading
+func _restore_ui_after_loading():
+	print("PuzzleGame: Restaurando UI después del loading...")
+	if UILayer:
+		UILayer.visible = true
+		print("PuzzleGame: UILayer restaurado")
