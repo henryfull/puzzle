@@ -17,13 +17,17 @@ var quit_requested = false
 
 # Variables de control para escenas
 var is_in_main_menu = false
+var is_in_puzzle_game = false  # Nueva variable para detectar si estamos en el puzzle
 var active_dialog = null
+
+# Variable para controlar si los gestos del borde están habilitados
+var edge_gestures_enabled = true
 
 func _ready():
 	# Desactivar la aceptación automática de salida
 	get_tree().set_auto_accept_quit(false)
 	
-	# Conectar el cambio de escena para detectar cuándo estamos en el menú principal
+	# Conectar el cambio de escena para detectar cuándo estamos en el menú principal o en el puzzle
 	get_tree().root.connect("ready", _on_scene_changed)
 
 func _on_scene_changed():
@@ -33,10 +37,29 @@ func _on_scene_changed():
 		if scene_path != null:
 			var scene_name = scene_path.get_file()
 			is_in_main_menu = (scene_name == "MainMenu.tscn")
-			print("Escena cambiada a: ", scene_name, ", es menú principal: ", is_in_main_menu)
+			is_in_puzzle_game = (scene_name == "PuzzleGame.tscn")
+			
+			# CRÍTICO: Deshabilitar gestos del borde cuando estamos en el puzzle
+			if is_in_puzzle_game:
+				edge_gestures_enabled = false
+				print("BackGestureHandler: Gestos del borde DESHABILITADOS para el puzzle")
+			else:
+				edge_gestures_enabled = true
+				print("BackGestureHandler: Gestos del borde habilitados para escena: ", scene_name)
+			
+			print("BackGestureHandler: Escena cambiada a: ", scene_name, 
+				  ", es menú principal: ", is_in_main_menu, 
+				  ", es puzzle: ", is_in_puzzle_game)
 
 # Esta función se llama cuando el sistema operativo intenta cerrar la app
 func _notification(what):
+	# 🚫 CRÍTICO: Si estamos en el puzzle, IGNORAR COMPLETAMENTE todas las notificaciones del sistema
+	if is_in_puzzle_game:
+		print("BackGestureHandler: En puzzle - Ignorando notificación del sistema: ", what)
+		# Marcar como manejado para que el sistema no haga nada
+		get_viewport().set_input_as_handled()
+		return
+	
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		print("Solicitud de cierre de ventana detectada")
 		_on_close_requested()
@@ -53,15 +76,31 @@ func _notification(what):
 func _process(_delta):
 	if quit_requested:
 		print("Petición de salida en proceso...")
+	
+	# 🚫 CRÍTICO: Durante el puzzle, eliminar CUALQUIER diálogo que aparezca cada frame
+	if is_in_puzzle_game:
+		_force_remove_all_dialogs_during_puzzle()
 
 # Cuando se recibe una solicitud de cierre de la aplicación
 func _on_close_requested():
+	# 🚫 CRÍTICO: Si estamos en el puzzle, IGNORAR completamente la solicitud de cierre
+	if is_in_puzzle_game:
+		print("BackGestureHandler: En puzzle - Ignorando solicitud de cierre")
+		get_viewport().set_input_as_handled()
+		return
+	
 	print("Interceptada solicitud de cierre")
 	show_exit_dialog()
 	# Bloquear el cierre automático
 	get_viewport().set_input_as_handled()
 
 func _input(event):
+	# 🚫 CRÍTICO: Si estamos en el puzzle, NO procesar NINGÚN gesto del borde
+	if is_in_puzzle_game:
+		# Durante el puzzle, ignorar completamente todos los gestos del borde
+		# No mostrar mensajes, no hacer nada, simplemente continuar con el juego
+		return
+	
 	# Eventos de toque en pantalla solo en dispositivos móviles
 	if not (OS.has_feature("mobile") or OS.has_feature("ios") or OS.has_feature("android")):
 		return
@@ -105,65 +144,51 @@ func _input(event):
 			# Marcar el evento como manejado para evitar que se propague
 			get_viewport().set_input_as_handled()
 
+# Manejar el gesto de "volver atrás" específico para el puzzle
+func _handle_back_gesture_puzzle():
+	print("BackGestureHandler: Botón atrás físico detectado en puzzle")
+	
+	# En el puzzle, abrir el menú de pausa en lugar de salir directamente
+	var current_scene = get_tree().current_scene
+	if current_scene and current_scene.has_method("_on_button_options_pressed"):
+		print("BackGestureHandler: Abriendo menú de pausa en puzzle")
+		current_scene._on_button_options_pressed()
+	else:
+		print("BackGestureHandler: Escena de puzzle no tiene menú de pausa, mostrando diálogo de salida")
+		show_exit_dialog()
+
 # Manejar el gesto de "volver atrás"
 func _handle_back_gesture():
-	# Obtener la escena actual
-	var current_scene = get_tree().current_scene
-	if current_scene == null:
-		print("No hay escena activa para manejar el gesto")
-		return
-		
-	print("Gesto de volver atrás detectado")
+	print("BackGestureHandler: Gesto de volver atrás detectado")
 	
-	# Verificar si la escena tiene su propio método para manejar el gesto
-	if current_scene.has_method("handle_back_gesture"):
-		print("La escena tiene un manejador personalizado para el gesto")
-		# Delegar el manejo del gesto a la escena actual
-		var result = current_scene.handle_back_gesture()
-		
-		# Si la escena devuelve true, significa que manejó el gesto
-		if result == true:
-			print("Gesto manejado por la escena")
-			return
-	
-	# Si la escena no tiene manejador o devolvió false, usar comportamiento predeterminado
-	_default_back_behavior()
-
-# Comportamiento predeterminado para el gesto de volver atrás
-func _default_back_behavior():
-	# Verificar en qué escena estamos
-	var current_scene = get_tree().current_scene
-	if current_scene == null:
+	# 🚫 CRÍTICO: Si estamos en el puzzle, IGNORAR completamente el gesto
+	if is_in_puzzle_game:
+		print("BackGestureHandler: En puzzle - Ignorando gesto de volver atrás")
+		get_viewport().set_input_as_handled()
 		return
-		
-	var scene_path = current_scene.scene_file_path
-	if scene_path == null:
-		print("Escena sin ruta, no se puede determinar comportamiento")
-		return
-		
-	var scene_name = scene_path.get_file()
-	print("Usando comportamiento predeterminado para escena: ", scene_name)
 	
-	# Implementar lógica de navegación "atrás" según la escena actual
-	if scene_name == "MainMenu.tscn":
-		# En el menú principal, mostrar diálogo de confirmación para salir
+	# Si ya hay un diálogo activo, no hacer nada
+	if active_dialog != null:
+		print("BackGestureHandler: Ya hay un diálogo activo, ignorando gesto")
+		return
+	
+	# Si estamos en el menú principal, mostrar diálogo de salida
+	if is_in_main_menu:
+		print("BackGestureHandler: En menú principal, mostrando diálogo de salida")
 		show_exit_dialog()
-	elif scene_name == "PuzzleGame.tscn":
-		# En el juego, volver al menú de selección
-		get_node("/root/GLOBAL").change_scene_with_loading("res://Scenes/PuzzleSelection.tscn")
-	elif scene_name == "PuzzleSelection.tscn":
-		# En selección de puzzles, volver a selección de packs
-		get_node("/root/GLOBAL").change_scene_with_loading("res://Scenes/PackSelection.tscn")
-	elif scene_name == "PackSelection.tscn" or scene_name == "Options.tscn" or scene_name == "Achievements.tscn":
-		# En estas escenas, volver al menú principal
-		get_node("/root/GLOBAL").change_scene_with_loading("res://Scenes/MainMenu.tscn")
-	else:
-		# Para escenas desconocidas, intentar volver al menú principal
-		print("Escena desconocida, volviendo al menú principal")
-		get_node("/root/GLOBAL").change_scene_with_loading("res://Scenes/MainMenu.tscn")
+		return
+	
+	# Si estamos en otra escena, intentar volver al menú principal
+	print("BackGestureHandler: En otra escena, volviendo al menú principal")
+	go_to_main_menu()
 
 # Mostrar el diálogo de confirmación para salir
 func show_exit_dialog():
+	# 🚫 CRÍTICO: Si estamos en el puzzle, NO mostrar NINGÚN diálogo
+	if is_in_puzzle_game:
+		print("BackGestureHandler: En puzzle - NO mostrar diálogo de salida, ignorando completamente")
+		return
+	
 	# Si ya hay un diálogo activo, no crear otro
 	if active_dialog != null and is_instance_valid(active_dialog):
 		print("Ya hay un diálogo activo")
@@ -180,8 +205,13 @@ func show_exit_dialog():
 		print("ERROR: No se puede encontrar la escena actual")
 		return
 	
-	# Instanciar un nuevo diálogo (que ya incluye su propio CanvasLayer)
-	var dialog = confirm_dialog_scene.instantiate()
+	# 🚫 NUEVO: Usar el interceptor para crear el diálogo
+	var dialog = _create_exit_dialog()
+	
+	# Si el interceptor devolvió null (estamos en puzzle), salir inmediatamente
+	if dialog == null:
+		print("BackGestureHandler: Creación de diálogo bloqueada por interceptor")
+		return
 	
 	# Conectar las señales
 	dialog.exit_confirmed.connect(_on_exit_confirmed)
@@ -200,6 +230,18 @@ func show_exit_dialog():
 
 # Eliminar diálogos existentes para evitar duplicados
 func _remove_existing_dialogs():
+	# 🚫 CRÍTICO: Si estamos en el puzzle, eliminar TODOS los diálogos sin preguntar
+	if is_in_puzzle_game:
+		print("BackGestureHandler: En puzzle - Eliminando TODOS los diálogos automáticamente")
+		var current_scene = get_tree().current_scene
+		if current_scene:
+			for child in current_scene.get_children():
+				if child.is_in_group("exit_dialog") or child.name.contains("Dialog") or child.name.contains("Confirm"):
+					print("BackGestureHandler: Eliminando diálogo forzosamente: ", child.name)
+					child.queue_free()
+		active_dialog = null
+		return
+	
 	# Limpiar diálogos en la escena actual
 	var current_scene = get_tree().current_scene
 	if current_scene:
@@ -210,6 +252,20 @@ func _remove_existing_dialogs():
 	
 	# Limpiar referencia al diálogo activo
 	active_dialog = null
+
+# Función para volver al menú principal de manera segura
+func go_to_main_menu():
+	print("BackGestureHandler: Navegando al menú principal")
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		if global.has_method("change_scene_with_loading"):
+			global.change_scene_with_loading("res://Scenes/MainMenu.tscn")
+		else:
+			# Fallback si no existe change_scene_with_loading
+			get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+	else:
+		# Fallback directo
+		get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
 
 # Callback cuando se confirma salir
 func _on_exit_confirmed():
@@ -227,4 +283,56 @@ func _on_exit_canceled():
 	
 	# Eliminar el diálogo después de cancelar
 	_remove_existing_dialogs()
+	
+# 🚫 FUNCIÓN CRÍTICA: Eliminar cualquier diálogo que aparezca durante el puzzle
+func _force_remove_all_dialogs_during_puzzle():
+	var current_scene = get_tree().current_scene
+	if not current_scene:
+		return
+	
+	# Lista de nombres comunes de diálogos a eliminar
+	var dialog_keywords = ["Dialog", "Confirm", "Exit", "Quit", "Alert", "Warning", "Popup", "Modal"]
+	
+	# Buscar y eliminar cualquier nodo que pueda ser un diálogo
+	for child in current_scene.get_children():
+		# Verificar si es un diálogo por nombre
+		var is_dialog = false
+		for keyword in dialog_keywords:
+			if child.name.contains(keyword):
+				is_dialog = true
+				break
+		
+		# Verificar si está en grupo de diálogos
+		if child.is_in_group("exit_dialog") or child.is_in_group("dialog") or child.is_in_group("popup"):
+			is_dialog = true
+		
+		# Verificar si es un CanvasLayer con diálogos dentro
+		if child is CanvasLayer:
+			for grandchild in child.get_children():
+				for keyword in dialog_keywords:
+					if grandchild.name.contains(keyword):
+						print("BackGestureHandler: Eliminando diálogo en CanvasLayer: ", grandchild.name)
+						grandchild.queue_free()
+		
+		# Si encontramos un diálogo, eliminarlo inmediatamente
+		if is_dialog:
+			print("BackGestureHandler: Eliminando diálogo durante puzzle: ", child.name)
+			child.queue_free()
+	
+	# Limpiar referencia al diálogo activo
+	if active_dialog != null:
+		if is_instance_valid(active_dialog):
+			active_dialog.queue_free()
+		active_dialog = null
+
+# 🚫 NUEVO: Función para crear diálogo con interceptor
+func _create_exit_dialog():
+	# 🚫 INTERCEPTOR CRÍTICO: Si estamos en puzzle, NO crear NUNCA el diálogo
+	if is_in_puzzle_game:
+		print("BackGestureHandler: _create_exit_dialog() bloqueado - Estamos en puzzle")
+		return null
+	
+	# Solo crear si no estamos en puzzle
+	return confirm_dialog_scene.instantiate()
+
 	

@@ -26,6 +26,9 @@ var board_offset := Vector2.ZERO  # Desplazamiento actual del tablero
 var touch_points := {}  # Para rastrear múltiples puntos de contacto en táctil
 var pan_sensitivity: float = 1.0  # Sensibilidad del desplazamiento
 
+# NUEVO: Configuración para prevenir conflictos con gestos del sistema
+var edge_margin: float = 40.0  # Margen en píxeles desde los bordes para ignorar toques
+
 func initialize(game: PuzzleGame):
 	puzzle_game = game
 	piece_manager = game.piece_manager
@@ -73,6 +76,21 @@ func _handle_keyboard_input(event: InputEventKey):
 	elif event.keycode == KEY_T and OS.is_debug_build():
 		var current_delay = piece_manager.get_auto_center_delay()
 		puzzle_game.show_success_message("⏰ Retraso actual: " + str(current_delay) + "s", 3.0)
+	
+	# 🔧 DEBUG: Teclas para ajustar el margen de bordes
+	elif event.keycode == KEY_BRACKETLEFT and OS.is_debug_build():
+		var new_margin = max(20.0, edge_margin - 10.0)
+		set_edge_margin(new_margin)
+		puzzle_game.show_success_message("🔧 Margen reducido a " + str(new_margin) + "px", 2.0)
+	
+	elif event.keycode == KEY_BRACKETRIGHT and OS.is_debug_build():
+		var new_margin = min(100.0, edge_margin + 10.0)
+		set_edge_margin(new_margin)
+		puzzle_game.show_success_message("🔧 Margen aumentado a " + str(new_margin) + "px", 2.0)
+	
+	# DEBUG: Tecla 'M' para mostrar el margen actual
+	elif event.keycode == KEY_M and OS.is_debug_build():
+		puzzle_game.show_success_message("🔧 Margen actual: " + str(edge_margin) + "px", 3.0)
 
 func handle_input(event: InputEvent) -> void:
 	# Manejo de teclas especiales
@@ -90,7 +108,19 @@ func handle_input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		_handle_mouse_motion(event)
 
+# Función mejorada para verificar si un toque está en una zona segura
+func is_touch_in_safe_zone(position: Vector2) -> bool:
+	var screen_size = get_viewport().get_visible_rect().size
+	return (position.x >= edge_margin and position.x <= screen_size.x - edge_margin and
+			position.y >= edge_margin and position.y <= screen_size.y - edge_margin)
+
 func _handle_screen_touch(event: InputEventScreenTouch):
+	# 🚫 PREVENIR CONFLICTOS CON GESTOS DEL SISTEMA OPERATIVO
+	# Ignorar toques que están muy cerca de los bordes de la pantalla
+	if not is_touch_in_safe_zone(event.position):
+		print("PuzzleInputHandler: Toque ignorado por estar cerca del borde en: ", event.position)
+		return
+	
 	# Detectar múltiples toques (doble y triple)
 	if event.pressed:
 		var current_time = Time.get_ticks_msec() / 1000.0
@@ -151,17 +181,32 @@ func _handle_screen_touch(event: InputEventScreenTouch):
 			process_piece_release()
 
 func _handle_screen_drag(event: InputEventScreenDrag):
-	# Actualizar la posición del punto de contacto
-	touch_points[event.index] = event.position
+	# 🚫 PREVENIR CONFLICTOS CON GESTOS DEL SISTEMA OPERATIVO
+	# También aplicar la verificación de bordes para los drags
+	var screen_size = get_viewport().get_visible_rect().size
+	
+	# Si el drag se acerca demasiado a los bordes, limitarlo
+	var safe_position = event.position
+	safe_position.x = clamp(safe_position.x, edge_margin, screen_size.x - edge_margin)
+	safe_position.y = clamp(safe_position.y, edge_margin, screen_size.y - edge_margin)
+	
+	# Actualizar la posición del punto de contacto con la posición segura
+	touch_points[event.index] = safe_position
 	
 	# Para paneo en dispositivos móviles necesitamos DOS dedos
 	if puzzle_game.is_mobile and touch_points.size() >= 2 and is_panning:
 		# En lugar de usar el centro de los dedos, usamos directamente la posición del dedo 
 		# que se está moviendo, lo que da un control más directo
-		var current_pos = event.position
+		var current_pos = safe_position
 		
-		# El delta es exactamente el movimiento real del dedo
+		# El delta es exactamente el movimiento real del dedo, pero ajustado para evitar bordes
 		var delta = event.relative
+		
+		# Si el movimiento nos llevaría demasiado cerca del borde, reducir el delta
+		var future_pos = event.position + delta
+		if not is_touch_in_safe_zone(future_pos):
+			# Reducir el delta para mantener la posición dentro de los límites seguros
+			delta *= 0.5
 		
 		# Aplicamos directamente el delta del movimiento del dedo, manteniendo
 		# la misma dirección que el gesto del usuario, pero ajustando por la sensibilidad
@@ -180,7 +225,7 @@ func _handle_screen_drag(event: InputEventScreenDrag):
 				
 				# En lugar de usar event.relative, calculamos la nueva posición basada
 				# en la posición actual del dedo y el offset guardado al comenzar el arrastre
-				var touch_pos = event.position
+				var touch_pos = safe_position  # Usar la posición segura
 				
 				for p in group_leader.group:
 					# Aplicar la nueva posición con el offset original
@@ -467,6 +512,11 @@ func set_pan_sensitivity(value: float) -> void:
 		if global.has_method("save_settings"):
 			global.save_settings()
 
+# Función para cambiar el margen de bordes dinámicamente
+func set_edge_margin(value: float) -> void:
+	edge_margin = clamp(value, 20.0, 100.0)
+	print("PuzzleInputHandler: Margen de borde actualizado a: ", edge_margin)
+
 # Función para cargar las preferencias del usuario
 func load_user_preferences() -> void:
 	# Cargar preferencias desde GLOBAL
@@ -477,6 +527,11 @@ func load_user_preferences() -> void:
 			if "pan_sensitivity" in global.settings.puzzle:
 				pan_sensitivity = global.settings.puzzle.pan_sensitivity
 				print("PuzzleInputHandler: Sensibilidad cargada desde GLOBAL: ", pan_sensitivity)
+			
+			# Cargar margen de bordes si existe
+			if "edge_margin" in global.settings.puzzle:
+				edge_margin = global.settings.puzzle.edge_margin
+				print("PuzzleInputHandler: Margen de borde cargado desde GLOBAL: ", edge_margin)
 
 # Nueva función para reiniciar el board_offset al centrado inicial
 func reset_board_to_center():

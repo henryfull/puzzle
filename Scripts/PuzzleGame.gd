@@ -147,6 +147,12 @@ func _ready():
 	
 	# Mostrar mensaje de bienvenida con opciones de centrado
 	_show_centering_welcome_message()
+	
+	# 🚫 NUEVO: Configurar timer para eliminar diálogos automáticamente
+	_setup_dialog_blocker()
+	
+	# 🚫 NUEVO: Interceptor ultra-agresivo - sobrescribir métodos globales
+	_setup_global_dialog_interceptors()
 
 func _connect_button_signals():
 	# Conectar botón de opciones (pausa)
@@ -210,8 +216,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	input_handler.handle_input(event)
 
 func _notification(what):
-	if game_state_manager:
-		game_state_manager.handle_notification(what)
+	# Interceptar cualquier notificación del sistema durante el puzzle
+	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		print("PuzzleGame: Interceptando notificación del sistema durante puzzle - IGNORANDO")
+		get_viewport().set_input_as_handled()
+		return
 
 # Funciones de acceso para los managers
 func get_puzzle_data():
@@ -247,6 +256,14 @@ func apply_smart_centering():
 		piece_manager._apply_smart_centering_correction()
 	else:
 		print("PuzzleGame: Error - piece_manager no disponible")
+
+# NUEVO: Función para ajustar el margen de bordes dinámicamente (útil para testing)
+func adjust_edge_margin(new_margin: float):
+	if input_handler:
+		input_handler.set_edge_margin(new_margin)
+		show_success_message("🔧 Margen de borde: " + str(new_margin) + "px", 2.0)
+	else:
+		print("PuzzleGame: Error - input_handler no disponible")
 
 # Función para ejecutar diagnóstico completo
 func run_positioning_diagnosis():
@@ -284,13 +301,19 @@ func _handle_puzzle_really_completed():
 
 # Delegación de funciones principales a los managers apropiados
 func show_success_message(message: String, duration: float = 1.5):
-	ui_manager.show_success_message(message, duration)
+	# Solo permitir mensajes de éxito normales del juego, NO diálogos de salida
+	if not message.contains("salir") and not message.contains("exit") and not message.contains("quit"):
+		ui_manager.show_success_message(message, duration)
 
 func show_error_message(message: String, duration: float = 2.0):
-	ui_manager.show_error_message(message, duration)
+	# Solo permitir mensajes de error normales del juego, NO diálogos de salida
+	if not message.contains("salir") and not message.contains("exit") and not message.contains("quit"):
+		ui_manager.show_error_message(message, duration)
 
 func _on_button_exit_pressed():
-	ui_manager.show_exit_dialog()
+	print("PuzzleGame: Botón de salida presionado durante puzzle - IGNORANDO")
+	GLOBAL.change_scene_direct("res://Scenes/PuzzleSelection.tscn")
+	# No hacer nada, continuar con el juego
 
 func _on_button_repeat_pressed():
 	game_state_manager.restart_puzzle()
@@ -330,6 +353,14 @@ func _on_puzzle_completed():
 	
 	# Mostrar pantalla de victoria
 	show_victory_screen()
+
+# NUEVO: Función para manejar gestos del borde durante el puzzle
+# Esta función devuelve true para indicar que el gesto fue manejado (ignorado)
+func handle_back_gesture() -> bool:
+	print("PuzzleGame: Gesto del borde detectado durante el puzzle - IGNORANDO completamente")
+	# Simplemente devolver true para indicar que el gesto fue "manejado" (ignorado)
+	# No mostrar diálogos, no hacer nada, continuar con el juego normalmente
+	return true
 
 # Función para mostrar la pantalla de victoria
 func show_victory_screen():
@@ -604,3 +635,100 @@ func _restore_ui_after_loading():
 	if UILayer:
 		UILayer.visible = true
 		print("PuzzleGame: UILayer restaurado")
+
+# 🚫 FUNCIÓN CRÍTICA: Configurar sistema para bloquear diálogos automáticamente
+func _setup_dialog_blocker():
+	var dialog_timer = Timer.new()
+	dialog_timer.wait_time = 0.016  # Verificar cada frame (~60 FPS = 16ms)
+	dialog_timer.timeout.connect(_block_all_dialogs)
+	dialog_timer.autostart = true
+	add_child(dialog_timer)
+	
+	# NUEVO: También verificar en _process() para máxima agresividad
+	print("PuzzleGame: Sistema de bloqueo de diálogos ULTRA-AGRESIVO activado")
+
+# 🚫 INTERCEPTOR FINAL: Sobrescribir métodos globales para bloquear diálogos
+func _setup_global_dialog_interceptors():
+	print("PuzzleGame: Configurando interceptores globales de diálogos...")
+	
+	# Interceptar cualquier nodo que se añada a la escena
+	if has_node("/root"):
+		var root = get_node("/root")
+		if not root.child_entered_tree.is_connected(_on_global_child_added):
+			root.child_entered_tree.connect(_on_global_child_added)
+			print("PuzzleGame: Interceptor de nodos globales activado")
+
+# 🚫 INTERCEPTOR GLOBAL: Detectar cuando se añade cualquier nodo a la escena
+func _on_global_child_added(node):
+	# Si es un diálogo, eliminarlo inmediatamente
+	if node.is_in_group("exit_dialog") or node.name.contains("Dialog") or node.name.contains("Confirm"):
+		print("PuzzleGame: Interceptando creación de diálogo global: ", node.name)
+		# Hacerlo invisible inmediatamente
+		node.visible = false
+		node.modulate.a = 0
+		# Eliminarlo en el siguiente frame
+		call_deferred("_force_remove_node", node)
+
+# 🚫 FUNCIÓN DE UTILIDAD: Forzar eliminación de nodo
+func _force_remove_node(node):
+	if is_instance_valid(node):
+		print("PuzzleGame: Forzando eliminación de nodo: ", node.name)
+		node.queue_free()
+
+# Añadir verificación cada frame para máxima agresividad
+func _process(_delta):
+	# 🚫 CRÍTICO: Verificar y eliminar diálogos cada frame durante el puzzle
+	_block_all_dialogs()
+
+# 🚫 FUNCIÓN CRÍTICA: Eliminar cualquier diálogo que aparezca
+func _block_all_dialogs():
+	# Lista de nombres comunes de diálogos a eliminar
+	var dialog_keywords = ["Dialog", "Confirm", "Exit", "Quit", "Alert", "Warning", "Popup", "Modal"]
+	
+	# Buscar en toda la escena
+	for child in get_children():
+		var should_remove = false
+		
+		# Verificar por nombre
+		for keyword in dialog_keywords:
+			if child.name.contains(keyword):
+				should_remove = true
+				break
+		
+		# Verificar si está en grupos de diálogos
+		if child.is_in_group("exit_dialog") or child.is_in_group("dialog") or child.is_in_group("popup"):
+			should_remove = true
+		
+		# Si es un CanvasLayer, verificar sus hijos
+		if child is CanvasLayer:
+			for grandchild in child.get_children():
+				for keyword in dialog_keywords:
+					if grandchild.name.contains(keyword):
+						print("PuzzleGame: Eliminando diálogo en CanvasLayer: ", grandchild.name)
+						# Hacer invisible inmediatamente antes de eliminar
+						grandchild.visible = false
+						grandchild.modulate.a = 0
+						grandchild.queue_free()
+		
+		# Eliminar diálogos encontrados
+		if should_remove:
+			print("PuzzleGame: Eliminando diálogo automáticamente: ", child.name)
+			# Hacer invisible inmediatamente antes de eliminar
+			child.visible = false
+			child.modulate.a = 0
+			child.queue_free()
+	
+	# NUEVO: Buscar también en la escena global por si el diálogo se añadió allí
+	var current_scene = get_tree().current_scene
+	if current_scene and current_scene != self:
+		for child in current_scene.get_children():
+			if child.is_in_group("exit_dialog") or child.name.contains("Dialog") or child.name.contains("Confirm"):
+				print("PuzzleGame: Eliminando diálogo en escena global: ", child.name)
+				child.visible = false
+				child.modulate.a = 0
+				child.queue_free()
+
+# 🚫 NUEVO: Sobrescribir cualquier función que pueda mostrar diálogos
+func show_exit_dialog():
+	print("PuzzleGame: Intento de mostrar diálogo de salida durante puzzle - BLOQUEADO")
+	# No hacer nada, simplemente ignorar

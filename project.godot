@@ -51,6 +51,7 @@ boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
 boot_splash/image="uid://ctfuu506avefk"
 boot_splash/minimum_display_time=5
 config/quality/msaa_2d=0
+config/auto_accept_quit=false
 
 [audio]
 
@@ -101,7 +102,14 @@ theme/custom_font="uid://nsb7mxocp6o3"
 
 pointing/android/enable_pan_and_scale_gestures=true
 compatibility/legacy_just_pressed_behavior=true
+sensors/enable_gyroscope=true
 pointing/emulate_touch_from_mouse=true
+pointing/android/touch_delay=0.0
+pointing/ios/touch_delay=0.0
+pointing/android/disable_edge_gestures=true
+pointing/ios/disable_edge_gestures=true
+pointing/android/enable_system_gestures=false
+pointing/ios/enable_system_gestures=false
 
 [internationalization]
 

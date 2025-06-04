@@ -1,11 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://b6sg71qs17yj5"]
+[gd_scene load_steps=9 format=3 uid="uid://b6sg71qs17yj5"]
 
 [ext_resource type="Script" uid="uid://c1twov7g0717y" path="res://Scripts/PuzzleSelection.gd" id="1_nt7kx"]
+[ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_moqol"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_4mmlg"]
 [ext_resource type="PackedScene" uid="uid://dpw3l7nftx7kg" path="res://Scenes/Components/PuzzleGrid/PuzzleGrid.tscn" id="4_moqol"]
-[ext_resource type="Texture2D" uid="uid://d3ia2d0qfe7qw" path="res://Assets/Images/GUID/backgrounds/bg_general.png" id="4_oehjl"]
 [ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="5_moqol"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="6_jmjrx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4mmlg"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_moqol"]
 
@@ -14,15 +16,33 @@ script = ExtResource("1_nt7kx")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Background" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -600.0
+offset_right = 600.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_oehjl")
-expand_mode = 1
+texture = ExtResource("2_moqol")
+expand_mode = 3
 stretch_mode = 6
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/TextureRect"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 80.0
+offset_right = 7.0
+offset_bottom = 220.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_4mmlg")
+
+[node name="BackgroundTitle" parent="CanvasLayer/TextureRect/PanelContainer" instance=ExtResource("4_4mmlg")]
+z_index = 1
+layout_mode = 2
+title = "Packs"
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
 z_index = 1

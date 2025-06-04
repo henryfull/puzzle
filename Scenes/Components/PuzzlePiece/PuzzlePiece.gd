@@ -29,7 +29,7 @@ var is_edge_piece: bool = false  # Si es pieza de borde en un grupo
 # Variables para efectos visuales de agrupación
 var grouped_opacity: float = 1.0  # Opacidad para piezas agrupadas (color vivo)
 var single_opacity: float = 0.8   # Opacidad para piezas sueltas (más apagado)
-var grouped_brightness: float = 1.1  # Brillo para piezas agrupadas
+var grouped_brightness: float = 1.0  # Brillo para piezas agrupadas
 var single_brightness: float = 0.9   # Brillo para piezas sueltas
 var correct_position_glow: float = 1.1  # Brillo extra para posición correcta
 

@@ -18,6 +18,13 @@ signal exit_canceled
 @onready var cancel_button = $CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer/CancelButton
 
 func _ready():
+	# 🚫 INTERCEPTOR CRÍTICO: Si estamos en puzzle, hacerse invisible INMEDIATAMENTE
+	if _is_in_puzzle_game():
+		print("ConfirmExitDialog: En puzzle - Haciéndose invisible inmediatamente")
+		_make_completely_invisible()
+		_self_destruct_immediately()
+		return
+	
 	# Añadir el nodo a un grupo para facilitar su identificación
 	add_to_group("exit_dialog")
 	
@@ -41,8 +48,53 @@ func _ready():
 	visible = true
 	print("ConfirmExitDialog listo")
 
+# 🚫 FUNCIÓN CRÍTICA: Detectar si estamos en el puzzle
+func _is_in_puzzle_game() -> bool:
+	var current_scene = get_tree().current_scene
+	if current_scene:
+		var scene_path = current_scene.scene_file_path
+		if scene_path != null:
+			var scene_name = scene_path.get_file()
+			return scene_name == "PuzzleGame.tscn"
+	return false
+
+# 🚫 FUNCIÓN CRÍTICA: Hacerse completamente invisible sin parpadeo
+func _make_completely_invisible():
+	# Hacerse invisible inmediatamente
+	visible = false
+	modulate.a = 0
+	
+	# Hacer invisible el CanvasLayer también
+	if has_node("CanvasLayer"):
+		$CanvasLayer.visible = false
+		$CanvasLayer.modulate.a = 0
+		
+		# Hacer invisibles todos los hijos también
+		for child in $CanvasLayer.get_children():
+			if child != null:
+				child.visible = false
+				child.modulate.a = 0
+
+# 🚫 FUNCIÓN CRÍTICA: Auto-destruirse inmediatamente
+func _self_destruct_immediately():
+	# Programar eliminación inmediata (siguiente frame)
+	call_deferred("queue_free")
+	
+	# También programar una eliminación de emergencia por si la primera falla
+	get_tree().create_timer(0.01).timeout.connect(func():
+		if is_instance_valid(self):
+			queue_free()
+	)
+
 # Mostrar el diálogo
 func show_dialog():
+	# 🚫 INTERCEPTOR CRÍTICO: Si estamos en puzzle, NO mostrar NUNCA
+	if _is_in_puzzle_game():
+		print("ConfirmExitDialog: show_dialog() llamado en puzzle - BLOQUEANDO")
+		_make_completely_invisible()
+		_self_destruct_immediately()
+		return
+	
 	print("Mostrando diálogo, botones: ", confirm_button != null, ", ", cancel_button != null)
 	
 	# Asegurar que el diálogo se muestre por encima de todo

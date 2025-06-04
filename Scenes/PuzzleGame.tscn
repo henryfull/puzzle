@@ -165,7 +165,7 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
 mouse_filter = 2
-color = Color(0.933713, 0.937972, 0.882672, 1)
+color = Color(0.0794423, 0.0791788, 0.0744599, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="ButtonHideHUD" type="Button" parent="BackgroundLayer"]
