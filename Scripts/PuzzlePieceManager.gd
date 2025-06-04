@@ -31,6 +31,7 @@ var auto_center_delay: float = 1.5  # Retraso en segundos antes del centrado aut
 
 # Variables para límites visuales
 var border_areas: Array = []
+var background_limits_container: Node2D = null  # 🆕 Contenedor para los límites que siempre está centrado
 var original_area_color: Color = Color(0,0,0, 0.1)  # Verde claro para área original
 var expandable_area_color: Color = Color(0,0,0, 0.1)  # Amarillo para área expandible
 var limit_area_color: Color = Color(0,0,0, 0.1)  # Rojo muy suave para límites absolutos
@@ -1925,6 +1926,9 @@ func create_visual_borders():
 	# Limpiar bordes existentes
 	clear_visual_borders()
 	
+	# Crear o obtener el contenedor BackgroundLimits
+	_ensure_background_limits_container()
+	
 	var puzzle_data = puzzle_game.get_puzzle_data()
 	var cell_size = puzzle_data.cell_size
 	var offset = puzzle_data.offset
@@ -1933,12 +1937,49 @@ func create_visual_borders():
 	_create_expandable_area_borders(offset, cell_size)
 
 func clear_visual_borders():
+	# Limpiar solo las áreas, no el contenedor
 	for border_area in border_areas:
 		if is_instance_valid(border_area):
 			border_area.queue_free()
 	border_areas.clear()
 
+func _ensure_background_limits_container():
+	# Si no existe el contenedor, crearlo
+	if background_limits_container == null or not is_instance_valid(background_limits_container):
+		background_limits_container = Node2D.new()
+		background_limits_container.name = "BackgroundLimits"
+		background_limits_container.z_index = 0  # Muy detrás de las piezas
+		
+		# Añadir al BackgroundLayer para mantener la jerarquía correcta
+		var background_layer = puzzle_game.get_node("BackgroundLayer")
+		if background_layer:
+			background_layer.add_child(background_limits_container)
+			print("PuzzlePieceManager: Contenedor BackgroundLimits creado en BackgroundLayer")
+		elif puzzle_game.pieces_container:
+			# Fallback: añadir al contenedor de piezas si no existe BackgroundLayer
+			puzzle_game.pieces_container.add_child(background_limits_container)
+			print("PuzzlePieceManager: Contenedor BackgroundLimits creado en PiecesContainer (fallback)")
+		else:
+			puzzle_game.add_child(background_limits_container)
+			print("PuzzlePieceManager: Contenedor BackgroundLimits creado directamente en juego")
+	
+	# 🔧 CLAVE: Mantener el contenedor siempre centrado horizontalmente
+	var viewport_size = puzzle_game.get_viewport_rect().size
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	
+	# Centrar horizontalmente el contenedor en función del ancho del puzzle
+	var horizontal_center = viewport_size.x * 0.5 - puzzle_data.width * 0.5
+	background_limits_container.position.x = horizontal_center
+	
+	# El Y se mantiene en 0 para que las áreas usen posiciones absolutas en Y
+	background_limits_container.position.y = 0
+	
+	print("PuzzlePieceManager: BackgroundLimits centrado horizontalmente en X=", horizontal_center)
+
 func _create_expandable_area_borders(offset: Vector2, cell_size: Vector2):
+	# Asegurar que tenemos el contenedor
+	_ensure_background_limits_container()
+	
 	# Calcular las dimensiones del área usando las mismas coordenadas que las piezas
 	var max_expansion_top = puzzle_game.max_extra_rows
 	var max_expansion_bottom = puzzle_game.max_extra_rows
@@ -1951,100 +1992,105 @@ func _create_expandable_area_borders(offset: Vector2, cell_size: Vector2):
 	print("PuzzlePieceManager: Debug - GLOBAL.rows: ", GLOBAL.rows, ", original_rows: ", original_rows, ", extra_rows_added: ", extra_rows_added)
 	print("PuzzlePieceManager: Debug - rows_added_top: ", rows_added_top, ", rows_added_bottom: ", rows_added_bottom)
 	
-	# Área original del puzzle (usando las variables de seguimiento precisas + offset)
-	# La posición Y del área original se desplaza hacia abajo por cada fila añadida arriba
-	var original_area_top_y = rows_added_top * cell_size.y
-	var original_area_pos = offset + Vector2(0, original_area_top_y)
+	# 🔧 CLAVE: Calcular posiciones RELATIVAS al contenedor BackgroundLimits
+	# El contenedor ya está centrado horizontalmente, así que solo necesitamos posiciones Y absolutas
+	
+	# Área original del puzzle (usando las variables de seguimiento precisas)
+	var original_area_top_y = offset.y + (rows_added_top * cell_size.y)
+	var original_area_pos = Vector2(0, original_area_top_y)  # X=0 porque el contenedor ya está centrado
 	var original_area_size = Vector2(GLOBAL.columns * cell_size.x, original_rows * cell_size.y)
 	
-	# Área actual del puzzle (toda el área que incluye expansiones + offset)
-	var current_area_pos = offset + Vector2(0, 0)
-	var current_area_size = Vector2(GLOBAL.columns * cell_size.x, GLOBAL.rows * cell_size.y)
+	print("PuzzlePieceManager: Debug - original_area_pos (relativa): ", original_area_pos, ", original_area_size: ", original_area_size)
 	
-	print("PuzzlePieceManager: Debug - original_area_pos: ", original_area_pos, ", original_area_size: ", original_area_size)
-	print("PuzzlePieceManager: Debug - current_area_pos: ", current_area_pos, ", current_area_size: ", current_area_size)
-	
-	# 1. Crear fondo para área original (verde - más visible)
-	_create_border_area(original_area_pos, original_area_size, "original_area", original_area_color)
+	# 1. Crear fondo para área original
+	_create_border_area_in_container(original_area_pos, original_area_size, "original_area", original_area_color)
 	
 	# 2. Si hay expansión disponible hacia arriba, mostrar área expandible superior
 	if remaining_expansion_top > 0:
-		var expandable_top_pos = offset + Vector2(0, original_area_top_y - remaining_expansion_top * cell_size.y)
+		var expandable_top_pos = Vector2(0, offset.y + (rows_added_top * cell_size.y) - (remaining_expansion_top * cell_size.y))
 		var expandable_top_size = Vector2(GLOBAL.columns * cell_size.x, remaining_expansion_top * cell_size.y)
-		_create_border_area(expandable_top_pos, expandable_top_size, "expandable_top", expandable_area_color)
-		print("PuzzlePieceManager: Debug - expandable_top_pos: ", expandable_top_pos, ", expandable_top_size: ", expandable_top_size)
+		_create_border_area_in_container(expandable_top_pos, expandable_top_size, "expandable_top", expandable_area_color)
+		print("PuzzlePieceManager: Debug - expandable_top_pos (relativa): ", expandable_top_pos, ", expandable_top_size: ", expandable_top_size)
 	
 	# 3. Si hay expansión disponible hacia abajo, mostrar área expandible inferior
 	if remaining_expansion_bottom > 0:
-		var expandable_bottom_pos = offset + Vector2(0, original_area_top_y + original_area_size.y)
+		var expandable_bottom_pos = Vector2(0, original_area_top_y + original_area_size.y)
 		var expandable_bottom_size = Vector2(GLOBAL.columns * cell_size.x, remaining_expansion_bottom * cell_size.y)
-		_create_border_area(expandable_bottom_pos, expandable_bottom_size, "expandable_bottom", expandable_area_color)
-		print("PuzzlePieceManager: Debug - expandable_bottom_pos: ", expandable_bottom_pos, ", expandable_bottom_size: ", expandable_bottom_size)
+		_create_border_area_in_container(expandable_bottom_pos, expandable_bottom_size, "expandable_bottom", expandable_area_color)
+		print("PuzzlePieceManager: Debug - expandable_bottom_pos (relativa): ", expandable_bottom_pos, ", expandable_bottom_size: ", expandable_bottom_size)
 	
 	# 4. Si ya hay filas expandidas actualmente, marcarlas con color diferente
-	if GLOBAL.rows > original_rows:
-		# Áreas ya expandidas (color límite muy sutil)
-		if current_area_pos.y < original_area_pos.y:
-			# Hay expansión hacia arriba
-			var expanded_top_size = Vector2(GLOBAL.columns * cell_size.x, original_area_pos.y - current_area_pos.y)
-			_create_border_area(current_area_pos, expanded_top_size, "expanded_top_area", limit_area_color)
+	if current_rows > original_rows:
+		# Área expandida hacia arriba (si existe)
+		if rows_added_top > 0:
+			var expanded_top_pos = Vector2(0, offset.y)
+			var expanded_top_size = Vector2(GLOBAL.columns * cell_size.x, rows_added_top * cell_size.y)
+			_create_border_area_in_container(expanded_top_pos, expanded_top_size, "expanded_top_area", limit_area_color)
+			print("PuzzlePieceManager: Debug - expanded_top_pos (relativa): ", expanded_top_pos, ", expanded_top_size: ", expanded_top_size)
 		
-		var current_bottom = current_area_pos.y + current_area_size.y
-		var original_bottom = original_area_pos.y + original_area_size.y
-		if current_bottom > original_bottom:
-			# Hay expansión hacia abajo
-			var expanded_bottom_pos = offset + Vector2(0, original_area_top_y + original_area_size.y)
-			var expanded_bottom_size = Vector2(GLOBAL.columns * cell_size.x, current_bottom - original_bottom)
-			_create_border_area(expanded_bottom_pos, expanded_bottom_size, "expanded_bottom_area", limit_area_color)
+		# Área expandida hacia abajo (si existe)
+		if rows_added_bottom > 0:
+			var expanded_bottom_pos = Vector2(0, original_area_top_y + original_area_size.y)
+			var expanded_bottom_size = Vector2(GLOBAL.columns * cell_size.x, rows_added_bottom * cell_size.y)
+			_create_border_area_in_container(expanded_bottom_pos, expanded_bottom_size, "expanded_bottom_area", limit_area_color)
+			print("PuzzlePieceManager: Debug - expanded_bottom_pos (relativa): ", expanded_bottom_pos, ", expanded_bottom_size: ", expanded_bottom_size)
 	
-	print("PuzzlePieceManager: Áreas visuales creadas:")
+	print("PuzzlePieceManager: Áreas visuales creadas en contenedor BackgroundLimits:")
 	print("  - Área original: ", original_area_pos, " tamaño: ", original_area_size)
 	print("  - Expansión restante: arriba=", remaining_expansion_top, " filas, abajo=", remaining_expansion_bottom, " filas")
-	
-	# Debug adicional: comparar con posición de una pieza real
-	if pieces.size() > 0:
-		var first_piece = pieces[0]
-		var piece_position = puzzle_game.get_puzzle_data().offset + first_piece.current_cell * puzzle_game.get_puzzle_data().cell_size
-		print("PuzzlePieceManager: DEBUG COMPARACIÓN - Primera pieza en celda ", first_piece.current_cell, " tiene posición: ", piece_position)
-		print("PuzzlePieceManager: DEBUG COMPARACIÓN - Offset del puzzle: ", offset)
-		print("PuzzlePieceManager: DEBUG COMPARACIÓN - Posición esperada del área original: ", original_area_pos)
+	print("  - Contenedor position: ", background_limits_container.position)
 
-func _create_border_area(position: Vector2, size: Vector2, area_name: String, color: Color):
+func _create_border_area_in_container(position: Vector2, size: Vector2, area_name: String, color: Color):
+	# Crear el área visual
 	var border_area = ColorRect.new()
 	border_area.name = area_name
-	border_area.position = position  # Usar la posición exacta que se pasa (ya incluye offset)
+	border_area.position = position  # Posición relativa al contenedor BackgroundLimits
 	border_area.size = size
 	border_area.color = color
-	border_area.z_index = 0  # Muy detrás de las piezas
+	border_area.z_index = 0  # Heredará el z_index del contenedor
 	border_area.mouse_filter = Control.MOUSE_FILTER_IGNORE  # No interceptar eventos de mouse
 	
-	# Añadir al BackgroundLayer en lugar del contenedor de piezas
-	var background_layer = puzzle_game.get_node("BackgroundLayer")
-	if background_layer:
-		background_layer.add_child(border_area)
-		print("PuzzlePieceManager: Área '", area_name, "' añadida al BackgroundLayer")
-	elif puzzle_game.pieces_container:
-		# Fallback: añadir al contenedor de piezas si no existe BackgroundLayer
-		puzzle_game.pieces_container.add_child(border_area)
-		print("PuzzlePieceManager: Área '", area_name, "' añadida al PiecesContainer (fallback)")
+	# 🔧 CLAVE: Añadir al contenedor BackgroundLimits en lugar de directamente al BackgroundLayer
+	if background_limits_container and is_instance_valid(background_limits_container):
+		background_limits_container.add_child(border_area)
+		border_areas.append(border_area)
+		print("PuzzlePieceManager: Área '", area_name, "' añadida al contenedor BackgroundLimits en posición relativa: ", position)
 	else:
-		puzzle_game.add_child(border_area)
-		print("PuzzlePieceManager: Área '", area_name, "' añadida directamente al juego")
-	
-	border_areas.append(border_area)
-	
-	# Debug: mostrar la posición final del área creada
-	print("PuzzlePieceManager: Área '", area_name, "' creada en posición: ", position, " con tamaño: ", size)
+		print("PuzzlePieceManager: ERROR - Contenedor BackgroundLimits no disponible para área '", area_name, "'")
+
+# 🆕 Nueva función para destruir completamente el contenedor si es necesario
+func destroy_background_limits_container():
+	if background_limits_container and is_instance_valid(background_limits_container):
+		background_limits_container.queue_free()
+		background_limits_container = null
+		border_areas.clear()  # Limpiar la lista ya que todas las áreas se destruirán con el contenedor
+		print("PuzzlePieceManager: Contenedor BackgroundLimits destruido completamente")
 
 func update_visual_borders():
-	# Actualizar los bordes cuando el tablero se expande
+	# 🔧 MEJORADO: Actualizar sin destruir el contenedor
+	print("PuzzlePieceManager: Actualizando límites visuales manteniendo contenedor")
+	
+	# Solo limpiar las áreas, no el contenedor
 	clear_visual_borders()
-	create_visual_borders()
+	
+	# Recrear las áreas con los nuevos datos
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	var cell_size = puzzle_data.cell_size
+	var offset = puzzle_data.offset
+	
+	# Asegurar que el contenedor esté centrado correctamente
+	_ensure_background_limits_container()
+	
+	# Crear las nuevas áreas
+	_create_expandable_area_borders(offset, cell_size)
 
 func toggle_visual_borders(visible: bool):
-	for border_area in border_areas:
-		if is_instance_valid(border_area):
-			border_area.visible = visible
+	# Alternar visibilidad de todo el contenedor
+	if background_limits_container and is_instance_valid(background_limits_container):
+		background_limits_container.visible = visible
+		print("PuzzlePieceManager: Límites visuales ", "mostrados" if visible else "ocultados")
+	else:
+		print("PuzzlePieceManager: No hay contenedor de límites para alternar visibilidad")
 
 func show_expansion_hint(direction: String):
 	# Mostrar un mensaje temporalmente sobre la posibilidad de expansión
@@ -2066,7 +2112,23 @@ func show_expansion_hint(direction: String):
 			message = "→ Límite lateral fijo"
 	
 	if message != "":
-		puzzle_game.show_success_message(message, 1.0) 
+		puzzle_game.show_success_message(message, 1.0)
+
+# 🆕 Función para obtener información del estado actual de límites visuales
+func get_visual_borders_info() -> Dictionary:
+	return {
+		"container_exists": background_limits_container != null and is_instance_valid(background_limits_container),
+		"container_position": background_limits_container.position if background_limits_container else Vector2.ZERO,
+		"areas_count": border_areas.size(),
+		"container_visible": background_limits_container.visible if background_limits_container else false
+	}
+
+# 🆕 Función para reinicializar completamente el sistema de límites visuales si es necesario
+func reinitialize_visual_borders():
+	print("PuzzlePieceManager: Reinicializando sistema de límites visuales...")
+	destroy_background_limits_container()
+	create_visual_borders()
+	print("PuzzlePieceManager: Sistema de límites visuales reinicializado completamente")
 
 # Función de diagnóstico para verificar el posicionamiento de las piezas
 func _verify_piece_positioning():

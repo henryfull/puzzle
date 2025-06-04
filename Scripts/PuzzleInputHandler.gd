@@ -14,7 +14,7 @@ var double_tap_threshold: float = 0.3  # Tiempo en segundos para considerar un d
 var last_touch_position: Vector2 = Vector2.ZERO
 var double_tap_distance_threshold: float = 50.0  # Distancia máxima para considerar un doble tap
 
-# Variables para gestionar el triple toque (mostrar límites)
+# Variables para gestionar el triple toque (reorganizar piezas)
 var touch_count: int = 0
 var last_triple_tap_time: float = 0.0
 var triple_tap_threshold: float = 0.5  # Tiempo para considerar un triple tap
@@ -113,13 +113,15 @@ func _handle_screen_touch(event: InputEventScreenTouch):
 		
 		# Procesar según el número de toques
 		if touch_count == 2:
-			# Es un doble tap, reorganizar las piezas que están fuera del área del puzzle
-			piece_manager.reorganize_pieces()
-		elif touch_count == 3:
-			# Es un triple tap, centrar el puzzle
-			print("PuzzleInputHandler: Triple tap detectado - Centrando puzzle...")
+			# Es un doble tap, centrar el puzzle
+			print("PuzzleInputHandler: Doble tap detectado - Centrando puzzle...")
 			puzzle_game.force_complete_recenter()
-			puzzle_game.show_success_message("🎯 Puzzle centrado con triple tap", 2.0)
+			puzzle_game.show_success_message("🎯 Puzzle centrado con doble tap", 2.0)
+		elif touch_count == 3:
+			# Es un triple tap, reorganizar las piezas que están fuera del área del puzzle
+			print("PuzzleInputHandler: Triple tap detectado - Reorganizando piezas...")
+			piece_manager.reorganize_pieces()
+			puzzle_game.show_success_message("🔄 Piezas reorganizadas con triple tap", 2.0)
 			# Reiniciar contador después del triple tap
 			touch_count = 0
 	
@@ -206,8 +208,8 @@ func _handle_mouse_button(event: InputEventMouseButton):
 			is_panning = false
 	
 	# Manejo de doble clic para reorganizar piezas que están fuera del área del puzzle
-	elif event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
-		piece_manager.reorganize_pieces()
+	# elif event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
+	# 	piece_manager.reorganize_pieces()
 	
 	# Manejo de click izquierdo para las piezas
 	elif event.button_index == MOUSE_BUTTON_LEFT:

@@ -204,6 +204,8 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_40j3j")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_7khmq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_r2a0d")
 
+[node name="BackgroundLimits" type="Node2D" parent="."]
+
 [node name="PiecesContainer" type="Node2D" parent="."]
 z_index = 5
 y_sort_enabled = true

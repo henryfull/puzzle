@@ -131,7 +131,7 @@ func _ready():
 	_connect_center_button()
 	
 	# PASO 2: Esperar un momento adicional para asegurar que todo esté completamente listo
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.15).timeout
 	
 	# PASO 3: Ocultar y eliminar el loading puzzle
 	_hide_loading_puzzle()
@@ -469,7 +469,7 @@ func _show_centering_welcome_message():
 	await get_tree().create_timer(1.5).timeout
 	
 	if is_mobile:
-		show_success_message("💡 Triple tap o botón 🎯 para centrar puzzle", 3.0)
+		show_success_message("💡 Doble tap o botón 🎯 para centrar puzzle", 3.0)
 	else:
 		show_success_message("💡 Presiona 'C' para centrar puzzle 🎯", 3.0)
 
@@ -524,7 +524,7 @@ func _hide_loading_puzzle():
 		else:
 			print("PuzzleGame: Método fade_out no encontrado, eliminando directamente")
 			# Pequeña pausa para simular transición
-			await get_tree().create_timer(0.3).timeout
+			await get_tree().create_timer(1.5).timeout
 		
 		# Asegurar que la instancia se elimine
 		if is_instance_valid(loading_puzzle_instance):
