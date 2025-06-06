@@ -53,19 +53,17 @@ func _on_scene_changed():
 
 # Esta función se llama cuando el sistema operativo intenta cerrar la app
 func _notification(what):
-	# 🚫 CRÍTICO: Si estamos en el puzzle, IGNORAR COMPLETAMENTE todas las notificaciones del sistema
-	if is_in_puzzle_game:
-		print("BackGestureHandler: En puzzle - Ignorando notificación del sistema: ", what)
-		# Marcar como manejado para que el sistema no haga nada
-		get_viewport().set_input_as_handled()
-		return
-	
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		print("Solicitud de cierre de ventana detectada")
 		_on_close_requested()
 	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		# Solo en Android, cuando se pulsa el botón atrás físico
 		print("Solicitud de botón atrás detectada")
+		# Si estamos en el puzzle, IGNORAR el gesto del botón atrás físico
+		if is_in_puzzle_game:
+			print("BackGestureHandler: En puzzle - Ignorando botón atrás físico")
+			get_viewport().set_input_as_handled()
+			return
 		_handle_back_gesture()
 	elif what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		print("Aplicación perdió el foco")
@@ -83,15 +81,17 @@ func _process(_delta):
 
 # Cuando se recibe una solicitud de cierre de la aplicación
 func _on_close_requested():
-	# 🚫 CRÍTICO: Si estamos en el puzzle, IGNORAR completamente la solicitud de cierre
-	if is_in_puzzle_game:
-		print("BackGestureHandler: En puzzle - Ignorando solicitud de cierre")
-		get_viewport().set_input_as_handled()
-		return
-	
 	print("Interceptada solicitud de cierre")
-	show_exit_dialog()
-	# Bloquear el cierre automático
+	
+	# Si estamos en el puzzle, mostrar un diálogo especial de confirmación
+	if is_in_puzzle_game:
+		print("BackGestureHandler: En puzzle - Mostrando diálogo de confirmación de cierre")
+		_show_puzzle_exit_confirmation()
+	else:
+		# En otras escenas, usar el diálogo normal
+		show_exit_dialog()
+	
+	# Bloquear el cierre automático para permitir la confirmación
 	get_viewport().set_input_as_handled()
 
 func _input(event):
@@ -230,19 +230,27 @@ func show_exit_dialog():
 
 # Eliminar diálogos existentes para evitar duplicados
 func _remove_existing_dialogs():
-	# 🚫 CRÍTICO: Si estamos en el puzzle, eliminar TODOS los diálogos sin preguntar
+	# Si estamos en el puzzle, solo eliminar diálogos que NO sean nuestro diálogo especial
 	if is_in_puzzle_game:
-		print("BackGestureHandler: En puzzle - Eliminando TODOS los diálogos automáticamente")
+		print("BackGestureHandler: En puzzle - Eliminando diálogos excepto el de confirmación de cierre")
 		var current_scene = get_tree().current_scene
 		if current_scene:
 			for child in current_scene.get_children():
+				# NO eliminar nuestro diálogo especial de confirmación de cierre
+				if child == active_dialog and child is AcceptDialog:
+					continue
+				
 				if child.is_in_group("exit_dialog") or child.name.contains("Dialog") or child.name.contains("Confirm"):
 					print("BackGestureHandler: Eliminando diálogo forzosamente: ", child.name)
 					child.queue_free()
-		active_dialog = null
+		
+		# Solo limpiar active_dialog si NO es nuestro diálogo especial
+		if active_dialog != null and is_instance_valid(active_dialog):
+			if not (active_dialog is AcceptDialog):
+				active_dialog = null
 		return
 	
-	# Limpiar diálogos en la escena actual
+	# Limpiar diálogos en la escena actual (fuera del puzzle)
 	var current_scene = get_tree().current_scene
 	if current_scene:
 		for child in current_scene.get_children():
@@ -285,6 +293,7 @@ func _on_exit_canceled():
 	_remove_existing_dialogs()
 	
 # 🚫 FUNCIÓN CRÍTICA: Eliminar cualquier diálogo que aparezca durante el puzzle
+# EXCEPTO el diálogo especial de confirmación de cierre
 func _force_remove_all_dialogs_during_puzzle():
 	var current_scene = get_tree().current_scene
 	if not current_scene:
@@ -295,6 +304,10 @@ func _force_remove_all_dialogs_during_puzzle():
 	
 	# Buscar y eliminar cualquier nodo que pueda ser un diálogo
 	for child in current_scene.get_children():
+		# NO eliminar nuestro diálogo especial de confirmación de cierre
+		if child == active_dialog and child is AcceptDialog:
+			continue
+		
 		# Verificar si es un diálogo por nombre
 		var is_dialog = false
 		for keyword in dialog_keywords:
@@ -319,11 +332,11 @@ func _force_remove_all_dialogs_during_puzzle():
 			print("BackGestureHandler: Eliminando diálogo durante puzzle: ", child.name)
 			child.queue_free()
 	
-	# Limpiar referencia al diálogo activo
-	if active_dialog != null:
-		if is_instance_valid(active_dialog):
+	# NO limpiar la referencia al diálogo activo si es nuestro diálogo especial
+	if active_dialog != null and is_instance_valid(active_dialog):
+		if not (active_dialog is AcceptDialog):
 			active_dialog.queue_free()
-		active_dialog = null
+			active_dialog = null
 
 # 🚫 NUEVO: Función para crear diálogo con interceptor
 func _create_exit_dialog():
@@ -335,4 +348,61 @@ func _create_exit_dialog():
 	# Solo crear si no estamos en puzzle
 	return confirm_dialog_scene.instantiate()
 
+# Función especial para mostrar confirmación de cierre durante el puzzle
+func _show_puzzle_exit_confirmation():
+	print("BackGestureHandler: Mostrando diálogo de confirmación especial para puzzle")
 	
+	# Crear un diálogo simple usando el sistema de alertas de Godot
+	var dialog_text = "¿Quieres cerrar el juego?\n\nTu progreso en el puzzle actual se perderá."
+	
+	# Crear un diálogo personalizado que NO será eliminado por el sistema anti-diálogos
+	var puzzle_exit_dialog = AcceptDialog.new()
+	puzzle_exit_dialog.set_title("Cerrar juego")
+	puzzle_exit_dialog.set_text(dialog_text)
+	puzzle_exit_dialog.add_button("Salir", true, "exit")
+	puzzle_exit_dialog.add_button("Cancelar", false, "cancel")
+	
+	# Configurar el diálogo para que esté por encima de todo
+	puzzle_exit_dialog.set_process_mode(Node.PROCESS_MODE_ALWAYS)
+	puzzle_exit_dialog.set_flag(Window.FLAG_ALWAYS_ON_TOP, true)
+	
+	# Conectar las señales
+	puzzle_exit_dialog.confirmed.connect(_on_puzzle_exit_confirmed)
+	puzzle_exit_dialog.canceled.connect(_on_puzzle_exit_canceled)
+	puzzle_exit_dialog.custom_action.connect(_on_puzzle_exit_custom_action)
+	
+	# Añadir el diálogo a la escena del puzzle
+	var current_scene = get_tree().current_scene
+	if current_scene:
+		current_scene.add_child(puzzle_exit_dialog)
+		puzzle_exit_dialog.popup_centered()
+		
+		# Guardar referencia para poder limpiarlo después
+		active_dialog = puzzle_exit_dialog
+		
+		print("BackGestureHandler: Diálogo de confirmación de puzzle mostrado")
+
+# Callback cuando se confirma salir del puzzle
+func _on_puzzle_exit_confirmed():
+	print("BackGestureHandler: Confirmado cierre del juego desde puzzle")
+	_cleanup_puzzle_dialog()
+	get_tree().quit()
+
+# Callback cuando se cancela salir del puzzle
+func _on_puzzle_exit_canceled():
+	print("BackGestureHandler: Cancelado cierre del juego desde puzzle")
+	_cleanup_puzzle_dialog()
+
+# Callback para acciones personalizadas del diálogo
+func _on_puzzle_exit_custom_action(action):
+	print("BackGestureHandler: Acción personalizada en diálogo de puzzle: ", action)
+	if action == "exit":
+		_on_puzzle_exit_confirmed()
+	elif action == "cancel":
+		_on_puzzle_exit_canceled()
+
+# Limpiar el diálogo del puzzle
+func _cleanup_puzzle_dialog():
+	if active_dialog != null and is_instance_valid(active_dialog):
+		active_dialog.queue_free()
+		active_dialog = null

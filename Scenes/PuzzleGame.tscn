@@ -139,7 +139,6 @@ wait_time = 5.0
 layer = -1
 
 [node name="TextureRect" type="TextureRect" parent="BackgroundLayer"]
-visible = false
 z_index = -1
 anchors_preset = 15
 anchor_right = 1.0
@@ -165,7 +164,7 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
 mouse_filter = 2
-color = Color(0.0794423, 0.0791788, 0.0744599, 1)
+color = Color(0.468252, 0.467392, 0.451786, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="ButtonHideHUD" type="Button" parent="BackgroundLayer"]
@@ -213,6 +212,7 @@ y_sort_enabled = true
 [node name="UILayer" type="CanvasLayer" parent="."]
 
 [node name="MarginContainer" type="MarginContainer" parent="UILayer"]
+visible = false
 show_behind_parent = true
 custom_minimum_size = Vector2(0, 120)
 anchors_preset = 12
@@ -226,6 +226,7 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="ColorRect" type="ColorRect" parent="UILayer/MarginContainer"]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.109804)

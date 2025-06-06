@@ -67,13 +67,14 @@ func _make_completely_invisible():
 	# Hacer invisible el CanvasLayer también
 	if has_node("CanvasLayer"):
 		$CanvasLayer.visible = false
-		$CanvasLayer.modulate.a = 0
+		# Los CanvasLayer no tienen modulate, solo se puede hacer invisible
 		
 		# Hacer invisibles todos los hijos también
 		for child in $CanvasLayer.get_children():
 			if child != null:
 				child.visible = false
-				child.modulate.a = 0
+				if child.has_method("set_modulate"):
+					child.modulate.a = 0
 
 # 🚫 FUNCIÓN CRÍTICA: Auto-destruirse inmediatamente
 func _self_destruct_immediately():

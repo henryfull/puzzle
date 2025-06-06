@@ -78,10 +78,10 @@ func start_tetris_puzzle():
 		debug_label.text = "ERROR: No se pudo cargar imagen"
 		return
 	
-	# Calcular tamaños
+	# Calcular tamaños con precisión de punto flotante
 	var image_size = target_texture.get_size()
-	piece_width = image_size.x / cols
-	piece_height = image_size.y / rows
+	piece_width = float(image_size.x) / float(cols)
+	piece_height = float(image_size.y) / float(rows)
 	
 	# Crear datos de todas las piezas (sin crearlas aún)
 	create_pieces_queue()
@@ -111,16 +111,24 @@ func create_pieces_queue():
 	count_label.text = "Piezas: " + str(all_pieces_data.size()) + " (orden aleatorio)"
 
 func create_piece_texture(col: int, row: int) -> Texture2D:
-	# Crear la textura de la pieza
+	# Crear la textura de la pieza con cálculos más precisos
 	var image = target_texture.get_image()
-	var piece_image = Image.create(int(piece_width), int(piece_height), false, Image.FORMAT_RGB8)
+	var image_size = image.get_size()
 	
-	var src_rect = Rect2i(
-		col * int(piece_width),
-		row * int(piece_height),
-		int(piece_width),
-		int(piece_height)
-	)
+	# Calcular el tamaño exacto de cada pieza usando flotantes
+	var exact_piece_width = float(image_size.x) / float(cols)
+	var exact_piece_height = float(image_size.y) / float(rows)
+	
+	# Calcular las coordenadas exactas de recorte
+	var src_x = int(col * exact_piece_width)
+	var src_y = int(row * exact_piece_height)
+	var src_width = int((col + 1) * exact_piece_width) - src_x
+	var src_height = int((row + 1) * exact_piece_height) - src_y
+	
+	# Crear la imagen de la pieza con el tamaño exacto calculado
+	var piece_image = Image.create(src_width, src_height, false, Image.FORMAT_RGB8)
+	
+	var src_rect = Rect2i(src_x, src_y, src_width, src_height)
 	
 	piece_image.blit_rect(image, src_rect, Vector2i.ZERO)
 	var piece_texture = ImageTexture.new()
@@ -129,20 +137,22 @@ func create_piece_texture(col: int, row: int) -> Texture2D:
 	return piece_texture
 
 func calculate_final_position(col: int, row: int) -> Vector2:
-	var scaled_width = piece_width * piece_scale
-	var scaled_height = piece_height * piece_scale
+	# Usar el tamaño escalado para el espaciado
+	# para que las piezas queden perfectamente juntas
+	var spacing_width = piece_width * piece_scale
+	var spacing_height = piece_height * piece_scale
 	
-	# Calcular el tamaño total del puzzle
-	var total_puzzle_width = cols * scaled_width
-	var total_puzzle_height = rows * scaled_height
+	# Calcular el tamaño total del puzzle usando el espaciado escalado
+	var total_puzzle_width = cols * spacing_width
+	var total_puzzle_height = rows * spacing_height
 	
 	# Centrar el puzzle perfectamente en la pantalla
 	var puzzle_start_x = (screen_size.x - total_puzzle_width) / 2
 	var puzzle_start_y = (screen_size.y - total_puzzle_height) / 2
 	
-	# Calcular la posición específica de esta pieza
-	var final_x = puzzle_start_x + (col * scaled_width) + (scaled_width / 2)
-	var final_y = puzzle_start_y + (row * scaled_height) + (scaled_height / 2)
+	# Calcular la posición específica de esta pieza usando el espaciado escalado
+	var final_x = puzzle_start_x + (col * spacing_width) + (spacing_width / 2)
+	var final_y = puzzle_start_y + (row * spacing_height) + (spacing_height / 2)
 	
 	return Vector2(final_x, final_y)
 
