@@ -68,6 +68,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/TextureRect"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,7 +84,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.107019, 0.294547, 0.529009, 1)
+color = Color(1, 0.968627, 0.0392157, 0.184314)
 
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
 visible = false

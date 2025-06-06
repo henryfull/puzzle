@@ -402,6 +402,24 @@ func get_current_game_state_for_victory() -> Dictionary:
 func restart_puzzle():
 	print("PuzzleGameStateManager: Reiniciando puzzle con dificultad original " + str(puzzle_game.default_columns) + "x" + str(puzzle_game.default_rows))
 	
+	# 🔧 CRÍTICO: Limpiar completamente el estado guardado para forzar posiciones aleatorias nuevas
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager:
+		print("PuzzleGameStateManager: Limpiando estado guardado para generar posiciones aleatorias nuevas")
+		puzzle_state_manager.clear_all_state()
+	
+	# Resetear contadores del juego a cero
+	total_moves = 0
+	elapsed_time = 0.0
+	flip_count = 0
+	flip_move_count = 0
+	is_flip = false
+	
+	# Resetear timers si existen
+	if timer_countdown:
+		timer_countdown.stop()
+	stop_game_timer()
+	
 	# Mostrar un mensaje al usuario
 	puzzle_game.show_success_message("Reiniciando puzzle " + str(puzzle_game.default_columns) + "x" + str(puzzle_game.default_rows))
 	
@@ -418,13 +436,34 @@ func restart_puzzle():
 	puzzle_game.piece_manager.grid.clear()
 	puzzle_game.piece_manager.pieces.clear()
 	
-	# IMPORTANTE: El tamaño se reiniciará automáticamente en load_and_create_pieces()
-	# No es necesario tocar variables aquí
+	# 🔧 IMPORTANTE: Resetear también variables de expansión para empezar desde cero
+	puzzle_game.piece_manager.extra_rows_added = 0
+	puzzle_game.piece_manager.rows_added_top = 0
+	puzzle_game.piece_manager.current_rows = puzzle_game.default_rows
+	puzzle_game.piece_manager.current_columns = puzzle_game.default_columns
 	
-	# Reiniciar el puzzle con la nueva dificultad
+	# Reiniciar el puzzle con posiciones completamente aleatorias nuevas
 	var puzzle_back = await puzzle_game.ui_manager.generate_back_texture_from_viewport(puzzle_game.viewport_scene_path)
 	if puzzle_back:
 		puzzle_game.piece_manager.load_and_create_pieces(puzzle_game.image_path, puzzle_back)
+		
+		# Inicializar nuevo estado después de crear las piezas
+		if puzzle_state_manager:
+			puzzle_state_manager.start_new_puzzle_state(
+				puzzle_game.current_pack_id,
+				puzzle_game.current_puzzle_id,
+				GLOBAL.gamemode,
+				GLOBAL.current_difficult
+			)
+		
+		# Reiniciar timers de juego si es necesario
+		setup_game_mode()
+		
+		# Actualizar UI con contadores en cero
+		if puzzle_game.movesLabel:
+			puzzle_game.movesLabel.text = "0"
+		
+		print("PuzzleGameStateManager: Puzzle reiniciado completamente con posiciones aleatorias nuevas")
 	else:
 		# Si falla la generación de la textura trasera, recargamos la escena
 		print("PuzzleGameStateManager: Error al generar textura trasera, recargando escena...")

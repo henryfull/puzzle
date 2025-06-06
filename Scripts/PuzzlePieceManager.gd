@@ -25,6 +25,11 @@ var use_tween_effect: bool = true  # Activar/desactivar el efecto
 var tween_duration: float = 0.3  # Duración de la animación Tween
 var flip_speed: float = 0.01  # Velocidad de la animación de flip
 
+# Configuración del efecto dorado - NUEVO SISTEMA DE FUSIÓN VISUAL
+var golden_effect_enabled: bool = true  # Activar/desactivar efecto dorado al formar grupos
+var golden_color: Color = Color(1.3, 1.2, 0.6, 1.0)  # Color dorado sutil (menos intenso)
+var golden_glow_duration: float = 0.7  # Duración total del efecto de brillo (en segundos) - más sutil
+
 # 🎯 CONFIGURACIÓN DE CENTRADO AUTOMÁTICO - AJUSTABLE PARA PRUEBAS
 # Incrementa este valor si el puzzle sigue apareciendo mal centrado al cargar
 var auto_center_delay: float = 1.5  # Retraso en segundos antes del centrado automático
@@ -88,6 +93,13 @@ func load_user_preferences() -> void:
 			# Cargar duración del efecto tween
 			if "tween_duration" in global.settings.puzzle:
 				tween_duration = global.settings.puzzle.tween_duration
+			
+			# Cargar configuración del efecto dorado
+			if "golden_effect_enabled" in global.settings.puzzle:
+				golden_effect_enabled = global.settings.puzzle.golden_effect_enabled
+			
+			if "golden_glow_duration" in global.settings.puzzle:
+				golden_glow_duration = global.settings.puzzle.golden_glow_duration
 
 # 🎯 FUNCIÓN PARA AJUSTAR EL RETRASO DEL CENTRADO AUTOMÁTICO
 func set_auto_center_delay(new_delay: float):
@@ -349,7 +361,7 @@ func get_cell_of_piece(piece_obj: Piece) -> Vector2:
 	
 	return Vector2(cx, cy)
 
-# Función para aplicar el efecto de Tween
+# Función para aplicar el efecto de Tween (solo movimiento, sin efecto dorado)
 func apply_tween_effect(node: Node2D, target_position: Vector2):
 	# Crear un nuevo Tween
 	var tween = puzzle_game.create_tween()
@@ -358,11 +370,14 @@ func apply_tween_effect(node: Node2D, target_position: Vector2):
 	
 	# Animar la posición
 	tween.tween_property(node, "position", target_position, tween_duration)
+
+# Función específica para movimiento con efecto dorado (solo para fusiones)
+func apply_tween_effect_with_golden_glow(node: Node2D, target_position: Vector2):
+	# Aplicar el movimiento normal
+	apply_tween_effect(node, target_position)
 	
-	# Opcionalmente, añadir un efecto de escala para dar sensación de "rebote"
-	var original_scale = node.scale
-	tween.parallel().tween_property(node, "scale", original_scale * 1.1, tween_duration * 0.5)
-	tween.tween_property(node, "scale", original_scale, tween_duration * 0.5)
+	# Aplicar el efecto dorado solo para fusiones
+	_apply_golden_glow_effect(node)
 
 func find_adjacent_pieces(piece: Piece, cell: Vector2) -> Array:
 	var adjacent = []
@@ -529,6 +544,9 @@ func merge_pieces(piece1: Piece, piece2: Piece):
 	_handle_merge_pieces(piece1, piece2)
 
 func place_group(piece: Piece):
+	# 🔧 CRÍTICO: Verificar y limpiar superposiciones antes de cualquier colocación
+	_ensure_no_overlapping_pieces_in_grid()
+	
 	_handle_place_group(piece)
 
 func check_all_groups() -> void:
@@ -582,10 +600,18 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 	# Generar un ID único para el grupo basado en la primera pieza
 	var group_id = piece1.node.get_instance_id()
 	
-	# Actualizar el grupo en todas las piezas
+	print("PuzzlePieceManager: Fusionando grupos - Tamaño final: ", new_group.size(), " piezas")
+	
+	# NUEVO: Limpiar todas las posiciones del grid primero para evitar conflictos
 	for p in new_group:
-		p.group = new_group
-		# Asegurar que la posición es correcta
+		remove_piece_at(p.current_cell)
+	
+	# NUEVO: Crear mapa de posiciones objetivo para evitar superposiciones
+	var target_positions = {}
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	
+	# Calcular posiciones objetivo para todas las piezas sin colocarlas aún
+	for p in new_group:
 		var offset = p.original_pos - piece1.original_pos
 		var target_cell = piece1.current_cell + offset
 		
@@ -600,19 +626,34 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 				target_cell.y = 0
 				break
 			local_rows_added += 1
-			target_cell.y = original_y + local_rows_added  # Ajustar correctamente después de la expansión
+			target_cell.y = original_y + local_rows_added
 		
 		# Expandir hacia abajo si es necesario
 		if target_cell.y >= current_rows:
 			if not add_extra_row():
 				target_cell.y = current_rows - 1
 		
-		# Actualizar la posición de la pieza
-		remove_piece_at(p.current_cell)
+		# Verificar si ya hay una pieza del grupo en esta posición
+		if target_cell in target_positions:
+			print("PuzzlePieceManager: ¡ERROR! - Dos piezas intentando ocupar la misma celda: ", target_cell)
+			# En caso de conflicto, buscar la celda libre más cercana
+			target_cell = _find_nearest_free_cell(target_cell, target_positions.keys())
+			print("PuzzlePieceManager: Reubicando pieza en conflicto a: ", target_cell)
+		
+		target_positions[target_cell] = p
+		print("PuzzlePieceManager: Pieza ", p.order_number, " asignada a celda ", target_cell)
+	
+	# Ahora colocar todas las piezas en sus posiciones finales
+	for target_cell in target_positions.keys():
+		var p = target_positions[target_cell]
+		
+		# Actualizar el grupo en la pieza
+		p.group = new_group
+		
+		# Colocar en el grid
 		set_piece_at(target_cell, p)
 		
-		# Calcular posición objetivo y aplicar Tween
-		var puzzle_data = puzzle_game.get_puzzle_data()
+		# Calcular posición visual objetivo
 		var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
 		
 		# Actualizar el estado de la pieza
@@ -626,8 +667,9 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 		if p.node.has_method("update_pieces_group"):
 			p.node.update_pieces_group(new_group)
 		
+		# Aplicar animación (con efecto dorado)
 		if use_tween_effect:
-			apply_tween_effect(p.node, target_position)
+			apply_tween_effect_with_golden_glow(p.node, target_position)
 		else:
 			p.node.position = target_position
 	
@@ -1920,6 +1962,142 @@ func _update_edge_pieces_in_group(group: Array):
 		if piece.node.has_method("update_visual_effects"):
 			piece.node.update_visual_effects() 
 
+# === FUNCIÓN AUXILIAR PARA EVITAR SUPERPOSICIONES ===
+
+# Función para encontrar la celda libre más cercana a una posición objetivo
+func _find_nearest_free_cell(target_cell: Vector2, occupied_cells: Array) -> Vector2:
+	# Comenzar con la posición objetivo
+	var best_cell = target_cell
+	var min_distance = INF
+	
+	# Buscar en un radio creciente alrededor de la posición objetivo
+	for radius in range(1, max(current_rows, current_columns)):
+		for dx in range(-radius, radius + 1):
+			for dy in range(-radius, radius + 1):
+				# Solo considerar las celdas del borde del radio actual
+				if abs(dx) != radius and abs(dy) != radius:
+					continue
+				
+				var test_cell = target_cell + Vector2(dx, dy)
+				
+				# Verificar que esté dentro de los límites
+				if test_cell.x < 0 or test_cell.x >= current_columns:
+					continue
+				if test_cell.y < 0 or test_cell.y >= current_rows:
+					continue
+				
+				# Verificar que no esté ocupada por otra pieza del grupo
+				if test_cell in occupied_cells:
+					continue
+				
+				# Verificar que no esté ocupada por otras piezas en el grid
+				if get_piece_at(test_cell) != null:
+					continue
+				
+				# Esta celda está libre, calcular distancia
+				var distance = test_cell.distance_to(target_cell)
+				if distance < min_distance:
+					min_distance = distance
+					best_cell = test_cell
+		
+		# Si encontramos una celda libre, usarla
+		if min_distance < INF:
+			break
+	
+	return best_cell
+
+# === FUNCIÓN PARA EFECTO DE BRILLO DORADO ===
+
+# Función para aplicar un efecto de brillo dorado que se desvanece gradualmente
+func _apply_golden_glow_effect(node: Node2D):
+	# Verificar si el efecto dorado está activado
+	if not golden_effect_enabled:
+		return
+	
+	print("PuzzlePieceManager: Aplicando efecto de brillo dorado en formación de grupo")
+	
+	# Obtener el sprite de la pieza
+	var sprite = null
+	if node.has_method("get_sprite"):
+		sprite = node.get_sprite()
+	elif node.has_node("Sprite2D"):
+		sprite = node.get_node("Sprite2D")
+	elif node.get_child_count() > 0:
+		# Buscar un Sprite2D entre los hijos
+		for child in node.get_children():
+			if child is Sprite2D:
+				sprite = child
+				break
+	
+	if sprite == null:
+		print("PuzzlePieceManager: No se pudo encontrar sprite para aplicar efecto dorado")
+		return
+	
+	# Guardar el color original
+	var original_modulate = sprite.modulate
+	
+	# Crear el efecto de brillo dorado usando la API correcta de Godot 4
+	var tween = puzzle_game.create_tween()
+	
+	# Calcular duraciones proporcionales basadas en golden_glow_duration
+	var flash_duration = golden_glow_duration * 0.20   # 20% para el flash inicial (más rápido)
+	var hold_duration = golden_glow_duration * 0.05    # 5% para mantener el brillo (muy breve)
+	var fade_duration = golden_glow_duration * 0.75    # 75% para el desvanecimiento (más suave)
+	
+	# FASE 1: Aplicar brillo dorado inmediatamente
+	tween.tween_property(sprite, "modulate", golden_color, flash_duration)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUART)
+	
+	# FASE 2: Mantener el brillo por un momento (usando tween_interval)
+	tween.tween_interval(hold_duration)
+	
+	# FASE 3: Desvanecer gradualmente de vuelta al color original
+	tween.tween_property(sprite, "modulate", original_modulate, fade_duration)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_SINE)
+	
+	# El sonido se reproduce desde _handle_merge_pieces para evitar duplicación
+
+# === FUNCIONES DE CONFIGURACIÓN DEL EFECTO DORADO ===
+
+# Función para personalizar el color del efecto (dorado, plateado, azul, etc.)
+func set_glow_effect_color(new_color: Color):
+	golden_color = new_color
+	print("PuzzlePieceManager: Color del efecto de fusión cambiado a: ", new_color)
+
+# Función para cambiar la duración del efecto
+func set_glow_effect_duration(new_duration: float):
+	golden_glow_duration = clamp(new_duration, 0.5, 3.0)  # Entre 0.5 y 3 segundos
+	print("PuzzlePieceManager: Duración del efecto de fusión cambiada a: ", golden_glow_duration, " segundos")
+
+# Función para activar/desactivar el efecto
+func set_glow_effect_enabled(enabled: bool):
+	golden_effect_enabled = enabled
+	print("PuzzlePieceManager: Efecto de brillo de fusión ", "activado" if enabled else "desactivado")
+
+# Función para obtener colores predefinidos interesantes
+func get_preset_glow_colors() -> Dictionary:
+	return {
+		"dorado": Color(1.8, 1.5, 0.3, 1.0),      # Dorado clásico
+		"plateado": Color(1.5, 1.5, 1.8, 1.0),    # Plateado/azul claro
+		"esmeralda": Color(0.3, 1.8, 0.8, 1.0),   # Verde esmeralda
+		"ruby": Color(1.8, 0.3, 0.5, 1.0),        # Rojo rubí
+		"amatista": Color(1.5, 0.3, 1.8, 1.0),    # Púrpura amatista
+		"cobre": Color(1.8, 0.8, 0.3, 1.0),       # Cobre/naranja
+		"zafiro": Color(0.3, 0.8, 1.8, 1.0),      # Azul zafiro
+		"perla": Color(1.6, 1.6, 1.6, 1.0)        # Blanco perla
+	}
+
+# Función para aplicar un color predefinido
+func set_preset_glow_color(preset_name: String):
+	var presets = get_preset_glow_colors()
+	if preset_name in presets:
+		set_glow_effect_color(presets[preset_name])
+		print("PuzzlePieceManager: Aplicado color predefinido '", preset_name, "'")
+	else:
+		print("PuzzlePieceManager: Color predefinido '", preset_name, "' no encontrado. Disponibles: ", presets.keys())
+
 # === FUNCIONES PARA LÍMITES VISUALES ===
 
 func create_visual_borders():
@@ -2346,3 +2524,83 @@ func _ensure_sprite_centered(piece_node: Node2D):
 			collision.position = Vector2.ZERO
 			# Mantener solo un scale razonable
 			collision.scale = Vector2.ONE
+
+# === FUNCIÓN CRÍTICA PARA EVITAR SUPERPOSICIONES ===
+
+# Función para asegurar que no hay piezas superpuestas en el grid
+func _ensure_no_overlapping_pieces_in_grid():
+	var grid_verify = {}
+	var duplicates_found = []
+	
+	# Primera pasada: detectar todas las superposiciones
+	for piece_obj in pieces:
+		var cell = piece_obj.current_cell
+		if cell in grid_verify:
+			# Hay superposición
+			var existing_piece = grid_verify[cell]
+			duplicates_found.append({
+				"cell": cell,
+				"pieces": [existing_piece, piece_obj]
+			})
+			print("PuzzlePieceManager: ⚠️ SUPERPOSICIÓN detectada en celda ", cell, " entre piezas ", existing_piece.order_number, " y ", piece_obj.order_number)
+		else:
+			grid_verify[cell] = piece_obj
+	
+	# Segunda pasada: resolver superposiciones
+	for duplicate_data in duplicates_found:
+		var overlapping_pieces = duplicate_data.pieces
+		var original_cell = duplicate_data.cell
+		
+		# Mantener la primera pieza en su lugar, reubicar las demás
+		for i in range(1, overlapping_pieces.size()):
+			var piece_to_move = overlapping_pieces[i]
+			
+			# Encontrar la celda libre más cercana
+			var new_cell = _find_truly_free_cell_near(original_cell)
+			if new_cell != original_cell:
+				print("PuzzlePieceManager: 🔧 Reubicando pieza superpuesta ", piece_to_move.order_number, " de ", original_cell, " a ", new_cell)
+				
+				# Actualizar grid interno
+				remove_piece_at(piece_to_move.current_cell)
+				piece_to_move.current_cell = new_cell
+				set_piece_at(new_cell, piece_to_move)
+				
+				# Actualizar posición visual
+				var puzzle_data = puzzle_game.get_puzzle_data()
+				var target_position = puzzle_data.offset + new_cell * puzzle_data.cell_size
+				piece_to_move.node.position = target_position
+				
+				print("PuzzlePieceManager: ✅ Pieza reubicada correctamente")
+
+# Función para encontrar una celda realmente libre cerca de una posición
+func _find_truly_free_cell_near(target_cell: Vector2) -> Vector2:
+	# Verificar primero la celda objetivo
+	if get_piece_at(target_cell) == null:
+		return target_cell
+	
+	# Búsqueda en espiral desde la posición objetivo
+	for radius in range(1, max(current_rows, current_columns)):
+		for dx in range(-radius, radius + 1):
+			for dy in range(-radius, radius + 1):
+				# Solo considerar las celdas del borde del radio actual
+				if abs(dx) != radius and abs(dy) != radius:
+					continue
+				
+				var test_cell = target_cell + Vector2(dx, dy)
+				
+				# Verificar límites
+				if test_cell.x < 0 or test_cell.x >= current_columns:
+					continue
+				if test_cell.y < 0 or test_cell.y >= current_rows:
+					continue
+				
+				# Verificar que esté realmente libre
+				if get_piece_at(test_cell) == null:
+					return test_cell
+	
+	# Si no encontramos espacio, expandir el tablero
+	if add_extra_row():
+		return Vector2(target_cell.x, current_rows - 1)
+	
+	# Último recurso
+	return target_cell
