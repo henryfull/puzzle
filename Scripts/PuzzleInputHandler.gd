@@ -326,54 +326,6 @@ func update_board_position() -> void:
 	if OS.is_debug_build():
 		print("PuzzleInputHandler: board_offset=", board_offset, ", container_pos=", pieces_container.position if pieces_container else "N/A")
 
-func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> void:
-	# Usar la posición del toque sin ajustar
-	var mouse_pos = touch_position
-	var clicked_piece = null
-	
-	# Encontrar la pieza clickeada
-	var pieces = piece_manager.get_pieces()
-	for piece_obj in pieces:
-		# Convertir la posición global del toque a local de cada pieza
-		var local_pos = piece_obj.node.to_local(mouse_pos)
-		var sprite = piece_obj.sprite
-		
-		# Verificar si el punto está dentro del sprite
-		if sprite.texture != null:
-			var tex_rect = Rect2(
-				sprite.position - sprite.texture.get_size() * sprite.scale * 0.5,
-				sprite.texture.get_size() * sprite.scale
-			)
-			
-			if tex_rect.has_point(local_pos):
-				clicked_piece = piece_obj
-				break
-	
-	if clicked_piece:
-		# Obtener el líder del grupo
-		var group_leader = piece_manager.get_group_leader(clicked_piece)
-		
-		# Guardar las posiciones originales de cada pieza del grupo antes de comenzar a arrastrar
-		for p in group_leader.group:
-			# Almacenamos la celda actual como punto de referencia para volver si es necesario
-			p.drag_start_cell = p.current_cell
-		
-		# Mover todo el grupo desde cualquier pieza
-		for p in group_leader.group:
-			p.dragging = true
-			# Guardar el offset (diferencia entre posición de la pieza y posición del toque)
-			p.drag_offset = p.node.global_position - mouse_pos
-			
-			# Usar el nuevo método set_dragging para cambiar el z-index
-			if p.node.has_method("set_dragging"):
-				p.node.set_dragging(true)
-			else:
-				p.node.z_index = 9999
-				
-			# Asegurar que la pieza esté al frente moviendo su nodo al final del árbol
-			if p.node.get_parent() != null:
-				p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
-
 func process_piece_click(event: InputEvent) -> void:
 	if event.pressed:
 		# Usar la posición global del mouse sin ajustar por el desplazamiento
@@ -384,21 +336,14 @@ func process_piece_click(event: InputEvent) -> void:
 		if OS.is_debug_build():
 			print("Clic en posición: ", mouse_pos)
 		
-		# Encontrar la pieza clickeada
-		var pieces = piece_manager.get_pieces()
-		for piece_obj in pieces:
-			# Verificar si la pieza es válida
-			if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
-				continue
-			
-			# Verificar si el punto está dentro de la pieza usando to_local
-			if is_mouse_over_piece(piece_obj, mouse_pos):
-				clicked_piece = piece_obj
-				if OS.is_debug_build():
-					print("Pieza encontrada en: ", piece_obj.node.global_position)
-				break
+		# 🔧 MEJORADO: Encontrar la pieza más apropiada considerando z-index y superposiciones
+		clicked_piece = _find_best_piece_at_position(mouse_pos)
 		
 		if clicked_piece:
+			# 🔧 CRÍTICO: Resolver cualquier superposición ANTES de iniciar el arrastre
+			print("PuzzleInputHandler: Verificando superposiciones antes de arrastrar...")
+			piece_manager.resolve_all_overlaps()
+			
 			# Obtener el líder del grupo
 			var group_leader = piece_manager.get_group_leader(clicked_piece)
 			
@@ -426,6 +371,233 @@ func process_piece_click(event: InputEvent) -> void:
 		# Al soltar, procesar el final del arrastre de la pieza
 		process_piece_release()
 
+# 🔧 NUEVA FUNCIÓN MEJORADA PARA ENCONTRAR LA MEJOR PIEZA
+func _find_best_piece_at_position(mouse_pos: Vector2):
+	"""
+	Encuentra la mejor pieza en una posición considerando:
+	1. Prioridad por z-index (piezas al frente primero)
+	2. Verificación precisa de área
+	3. Exclusión de piezas ya en proceso de arrastre
+	"""
+	var candidate_pieces = []
+	var pieces = piece_manager.get_pieces()
+	
+	# 🔧 CRÍTICO: Verificar y resolver superposiciones ANTES de la detección
+	if not piece_manager.verify_no_overlaps():
+		print("PuzzleInputHandler: Resolviendo superposiciones automáticamente antes de detectar clic...")
+		piece_manager.resolve_all_overlaps()
+		# Actualizar la lista de piezas después de resolver superposiciones
+		pieces = piece_manager.get_pieces()
+	
+	# PASO 1: Encontrar todas las piezas candidatas bajo el cursor
+	for piece_obj in pieces:
+		# Verificar si la pieza es válida
+		if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+			continue
+		
+		# Saltar piezas que ya están siendo arrastradas
+		if piece_obj.dragging:
+			continue
+		
+		# Verificar si el punto está dentro de la pieza usando verificación mejorada
+		if _is_mouse_over_piece_improved(piece_obj, mouse_pos):
+			candidate_pieces.append({
+				"piece": piece_obj,
+				"z_index": piece_obj.node.z_index,
+				"distance_to_center": _calculate_distance_to_piece_center(piece_obj, mouse_pos),
+				"is_dragging": piece_obj.dragging,
+				"is_at_correct_position": piece_obj.is_at_correct_position
+			})
+			
+			if OS.is_debug_build():
+				print("Candidata encontrada: pieza ", piece_obj.order_number, " z-index: ", piece_obj.node.z_index, " distancia: ", _calculate_distance_to_piece_center(piece_obj, mouse_pos))
+	
+	if candidate_pieces.is_empty():
+		if OS.is_debug_build():
+			print("No se encontraron piezas bajo el cursor en ", mouse_pos)
+		return null
+	
+	# PASO 2: Ordenar candidatos por prioridad inteligente
+	candidate_pieces.sort_custom(func(a, b):
+		# 🔧 PRIORIDAD 1: Nunca seleccionar piezas que están siendo arrastradas
+		if a.is_dragging != b.is_dragging:
+			return not a.is_dragging  # La que NO está siendo arrastrada tiene prioridad
+		
+		# 🔧 PRIORIDAD 2: z-index más alto (piezas visualmente al frente)
+		if a.z_index != b.z_index:
+			return a.z_index > b.z_index
+		
+		# 🔧 PRIORIDAD 3: Piezas fuera de posición tienen prioridad (están siendo movidas)
+		if a.is_at_correct_position != b.is_at_correct_position:
+			return not a.is_at_correct_position  # La que NO está en posición correcta tiene prioridad
+		
+		# 🔧 PRIORIDAD 4: Distancia al centro de la pieza (más cerca del centro)
+		return a.distance_to_center < b.distance_to_center
+	)
+	
+	var best_piece = candidate_pieces[0].piece
+	
+	if OS.is_debug_build():
+		print("Mejor pieza seleccionada: ", best_piece.order_number, 
+			  " z-index: ", best_piece.node.z_index,
+			  " distancia: ", candidate_pieces[0].distance_to_center,
+			  " posición correcta: ", candidate_pieces[0].is_at_correct_position)
+	
+	# 🔧 NUEVA VERIFICACIÓN: Si hay múltiples candidatos con z-index similar, verificar superposiciones
+	var similar_z_candidates = candidate_pieces.filter(func(c): return abs(c.z_index - candidate_pieces[0].z_index) <= 10)
+	if similar_z_candidates.size() > 1:
+		print("PuzzleInputHandler: Múltiples candidatos con z-index similar - Verificando superposiciones...")
+		_verify_and_fix_visual_conflicts(similar_z_candidates)
+	
+	return best_piece
+
+# 🔧 NUEVA FUNCIÓN PARA VERIFICAR Y RESOLVER CONFLICTOS VISUALES
+func _verify_and_fix_visual_conflicts(candidates: Array):
+	"""
+	Verifica si hay piezas superpuestas visualmente y las separa
+	"""
+	if candidates.size() <= 1:
+		return
+	
+	print("PuzzleInputHandler: Detectados ", candidates.size(), " candidatos con posible superposición visual")
+	
+	# Obtener posiciones actuales de las piezas candidatas
+	var positions = {}
+	for candidate in candidates:
+		var piece = candidate.piece
+		positions[piece.order_number] = piece.node.global_position
+	
+	# Verificar si hay superposiciones visuales (posiciones muy cercanas)
+	var visual_conflicts = []
+	for i in range(candidates.size()):
+		for j in range(i + 1, candidates.size()):
+			var piece_a = candidates[i].piece
+			var piece_b = candidates[j].piece
+			var distance = piece_a.node.global_position.distance_to(piece_b.node.global_position)
+			
+			# Si están muy cerca (menos de 30 píxeles), hay superposición visual
+			if distance < 30:
+				visual_conflicts.append([piece_a, piece_b])
+				print("PuzzleInputHandler: Conflicto visual detectado entre piezas ", piece_a.order_number, " y ", piece_b.order_number, " (distancia: ", distance, ")")
+	
+	# Resolver conflictos moviendo piezas a posiciones libres
+	for conflict in visual_conflicts:
+		var piece_to_move = conflict[1]  # Mover la segunda pieza (menor prioridad)
+		print("PuzzleInputHandler: Moviendo pieza ", piece_to_move.order_number, " para resolver conflicto visual")
+		
+		# Buscar una celda libre cercana para la pieza
+		var current_cell = piece_manager.get_cell_of_piece(piece_to_move)
+		var free_cell = piece_manager._find_free_cell_near(current_cell)
+		
+		if free_cell != Vector2(-999, -999):
+			# Mover pieza a la celda libre
+			piece_to_move.current_cell = free_cell
+			var puzzle_data = puzzle_game.get_puzzle_data()
+			var new_position = puzzle_data.offset + free_cell * puzzle_data.cell_size
+			piece_to_move.node.global_position = new_position
+			
+			# Actualizar grid
+			piece_manager.set_piece_at(free_cell, piece_to_move)
+			
+			print("PuzzleInputHandler: Pieza ", piece_to_move.order_number, " movida a celda libre: ", free_cell)
+		else:
+			print("PuzzleInputHandler: ⚠️ No se pudo encontrar celda libre para pieza ", piece_to_move.order_number)
+
+# 🔧 FUNCIÓN MEJORADA DE VERIFICACIÓN DE MOUSE SOBRE PIEZA
+func _is_mouse_over_piece_improved(piece_obj, mouse_pos: Vector2) -> bool:
+	"""
+	Verificación mejorada que considera z-index y áreas de colisión más precisas
+	"""
+	# Verificaciones de seguridad básicas
+	if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node) or not is_instance_valid(piece_obj.sprite):
+		return false
+		
+	var sprite = piece_obj.sprite
+	if sprite.texture == null:
+		return false
+
+	# Convertir mouse_pos a espacio local de la pieza
+	var local_pos = piece_obj.node.to_local(mouse_pos)
+	
+	# 🔧 MEJORADO: Usar el área de colisión de Area2D si está disponible y es más precisa
+	if piece_obj.node.has_node("Area2D"):
+		var area2d = piece_obj.node.get_node("Area2D")
+		if area2d.has_node("CollisionShape2D"):
+			var collision_shape = area2d.get_node("CollisionShape2D")
+			if collision_shape.shape is RectangleShape2D:
+				var rect_shape = collision_shape.shape as RectangleShape2D
+				# Crear rectángulo de colisión centrado
+				var collision_rect = Rect2(
+					collision_shape.position - rect_shape.size * 0.5,
+					rect_shape.size
+				)
+				# Aplicar la escala del collision shape
+				collision_rect.position *= collision_shape.scale
+				collision_rect.size *= collision_shape.scale
+				
+				# 🔧 NUEVA VERIFICACIÓN: Reducir ligeramente el área para evitar superposiciones
+				var margin = 5.0  # Margen en píxeles
+				collision_rect = collision_rect.grow(-margin)
+				
+				if collision_rect.has_point(local_pos):
+					return true
+	
+	# Fallback: usar el rectángulo del sprite como antes, pero con margen
+	var tex_rect = Rect2(
+		sprite.position - sprite.texture.get_size() * sprite.scale * 0.5,
+		sprite.texture.get_size() * sprite.scale
+	)
+	
+	# Aplicar margen también al fallback
+	var margin = 5.0
+	tex_rect = tex_rect.grow(-margin)
+	
+	return tex_rect.has_point(local_pos)
+
+# 🔧 NUEVA FUNCIÓN PARA CALCULAR DISTANCIA AL CENTRO DE LA PIEZA
+func _calculate_distance_to_piece_center(piece_obj, mouse_pos: Vector2) -> float:
+	"""
+	Calcula la distancia del cursor al centro de la pieza para desempatar
+	"""
+	var piece_center = piece_obj.node.global_position
+	return mouse_pos.distance_to(piece_center)
+
+func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> void:
+	# Usar la posición del toque sin ajustar
+	var mouse_pos = touch_position
+	
+	# 🔧 CRÍTICO: Resolver superposiciones antes de cualquier detección
+	print("PuzzleInputHandler: Verificando superposiciones antes de detectar toque...")
+	piece_manager.resolve_all_overlaps()
+	
+	# 🔧 MEJORADO: Usar la misma lógica mejorada para detección táctil
+	var clicked_piece = _find_best_piece_at_position(mouse_pos)
+	
+	if clicked_piece:
+		# Obtener el líder del grupo
+		var group_leader = piece_manager.get_group_leader(clicked_piece)
+		
+		# Guardar las posiciones originales de cada pieza del grupo antes de comenzar a arrastrar
+		for p in group_leader.group:
+			# Almacenamos la celda actual como punto de referencia para volver si es necesario
+			p.drag_start_cell = p.current_cell
+		
+		# Mover todo el grupo desde cualquier pieza
+		for p in group_leader.group:
+			p.dragging = true
+			# Guardar el offset (diferencia entre posición de la pieza y posición del toque)
+			p.drag_offset = p.node.global_position - mouse_pos
+			
+			# Usar el nuevo método set_dragging para cambiar el z-index
+			if p.node.has_method("set_dragging"):
+				p.node.set_dragging(true)
+			else:
+				p.node.z_index = 9999
+				
+			# Asegurar que la pieza esté al frente moviendo su nodo al final del árbol
+			if p.node.get_parent() != null:
+				p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
+
 func process_piece_release() -> void:
 	# Al soltar, colocar todo el grupo
 	var dragging_piece = null
@@ -452,41 +624,16 @@ func process_piece_release() -> void:
 		# Colocar el grupo - aquí ocurre la magia
 		piece_manager.place_group(group_leader)
 		
+		# 🔧 CRÍTICO: Verificar y resolver superposiciones después de colocar
+		print("PuzzleInputHandler: Verificando superposiciones después de soltar pieza...")
+		piece_manager.resolve_all_overlaps()
+		
 		# Incrementar contador de movimientos solo si la posición cambió
 		if old_position != group_leader.current_cell:
 			print("PuzzleInputHandler: Pieza movida de ", old_position, " a ", group_leader.current_cell)
 			puzzle_game.game_state_manager.increment_move_count()
 		else:
 			print("PuzzleInputHandler: Pieza no se movió, permanece en ", old_position)
-
-func is_mouse_over_piece(piece_obj, mouse_pos: Vector2) -> bool:
-	# Verificaciones de seguridad
-	if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node) or not is_instance_valid(piece_obj.sprite):
-		return false
-		
-	var sprite = piece_obj.sprite
-	if sprite.texture == null:
-		return false
-
-	# Convertir mouse_pos a espacio local de la pieza
-	var local_pos = piece_obj.node.to_local(mouse_pos)
-	
-	# Para diagnóstico
-	if OS.is_debug_build() and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		print("Mouse pos: ", mouse_pos)
-		print("Local pos en pieza: ", local_pos)
-		print("Sprite pos: ", sprite.position)
-		print("Sprite scale: ", sprite.scale)
-		print("Texture size: ", sprite.texture.get_size())
-	
-	# Crear un rectángulo que represente el área del sprite
-	var tex_rect = Rect2(
-		sprite.position - sprite.texture.get_size() * sprite.scale * 0.5,
-		sprite.texture.get_size() * sprite.scale
-	)
-	
-	# Verificar si el punto local está dentro del rectángulo
-	return tex_rect.has_point(local_pos)
 
 # Función para obtener el centro entre todos los puntos de contacto
 func get_touch_center() -> Vector2:

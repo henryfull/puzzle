@@ -64,6 +64,11 @@ class Piece:
 		drag_start_cell = _orig  # Inicialmente, la celda de inicio es la misma que la original
 		order_number = _order
 		group = [self]  # Inicialmente, cada pieza está en su propio grupo
+	
+	# 🔧 NUEVA PROPIEDAD: Verificar si la pieza está en su posición correcta
+	var is_at_correct_position: bool:
+		get:
+			return current_cell == original_pos
 
 func initialize(game: PuzzleGame):
 	puzzle_game = game
@@ -556,6 +561,111 @@ func place_group(piece: Piece):
 func check_all_groups() -> void:
 	_handle_check_all_groups()
 
+# 🔧 NUEVAS FUNCIONES PÚBLICAS PARA RESOLUCIÓN DE SUPERPOSICIONES
+func resolve_all_overlaps():
+	"""
+	Función pública para resolver todas las superposiciones de forma integral
+	Retorna true si se encontraron y resolvieron superposiciones
+	"""
+	print("PuzzlePieceManager: Ejecutando resolución pública de superposiciones...")
+	
+	if has_method("resolve_all_overlapping_pieces_comprehensive"):
+		resolve_all_overlapping_pieces_comprehensive()
+		return true
+	else:
+		# Fallback con método básico
+		var overlaps_found = _detect_and_resolve_overlaps()
+		print("PuzzlePieceManager: Resueltas ", overlaps_found, " superposiciones (método básico)")
+		return overlaps_found > 0
+
+func verify_no_overlaps() -> bool:
+	"""
+	Función pública para verificar que no hay superposiciones
+	Retorna true si no hay superposiciones
+	"""
+	var grid_check = {}
+	var overlaps_detected = false
+	
+	for piece_obj in pieces:
+		var cell = piece_obj.current_cell
+		if cell in grid_check:
+			print("PuzzlePieceManager: ⚠️ SUPERPOSICIÓN detectada entre piezas ", grid_check[cell].order_number, " y ", piece_obj.order_number, " en celda ", cell)
+			overlaps_detected = true
+		else:
+			grid_check[cell] = piece_obj
+	
+	if not overlaps_detected:
+		print("PuzzlePieceManager: ✅ No se detectaron superposiciones")
+	
+	return not overlaps_detected
+
+# Función para forzar recalcular posiciones de grid desde posiciones visuales
+func recalculate_all_grid_positions():
+	"""
+	Recalcula todas las posiciones de grid basándose en las posiciones visuales actuales
+	Útil después de cargar un estado guardado
+	"""
+	print("PuzzlePieceManager: Recalculando todas las posiciones de grid...")
+	
+	# Limpiar grid
+	grid.clear()
+	
+	# Recalcular posiciones desde las posiciones visuales actuales
+	for piece_obj in pieces:
+		if piece_obj.node:
+			# Calcular celda desde posición visual
+			var calculated_cell = get_cell_of_piece(piece_obj)
+			piece_obj.current_cell = calculated_cell
+			
+			# Verificar si la celda ya está ocupada
+			if calculated_cell in grid:
+				print("PuzzlePieceManager: ⚠️ CONFLICTO al recalcular - celda ", calculated_cell, " ya ocupada por pieza ", grid[calculated_cell].order_number, ", nueva pieza: ", piece_obj.order_number)
+				# Buscar celda libre cercana
+				var free_cell = _find_free_cell_near(calculated_cell)
+				if free_cell != Vector2(-999, -999):
+					print("PuzzlePieceManager: Moviendo pieza ", piece_obj.order_number, " a celda libre: ", free_cell)
+					piece_obj.current_cell = free_cell
+					# Actualizar posición visual también
+					var puzzle_data = puzzle_game.get_puzzle_data()
+					var new_pos = puzzle_data.offset + free_cell * puzzle_data.cell_size
+					piece_obj.node.global_position = new_pos
+				else:
+					print("PuzzlePieceManager: ⚠️ No se encontró celda libre para pieza ", piece_obj.order_number)
+			
+			# Registrar en grid
+			set_piece_at(piece_obj.current_cell, piece_obj)
+	
+	print("PuzzlePieceManager: Recálculo de posiciones de grid completado")
+
+# Función auxiliar para encontrar celda libre cerca de una posición
+func _find_free_cell_near(target_cell: Vector2) -> Vector2:
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	var max_search_radius = max(puzzle_data.rows, puzzle_data.columns)
+	
+	for radius in range(1, max_search_radius + 1):
+		for dx in range(-radius, radius + 1):
+			for dy in range(-radius, radius + 1):
+				if abs(dx) == radius or abs(dy) == radius:  # Solo el borde del radio actual
+					var test_cell = target_cell + Vector2(dx, dy)
+					if test_cell.x >= 0 and test_cell.x < puzzle_data.columns and test_cell.y >= 0 and test_cell.y < puzzle_data.rows and not (test_cell in grid):
+						return test_cell
+	
+	return Vector2(-999, -999)  # No se encontró celda libre
+
+func force_clean_grid():
+	"""
+	Función pública para forzar la limpieza y reconstrucción del grid
+	"""
+	print("PuzzlePieceManager: Forzando limpieza y reconstrucción del grid...")
+	if has_method("_rebuild_clean_grid"):
+		_rebuild_clean_grid()
+	else:
+		# Fallback: limpiar y reconstruir manualmente
+		grid.clear()
+		for piece_obj in pieces:
+			if is_instance_valid(piece_obj) and is_instance_valid(piece_obj.node):
+				set_piece_at(piece_obj.current_cell, piece_obj)
+
 func reorganize_pieces():
 	# Reorganiza solo las piezas que están fuera del área original del puzzle
 	# Mantiene las piezas dentro del área en sus posiciones actuales
@@ -566,6 +676,10 @@ func reorganize_pieces():
 	# IMPORTANTE: Solo reorganizar piezas, NO reiniciar el juego
 	# No tocar timers, contadores ni estadísticas del juego
 	_handle_reorganize_pieces()
+	
+	# 🔧 CRÍTICO: Verificar superposiciones después de reorganizar
+	print("PuzzlePieceManager: Verificando superposiciones después de reorganizar...")
+	_ensure_no_overlapping_pieces_in_grid()
 	
 	print("PuzzlePieceManager: REORGANIZACIÓN COMPLETADA - Estado del juego preservado")
 
@@ -684,9 +798,16 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 	print("PuzzlePieceManager: Reproduciendo sonido de fusión")
 	puzzle_game.play_merge_sound()
 	
+	# 🔧 CRÍTICO: Verificar superposiciones después de fusionar
+	print("PuzzlePieceManager: Verificando superposiciones después de fusionar piezas...")
+	_ensure_no_overlapping_pieces_in_grid()
+	
 	print("PuzzlePieceManager: Piezas fusionadas - nuevo grupo de ", new_group.size(), " piezas")
 
 func _handle_place_group(piece: Piece):
+	# 🔧 CRÍTICO: Verificar y limpiar superposiciones antes de cualquier colocación
+	_ensure_no_overlapping_pieces_in_grid()
+	
 	# Obtener el líder del grupo
 	var leader = get_group_leader(piece)
 	
@@ -719,6 +840,7 @@ func _handle_place_group(piece: Piece):
 			puzzle_game.show_error_message("No se puede colocar aquí", 1.5)
 		return
 	
+	
 	# Indicar que se acaba de colocar una pieza o grupo
 	just_placed_piece = true
 	
@@ -726,6 +848,10 @@ func _handle_place_group(piece: Piece):
 	
 	# NUEVA LÓGICA: Sistema de "onda expansiva"
 	_place_group_with_wave_expansion(leader, target_cell)
+	
+	# 🔧 CRÍTICO: Verificar superposiciones después de colocar grupo
+	print("PuzzlePieceManager: Verificando superposiciones después de colocar grupo...")
+	_ensure_no_overlapping_pieces_in_grid()
 
 func _handle_check_all_groups():
 	# Recorrer una copia de la lista de piezas
@@ -2547,84 +2673,7 @@ func _ensure_sprite_centered(piece_node: Node2D):
 			collision.scale = Vector2.ONE
 
 # === FUNCIÓN CRÍTICA PARA EVITAR SUPERPOSICIONES ===
-
-# Función para asegurar que no hay piezas superpuestas en el grid
-func _ensure_no_overlapping_pieces_in_grid():
-	var grid_verify = {}
-	var duplicates_found = []
-	
-	# Primera pasada: detectar todas las superposiciones
-	for piece_obj in pieces:
-		var cell = piece_obj.current_cell
-		if cell in grid_verify:
-			# Hay superposición
-			var existing_piece = grid_verify[cell]
-			duplicates_found.append({
-				"cell": cell,
-				"pieces": [existing_piece, piece_obj]
-			})
-			print("PuzzlePieceManager: ⚠️ SUPERPOSICIÓN detectada en celda ", cell, " entre piezas ", existing_piece.order_number, " y ", piece_obj.order_number)
-		else:
-			grid_verify[cell] = piece_obj
-	
-	# Segunda pasada: resolver superposiciones
-	for duplicate_data in duplicates_found:
-		var overlapping_pieces = duplicate_data.pieces
-		var original_cell = duplicate_data.cell
-		
-		# Mantener la primera pieza en su lugar, reubicar las demás
-		for i in range(1, overlapping_pieces.size()):
-			var piece_to_move = overlapping_pieces[i]
-			
-			# Encontrar la celda libre más cercana
-			var new_cell = _find_truly_free_cell_near(original_cell)
-			if new_cell != original_cell:
-				print("PuzzlePieceManager: 🔧 Reubicando pieza superpuesta ", piece_to_move.order_number, " de ", original_cell, " a ", new_cell)
-				
-				# Actualizar grid interno
-				remove_piece_at(piece_to_move.current_cell)
-				piece_to_move.current_cell = new_cell
-				set_piece_at(new_cell, piece_to_move)
-				
-				# Actualizar posición visual
-				var puzzle_data = puzzle_game.get_puzzle_data()
-				var target_position = puzzle_data.offset + new_cell * puzzle_data.cell_size
-				piece_to_move.node.position = target_position
-				
-				print("PuzzlePieceManager: ✅ Pieza reubicada correctamente")
-
-# Función para encontrar una celda realmente libre cerca de una posición
-func _find_truly_free_cell_near(target_cell: Vector2) -> Vector2:
-	# Verificar primero la celda objetivo
-	if get_piece_at(target_cell) == null:
-		return target_cell
-	
-	# Búsqueda en espiral desde la posición objetivo
-	for radius in range(1, max(current_rows, current_columns)):
-		for dx in range(-radius, radius + 1):
-			for dy in range(-radius, radius + 1):
-				# Solo considerar las celdas del borde del radio actual
-				if abs(dx) != radius and abs(dy) != radius:
-					continue
-				
-				var test_cell = target_cell + Vector2(dx, dy)
-				
-				# Verificar límites
-				if test_cell.x < 0 or test_cell.x >= current_columns:
-					continue
-				if test_cell.y < 0 or test_cell.y >= current_rows:
-					continue
-				
-				# Verificar que esté realmente libre
-				if get_piece_at(test_cell) == null:
-					return test_cell
-	
-	# Si no encontramos espacio, expandir el tablero
-	if add_extra_row():
-		return Vector2(target_cell.x, current_rows - 1)
-	
-	# Último recurso
-	return target_cell
+# (Las funciones nuevas e integrales están más abajo)
 
 # === FUNCIONES PARA CONTROL GLOBAL DE BORDES DE GRUPO ===
 
@@ -2893,3 +2942,617 @@ func update_all_group_borders():
 func clear_all_group_borders():
 	for group_id in group_border_lines.keys():
 		remove_group_border(group_id)
+
+# === FUNCIÓN CRÍTICA PARA EVITAR SUPERPOSICIONES ===
+
+# 🔧 NUEVA FUNCIÓN INTEGRAL DE DETECCIÓN Y RESOLUCIÓN DE SUPERPOSICIONES
+func resolve_all_overlapping_pieces_comprehensive():
+	"""
+	Función integral para detectar y resolver TODAS las superposiciones
+	Debe ejecutarse después de cargar un puzzle guardado
+	"""
+	print("PuzzlePieceManager: 🔧 INICIANDO RESOLUCIÓN INTEGRAL DE SUPERPOSICIONES")
+	
+	var overlaps_found = 0
+	var iterations = 0
+	var max_iterations = 10  # 🔧 AUMENTADO: Más iteraciones para casos complejos
+	
+	while iterations < max_iterations:
+		iterations += 1
+		print("PuzzlePieceManager: Iteración ", iterations, " de resolución de superposiciones")
+		
+		var current_overlaps = _detect_and_resolve_overlaps()
+		overlaps_found += current_overlaps
+		
+		if current_overlaps == 0:
+			print("PuzzlePieceManager: ✅ No se encontraron más superposiciones")
+			break
+		else:
+			print("PuzzlePieceManager: Resueltas ", current_overlaps, " superposiciones en esta iteración")
+			# Esperar un frame para que las actualizaciones se asienten
+			await puzzle_game.get_tree().process_frame
+	
+	if iterations >= max_iterations:
+		print("PuzzlePieceManager: ⚠️ Máximo de iteraciones alcanzado, aplicando resolución de emergencia")
+		# Aplicar resolución de emergencia más agresiva
+		_emergency_overlap_resolution()
+	
+	# Verificación final
+	var final_check = _verify_no_overlaps()
+	if final_check:
+		print("PuzzlePieceManager: ✅ VERIFICACIÓN FINAL: No hay superposiciones")
+	else:
+		print("PuzzlePieceManager: ❌ VERIFICACIÓN FINAL: AÚN HAY SUPERPOSICIONES - Aplicando redistribución forzada")
+		# Como último recurso, forzar redistribución completa
+		_force_complete_redistribution()
+	
+	print("PuzzlePieceManager: 🔧 RESOLUCIÓN INTEGRAL COMPLETADA - Total overlaps resueltos: ", overlaps_found)
+	
+	# Actualizar bordes de grupo después de resolver superposiciones
+	update_all_group_borders()
+
+# 🔧 NUEVA FUNCIÓN DE REDISTRIBUCIÓN FORZADA
+func _force_complete_redistribution():
+	"""
+	Última opción: redistribuir todas las piezas garantizando que no hay superposiciones
+	"""
+	print("PuzzlePieceManager: 🚨 INICIANDO REDISTRIBUCIÓN FORZADA COMPLETA")
+	
+	# Obtener todas las posiciones disponibles expandiendo si es necesario
+	var available_positions = []
+	
+	# Expandir tablero preventivamente si no hay suficientes posiciones
+	while (current_rows * current_columns) < pieces.size():
+		if not add_extra_row():
+			break
+	
+	# Generar lista completa de posiciones disponibles
+	for r in range(current_rows):
+		for c in range(current_columns):
+			available_positions.append(Vector2(c, r))
+	
+	# Limpiar grid completamente
+	grid.clear()
+	
+	# Algoritmo de redistribución inteligente
+	var pieces_by_group = {}
+	var individual_pieces = []
+	
+	# Clasificar piezas por grupos
+	for piece_obj in pieces:
+		if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+			continue
+		
+		var leader = get_group_leader(piece_obj)
+		var group_id = leader.node.get_instance_id()
+		
+		if leader.group.size() > 1:
+			if not group_id in pieces_by_group:
+				pieces_by_group[group_id] = leader.group.duplicate()
+		else:
+			individual_pieces.append(piece_obj)
+	
+	print("PuzzlePieceManager: Redistribuyendo ", pieces_by_group.size(), " grupos y ", individual_pieces.size(), " piezas individuales")
+	
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	var used_positions = {}
+	
+	# PASO 1: Redistribuir grupos manteniendo estructura
+	for group_id in pieces_by_group.keys():
+		var group = pieces_by_group[group_id]
+		var leader = group[0]  # El primer elemento es el líder
+		
+		# Encontrar posición donde el grupo completo quepa
+		var best_anchor = _find_safe_anchor_for_group_redistribution(leader, available_positions, used_positions)
+		
+		if best_anchor != Vector2(-1, -1):
+			# Colocar grupo en la nueva posición
+			for piece in group:
+				var offset = piece.original_pos - leader.original_pos
+				var target_cell = best_anchor + offset
+				
+				# Verificar que la posición esté disponible
+				if target_cell.x >= 0 and target_cell.x < current_columns and target_cell.y >= 0 and target_cell.y < current_rows:
+					piece.current_cell = target_cell
+					set_piece_at(target_cell, piece)
+					used_positions[target_cell] = true
+					
+					# Actualizar posición visual
+					var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+					piece.node.position = target_position
+					
+					print("PuzzlePieceManager: Grupo - Pieza ", piece.order_number, " reubicada a ", target_cell)
+		else:
+			print("PuzzlePieceManager: ⚠️ No se pudo reubicar grupo, separando piezas...")
+			# Si no se puede reubicar el grupo, tratarlo como piezas individuales
+			for piece in group:
+				individual_pieces.append(piece)
+	
+	# PASO 2: Redistribuir piezas individuales
+	for piece_obj in individual_pieces:
+		var free_position = _find_next_free_position(available_positions, used_positions)
+		
+		if free_position != Vector2(-1, -1):
+			piece_obj.current_cell = free_position
+			set_piece_at(free_position, piece_obj)
+			used_positions[free_position] = true
+			
+			# Actualizar posición visual
+			var target_position = puzzle_data.offset + free_position * puzzle_data.cell_size
+			piece_obj.node.position = target_position
+			
+			print("PuzzlePieceManager: Individual - Pieza ", piece_obj.order_number, " reubicada a ", free_position)
+		else:
+			print("PuzzlePieceManager: ❌ ERROR CRÍTICO - No hay posiciones disponibles para pieza ", piece_obj.order_number)
+	
+	print("PuzzlePieceManager: 🚨 REDISTRIBUCIÓN FORZADA COMPLETADA")
+
+# Función auxiliar para encontrar ancla segura para grupos durante redistribución
+func _find_safe_anchor_for_group_redistribution(leader: Piece, available_positions: Array, used_positions: Dictionary) -> Vector2:
+	# Calcular dimensiones del grupo
+	var min_offset = Vector2(INF, INF)
+	var max_offset = Vector2(-INF, -INF)
+	
+	for piece in leader.group:
+		var offset = piece.original_pos - leader.original_pos
+		min_offset.x = min(min_offset.x, offset.x)
+		min_offset.y = min(min_offset.y, offset.y)
+		max_offset.x = max(max_offset.x, offset.x)
+		max_offset.y = max(max_offset.y, offset.y)
+	
+	# Probar cada posición disponible
+	for test_anchor in available_positions:
+		if test_anchor in used_positions:
+			continue
+		
+		var can_place = true
+		
+		# Verificar que todas las piezas del grupo caben
+		for piece in leader.group:
+			var offset = piece.original_pos - leader.original_pos
+			var target_cell = test_anchor + offset
+			
+			# Verificar límites
+			if target_cell.x < 0 or target_cell.x >= current_columns or target_cell.y < 0 or target_cell.y >= current_rows:
+				can_place = false
+				break
+			
+			# Verificar que no esté ocupada
+			if target_cell in used_positions:
+				can_place = false
+				break
+		
+		if can_place:
+			# Marcar todas las posiciones del grupo como usadas
+			for piece in leader.group:
+				var offset = piece.original_pos - leader.original_pos
+				var target_cell = test_anchor + offset
+				used_positions[target_cell] = true
+			
+			return test_anchor
+	
+	return Vector2(-1, -1)
+
+# Función auxiliar para encontrar la siguiente posición libre
+func _find_next_free_position(available_positions: Array, used_positions: Dictionary) -> Vector2:
+	for position in available_positions:
+		if not position in used_positions:
+			return position
+	
+	return Vector2(-1, -1)
+
+# Detectar y resolver superposiciones (una iteración) - VERSIÓN MEJORADA
+func _detect_and_resolve_overlaps() -> int:
+	var grid_verify = {}
+	var overlaps_found = []
+	var overlaps_resolved = 0
+	
+	# PASO 1: Detectar todas las superposiciones con más detalle
+	for piece_obj in pieces:
+		if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+			continue
+			
+		var cell = piece_obj.current_cell
+		var cell_key_str = cell_key(cell)
+		
+		if cell_key_str in grid_verify:
+			# ¡Superposición detectada!
+			var existing_piece = grid_verify[cell_key_str]
+			overlaps_found.append({
+				"cell": cell,
+				"existing_piece": existing_piece,
+				"overlapping_piece": piece_obj,
+				"existing_group_size": existing_piece.group.size(),
+				"overlapping_group_size": piece_obj.group.size()
+			})
+			print("PuzzlePieceManager: ⚠️ SUPERPOSICIÓN en celda ", cell, 
+				  " entre piezas ", existing_piece.order_number, " (grupo ", existing_piece.group.size(), ") y ", 
+				  piece_obj.order_number, " (grupo ", piece_obj.group.size(), ")")
+		else:
+			grid_verify[cell_key_str] = piece_obj
+	
+	# PASO 2: Resolver cada superposición con prioridades mejoradas
+	for overlap in overlaps_found:
+		var resolved = _resolve_single_overlap_improved(overlap)
+		if resolved:
+			overlaps_resolved += 1
+	
+	# PASO 3: Reconstruir grid limpio después de las resoluciones
+	_rebuild_clean_grid()
+	
+	return overlaps_resolved
+
+# Versión mejorada de resolución de superposición individual
+func _resolve_single_overlap_improved(overlap: Dictionary) -> bool:
+	var existing_piece = overlap.existing_piece
+	var overlapping_piece = overlap.overlapping_piece
+	var conflict_cell = overlap.cell
+	
+	print("PuzzlePieceManager: Resolviendo overlap mejorado en celda ", conflict_cell)
+	
+	# 🔧 PRIORIDADES MEJORADAS para determinar qué pieza mover
+	var piece_to_move = _determine_piece_to_move_improved(existing_piece, overlapping_piece)
+	var piece_to_keep = existing_piece if piece_to_move == overlapping_piece else overlapping_piece
+	
+	print("PuzzlePieceManager: Moviendo pieza ", piece_to_move.order_number, 
+		  " (grupo ", piece_to_move.group.size(), "), manteniendo pieza ", piece_to_keep.order_number,
+		  " (grupo ", piece_to_keep.group.size(), ")")
+	
+	# Encontrar nueva posición con búsqueda más amplia
+	var new_cell = _find_best_relocation_cell_improved(piece_to_move, conflict_cell)
+	
+	if new_cell == conflict_cell:
+		print("PuzzlePieceManager: ⚠️ Búsqueda inicial falló, expandiendo búsqueda...")
+		# Búsqueda más agresiva
+		new_cell = _find_any_available_cell_for_piece(piece_to_move)
+		
+		if new_cell == Vector2(-1, -1):
+			print("PuzzlePieceManager: ⚠️ No se encontró posición, expandiendo tablero...")
+			# Como último recurso, expandir el tablero
+			if _try_expand_board_for_piece(piece_to_move):
+				new_cell = Vector2(piece_to_move.current_cell.x, current_rows - 1)  # Colocar en la nueva fila
+			else:
+				return false
+	
+	# Mover la pieza con verificación de éxito
+	var move_success = _move_piece_to_cell_safe(piece_to_move, new_cell)
+	
+	if move_success:
+		print("PuzzlePieceManager: ✅ Pieza ", piece_to_move.order_number, " reubicada exitosamente de ", conflict_cell, " a ", new_cell)
+		return true
+	else:
+		print("PuzzlePieceManager: ❌ Falló al mover pieza ", piece_to_move.order_number)
+		return false
+
+# Función mejorada para determinar qué pieza mover
+func _determine_piece_to_move_improved(piece1: Piece, piece2: Piece) -> Piece:
+	# Prioridad 1: NUNCA mover piezas en posición correcta
+	var piece1_correct = (piece1.current_cell == piece1.original_pos)
+	var piece2_correct = (piece2.current_cell == piece2.original_pos)
+	
+	if piece1_correct and not piece2_correct:
+		return piece2
+	if piece2_correct and not piece1_correct:
+		return piece1
+	
+	# Prioridad 2: Mantener grupos más grandes (más difíciles de reubicar)
+	if piece1.group.size() > piece2.group.size():
+		return piece2
+	if piece2.group.size() > piece1.group.size():
+		return piece1
+	
+	# Prioridad 3: Mover la pieza que se movió más recientemente (drag_start_cell diferente)
+	var piece1_recently_moved = (piece1.current_cell != piece1.drag_start_cell)
+	var piece2_recently_moved = (piece2.current_cell != piece2.drag_start_cell)
+	
+	if piece1_recently_moved and not piece2_recently_moved:
+		return piece1
+	if piece2_recently_moved and not piece1_recently_moved:
+		return piece2
+	
+	# Prioridad 4: Mover la pieza con mayor número de orden (creada después)
+	if piece1.order_number > piece2.order_number:
+		return piece1
+	else:
+		return piece2
+
+# Función mejorada para encontrar celda de reubicación
+func _find_best_relocation_cell_improved(piece: Piece, avoid_cell: Vector2) -> Vector2:
+	# Si es parte de un grupo, intentar mover todo el grupo
+	if piece.group.size() > 1:
+		return _find_group_relocation_position_improved(piece, avoid_cell)
+	else:
+		return _find_individual_relocation_position_improved(piece, avoid_cell)
+
+# Búsqueda mejorada para grupos
+func _find_group_relocation_position_improved(piece: Piece, avoid_cell: Vector2) -> Vector2:
+	var leader = get_group_leader(piece)
+	var current_anchor = leader.current_cell
+	
+	# 🔧 BÚSQUEDA MÁS AMPLIA: Buscar en círculos concéntricos
+	var max_radius = max(current_rows, current_columns)
+	
+	for radius in range(1, max_radius + 1):
+		var positions_at_radius = []
+		
+		# Generar todas las posiciones a esta distancia
+		for dx in range(-radius, radius + 1):
+			for dy in range(-radius, radius + 1):
+				# Solo considerar posiciones en el perímetro del radio actual
+				if abs(dx) == radius or abs(dy) == radius:
+					var test_anchor = current_anchor + Vector2(dx, dy)
+					
+					# Verificar que está dentro de los límites expandidos
+					if test_anchor.x >= 0 and test_anchor.x < current_columns and test_anchor.y >= 0 and test_anchor.y < current_rows:
+						# Verificar que no está muy cerca de la celda a evitar
+						if test_anchor.distance_to(avoid_cell) >= 2.0:
+							positions_at_radius.append(test_anchor)
+		
+		# Ordenar posiciones por distancia al centro del tablero (preferir posiciones centrales)
+		var center = Vector2(current_columns / 2.0, current_rows / 2.0)
+		positions_at_radius.sort_custom(func(a, b): return a.distance_to(center) < b.distance_to(center))
+		
+		# Probar cada posición a esta distancia
+		for test_anchor in positions_at_radius:
+			if _can_place_group_at_anchor_ignore_own_group(leader, test_anchor):
+				print("PuzzlePieceManager: Posición de grupo encontrada a radio ", radius, ": ", test_anchor)
+				return test_anchor
+	
+	return avoid_cell  # No se encontró posición
+
+# Búsqueda mejorada para piezas individuales
+func _find_individual_relocation_position_improved(piece: Piece, avoid_cell: Vector2) -> Vector2:
+	var current_cell = piece.current_cell
+	
+	# 🔧 BÚSQUEDA MÁS AMPLIA: Círculos concéntricos
+	var max_radius = max(current_rows, current_columns)
+	
+	for radius in range(1, max_radius + 1):
+		var positions_at_radius = []
+		
+		for dx in range(-radius, radius + 1):
+			for dy in range(-radius, radius + 1):
+				if abs(dx) == radius or abs(dy) == radius:
+					var test_cell = current_cell + Vector2(dx, dy)
+					
+					# Verificar límites
+					if test_cell.x >= 0 and test_cell.x < current_columns and test_cell.y >= 0 and test_cell.y < current_rows:
+						# Verificar que no es la celda a evitar
+						if test_cell != avoid_cell:
+							positions_at_radius.append(test_cell)
+		
+		# Ordenar por preferencia (centro del tablero)
+		var center = Vector2(current_columns / 2.0, current_rows / 2.0)
+		positions_at_radius.sort_custom(func(a, b): return a.distance_to(center) < b.distance_to(center))
+		
+		# Probar cada posición
+		for test_cell in positions_at_radius:
+			if get_piece_at(test_cell) == null:
+				return test_cell
+	
+	return avoid_cell  # No se encontró posición
+
+# Función para encontrar cualquier celda disponible como último recurso
+func _find_any_available_cell_for_piece(piece: Piece) -> Vector2:
+	print("PuzzlePieceManager: Búsqueda de emergencia para pieza ", piece.order_number)
+	
+	# Para grupos, buscar cualquier posición donde quepa
+	if piece.group.size() > 1:
+		var leader = get_group_leader(piece)
+		
+		for r in range(current_rows):
+			for c in range(current_columns):
+				var test_anchor = Vector2(c, r)
+				if _can_place_group_at_anchor_ignore_own_group(leader, test_anchor):
+					return test_anchor
+	else:
+		# Para piezas individuales, cualquier celda libre
+		for r in range(current_rows):
+			for c in range(current_columns):
+				var test_cell = Vector2(c, r)
+				if get_piece_at(test_cell) == null:
+					return test_cell
+	
+	return Vector2(-1, -1)
+
+# Función segura para mover piezas con verificación
+func _move_piece_to_cell_safe(piece: Piece, new_cell: Vector2) -> bool:
+	if piece.group.size() > 1:
+		# Mover grupo completo
+		var leader = get_group_leader(piece)
+		var offset = new_cell - leader.current_cell
+		
+		# Verificar que todas las posiciones objetivo estén disponibles
+		for group_piece in leader.group:
+			var target_cell = group_piece.current_cell + offset
+			if target_cell.x < 0 or target_cell.x >= current_columns or target_cell.y < 0 or target_cell.y >= current_rows:
+				return false
+			
+			var occupant = get_piece_at(target_cell)
+			if occupant != null and not (occupant in leader.group):
+				return false
+		
+		# Si llegamos aquí, es seguro mover el grupo
+		for group_piece in leader.group:
+			var old_cell = group_piece.current_cell
+			var target_cell = old_cell + offset
+			
+			# Limpiar posición anterior
+			remove_piece_at(old_cell)
+			
+			# Actualizar current_cell
+			group_piece.current_cell = target_cell
+			
+			# Colocar en nueva posición
+			set_piece_at(target_cell, group_piece)
+			
+			# Actualizar posición visual
+			var puzzle_data = puzzle_game.get_puzzle_data()
+			var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+			group_piece.node.position = target_position
+		
+		return true
+	else:
+		# Mover pieza individual
+		if new_cell.x < 0 or new_cell.x >= current_columns or new_cell.y < 0 or new_cell.y >= current_rows:
+			return false
+		
+		var occupant = get_piece_at(new_cell)
+		if occupant != null:
+			return false
+		
+		var old_cell = piece.current_cell
+		
+		# Limpiar posición anterior
+		remove_piece_at(old_cell)
+		
+		# Actualizar current_cell
+		piece.current_cell = new_cell
+		
+		# Colocar en nueva posición
+		set_piece_at(new_cell, piece)
+		
+		# Actualizar posición visual
+		var puzzle_data = puzzle_game.get_puzzle_data()
+		var target_position = puzzle_data.offset + new_cell * puzzle_data.cell_size
+		piece.node.position = target_position
+		
+		return true
+
+# Intentar expandir el tablero para hacer espacio para una pieza
+func _try_expand_board_for_piece(piece: Piece) -> bool:
+	if extra_rows_added >= puzzle_game.max_extra_rows:
+		return false
+	
+	print("PuzzlePieceManager: Expandiendo tablero para resolver superposición")
+	return add_extra_row()
+
+# Reconstruir grid limpio después de las resoluciones
+func _rebuild_clean_grid():
+	print("PuzzlePieceManager: Reconstruyendo grid limpio")
+	
+	# Limpiar grid completamente
+	grid.clear()
+	
+	# Volver a registrar todas las piezas según su current_cell
+	for piece_obj in pieces:
+		if is_instance_valid(piece_obj) and is_instance_valid(piece_obj.node):
+			set_piece_at(piece_obj.current_cell, piece_obj)
+
+# Verificar que no hay superposiciones (verificación final)
+func _verify_no_overlaps() -> bool:
+	var grid_verify = {}
+	
+	for piece_obj in pieces:
+		if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+			continue
+		
+		var cell = piece_obj.current_cell
+		var cell_key_str = cell_key(cell)
+		
+		if cell_key_str in grid_verify:
+			var existing_piece = grid_verify[cell_key_str]
+			print("PuzzlePieceManager: ❌ SUPERPOSICIÓN PERSISTENTE en celda ", cell, 
+				  " entre piezas ", existing_piece.order_number, " y ", piece_obj.order_number)
+			return false
+		
+		grid_verify[cell_key_str] = piece_obj
+	
+	return true
+
+# Resolución de emergencia para casos extremos
+func _emergency_overlap_resolution():
+	print("PuzzlePieceManager: 🚨 EJECUTANDO RESOLUCIÓN DE EMERGENCIA")
+	
+	# Reorganizar todas las piezas forzando posiciones válidas
+	var available_positions = []
+	
+	# Generar lista de todas las posiciones disponibles
+	for r in range(current_rows):
+		for c in range(current_columns):
+			available_positions.append(Vector2(c, r))
+	
+	# Expandir tablero si no hay suficientes posiciones
+	while available_positions.size() < pieces.size():
+		if not add_extra_row():
+			break
+		# Agregar nuevas posiciones de la fila añadida
+		var new_row = current_rows - 1
+		for c in range(current_columns):
+			available_positions.append(Vector2(c, new_row))
+	
+	# Limpiar grid completamente
+	grid.clear()
+	
+	# Reorganizar piezas de forma determinística
+	available_positions.shuffle()  # Aleatorizar para evitar patrones
+	
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	
+	for i in range(pieces.size()):
+		if i >= available_positions.size():
+			print("PuzzlePieceManager: ❌ No hay suficientes posiciones para todas las piezas")
+			break
+		
+		var piece_obj = pieces[i]
+		var new_cell = available_positions[i]
+		
+		# Actualizar current_cell
+		piece_obj.current_cell = new_cell
+		
+		# Registrar en grid
+		set_piece_at(new_cell, piece_obj)
+		
+		# Actualizar posición visual
+		var target_position = puzzle_data.offset + new_cell * puzzle_data.cell_size
+		piece_obj.node.position = target_position
+		
+		print("PuzzlePieceManager: Pieza ", piece_obj.order_number, " reubicada a ", new_cell, " (emergencia)")
+	
+	print("PuzzlePieceManager: 🚨 RESOLUCIÓN DE EMERGENCIA COMPLETADA")
+
+# Función para encontrar una celda realmente libre cerca de una posición
+func _find_truly_free_cell_near(target_cell: Vector2) -> Vector2:
+	# Verificar primero la celda objetivo
+	if get_piece_at(target_cell) == null:
+		return target_cell
+	
+	# Búsqueda en espiral desde la posición objetivo
+	for radius in range(1, max(current_rows, current_columns)):
+		for dx in range(-radius, radius + 1):
+			for dy in range(-radius, radius + 1):
+				# Solo considerar las celdas del borde del radio actual
+				if abs(dx) != radius and abs(dy) != radius:
+					continue
+				
+				var test_cell = target_cell + Vector2(dx, dy)
+				
+				# Verificar límites
+				if test_cell.x < 0 or test_cell.x >= current_columns:
+					continue
+				if test_cell.y < 0 or test_cell.y >= current_rows:
+					continue
+				
+				# Verificar que esté realmente libre
+				if get_piece_at(test_cell) == null:
+					return test_cell
+	
+	# Si no encontramos espacio, expandir el tablero
+	if add_extra_row():
+		return Vector2(target_cell.x, current_rows - 1)
+	
+	# Último recurso
+	return target_cell
+
+# Función simplificada para uso en otros contextos (mantener compatibilidad)
+func _ensure_no_overlapping_pieces_in_grid():
+	"""
+	Versión simplificada para mantener compatibilidad con código existente
+	"""
+	print("PuzzlePieceManager: Ejecutando verificación rápida de superposiciones...")
+	var overlaps = _detect_and_resolve_overlaps()
+	if overlaps > 0:
+		print("PuzzlePieceManager: ⚠️ Se encontraron y resolvieron ", overlaps, " superposiciones")
+		_rebuild_clean_grid()
+	else:
+		print("PuzzlePieceManager: ✅ No se encontraron superposiciones")
