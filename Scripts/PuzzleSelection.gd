@@ -123,20 +123,35 @@ func scroll_to_last_available_puzzle():
 	var puzzle_to_scroll_to = null
 	var last_unlocked_index = -1
 	
-	# Recorrer los puzzles en orden inverso para encontrar el último disponible
-	for i in range(pack.puzzles.size() - 1, -1, -1):
-		var puzzle_data = pack.puzzles[i]
-		
-		# Si encontramos un puzzle desbloqueado pero no completado, ese es el que buscamos
-		if puzzle_data.unlocked and not puzzle_data.completed:
-			puzzle_to_scroll_to = puzzle_data
-			print("PuzzleSelection: Encontrado puzzle por completar: ", puzzle_data.id)
-			break
-		
-		# Guardar referencia al último puzzle desbloqueado
-		if puzzle_data.unlocked and last_unlocked_index < i:
-			last_unlocked_index = i
-			puzzle_to_scroll_to = puzzle_data
+	# Primero verificar si hay un puzzle guardado en el estado
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager:
+		var saved_puzzle_id = puzzle_state_manager.get_saved_puzzle_id()
+		if not saved_puzzle_id.is_empty():
+			# Buscar el puzzle guardado en el pack actual
+			for i in range(pack.puzzles.size()):
+				var puzzle_data = pack.puzzles[i]
+				if puzzle_data.id == saved_puzzle_id:
+					puzzle_to_scroll_to = puzzle_data
+					print("PuzzleSelection: Encontrado puzzle guardado: ", puzzle_data.id)
+					break
+	
+	# Si no hay puzzle guardado, buscar el último disponible por desbloquear
+	if not puzzle_to_scroll_to:
+		# Recorrer los puzzles en orden inverso para encontrar el último disponible
+		for i in range(pack.puzzles.size() - 1, -1, -1):
+			var puzzle_data = pack.puzzles[i]
+			
+			# Si encontramos un puzzle desbloqueado pero no completado, ese es el que buscamos
+			if puzzle_data.unlocked and not puzzle_data.completed:
+				puzzle_to_scroll_to = puzzle_data
+				print("PuzzleSelection: Encontrado puzzle por completar: ", puzzle_data.id)
+				break
+			
+			# Guardar referencia al último puzzle desbloqueado
+			if puzzle_data.unlocked and last_unlocked_index < i:
+				last_unlocked_index = i
+				puzzle_to_scroll_to = puzzle_data
 	
 	# Si encontramos un puzzle, desplazar hasta él
 	if puzzle_to_scroll_to:
@@ -194,6 +209,16 @@ func ensure_pack_selected():
 
 func _on_PuzzleSelected(puzzle) -> void:
 	print("PuzzleSelection: Puzzle seleccionado - ID: ", puzzle.get("id", "NO ID"), ", Nombre: ", puzzle.get("name", "NO NAME"))
+	
+	# Verificar si estamos seleccionando un puzzle diferente al guardado
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager and puzzle_state_manager.has_saved_state():
+		var saved_puzzle_id = puzzle_state_manager.get_saved_puzzle_id()
+		var selected_puzzle_id = puzzle.get("id", "")
+		
+		if saved_puzzle_id != selected_puzzle_id:
+			print("PuzzleSelection: Seleccionando puzzle diferente al guardado (", saved_puzzle_id, " -> ", selected_puzzle_id, "), limpiando estado")
+			puzzle_state_manager.clear_all_state()
 	
 	# Guardar el puzzle seleccionado en la variable global
 	GLOBAL.selected_puzzle = puzzle

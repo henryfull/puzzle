@@ -44,6 +44,15 @@ func initialize(game: PuzzleGame):
 		var options_manager = get_node("/root/OptionsManager")
 		if !options_manager.is_connected("options_closed", Callable(self, "_on_options_closed")):
 			options_manager.connect("options_closed", Callable(self, "_on_options_closed"))
+	
+	# Configurar timer para actualización periódica del estado guardado
+	var save_timer = Timer.new()
+	save_timer.name = "SaveStateTimer"
+	save_timer.wait_time = 3.0  # Actualizar estado cada 3 segundos (más frecuente)
+	save_timer.one_shot = false
+	save_timer.autostart = true
+	save_timer.connect("timeout", Callable(self, "_update_puzzle_state"))
+	add_child(save_timer)
 
 func setup_game_mode():
 	# Iniciar el temporizador para medir el tiempo de juego
@@ -306,6 +315,9 @@ func increment_move_count():
 	else:
 		print("PuzzleGameStateManager: ⚪ Movimiento realizado en modo normal")
 	
+	# NUEVO: Actualizar estado guardado inmediatamente después de un movimiento
+	_update_puzzle_state()
+	
 	# Debug del estado actual después del movimiento
 	debug_flip_state()
 
@@ -438,4 +450,9 @@ func handle_back_gesture() -> bool:
 # Función para mostrar el menú de opciones
 func show_options_menu():
 	if !is_paused:
-		pause_game() 
+		pause_game()
+
+# Función para actualizar el estado guardado del puzzle
+func _update_puzzle_state():
+	if puzzle_game and puzzle_game.has_method("_update_saved_state"):
+		puzzle_game._update_saved_state() 

@@ -199,6 +199,119 @@ func update_visual():
 	# Actualizar efectos visuales después de cambiar la textura
 	update_visual_effects()
 
+# Método para obtener los datos de la pieza para serialización (alias también disponible como get_data)
+func get_puzzle_piece_data() -> Dictionary:
+	var group_piece_ids = []
+	for piece in pieces_group:
+		if piece != null and piece.has_method("get_instance_id"):
+			group_piece_ids.append(piece.get_instance_id())
+	
+	var data = {
+		"order_number": order_number,
+		"original_grid_position": {
+			"x": original_grid_position.x,
+			"y": original_grid_position.y
+		},
+		"current_position": {
+			"x": global_position.x,
+			"y": global_position.y
+		},
+		"local_position": {
+			"x": position.x,
+			"y": position.y
+		},
+		"flipped": flipped,
+		"group_id": group_id,
+		"is_correct_position": is_correct_position,
+		"is_edge_piece": is_edge_piece,
+		"dragging": dragging,
+		"group_piece_ids": group_piece_ids,
+		"only_vertical": only_vertical,
+		"fragment_region": {
+			"x": fragment_region.position.x,
+			"y": fragment_region.position.y,
+			"width": fragment_region.size.x,
+			"height": fragment_region.size.y
+		}
+	}
+	
+	# Debug: imprimir datos de la pieza al serializar
+	print("PuzzlePiece: Serializando pieza ", order_number, " en posición global: ", global_position, ", local: ", position)
+	
+	return data
+
+# Método para restaurar los datos de la pieza desde serialización
+func set_puzzle_piece_data(data: Dictionary):
+	print("PuzzlePiece: Restaurando datos de pieza ", data.get("order_number", "?"))
+	
+	if data.has("order_number"):
+		order_number = data.order_number
+		set_order_number(order_number)
+	
+	if data.has("original_grid_position"):
+		var orig_pos_data = data.original_grid_position
+		if typeof(orig_pos_data) == TYPE_DICTIONARY and orig_pos_data.has("x") and orig_pos_data.has("y"):
+			original_grid_position = Vector2(orig_pos_data.x, orig_pos_data.y)
+		else:
+			original_grid_position = orig_pos_data  # Fallback para formato anterior
+	
+	# Restaurar posición - intentar global primero, luego local como respaldo
+	if data.has("current_position"):
+		var current_pos_data = data.current_position
+		if typeof(current_pos_data) == TYPE_DICTIONARY and current_pos_data.has("x") and current_pos_data.has("y"):
+			global_position = Vector2(current_pos_data.x, current_pos_data.y)
+			print("PuzzlePiece: Posición global restaurada a: ", global_position)
+		else:
+			global_position = current_pos_data  # Fallback para formato anterior
+			print("PuzzlePiece: Posición global restaurada (formato anterior) a: ", global_position)
+	elif data.has("local_position"):
+		var local_pos_data = data.local_position
+		if typeof(local_pos_data) == TYPE_DICTIONARY and local_pos_data.has("x") and local_pos_data.has("y"):
+			position = Vector2(local_pos_data.x, local_pos_data.y)
+			print("PuzzlePiece: Posición local restaurada a: ", position)
+		else:
+			position = local_pos_data  # Fallback para formato anterior
+			print("PuzzlePiece: Posición local restaurada (formato anterior) a: ", position)
+	
+	if data.has("flipped"):
+		flipped = data.flipped
+		update_visual()
+	
+	if data.has("group_id"):
+		group_id = data.group_id
+	
+	if data.has("is_correct_position"):
+		is_correct_position = data.is_correct_position
+	
+	if data.has("is_edge_piece"):
+		is_edge_piece = data.is_edge_piece
+	
+	if data.has("only_vertical"):
+		only_vertical = data.only_vertical
+	
+	if data.has("fragment_region"):
+		var region_data = data.fragment_region
+		fragment_region = Rect2(
+			Vector2(region_data.x, region_data.y),
+			Vector2(region_data.width, region_data.height)
+		)
+		update_visual()
+	
+	# Forzar actualización visual después de restaurar datos
+	call_deferred("_force_visual_update")
+	
+	print("PuzzlePiece: Datos restaurados para pieza ", order_number, " en posición final: ", global_position)
+	
+	# Los grupos se restaurarán en una segunda pasada
+	# porque necesitamos que todas las piezas estén cargadas primero
+
+# Método auxiliar para forzar actualización visual
+func _force_visual_update():
+	update_visual()
+	# Asegurar que la posición se mantenga
+	if has_method("update_visual_effects"):
+		update_visual_effects()
+
 # Nueva función para actualizar efectos visuales basados en agrupación
 func update_visual_effects():
 	if not enable_visual_effects or not is_instance_valid(sprite):

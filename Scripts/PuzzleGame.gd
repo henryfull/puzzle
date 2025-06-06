@@ -75,6 +75,9 @@ var current_puzzle_id: String = ""
 func _ready():
 	print("PuzzleGame: Iniciando juego...")
 	
+	# Configurar guardado de emergencia al cerrar la aplicación
+	get_tree().auto_accept_quit = false
+	
 	# PASO 1: Instanciar y mostrar el loading puzzle INMEDIATAMENTE
 	_show_loading_puzzle()
 	
@@ -104,7 +107,31 @@ func _ready():
 	add_child(victory_checker)
 	victory_checker.puzzle_is_complete.connect(_handle_puzzle_really_completed)
 
-	# Configurar el puzzle según los datos seleccionados
+	# Verificar si debemos usar el estado guardado o empezar nuevo puzzle
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	var continuing_game = false
+	
+	# Solo continuar si hay estado guardado Y es el mismo puzzle que queremos jugar
+	if puzzle_state_manager and puzzle_state_manager.has_saved_state():
+		var saved_pack_id = puzzle_state_manager.get_saved_pack_id()
+		var saved_puzzle_id = puzzle_state_manager.get_saved_puzzle_id()
+		var current_pack_id_check = GLOBAL.selected_pack.id if GLOBAL.selected_pack else ""
+		var current_puzzle_id_check = GLOBAL.selected_puzzle.id if GLOBAL.selected_puzzle else ""
+		
+		# Solo continuar si es exactamente el mismo puzzle
+		if saved_pack_id == current_pack_id_check and saved_puzzle_id == current_puzzle_id_check:
+			print("PuzzleGame: Detectado estado guardado para el mismo puzzle, continuando partida...")
+			continuing_game = puzzle_state_manager.setup_continue_game()
+			if continuing_game:
+				print("PuzzleGame: Configuración de continuación aplicada exitosamente")
+			else:
+				print("PuzzleGame: No se pudo configurar la continuación, empezando nueva partida")
+		else:
+			print("PuzzleGame: Estado guardado es para otro puzzle (", saved_pack_id, "/", saved_puzzle_id, "), empezando nueva partida")
+			# Limpiar el estado guardado del puzzle anterior
+			puzzle_state_manager.clear_all_state()
+	
+	# Configurar el puzzle según los datos seleccionados o guardados
 	if GLOBAL.selected_puzzle != null:
 		image_path = GLOBAL.selected_puzzle.image
 		if GLOBAL.selected_pack != null:
@@ -118,6 +145,10 @@ func _ready():
 	# Generar textura trasera y crear piezas
 	await _setup_puzzle()
 	
+	# Si estamos continuando una partida, restaurar el estado de las piezas
+	if continuing_game and puzzle_state_manager:
+		await _restore_puzzle_state(puzzle_state_manager)
+	
 	# El centrado automático ahora se hace al final de load_and_create_pieces()
 	# para asegurar que todas las piezas estén completamente cargadas
 	
@@ -126,6 +157,13 @@ func _ready():
 	
 	# Configurar modos de juego
 	game_state_manager.setup_game_mode()
+	
+	# Si estamos continuando, restaurar los contadores
+	if continuing_game and puzzle_state_manager:
+		_restore_game_counters(puzzle_state_manager)
+	else:
+		# Nueva partida - inicializar el estado
+		_initialize_new_puzzle_state()
 	
 	# Conectar botón de centrado si existe en la escena
 	_connect_center_button()
@@ -218,8 +256,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _notification(what):
 	# Interceptar cualquier notificación del sistema durante el puzzle
 	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		print("PuzzleGame: Interceptando notificación del sistema durante puzzle - IGNORANDO")
-		get_viewport().set_input_as_handled()
+		print("PuzzleGame: Detectado cierre de aplicación - Guardando estado de emergencia")
+		_emergency_save_state()
+		get_tree().quit()
 		return
 
 # Funciones de acceso para los managers
@@ -297,6 +336,10 @@ func force_complete_recenter(silent: bool = false):
 func _handle_puzzle_really_completed():
 	puzzle_completed = true
 	print("PuzzleGame: _handle_puzzle_really_completed() - Puzzle marcado como completado internamente tras señal de VictoryChecker.")
+	
+	# Limpiar el estado guardado del puzzle
+	_handle_puzzle_completion_state()
+	
 	# El VictoryChecker ya maneja la transición a la pantalla de victoria
 
 # Delegación de funciones principales a los managers apropiados
@@ -732,3 +775,256 @@ func _block_all_dialogs():
 func show_exit_dialog():
 	print("PuzzleGame: Intento de mostrar diálogo de salida durante puzzle - BLOQUEADO")
 	# No hacer nada, simplemente ignorar
+
+# === MÉTODOS PARA GESTIÓN DEL ESTADO GUARDADO ===
+
+# Inicializar el estado para una nueva partida
+func _initialize_new_puzzle_state():
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager:
+		puzzle_state_manager.start_new_puzzle_state(current_pack_id, current_puzzle_id, GLOBAL.gamemode, GLOBAL.current_difficult)
+		print("PuzzleGame: Nuevo estado de puzzle inicializado")
+
+# Restaurar el estado de las piezas del puzzle
+func _restore_puzzle_state(puzzle_state_manager):
+	print("PuzzleGame: Restaurando estado de las piezas...")
+	
+	var saved_pieces_data = puzzle_state_manager.get_saved_pieces_data()
+	
+	print("PuzzleGame: Datos guardados - Piezas: ", saved_pieces_data.size())
+	
+	if saved_pieces_data.size() == 0:
+		print("PuzzleGame: No hay datos de piezas guardados, usando posiciones iniciales")
+		return
+	
+	# Esperar múltiples frames para asegurar inicialización completa
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	# Preparar para restauración - no necesitamos desagrupar ya que trabajaremos con el PuzzlePieceManager
+	print("PuzzleGame: Preparando restauración de estado...")
+	
+	# Esperar un frame adicional para estabilidad
+	await get_tree().process_frame
+	
+	# Obtener piezas del PuzzlePieceManager y crear mapa por order_number
+	var manager_pieces = piece_manager.get_pieces() if piece_manager else []
+	var total_pieces = manager_pieces.size()
+	
+	print("PuzzleGame: Encontradas ", total_pieces, " piezas en PuzzlePieceManager")
+	
+	# Restaurar posiciones individuales primero (sin grupos)
+	var restored_count = 0
+	for piece_data in saved_pieces_data:
+		var order = piece_data.get("order_number", -1)
+		if order >= 0:
+			var found_piece = null
+			
+			# Buscar la pieza con el order_number correspondiente
+			for piece_obj in manager_pieces:
+				if piece_obj.node.order_number == order:
+					found_piece = piece_obj
+					break
+			
+			if found_piece:
+				# Restaurar solo posición y flip state primero
+				if piece_data.has("current_position"):
+					var current_pos_data = piece_data.current_position
+					var target_pos = Vector2.ZERO
+					
+					# Manejar diferentes formatos de posición (Vector2 directo o diccionario)
+					if typeof(current_pos_data) == TYPE_DICTIONARY:
+						if current_pos_data.has("x") and current_pos_data.has("y"):
+							target_pos = Vector2(current_pos_data.x, current_pos_data.y)
+					elif typeof(current_pos_data) == TYPE_STRING:
+						# Si es string, intentar parsearlo como Vector2
+						var vector_string = current_pos_data.strip_edges()
+						if vector_string.begins_with("(") and vector_string.ends_with(")"):
+							vector_string = vector_string.substr(1, vector_string.length() - 2)
+							var parts = vector_string.split(",")
+							if parts.size() == 2:
+								target_pos = Vector2(float(parts[0].strip_edges()), float(parts[1].strip_edges()))
+					elif current_pos_data is Vector2:
+						target_pos = current_pos_data
+					else:
+						print("PuzzleGame: Formato de posición desconocido: ", typeof(current_pos_data))
+						continue
+					
+					# Actualizar posición visual
+					found_piece.node.global_position = target_pos
+					
+					# 🔧 CRUCIAL: Actualizar el grid interno del PuzzlePieceManager
+					# Primero remover la pieza de su posición anterior en el grid
+					if piece_manager:
+						piece_manager.remove_piece_at(found_piece.current_cell)
+						
+						var new_cell = Vector2.ZERO
+						
+						# 🎯 PRIORIDAD: Usar celda guardada si está disponible (más confiable)
+						if piece_data.has("current_cell"):
+							var current_cell_data = piece_data.current_cell
+							if typeof(current_cell_data) == TYPE_DICTIONARY and current_cell_data.has("x") and current_cell_data.has("y"):
+								new_cell = Vector2(current_cell_data.x, current_cell_data.y)
+								print("PuzzleGame: Pieza ", order, " - Usando celda guardada: ", new_cell)
+							else:
+								# Fallback: calcular desde posición
+								new_cell = piece_manager.get_cell_of_piece(found_piece)
+								print("PuzzleGame: Pieza ", order, " - Calculando celda desde posición: ", new_cell)
+						else:
+							# Fallback: calcular desde posición (para saves antiguos)
+							new_cell = piece_manager.get_cell_of_piece(found_piece)
+							print("PuzzleGame: Pieza ", order, " - Calculando celda (save antiguo): ", new_cell)
+						
+						# Actualizar el grid con la nueva posición
+						piece_manager.set_piece_at(new_cell, found_piece)
+						
+						print("PuzzleGame: Pieza ", order, " posicionada en ", target_pos, " - Grid actualizado a celda ", new_cell)
+					else:
+						print("PuzzleGame: Pieza ", order, " posicionada en ", target_pos, " - Sin actualización de grid")
+				
+				if piece_data.has("is_flipped") and found_piece.node.has_method("set_is_flipped"):
+					found_piece.node.set_is_flipped(piece_data.is_flipped)
+				
+				restored_count += 1
+			else:
+				print("PuzzleGame: ⚠️ No se pudo restaurar pieza con orden ", order)
+	
+	# Esperar frame después de colocar las piezas
+	await get_tree().process_frame
+	
+	# Ahora restaurar los grupos usando el PuzzlePieceManager
+	print("PuzzleGame: Restaurando grupos usando PuzzlePieceManager...")
+	var groups_to_restore = {}
+	
+	# Organizar piezas por grupo
+	for piece_data in saved_pieces_data:
+		if piece_data.has("group_id") and piece_data.group_id != -1:
+			var group_id = piece_data.group_id
+			if not groups_to_restore.has(group_id):
+				groups_to_restore[group_id] = []
+			groups_to_restore[group_id].append(piece_data.get("order_number", -1))
+	
+	# Restaurar grupos usando el sistema de PuzzlePieceManager
+	if piece_manager:
+		for group_id in groups_to_restore.keys():
+			var orders_in_group = groups_to_restore[group_id]
+			if orders_in_group.size() > 1:
+				var piece_objects_in_group = []
+				
+				# Encontrar los objetos Piece correspondientes (reutilizar manager_pieces)
+				for order in orders_in_group:
+					for piece_obj in manager_pieces:
+						if piece_obj.node.order_number == order:
+							piece_objects_in_group.append(piece_obj)
+							break
+				
+				# Crear el grupo usando el sistema correcto
+				if piece_objects_in_group.size() > 1:
+					# Crear un grupo manualmente asignando el mismo array group a todas las piezas
+					for piece_obj in piece_objects_in_group:
+						piece_obj.group = piece_objects_in_group.duplicate()
+						# Actualizar visuales del nodo
+						if piece_obj.node.has_method("set_group_id"):
+							piece_obj.node.set_group_id(group_id)
+						if piece_obj.node.has_method("update_pieces_group"):
+							piece_obj.node.update_pieces_group(piece_objects_in_group)
+					
+					print("PuzzleGame: Grupo ", group_id, " recreado con ", piece_objects_in_group.size(), " piezas")
+	else:
+		print("PuzzleGame: ⚠️ No se pudo acceder al PuzzlePieceManager para restaurar grupos")
+	
+	print("PuzzleGame: Estado de piezas restaurado - ", restored_count, "/", saved_pieces_data.size(), " piezas restauradas correctamente")
+	
+	# Forzar actualización visual después de la restauración
+	await get_tree().process_frame
+	print("PuzzleGame: Restauración de estado completada")
+
+# Restaurar los contadores del juego
+func _restore_game_counters(puzzle_state_manager):
+	print("PuzzleGame: Restaurando contadores del juego...")
+	
+	var saved_counters = puzzle_state_manager.get_saved_counters()
+	
+	# Restaurar contadores en el game_state_manager
+	if game_state_manager:
+		if saved_counters.has("elapsed_time"):
+			game_state_manager.elapsed_time = saved_counters.elapsed_time
+			# Ajustar el tiempo de inicio para que el tiempo transcurrido sea correcto
+			game_state_manager.start_time = Time.get_unix_time_from_system() - saved_counters.elapsed_time
+		
+		if saved_counters.has("total_moves"):
+			game_state_manager.total_moves = saved_counters.total_moves
+		
+		if saved_counters.has("flip_count"):
+			game_state_manager.flip_count = saved_counters.flip_count
+		
+		if saved_counters.has("flip_move_count"):
+			game_state_manager.flip_move_count = saved_counters.flip_move_count
+		
+		if saved_counters.has("time_left"):
+			game_state_manager.time_left = saved_counters.time_left
+		
+		print("PuzzleGame: Contadores restaurados - Tiempo: ", saved_counters.get("elapsed_time", 0), 
+			  ", Movimientos: ", saved_counters.get("total_moves", 0))
+	
+	# Actualizar UI con los valores restaurados
+	_update_ui_counters()
+
+# Actualizar la UI con los contadores actuales
+func _update_ui_counters():
+	if game_state_manager:
+		# Actualizar movimientos
+		if movesLabel:
+			movesLabel.text = str(game_state_manager.total_moves)
+		
+		# Actualizar tiempo si es visible
+		var timer_label = get_node("UILayer/TimerLabel") if has_node("UILayer/TimerLabel") else null
+		if timer_label and timer_label.visible:
+			var minutes = int(game_state_manager.elapsed_time) / 60
+			var seconds = int(game_state_manager.elapsed_time) % 60
+			timer_label.text = "%02d:%02d" % [minutes, seconds]
+
+# Función llamada cuando se completa el puzzle para limpiar el estado
+func _handle_puzzle_completion_state():
+	print("PuzzleGame: Puzzle completado, limpiando estado guardado...")
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager:
+		puzzle_state_manager.complete_puzzle()
+	
+	# Aquí se puede agregar lógica adicional para cuando se completa el puzzle
+	print("PuzzleGame: Estado limpiado, pack y puzzle mantenidos para acceso rápido")
+
+# Método para actualizar el estado guardado (llamado periódicamente o en eventos importantes)
+func _update_saved_state():
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if not puzzle_state_manager or not puzzle_state_manager.has_saved_state():
+		return
+	
+	# Actualizar contadores
+	if game_state_manager:
+		puzzle_state_manager.update_counters(
+			game_state_manager.elapsed_time,
+			game_state_manager.total_moves,
+			game_state_manager.flip_count,
+			game_state_manager.flip_move_count,
+			game_state_manager.time_left
+		)
+	
+	# 🔧 CRUCIAL: Actualizar posiciones usando el PuzzlePieceManager para incluir información de celda
+	if piece_manager:
+		puzzle_state_manager.update_pieces_positions_from_manager(piece_manager)
+	elif pieces_container:
+		# Fallback al método anterior si no hay piece_manager disponible
+		puzzle_state_manager.update_pieces_positions(pieces_container)
+
+# Guardado de emergencia cuando se cierra la aplicación
+func _emergency_save_state():
+	print("PuzzleGame: Ejecutando guardado de emergencia...")
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager and puzzle_state_manager.has_saved_state():
+		# Actualizar estado inmediatamente
+		_update_saved_state()
+		# Forzar guardado inmediato
+		puzzle_state_manager.save_puzzle_state()
+		print("PuzzleGame: Guardado de emergencia completado")

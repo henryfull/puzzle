@@ -69,6 +69,7 @@ AudioManager="*res://Scripts/Autoload/AudioManager.gd"
 TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
 ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
+PuzzleStateManager="*res://Scripts/Autoload/PuzzleStateManager.gd"
 BackGestureHandler="*res://Scripts/Autoload/BackGestureHandler.gd"
 
 [debug]

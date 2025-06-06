@@ -73,6 +73,28 @@ func _on_PlayButton_pressed():
 		get_node("/root/OptionsManager").hide_options()
 		await get_tree().create_timer(0.3).timeout  # Esperar a que termine la animación
 	
+	# Verificar si hay un estado guardado para continuar
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager and puzzle_state_manager.has_saved_state():
+		print("MainMenu: Detectado estado guardado, continuando partida...")
+		if puzzle_state_manager.setup_continue_game():
+			# Ir directamente al puzzle guardado
+			GLOBAL.change_scene_with_loading("res://Scenes/PuzzleGame.tscn")
+			return
+		else:
+			print("MainMenu: No se pudo configurar la continuación, yendo a selección de packs")
+	
+	# Si no hay estado guardado o hay un pack/puzzle guardado, ir a la selección apropiada
+	if puzzle_state_manager:
+		var saved_pack_id = puzzle_state_manager.get_saved_pack_id()
+		var saved_puzzle_id = puzzle_state_manager.get_saved_puzzle_id()
+		
+		if not saved_pack_id.is_empty():
+			# Hay un pack guardado, configurar GLOBAL y ir a selección de puzzles
+			_setup_saved_pack_and_go_to_puzzles(saved_pack_id)
+			return
+	
+	# No hay estado guardado, ir a selección de packs normalmente
 	GLOBAL.change_scene_with_loading("res://Scenes/PackSelection.tscn")
 
 func _on_OptionsButton_pressed():
@@ -114,3 +136,32 @@ func _on_StatsButton_pressed():
 
 func _on_show_gameModes() -> void:
 	$GameMode.get_child(0).visible = true
+
+# Función para configurar el pack guardado y ir a la selección de puzzles
+func _setup_saved_pack_and_go_to_puzzles(pack_id: String):
+	print("MainMenu: Configurando pack guardado: ", pack_id)
+	
+	# Buscar el pack en ProgressManager
+	var progress_manager = get_node("/root/ProgressManager")
+	if not progress_manager:
+		print("MainMenu: Error - No se encontró ProgressManager")
+		GLOBAL.change_scene_with_loading("res://Scenes/PackSelection.tscn")
+		return
+	
+	# Buscar el pack por ID
+	var found_pack = null
+	for pack in progress_manager.packs_data.packs:
+		if pack.id == pack_id:
+			found_pack = pack
+			break
+	
+	if found_pack:
+		# Configurar GLOBAL con el pack encontrado
+		GLOBAL.selected_pack = found_pack
+		print("MainMenu: Pack configurado: ", found_pack.name)
+		
+		# Ir a la selección de puzzles del pack
+		GLOBAL.change_scene_with_loading("res://Scenes/PuzzleSelection.tscn")
+	else:
+		print("MainMenu: No se encontró el pack guardado, yendo a selección de packs")
+		GLOBAL.change_scene_with_loading("res://Scenes/PackSelection.tscn")
