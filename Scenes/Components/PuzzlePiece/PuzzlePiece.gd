@@ -48,6 +48,13 @@ var group_colors: Array = [
 	Color(0.5, 0.2, 0.8, 1.0)     # Violeta
 ]
 
+# Variables para bordes de grupo - NUEVO SISTEMA
+var group_border_line: Line2D  # Línea para el borde del grupo
+var enable_group_borders: bool = true  # Activar/desactivar bordes de grupo
+var group_border_color: Color = Color(1.0, 1.0, 0.0, 0.8)  # Amarillo por defecto
+var group_border_width: float = 2.0  # Grosor del borde (más delgado para interiores)
+var border_offset: float = 3.0  # Distancia INTERIOR desde el borde del sprite
+
 # Variables exportables para personalización
 @export var background_color: Color = Color(0.2, 0.2, 0.2, 1.0)  # Color de fondo para el lado trasero
 @export var number_color: Color = Color(1, 1, 1, 1)  # Color del número
@@ -72,6 +79,12 @@ var group_colors: Array = [
 @export_subgroup("Configuración Avanzada")
 @export var brightness_variation: float = 0.4   # Variación de brillo (OBSOLETO - usar variables específicas arriba)
 
+@export_subgroup("Bordes de Grupo")
+@export var enable_group_border_display: bool = true  # Activar/desactivar bordes de grupo
+@export var group_border_thickness: float = 2.0  # Grosor del borde del grupo (interiores)
+@export_range(0.1, 1.0, 0.1) var group_border_opacity: float = 0.7  # Opacidad del borde (más sutil)
+@export var group_border_color_override: Color = Color(1.0, 1.0, 0.0, 0.7)  # Color del borde (amarillo más sutil)
+
 func _ready():
 	# Ajustar para recibir eventos de entrada
 	# El Area2D está para colisiones, pero usaremos _input_event
@@ -82,6 +95,11 @@ func _ready():
 	# Si hay un color personalizado para piezas sueltas, usarlo
 	if single_piece_color_override != Color(0.2, 0.2, 0.2, 1.0):
 		single_piece_color = single_piece_color_override
+	
+	# Configurar variables de borde de grupo desde las exportadas
+	enable_group_borders = enable_group_border_display
+	group_border_width = group_border_thickness
+	group_border_color = group_border_color_override
 	
 	# Configurar efectos visuales iniciales
 	setup_visual_effects()
@@ -101,6 +119,9 @@ func _ready():
 		number_label.z_index = 11  # El número debe estar encima del fondo
 		# Asegurarse de que el Label no bloquee los eventos de entrada
 		number_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	# Configurar borde de grupo inicial (no se mostrará hasta que esté en grupo)
+	update_group_border()
 
 func setup_visual_effects():
 	# Configurar los valores de efectos visuales desde las variables exportables
@@ -376,6 +397,9 @@ func set_group_id(id: int):
 	# También actualizamos el color del fondo siempre (independientemente de si está volteado)
 	update_background_color()
 	update_visual_effects()
+	# Actualizar borde de grupo
+	update_group_border()
+	update_border_color()
 
 # Función para establecer si es una pieza de borde en un grupo
 func set_edge_piece(is_edge: bool):
@@ -395,6 +419,9 @@ func update_pieces_group(new_group: Array):
 	# Actualizar el color del fondo si la pieza está volteada
 	if flipped:
 		update_background_color()
+	# Actualizar borde de grupo
+	update_group_border()
+	update_border_color()
 
 # Método para manejar los eventos de entrada en el área de colisión
 func _input_event(_viewport, event, _shape_idx):
@@ -454,15 +481,71 @@ func update_all_visuals():
 	if dragging:
 		set_dragging(true)
 
+# === FUNCIONES PARA BORDES DE GRUPO ===
+
+# Crear el borde de grupo
+func create_group_border():
+	if not enable_group_border_display:
+		return
+	
+	# Si ya existe un borde, eliminarlo primero
+	if group_border_line:
+		remove_group_border()
+	
+	# Crear nuevo Line2D para el borde
+	group_border_line = Line2D.new()
+	group_border_line.name = "GroupBorder"
+	group_border_line.width = group_border_thickness
+	group_border_line.default_color = group_border_color_override
+	group_border_line.z_index = 100  # Por encima de las piezas
+	group_border_line.closed = true  # Cerrar el contorno
+	
+	# Añadir al nodo principal de la pieza
+	add_child(group_border_line)
+	
+	print("PuzzlePiece: Borde de grupo creado para pieza ", order_number)
+
+# Eliminar el borde de grupo
+func remove_group_border():
+	if group_border_line and is_instance_valid(group_border_line):
+		group_border_line.queue_free()
+		group_border_line = null
+
+# Actualizar el borde de grupo basado en el estado actual
+func update_group_border():
+	# 🔧 NUEVO ENFOQUE: Solo limpiar bordes individuales
+	# El borde del grupo ahora se maneja centralmente en PuzzlePieceManager
+	if group_border_line and is_instance_valid(group_border_line):
+		group_border_line.queue_free()
+		group_border_line = null
+	
+	# Ya no creamos bordes individuales por pieza
+	# El PuzzlePieceManager se encargará de crear el borde del área completa del grupo
+
+# Función para establecer el color del borde basado en el grupo
+func set_group_border_color(color: Color):
+	group_border_color = color
+	if group_border_line and is_instance_valid(group_border_line):
+		group_border_line.default_color = color
+
+# Función para mostrar/ocultar el borde temporalmente
+func set_group_border_visible(visible: bool):
+	if group_border_line and is_instance_valid(group_border_line):
+		group_border_line.visible = visible
+
 # Funciones de compatibilidad (para mantener la API existente)
 func create_border():
-	# Ya no creamos bordes, pero mantenemos la función por compatibilidad
-	pass
+	# Ahora crea bordes de grupo en lugar de bordes individuales
+	update_group_border()
 
 func update_border():
-	# Ya no actualizamos bordes, pero mantenemos la función por compatibilidad
-	pass
+	# Ahora actualiza bordes de grupo
+	update_group_border()
 
 func update_border_color():
-	# Ya no actualizamos colores de borde, pero mantenemos la función por compatibilidad
-	pass
+	# Actualizar color de borde de grupo basado en el group_id
+	if pieces_group.size() > 1:
+		var color_index = abs(group_id) % group_colors.size()
+		var border_color = group_colors[color_index]
+		border_color.a = group_border_opacity  # Aplicar opacidad configurada
+		set_group_border_color(border_color)

@@ -84,7 +84,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 0.968627, 0.0392157, 0.184314)
+color = Color(0.278299, 0.330951, 0.666247, 1)
 
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
 visible = false

@@ -27,7 +27,7 @@ var flip_speed: float = 0.01  # Velocidad de la animación de flip
 
 # Configuración del efecto dorado - NUEVO SISTEMA DE FUSIÓN VISUAL
 var golden_effect_enabled: bool = true  # Activar/desactivar efecto dorado al formar grupos
-var golden_color: Color = Color(1.3, 1.2, 0.6, 1.0)  # Color dorado sutil (menos intenso)
+var golden_color: Color = Color(1, 1, 0.6, 1.0)  # Color dorado sutil (menos intenso)
 var golden_glow_duration: float = 0.7  # Duración total del efecto de brillo (en segundos) - más sutil
 
 # 🎯 CONFIGURACIÓN DE CENTRADO AUTOMÁTICO - AJUSTABLE PARA PRUEBAS
@@ -308,6 +308,10 @@ func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 	
 	# Aplicar centrado automático silencioso
 	puzzle_game.force_complete_recenter(true)
+	
+	# 🔲 Inicializar bordes de grupo después de que todo esté cargado
+	print("PuzzlePieceManager: 🔲 Inicializando sistema centralizado de bordes de grupo...")
+	update_all_group_borders()
 	
 	# Mostrar mensaje de confirmación del centrado automático
 	print("PuzzlePieceManager: 🎯 Centrado automático completado al cargar el puzzle")
@@ -847,6 +851,10 @@ func _handle_reorganize_pieces():
 			# Solo reorganizar lo que se puede sin cambiar el tamaño del tablero
 	
 	print("PuzzlePieceManager: Reorganización completada manteniendo integridad de grupos")
+	
+	# 🔲 NUEVO: Actualizar bordes de grupo después de la reorganización
+	update_all_group_borders()
+	print("PuzzlePieceManager: Bordes de grupo actualizados después de la reorganización")
 	
 	# Verificar estado final
 	print("PuzzlePieceManager: Estado después de reorganización:")
@@ -1930,6 +1938,8 @@ func _update_edge_pieces_in_group(group: Array):
 		for piece in group:
 			if piece.node.has_method("set_edge_piece"):
 				piece.node.set_edge_piece(true)
+		# Actualizar bordes centralmente después de cambios en grupos
+		update_all_group_borders()
 		return
 	
 	var directions = [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]
@@ -1960,7 +1970,10 @@ func _update_edge_pieces_in_group(group: Array):
 		
 		# Actualizar efectos visuales después de cambiar el estado de borde
 		if piece.node.has_method("update_visual_effects"):
-			piece.node.update_visual_effects() 
+			piece.node.update_visual_effects()
+	
+	# 🆕 ACTUALIZAR BORDES DE GRUPO centralmente después de formar/modificar grupo
+	update_all_group_borders() 
 
 # === FUNCIÓN AUXILIAR PARA EVITAR SUPERPOSICIONES ===
 
@@ -2408,6 +2421,10 @@ func force_recenter_all_pieces():
 			piece_obj.node.get_node("Sprite2D").position = Vector2.ZERO
 	
 	print("PuzzlePieceManager: Recentrado forzado completado para ", pieces.size(), " piezas")
+	
+	# 🔲 NUEVO: Actualizar bordes de grupo después del recentrado forzado
+	update_all_group_borders()
+	print("PuzzlePieceManager: Bordes de grupo actualizados después del recentrado forzado")
 
 # Función para aplicar corrección inteligente de centrado
 func _apply_smart_centering_correction():
@@ -2478,6 +2495,10 @@ func _apply_smart_centering_correction():
 		print("PuzzlePieceManager: ✅ Corrección de centrado completada")
 	else:
 		print("PuzzlePieceManager: ✅ El puzzle ya está suficientemente centrado (offset: ", correction_offset.length(), ")")
+	
+	# 🔲 NUEVO: Actualizar bordes de grupo después de la corrección de centrado
+	update_all_group_borders()
+	print("PuzzlePieceManager: Bordes de grupo actualizados después de la corrección de centrado")
 	
 	# Verificar que la corrección funcionó
 	var verification_result = _verify_piece_positioning()
@@ -2604,3 +2625,271 @@ func _find_truly_free_cell_near(target_cell: Vector2) -> Vector2:
 	
 	# Último recurso
 	return target_cell
+
+# === FUNCIONES PARA CONTROL GLOBAL DE BORDES DE GRUPO ===
+
+# Función específica para convertir bordes exteriores a interiores (fix rápido)
+func convert_borders_to_interior():
+	print("PuzzlePieceManager: Convirtiendo todos los bordes a interiores...")
+	
+	for piece_obj in pieces:
+		# Actualizar configuración para bordes interiores
+		if piece_obj.node.has_method("remove_group_border"):
+			piece_obj.node.remove_group_border()
+		
+		# Ajustar configuración para bordes interiores más sutiles
+		piece_obj.node.border_offset = 3.0
+		piece_obj.node.group_border_width = 2.0
+		piece_obj.node.group_border_color = Color(1.0, 1.0, 0.0, 0.7)
+		
+		# Recrear borde con nueva configuración
+		if piece_obj.node.has_method("update_group_border"):
+			piece_obj.node.update_group_border()
+		if piece_obj.node.has_method("update_border_color"):
+			piece_obj.node.update_border_color()
+	
+	print("PuzzlePieceManager: ✅ Bordes convertidos a interiores exitosamente")
+
+# Función para activar/desactivar bordes de grupo globalmente
+func set_group_borders_enabled(enabled: bool):
+	print("PuzzlePieceManager: ", "Activando" if enabled else "Desactivando", " bordes de grupo globalmente")
+	
+	enable_group_borders_global = enabled
+	if enabled:
+		update_all_group_borders()
+	else:
+		clear_all_group_borders()
+
+# Función para cambiar el grosor de todos los bordes de grupo
+func set_group_border_thickness(thickness: float):
+	print("PuzzlePieceManager: Cambiando grosor de bordes de grupo a: ", thickness)
+	
+	group_border_thickness_global = thickness
+	# Actualizar grosor de bordes existentes
+	for border_line in group_border_lines.values():
+		if is_instance_valid(border_line):
+			border_line.width = thickness
+
+# Función para cambiar la opacidad de todos los bordes de grupo
+func set_group_border_opacity(opacity: float):
+	opacity = clamp(opacity, 0.1, 1.0)
+	print("PuzzlePieceManager: Cambiando opacidad de bordes de grupo a: ", opacity)
+	
+	# Actualizar color global con nueva opacidad
+	group_border_color_global.a = opacity
+	# Recrear bordes con nueva opacidad
+	update_all_group_borders()
+
+# Función para forzar actualización de todos los bordes de grupo
+func refresh_all_group_borders():
+	print("PuzzlePieceManager: Refrescando todos los bordes de grupo")
+	update_all_group_borders()
+
+# Función para mostrar/ocultar temporalmente todos los bordes
+func toggle_group_borders_visibility(visible: bool):
+	print("PuzzlePieceManager: ", "Mostrando" if visible else "Ocultando", " bordes de grupo")
+	
+	if group_borders_container and is_instance_valid(group_borders_container):
+		group_borders_container.visible = visible
+
+# === SISTEMA CENTRALIZADO DE BORDES DE GRUPO ===
+
+# Contenedor para los bordes de grupo
+var group_borders_container: Node2D
+var group_border_lines: Dictionary = {}  # group_id -> Line2D
+var enable_group_borders_global: bool = true
+var group_border_thickness_global: float = 2.0
+var group_border_color_global: Color = Color(1.0, 1.0, 0.0, 0.7)
+
+# Inicializar el contenedor de bordes de grupo
+func _initialize_group_borders_container():
+	if not group_borders_container or not is_instance_valid(group_borders_container):
+		group_borders_container = Node2D.new()
+		group_borders_container.name = "GroupBordersContainer"
+		group_borders_container.z_index = 150  # Por encima de las piezas
+		
+		# Añadir al contenedor de piezas
+		if puzzle_game.pieces_container:
+			puzzle_game.pieces_container.add_child(group_borders_container)
+		else:
+			puzzle_game.add_child(group_borders_container)
+		
+		print("PuzzlePieceManager: Contenedor de bordes de grupo inicializado")
+
+# Crear borde para un grupo específico
+func create_group_border(group: Array, group_id: int):
+	if not enable_group_borders_global or group.size() <= 1:
+		return
+	
+	_initialize_group_borders_container()
+	
+	# Eliminar borde existente si lo hay
+	remove_group_border(group_id)
+	
+	# Calcular el contorno del grupo
+	var border_points = _calculate_group_border_outline(group)
+	
+	if border_points.size() < 3:  # Necesitamos al menos 3 puntos para un contorno
+		return
+	
+	# Crear Line2D para el borde del grupo
+	var border_line = Line2D.new()
+	border_line.name = "GroupBorder_" + str(group_id)
+	border_line.width = group_border_thickness_global
+	border_line.default_color = _get_group_border_color(group_id)
+	border_line.closed = true
+	border_line.z_index = 1
+	
+	# Añadir puntos del contorno
+	for point in border_points:
+		border_line.add_point(point)
+	
+	# Añadir al contenedor
+	group_borders_container.add_child(border_line)
+	group_border_lines[group_id] = border_line
+	
+	print("PuzzlePieceManager: Borde creado para grupo ", group_id, " con ", border_points.size(), " puntos")
+
+# Eliminar borde de un grupo específico
+func remove_group_border(group_id: int):
+	if group_id in group_border_lines:
+		var border_line = group_border_lines[group_id]
+		if is_instance_valid(border_line):
+			border_line.queue_free()
+		group_border_lines.erase(group_id)
+
+# Función para calcular el contorno exterior de un grupo
+func _calculate_group_border_outline(group: Array) -> Array:
+	if group.size() == 0:
+		return []
+	
+	# Obtener datos del puzzle para cálculos de posición
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	var cell_size = puzzle_data.cell_size
+	var offset = puzzle_data.offset
+	
+	# Crear un mapa de las celdas ocupadas por el grupo
+	var group_cells = {}
+	for piece in group:
+		group_cells[piece.current_cell] = true
+	
+	# Encontrar el contorno exterior del grupo
+	var outline_segments = []
+	
+	# Para cada pieza del grupo, verificar qué lados están en el perímetro
+	for piece in group:
+		var cell = piece.current_cell
+		var piece_pos = offset + cell * cell_size
+		var half_cell = cell_size * 0.5
+		
+		# Verificar cada lado de la pieza
+		var directions = [
+			{"dir": Vector2.UP, "corners": [Vector2(-half_cell.x, -half_cell.y), Vector2(half_cell.x, -half_cell.y)]},
+			{"dir": Vector2.RIGHT, "corners": [Vector2(half_cell.x, -half_cell.y), Vector2(half_cell.x, half_cell.y)]},
+			{"dir": Vector2.DOWN, "corners": [Vector2(half_cell.x, half_cell.y), Vector2(-half_cell.x, half_cell.y)]},
+			{"dir": Vector2.LEFT, "corners": [Vector2(-half_cell.x, half_cell.y), Vector2(-half_cell.x, -half_cell.y)]}
+		]
+		
+		for side in directions:
+			var neighbor_cell = cell + side.dir
+			
+			# Si no hay pieza del grupo en esta dirección, este lado es parte del contorno
+			if not neighbor_cell in group_cells:
+				var corner1 = piece_pos + side.corners[0]
+				var corner2 = piece_pos + side.corners[1]
+				outline_segments.append({"start": corner1, "end": corner2})
+	
+	# Conectar los segmentos para formar un contorno cerrado
+	return _connect_outline_segments(outline_segments)
+
+# Función para conectar segmentos de contorno en un polígono cerrado
+func _connect_outline_segments(segments: Array) -> Array:
+	if segments.size() == 0:
+		return []
+	
+	var connected_points = []
+	var current_segment = segments[0]
+	connected_points.append(current_segment.start)
+	segments.remove_at(0)
+	
+	# Intentar conectar segmentos
+	while segments.size() > 0:
+		var current_end = current_segment.end
+		var found_connection = false
+		
+		# Buscar el siguiente segmento que conecte
+		for i in range(segments.size()):
+			var segment = segments[i]
+			var distance_to_start = current_end.distance_to(segment.start)
+			var distance_to_end = current_end.distance_to(segment.end)
+			
+			if distance_to_start < 2.0:  # Conecta con el inicio del segmento
+				connected_points.append(current_end)
+				current_segment = segment
+				segments.remove_at(i)
+				found_connection = true
+				break
+			elif distance_to_end < 2.0:  # Conecta con el final del segmento (invertir)
+				connected_points.append(current_end)
+				current_segment = {"start": segment.end, "end": segment.start}
+				segments.remove_at(i)
+				found_connection = true
+				break
+		
+		if not found_connection:
+			break
+	
+	# Añadir el último punto para cerrar el contorno
+	if connected_points.size() > 0:
+		connected_points.append(current_segment.end)
+	
+	return connected_points
+
+# Función para obtener el color del borde basado en el group_id
+func _get_group_border_color(group_id: int) -> Color:
+	# Reutilizar los colores ya definidos en PuzzlePiece
+	var group_colors = [
+		Color(0.95, 0.3, 0.3, 0.7),   # Rojo
+		Color(0.3, 0.8, 0.3, 0.7),    # Verde
+		Color(0.3, 0.3, 0.95, 0.7),   # Azul
+		Color(0.95, 0.95, 0.3, 0.7),  # Amarillo
+		Color(0.95, 0.6, 0.3, 0.7),   # Naranja
+		Color(0.7, 0.3, 0.95, 0.7),   # Púrpura
+		Color(0.3, 0.95, 0.95, 0.7),  # Cian
+		Color(0.95, 0.3, 0.6, 0.7),   # Rosa
+		Color(0.5, 0.8, 0.2, 0.7),    # Verde lima
+		Color(0.5, 0.2, 0.8, 0.7)     # Violeta
+	]
+	
+	var color_index = abs(group_id) % group_colors.size()
+	return group_colors[color_index]
+
+# Función para actualizar todos los bordes de grupo
+func update_all_group_borders():
+	if not enable_group_borders_global:
+		clear_all_group_borders()
+		return
+	
+	print("PuzzlePieceManager: Actualizando todos los bordes de grupo...")
+	
+	# Limpiar bordes existentes
+	clear_all_group_borders()
+	
+	# Crear mapa de grupos activos
+	var active_groups = {}
+	for piece_obj in pieces:
+		if piece_obj.group.size() > 1:
+			var group_id = piece_obj.node.group_id
+			if not group_id in active_groups:
+				active_groups[group_id] = []
+			active_groups[group_id] = piece_obj.group
+	
+	# Crear bordes para cada grupo
+	for group_id in active_groups.keys():
+		var group = active_groups[group_id]
+		create_group_border(group, group_id)
+
+# Función para limpiar todos los bordes de grupo
+func clear_all_group_borders():
+	for group_id in group_border_lines.keys():
+		remove_group_border(group_id)

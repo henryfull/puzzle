@@ -325,7 +325,12 @@ func force_complete_recenter(silent: bool = false):
 	if piece_manager:
 		piece_manager._apply_smart_centering_correction()
 	
-	# 3. Verificar resultado (solo mostrar mensajes si no es silencioso)
+	# 3. 🔲 NUEVO: Actualizar bordes de grupo después del centrado
+	if piece_manager:
+		piece_manager.update_all_group_borders()
+		print("PuzzleGame: Bordes de grupo actualizados después del centrado")
+	
+	# 4. Verificar resultado (solo mostrar mensajes si no es silencioso)
 	if run_positioning_diagnosis():
 		if not silent:
 			show_success_message("✅ Puzzle centrado perfectamente", 2.0)
@@ -1028,3 +1033,62 @@ func _emergency_save_state():
 		# Forzar guardado inmediato
 		puzzle_state_manager.save_puzzle_state()
 		print("PuzzleGame: Guardado de emergencia completado")
+
+# === FUNCIONES PARA CONTROL DE BORDES DE GRUPO ===
+
+# Función para activar/desactivar bordes de grupo
+func toggle_group_borders(enabled: bool):
+	if piece_manager:
+		piece_manager.set_group_borders_enabled(enabled)
+		show_success_message("🔲 Bordes de grupo " + ("activados" if enabled else "desactivados"), 2.0)
+	else:
+		print("PuzzleGame: Error - piece_manager no disponible")
+
+# Función para cambiar grosor de bordes de grupo
+func set_group_border_thickness(thickness: float):
+	if piece_manager:
+		piece_manager.set_group_border_thickness(thickness)
+		show_success_message("🔲 Grosor de bordes: " + str(thickness) + "px", 2.0)
+	else:
+		print("PuzzleGame: Error - piece_manager no disponible")
+
+# Función para cambiar opacidad de bordes de grupo
+func set_group_border_opacity(opacity: float):
+	if piece_manager:
+		piece_manager.set_group_border_opacity(opacity)
+		show_success_message("🔲 Opacidad de bordes: " + str(int(opacity * 100)) + "%", 2.0)
+	else:
+		print("PuzzleGame: Error - piece_manager no disponible")
+
+# Función para refrescar todos los bordes
+func refresh_group_borders():
+	if piece_manager:
+		piece_manager.refresh_all_group_borders()
+		show_success_message("🔲 Bordes de grupo refrescados", 2.0)
+	else:
+		print("PuzzleGame: Error - piece_manager no disponible")
+
+# Función para mostrar/ocultar temporalmente los bordes
+func toggle_group_borders_visibility(visible: bool):
+	if piece_manager:
+		piece_manager.toggle_group_borders_visibility(visible)
+		show_success_message("🔲 Bordes " + ("mostrados" if visible else "ocultados"), 1.5)
+	else:
+		print("PuzzleGame: Error - piece_manager no disponible")
+
+# Función para convertir bordes existentes a interiores
+func convert_borders_to_interior():
+	if piece_manager:
+		piece_manager.convert_borders_to_interior()
+		show_success_message("🔲 Bordes convertidos a interiores", 2.0)
+	else:
+		print("PuzzleGame: Error - piece_manager no disponible")
+
+# Función de utilidad para centrar el puzzle y actualizar bordes automáticamente
+func center_puzzle_and_update_borders(silent: bool = false):
+	force_complete_recenter(silent)
+	# Los bordes ya se actualizan automáticamente en force_complete_recenter
+	if not silent:
+		show_success_message("🎯 Puzzle centrado y bordes actualizados", 2.0)
+
+# NUEVO: Función para manejar gestos del borde durante el puzzle

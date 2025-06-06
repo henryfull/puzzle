@@ -537,4 +537,9 @@ func load_user_preferences() -> void:
 func reset_board_to_center():
 	print("PuzzleInputHandler: Reseteando tablero al centro")
 	board_offset = Vector2.ZERO
-	update_board_position() 
+	update_board_position()
+	
+	# 🔲 NUEVO: Actualizar bordes de grupo después de resetear al centro
+	if piece_manager:
+		piece_manager.update_all_group_borders()
+		print("PuzzleInputHandler: Bordes de grupo actualizados después de resetear al centro") 
