@@ -1,9 +1,11 @@
-[gd_scene load_steps=21 format=3 uid="uid://dh7t7utu076oi"]
+[gd_scene load_steps=23 format=3 uid="uid://dh7t7utu076oi"]
 
 [ext_resource type="Script" uid="uid://cct0rg0djuimx" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
 [ext_resource type="Texture2D" uid="uid://cg6madwi8etli" path="res://Assets/Images/GUID/backgrounds/fondo 4.png" id="2_8um5k"]
+[ext_resource type="PackedScene" uid="uid://bf4l7m2h4pnm8" path="res://Scenes/Components/ParticleBackground.tscn" id="2_particle"]
 [ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="3_8saeu"]
 [ext_resource type="Texture2D" uid="uid://cvketyxjld53v" path="res://Assets/Images/tikitiki logo.png" id="3_8um5k"]
+[ext_resource type="PackedScene" uid="uid://bnx3dokwgr658" path="res://Scenes/Components/GradientBackground/gradient_background.tscn" id="3_cmrfp"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_ghw46"]
 [ext_resource type="PackedScene" uid="uid://bnl7nqpqlgw5v" path="res://Scenes/Components/GameModeSelection/GameMode.tscn" id="5_df05h"]
 [ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="6_xim88"]
@@ -57,7 +59,18 @@ script = ExtResource("1_pl40w")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer"]
+visible = false
+z_index = -9
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.278299, 0.330951, 0.666247, 1)
+
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -77,14 +90,9 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.505882)
 
-[node name="ColorRect2" type="ColorRect" parent="CanvasLayer/TextureRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.278299, 0.330951, 0.666247, 1)
+[node name="GradientBackground" parent="CanvasLayer" instance=ExtResource("3_cmrfp")]
+
+[node name="ParticleBackground" parent="CanvasLayer" instance=ExtResource("2_particle")]
 
 [node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
 visible = false

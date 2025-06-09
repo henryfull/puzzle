@@ -220,8 +220,6 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	)
 	stats_table_container.add_child(best_moves_row)
 	
-
-	
 	# Fila de mejor flips
 	var best_flips_row = create_stat_row(tr("Menor flips"), difficulties, puzzle_stats, 
 		func(stats):
@@ -230,8 +228,6 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 			return "-"
 	)
 	stats_table_container.add_child(best_flips_row)
-	
-
 	
 	# Fila de mejor movimientos con flip
 	var best_flip_moves_row = create_stat_row(tr("Menor mov. flip"), difficulties, puzzle_stats, 
@@ -242,14 +238,25 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	)
 	stats_table_container.add_child(best_flip_moves_row)
 	
+	# Fila de mejor puntuación - NUEVA
+	var best_score_row = create_stat_row(tr("Mejor puntuación"), difficulties, puzzle_stats, 
+		func(stats):
+			if stats.has("best_score") and stats["best_score"] > 0:
+				return str(int(stats["best_score"]))
+			return "-"
+	)
+	stats_table_container.add_child(best_score_row)
 	
-	# Separador antes de historial
-	var separator = HSeparator.new()
-	stats_table_container.add_child(separator)
+	# Fila de fecha mejor puntuación - NUEVA
+	var best_score_date_row = create_stat_row(tr("Fecha"), difficulties, puzzle_stats, 
+		func(stats):
+			if stats.has("best_score_date") and stats["best_score_date"] != "":
+				return format_date_time(stats["best_score_date"])
+			return "-"
+	)
+	stats_table_container.add_child(best_score_date_row)
 	
-	
-	# Historial de partidas (3 últimas partidas para cada dificultad)
-	# create_history_rows(difficulties, puzzle_stats)
+	# Ya no mostramos historial - solo los mejores resultados
 
 # Crear fila de encabezados
 func create_header_row(difficulties: Array) -> HBoxContainer:
@@ -290,9 +297,6 @@ func create_stat_row(stat_name: String, difficulties: Array, puzzle_stats: Dicti
 	
 	return row
 
-
-
-
 # Crear una celda para la tabla
 func create_cell(text: String, is_header: bool = false) -> Label:
 	var label = Label.new()
@@ -316,6 +320,8 @@ func format_date_time(date_str: String) -> String:
 		return date_part + " " + time_part
 	return date_str
 
+# Las funciones de historial han sido eliminadas - ya no mostramos historial de partidas
+
 # Manejadores de eventos
 func _on_pack_selected(index: int):
 	var pack_id = pack_selector.get_item_metadata(index)
@@ -333,7 +339,6 @@ func _on_puzzle_selected(index: int):
 
 func _on_back_button_pressed():
 	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn") 
-
 
 func _on_button_expanse_pressed() -> void:
 	$CanvasLayer/ExpanseImage.visible = true

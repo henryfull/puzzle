@@ -10,8 +10,13 @@ var puzzle_game: Node2D
 # Variables para el estado del HUD
 var hud_visible: bool = true
 
+# Variables para la UI de puntuación dinámicas eliminadas
+# Los elementos de puntuación ahora están directamente en el UILayer
+
 func initialize(game: Node2D):
 	puzzle_game = game
+	# Ya no necesitamos crear dinámicamente la UI de puntuación
+	# Los elementos están directamente en el UILayer de la escena
 
 # Función para generar textura trasera desde viewport
 func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
@@ -306,4 +311,17 @@ func toggle_hud():
 			hide_button.visible = false
 		if show_button:
 			show_button.visible = true
-		show_success_message("HUD Oculto", 1.0) 
+		show_success_message("HUD Oculto", 1.0)
+
+# === FUNCIONES DE INTERFAZ DE PUNTUACIÓN ===
+# NOTA: Las funciones de UI de puntuación han sido movidas a PuzzleGame.gd
+# ya que los elementos ahora están integrados directamente en el UILayer de la escena
+
+# Estas funciones ahora son manejadas directamente por PuzzleGame:
+# - _on_score_updated() 
+# - _on_streak_updated()
+# - _on_bonus_applied()
+# - hide_score_ui() / show_score_ui()
+# 
+# Los elementos ScoreLabel y StreakLabel están en la escena y se actualizan
+# automáticamente a través de las señales conectadas en PuzzleGame._connect_score_ui_signals() 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://sc0afjqsuaff"]
+[gd_scene load_steps=29 format=3 uid="uid://sc0afjqsuaff"]
 
 [ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
 [ext_resource type="Texture2D" uid="uid://c8e3l3s0vy870" path="res://Assets/Images/GUID/backgrounds/bg_victory.jpg" id="2_fv7sy"]
@@ -118,7 +118,16 @@ shadow_color = Color(0, 0, 0, 1)
 shadow_size = 4
 shadow_offset = Vector2(0, 1)
 
-[node name="VictoryScreen" type="Control" node_paths=PackedStringArray("labelNamePuzzle", "labelInfo", "statsLabel", "puzzleImage2D", "textView", "labelTitle", "moves", "time_panel", "flips_panel", "expanseImagePanel")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xuyag"]
+resource_local_to_scene = true
+bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(0, 1)
+
+[node name="VictoryScreen" type="Control" node_paths=PackedStringArray("labelNamePuzzle", "labelInfo", "statsLabel", "puzzleImage2D", "textView", "labelTitle", "moves", "time_panel", "flips_panel", "expanseImagePanel", "score_panel")]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_g6yxt")
@@ -132,6 +141,7 @@ moves = NodePath("CanvasLayer/Movimientos")
 time_panel = NodePath("CanvasLayer/Tiempo")
 flips_panel = NodePath("CanvasLayer/Flips")
 expanseImagePanel = NodePath("CanvasLayer/ExpanseImage")
+score_panel = NodePath("CanvasLayer/Puntuacion")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
@@ -567,6 +577,19 @@ grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_c5778")
 title = "Flips"
 color = Color(0.329412, 0.65098, 0.992157, 1)
+
+[node name="Puntuacion" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -87.5
+offset_top = 350.0
+offset_right = 87.5
+offset_bottom = 490.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xuyag")
+title = "PUNTUACIÓN"
+color = Color(0.95, 0.6, 0.1, 1)
 
 [node name="ExpanseImage" parent="CanvasLayer" instance=ExtResource("10_r53cv")]
 visible = false

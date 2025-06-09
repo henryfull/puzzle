@@ -640,7 +640,7 @@ func recalculate_all_grid_positions():
 # Función auxiliar para encontrar celda libre cerca de una posición
 func _find_free_cell_near(target_cell: Vector2) -> Vector2:
 	var puzzle_data = puzzle_game.get_puzzle_data()
-	var max_search_radius = max(puzzle_data.rows, puzzle_data.columns)
+	var max_search_radius = max(current_rows, current_columns)
 	
 	for radius in range(1, max_search_radius + 1):
 		for dx in range(-radius, radius + 1):
@@ -707,6 +707,19 @@ func can_place_group_at_position(piece: Piece, target_cell: Vector2) -> bool:
 func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 	# Indicar que se ha colocado/fusionado una pieza
 	just_placed_piece = true
+	
+	# Notificar al score manager sobre la unión de grupos
+	# SOLO si realmente hubo movimiento (no solo por reconexión automática)
+	if puzzle_game.score_manager and puzzle_game.score_manager.is_scoring_enabled():
+		# Verificar que al menos una de las piezas involucradas se movió realmente
+		var piece1_moved = (piece1.current_cell != piece1.drag_start_cell)
+		var piece2_moved = (piece2.current_cell != piece2.drag_start_cell)
+		
+		if piece1_moved or piece2_moved:
+			puzzle_game.score_manager.add_groups_connected()
+			print("PuzzlePieceManager: Unión de grupos por movimiento real - Puntos otorgados")
+		else:
+			print("PuzzlePieceManager: Fusión automática sin movimiento - No se otorgan puntos de unión")
 	
 	# Combinar los grupos
 	var new_group = []
@@ -821,6 +834,13 @@ func _handle_place_group(piece: Piece):
 		print("PuzzlePieceManager: Colocación inválida - devolviendo piezas a posición original")
 		_rollback_to_original_position(leader)
 		
+		# Para colocaciones que fallan la validación, NO se considera movimiento inválido
+		# Es simplemente como si no hubiera pasado nada - no afecta racha ni puntos
+		if puzzle_game.score_manager and puzzle_game.score_manager.is_scoring_enabled():
+			# Solo registrar como intento sin progreso (sin penalización ni afectar racha)
+			puzzle_game.score_manager.add_placement_attempt_failed()
+			print("PuzzlePieceManager: Intento de colocación fallido - Sin penalización, racha intacta")
+		
 		# Proporcionar retroalimentación específica sobre el límite
 		var pieces_outside_horizontal = false
 		var pieces_outside_vertical = false
@@ -841,13 +861,50 @@ func _handle_place_group(piece: Piece):
 		return
 	
 	
-	# Indicar que se acaba de colocar una pieza o grupo
-	just_placed_piece = true
-	
 	print("PuzzlePieceManager: Colocación válida - procediendo con sistema de onda expansiva")
 	
+	# Guardar estado del puzzle ANTES del movimiento para detectar progreso
+	var groups_before_movement = _count_puzzle_groups()
+	var connections_before = _count_group_connections(leader)
+	
 	# NUEVA LÓGICA: Sistema de "onda expansiva"
-	_place_group_with_wave_expansion(leader, target_cell)
+	var placement_successful = _place_group_with_wave_expansion(leader, target_cell)
+	
+	# SOLO otorgar puntos si la colocación fue realmente exitosa
+	if placement_successful:
+		# Indicar que se acaba de colocar una pieza o grupo
+		just_placed_piece = true
+		
+		# NUEVA LÓGICA: Solo otorgar puntos por PROGRESO REAL del puzzle
+		if puzzle_game.score_manager and puzzle_game.score_manager.is_scoring_enabled():
+			# Verificar si el grupo realmente cambió de posición
+			var actual_movement_occurred = _verify_actual_movement(leader, target_cell)
+			if actual_movement_occurred:
+				# Verificar si este movimiento logró progreso real en el puzzle
+				var groups_after_movement = _count_puzzle_groups()
+				var connections_after = _count_group_connections(leader)
+				var puzzle_progress_made = _evaluate_puzzle_progress(groups_before_movement, groups_after_movement, connections_before, connections_after)
+				
+				if puzzle_progress_made > 0:
+					# Solo otorgar puntos si hubo progreso real (nuevas conexiones, etc.)
+					puzzle_game.score_manager.add_group_moved_successfully(leader.group.size())
+					print("PuzzlePieceManager: Movimiento con progreso real - Puntos otorgados (progreso: ", puzzle_progress_made, ")")
+				else:
+					# Movimiento sin progreso = pieza colocada pero no se agrupa con nada
+					# Según especificaciones: esto es "movimiento inválido" con penalización
+					print("PuzzlePieceManager: Movimiento sin progreso - Aplicando penalización por no agruparse")
+					puzzle_game.score_manager.add_move_without_grouping()
+			else:
+				print("PuzzlePieceManager: Movimiento sin cambio de posición detectado - No se otorgan puntos")
+				# Contar como movimiento sin progreso para estadísticas
+				puzzle_game.score_manager.add_piece_moved_without_progress()
+	else:
+		print("PuzzlePieceManager: La colocación falló en el sistema de onda expansiva")
+		# Si la colocación falló, hacer rollback y no otorgar puntos
+		_rollback_to_original_position(leader)
+		if puzzle_game.score_manager and puzzle_game.score_manager.is_scoring_enabled():
+			puzzle_game.score_manager.add_placement_attempt_failed()
+		puzzle_game.show_error_message("No se puede colocar aquí", 1.5)
 	
 	# 🔧 CRÍTICO: Verificar superposiciones después de colocar grupo
 	print("PuzzlePieceManager: Verificando superposiciones después de colocar grupo...")
@@ -1617,7 +1674,7 @@ func _rollback_to_original_position(leader: Piece):
 	print("PuzzlePieceManager: Rollback completado, estructura de grupo mantenida")
 
 # NUEVA FUNCIÓN: Sistema de "onda expansiva" para colocación de grupos
-func _place_group_with_wave_expansion(leader: Piece, target_cell: Vector2):
+func _place_group_with_wave_expansion(leader: Piece, target_cell: Vector2) -> bool:
 	var puzzle_data = puzzle_game.get_puzzle_data()
 	var group_copy = leader.group.duplicate()
 	
@@ -1701,6 +1758,20 @@ func _place_group_with_wave_expansion(leader: Piece, target_cell: Vector2):
 	# PASO 4: Colocar el grupo principal en su posición objetivo
 	_place_group_at_positions(leader, group_copy, required_positions, target_cell)
 	
+	# Verificar que la colocación del grupo principal fue exitosa
+	var placement_successful = true
+	for i in range(group_copy.size()):
+		var piece = group_copy[i]
+		var expected_pos = required_positions[i]
+		if piece.current_cell != expected_pos:
+			print("PuzzlePieceManager: ERROR - Pieza no colocada en posición esperada: ", piece.current_cell, " vs ", expected_pos)
+			placement_successful = false
+			break
+	
+	if not placement_successful:
+		print("PuzzlePieceManager: Fallo en colocación del grupo principal")
+		return false
+	
 	# PASO 5: Redistribuir grupos afectados con "onda expansiva"
 	_redistribute_affected_groups(affected_groups)
 	
@@ -1719,6 +1790,9 @@ func _place_group_with_wave_expansion(leader: Piece, target_cell: Vector2):
 	if leader.group.size() == initial_group_size:
 		print("PuzzlePieceManager: Reproduciendo sonido de movimiento")
 		puzzle_game.play_move_sound()
+	
+	# Retornar que la colocación fue exitosa
+	return true
 
 # Función para colocar un grupo en posiciones específicas
 func _place_group_at_positions(leader: Piece, group_pieces: Array, positions: Array, leader_target: Vector2):
@@ -2058,6 +2132,102 @@ func _attempt_automatic_merges(leader: Piece):
 					break
 			if merged:
 				break
+
+func _verify_actual_movement(leader: Piece, target_cell: Vector2) -> bool:
+	"""
+	Verifica si un movimiento realmente cambió la posición del grupo
+	Compara las posiciones antes del arrastre con las posiciones después
+	"""
+	# Verificar si el líder cambió de posición desde donde empezó el arrastre
+	var leader_moved = (leader.drag_start_cell != target_cell)
+	
+	if not leader_moved:
+		print("PuzzlePieceManager: Líder no cambió de posición (", leader.drag_start_cell, " → ", target_cell, ")")
+		return false
+	
+	# Para grupos, verificar que al menos una pieza del grupo haya cambiado de posición
+	var any_piece_moved = false
+	for piece in leader.group:
+		# Calcular dónde debería estar esta pieza en la nueva posición
+		var offset = piece.original_pos - leader.original_pos
+		var new_expected_position = target_cell + offset
+		
+		# Calcular dónde estaba antes del movimiento
+		var old_position = leader.drag_start_cell + offset
+		
+		if new_expected_position != old_position:
+			any_piece_moved = true
+			break
+	
+	if any_piece_moved:
+		print("PuzzlePieceManager: Movimiento real detectado - Se otorgarán puntos")
+	else:
+		print("PuzzlePieceManager: Sin movimiento real detectado - No se otorgan puntos")
+	
+	return any_piece_moved
+
+func _evaluate_puzzle_progress(groups_before: int, groups_after: int, connections_before: int, connections_after: int) -> int:
+	"""
+	Evalúa si un movimiento resultó en progreso real del puzzle
+	Retorna puntos de progreso: 0 = sin progreso (penalizar), >0 = progreso real (premiar)
+	"""
+	var progress_points = 0
+	
+	# CRITERIO PRINCIPAL: Si disminuyó el número total de grupos (se fusionaron grupos)
+	if groups_after < groups_before:
+		var groups_merged = groups_before - groups_after
+		progress_points += groups_merged * 2  # Doble valor por fusión real
+		print("PuzzlePieceManager: Progreso REAL - Se fusionaron ", groups_merged, " grupos")
+		return progress_points  # Fusión es progreso garantizado
+	
+	# CRITERIO SECUNDARIO: Si aumentaron las conexiones del grupo (se acercó a otros grupos)
+	# PERO solo si realmente se conectó (no solo se acercó)
+	if connections_after > connections_before:
+		var new_connections = connections_after - connections_before
+		progress_points += new_connections
+		print("PuzzlePieceManager: Progreso - ", new_connections, " nuevas conexiones adyacentes")
+	
+	# CRITERIO CRÍTICO: Si el grupo sigue aislado después del movimiento
+	if connections_after == 0:
+		print("PuzzlePieceManager: SIN PROGRESO - Grupo permanece aislado (no se agrupa con nada)")
+		return 0  # Movimiento sin agrupamiento = penalización
+	
+	print("PuzzlePieceManager: Evaluación de progreso - Antes: ", groups_before, " grupos, ", connections_before, " conexiones")
+	print("PuzzlePieceManager: Evaluación de progreso - Después: ", groups_after, " grupos, ", connections_after, " conexiones")
+	print("PuzzlePieceManager: Puntos de progreso calculados: ", progress_points)
+	
+	return progress_points
+
+func _count_puzzle_groups() -> int:
+	"""Cuenta el número total de grupos independientes en el puzzle"""
+	var unique_leaders = []
+	for piece_obj in pieces:
+		var leader = get_group_leader(piece_obj)
+		if not (leader in unique_leaders):
+			unique_leaders.append(leader)
+	return unique_leaders.size()
+
+func _count_group_connections(target_group_leader: Piece) -> int:
+	"""Cuenta cuántos grupos diferentes están adyacentes al grupo objetivo"""
+	var adjacent_groups = []
+	
+	for piece in target_group_leader.group:
+		var adjacent_pieces = find_adjacent_pieces(piece, piece.current_cell)
+		for adj_piece in adjacent_pieces:
+			if not (adj_piece in target_group_leader.group):
+				var adj_leader = get_group_leader(adj_piece)
+				if not (adj_leader in adjacent_groups):
+					adjacent_groups.append(adj_leader)
+	
+	return adjacent_groups.size()
+
+func _verify_attempted_movement(leader: Piece, target_cell: Vector2) -> bool:
+	"""
+	Verifica si hubo un intento real de movimiento (para penalizaciones)
+	Similar a _verify_actual_movement pero más permisivo para detectar intentos
+	"""
+	# Si el jugador intentó mover a una celda diferente de donde empezó
+	return leader.drag_start_cell != target_cell
 
 func _update_edge_pieces_in_group(group: Array):
 	if group.size() <= 1:

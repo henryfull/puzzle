@@ -8,6 +8,10 @@ class_name PuzzleGame
 @onready var progress_manager = get_node("/root/ProgressManager")
 var VictoryCheckerScene = preload("res://Scripts/gameplay/VictoryChecker.gd")
 
+# Precargar los nuevos managers de puntuación
+var PuzzleScoreManagerScene = preload("res://Scripts/PuzzleScoreManager.gd")
+var PuzzleRankingManagerScene = preload("res://Scripts/PuzzleRankingManager.gd")
+
 # Precargar la escena de loading puzzle
 var LoadingPuzzleScene = preload("res://Scenes/Components/loadingPuzzle/loading_puzzle.tscn")
 var loading_puzzle_instance: Node2D
@@ -37,6 +41,14 @@ var loading_puzzle_instance: Node2D
 @export var flip_button: Button
 @export var center_button: Button  # Botón de centrado desde la escena
 
+# Referencias a elementos de puntuación y racha en el UILayer
+@export var score_label: Label
+@export var streak_label: Label
+@export var floating_points_label: Label
+
+# Control para evitar duplicación de puntos flotantes
+var last_score_shown: int = 0
+
 # Referencias a mensajes de éxito/error que deberían estar en la escena
 @onready var success_message_label: Label = $UILayer/SuccessMessage
 @onready var error_message_label: Label = $UILayer/ErrorMessage
@@ -46,6 +58,8 @@ var input_handler: PuzzleInputHandler
 var piece_manager: PuzzlePieceManager
 var game_state_manager: PuzzleGameStateManager
 var ui_manager: PuzzleUIManager
+var score_manager
+var ranking_manager
 
 # Variables principales que serán compartidas
 var puzzle_texture: Texture2D
@@ -214,18 +228,213 @@ func _initialize_managers():
 	piece_manager = PuzzlePieceManager.new()
 	game_state_manager = PuzzleGameStateManager.new()
 	ui_manager = PuzzleUIManager.new()
+	score_manager = PuzzleScoreManagerScene.new()
+	ranking_manager = PuzzleRankingManagerScene.new()
 	
 	# Añadir como hijos
 	add_child(input_handler)
 	add_child(piece_manager)
 	add_child(game_state_manager)
 	add_child(ui_manager)
+	add_child(score_manager)
+	add_child(ranking_manager)
 	
 	# Inicializar con referencias necesarias
 	input_handler.initialize(self)
 	piece_manager.initialize(self)
 	game_state_manager.initialize(self)
 	ui_manager.initialize(self)
+	score_manager.initialize(self, game_state_manager)
+	ranking_manager.initialize()
+	
+	# Conectar señales del score manager a la UI del UILayer
+	_connect_score_ui_signals()
+
+func _connect_score_ui_signals():
+	"""Conecta las señales del score manager a los elementos del UILayer"""
+	if score_manager:
+		score_manager.score_updated.connect(_on_score_updated)
+		score_manager.streak_updated.connect(_on_streak_updated)
+		score_manager.bonus_applied.connect(_on_bonus_applied)
+		print("PuzzleGame: Señales de puntuación conectadas al UILayer")
+
+func _on_score_updated(new_score: int):
+	"""Actualiza la puntuación mostrada en el UILayer"""
+	if score_label:
+		score_label.text = "Puntos: " + str(new_score)
+	
+	# Mostrar puntos flotantes SIEMPRE que haya un incremento
+	if new_score > last_score_shown:
+		var points_gained = new_score - last_score_shown
+		if points_gained > 0:
+			# Mostrar TODOS los incrementos de puntos, no solo los pequeños
+			show_floating_points("+" + str(points_gained), "normal")
+		
+		last_score_shown = new_score
+
+func _on_streak_updated(streak_count: int):
+	"""Actualiza la racha mostrada en el UILayer"""
+	if streak_label:
+		streak_label.text = "Racha: " + str(streak_count)
+		
+		# Cambiar color según la racha para mejor feedback visual
+		if streak_count >= 10:
+			streak_label.add_theme_color_override("font_color", Color(1.0, 0.3, 1.0, 1.0))  # Magenta
+		elif streak_count >= 5:
+			streak_label.add_theme_color_override("font_color", Color(0.3, 1.0, 1.0, 1.0))  # Cian
+		elif streak_count >= 3:
+			streak_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.3, 1.0))  # Amarillo
+		else:
+			streak_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3, 1.0))  # Verde default
+
+func _on_bonus_applied(bonus_type: String, points: int):
+	"""Muestra mensaje descriptivo cuando se aplica un bonus"""
+	var bonus_message = ""
+	match bonus_type:
+		"streak":
+			bonus_message = "¡Bonus racha! +" + str(points)
+		"group_union":
+			bonus_message = "¡Grupos unidos! +" + str(points)
+		"no_errors":
+			bonus_message = "¡Sin errores! +" + str(points)
+		"no_flip":
+			bonus_message = "¡Sin flip! +" + str(points)
+		_:
+			bonus_message = "¡Bonus! +" + str(points)
+	
+	# Solo mostrar mensaje descriptivo en la parte superior
+	# Los puntos flotantes se manejan automáticamente en _on_score_updated()
+	show_success_message(bonus_message, 2.0)
+
+# === FUNCIONES PÚBLICAS PARA GESTIÓN DE PUNTUACIÓN EN EL UILAYER ===
+
+func set_score_display(score: int):
+	"""Establece la puntuación mostrada en el UILayer directamente"""
+	if score_label:
+		score_label.text = "Puntos: " + str(score)
+
+func set_streak_display(streak: int):
+	"""Establece la racha mostrada en el UILayer directamente"""
+	if streak_label:
+		streak_label.text = "Racha: " + str(streak)
+		
+		# Aplicar colores según la racha
+		if streak >= 10:
+			streak_label.add_theme_color_override("font_color", Color(1.0, 0.3, 1.0, 1.0))  # Magenta
+		elif streak >= 5:
+			streak_label.add_theme_color_override("font_color", Color(0.3, 1.0, 1.0, 1.0))  # Cian
+		elif streak >= 3:
+			streak_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.3, 1.0))  # Amarillo
+		else:
+			streak_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3, 1.0))  # Verde default
+
+func update_score_and_streak(score: int, streak: int):
+	"""Actualiza tanto la puntuación como la racha de una vez"""
+	set_score_display(score)
+	set_streak_display(streak)
+
+func get_current_displayed_score() -> int:
+	"""Obtiene la puntuación actualmente mostrada en el UILayer"""
+	if score_label and score_label.text.begins_with("Puntos: "):
+		var score_text = score_label.text.replace("Puntos: ", "")
+		return int(score_text)
+	return 0
+
+func get_current_displayed_streak() -> int:
+	"""Obtiene la racha actualmente mostrada en el UILayer"""
+	if streak_label and streak_label.text.begins_with("Racha: "):
+		var streak_text = streak_label.text.replace("Racha: ", "")
+		return int(streak_text)
+	return 0
+
+func hide_score_ui():
+	"""Oculta los elementos de puntuación del UILayer"""
+	if score_label:
+		score_label.visible = false
+	if streak_label:
+		streak_label.visible = false
+
+func show_score_ui():
+	"""Muestra los elementos de puntuación del UILayer"""
+	if score_label:
+		score_label.visible = true
+	if streak_label:
+		streak_label.visible = true
+
+func reset_score_display():
+	"""Reinicia la visualización de puntuación y racha a valores iniciales"""
+	set_score_display(0)
+	set_streak_display(0)
+	last_score_shown = 0  # Resetear control de puntos flotantes
+
+func show_floating_points(points_text: String, bonus_type: String = ""):
+	"""Muestra puntos flotantes animados en el UILayer"""
+	if not floating_points_label:
+		print("PuzzleGame: Error - floating_points_label no disponible")
+		return
+	
+	print("PuzzleGame: Mostrando puntos flotantes: ", points_text)
+	
+	# Configurar el texto y color según el tipo de bonus
+	floating_points_label.text = points_text
+	
+	# Aplicar colores según el tipo y cantidad de puntos
+	match bonus_type:
+		"streak":
+			floating_points_label.add_theme_color_override("font_color", Color(1.0, 0.3, 1.0, 1.0))  # Magenta para racha
+		"group_union":
+			floating_points_label.add_theme_color_override("font_color", Color(0.3, 1.0, 1.0, 1.0))  # Cian para grupos unidos
+		"no_errors":
+			floating_points_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3, 1.0))  # Verde para sin errores
+		"no_flip":
+			floating_points_label.add_theme_color_override("font_color", Color(0.3, 0.3, 1.0, 1.0))   # Azul para sin flip
+		"normal":
+			# Determinar color según la cantidad de puntos
+			var points_value = int(points_text.replace("+", ""))
+			if points_value > 4:
+				# Puntos altos (con bonus) - Dorado brillante
+				floating_points_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2, 1.0))
+			elif points_value > 2:
+				# Puntos medios - Amarillo
+				floating_points_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.3, 1.0))
+			else:
+				# Puntos básicos - Blanco
+				floating_points_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 1.0))
+		_:
+			floating_points_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2, 1.0))  # Dorado por defecto
+	
+	# Posicionar en el centro de la pantalla
+	var viewport_size = get_viewport_rect().size
+	floating_points_label.position.x = (viewport_size.x - floating_points_label.size.x) * 0.5
+	floating_points_label.position.y = viewport_size.y * 0.15  # Un poco arriba del centro
+	
+	# Resetear propiedades iniciales
+	floating_points_label.modulate = Color(1, 1, 1, 0)  # Invisible al inicio
+	floating_points_label.scale = Vector2(0.5, 0.5)     # Pequeño al inicio
+	floating_points_label.visible = true
+	
+	# Crear animación personalizable
+	var tween = create_tween()
+	tween.set_parallel(true)  # Permitir múltiples animaciones paralelas
+	
+	# FASE 1: Aparición con efecto de escala y fade-in (0.3 segundos)
+	tween.tween_property(floating_points_label, "modulate", Color(1, 1, 1, 1), 0.3)
+	tween.tween_property(floating_points_label, "scale", Vector2(1.2, 1.2), 0.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	
+	# FASE 2: Movimiento hacia arriba con efecto de flotación (1.5 segundos)
+	var float_target = floating_points_label.position + Vector2(0, -80)
+	tween.tween_property(floating_points_label, "position", float_target, 1.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
+	
+	# FASE 3: Reducir escala ligeramente durante el movimiento (0.8 segundos, con delay)
+	tween.tween_property(floating_points_label, "scale", Vector2(1.0, 1.0), 0.8).set_delay(0.3).set_ease(Tween.EASE_OUT)
+	
+	# FASE 4: Desvanecimiento final (0.5 segundos, al final)
+	tween.tween_property(floating_points_label, "modulate", Color(1, 1, 1, 0), 0.5).set_delay(1.3)
+	
+	# FASE 5: Ocultar al final
+	tween.tween_callback(func(): floating_points_label.visible = false).set_delay(1.8)
+	
+	print("PuzzleGame: Animación de puntos flotantes iniciada para: ", points_text)
 
 func _setup_pieces_container():
 	if not pieces_container:
@@ -470,6 +679,10 @@ func _on_button_repeat_pressed():
 	game_state_manager.restart_puzzle()
 
 func on_flip_button_pressed():
+	# Notificar al score manager sobre el uso de flip
+	if score_manager and score_manager.is_scoring_enabled():
+		score_manager.add_flip_use()
+	
 	ui_manager.on_flip_button_pressed()
 
 func _on_button_toggle_hud_pressed():
@@ -486,6 +699,21 @@ func _on_puzzle_completed():
 	if current_pack_id.is_empty() or current_puzzle_id.is_empty():
 		print("ERROR: No se pueden guardar el progreso, faltan los IDs del pack o puzzle")
 		return
+	
+	# Completar puzzle en el score manager
+	if score_manager and score_manager.is_scoring_enabled():
+		score_manager.complete_puzzle()
+		
+		# Obtener resumen de la puntuación
+		var score_summary = score_manager.get_score_summary()
+		
+		# Agregar tiempo de finalización
+		score_summary["completion_time"] = game_state_manager.elapsed_time
+		
+		# Guardar la puntuación en el ranking manager
+		if ranking_manager:
+			ranking_manager.save_puzzle_score(current_pack_id, current_puzzle_id, score_summary)
+			ranking_manager.update_global_ranking()
 	
 	# Marcar el puzzle como completado en el ProgressManager
 	print("PuzzleGame: Marcando puzzle como completado - Pack: " + current_pack_id + ", Puzzle: " + current_puzzle_id)
@@ -520,6 +748,11 @@ func show_victory_screen():
 	# Obtener datos del estado del juego para la victoria
 	var game_state = game_state_manager.get_current_game_state_for_victory()
 	
+	# Preparar datos de puntuación si está disponible
+	var score_data = {}
+	if score_manager and score_manager.is_scoring_enabled():
+		score_data = score_manager.get_score_summary()
+	
 	# Guardar los datos necesarios en GLOBAL para que la escena de victoria pueda acceder a ellos
 	GLOBAL.victory_data = {
 		"puzzle": GLOBAL.selected_puzzle,
@@ -534,7 +767,8 @@ func show_victory_screen():
 		"relax_mode": game_state.relax_mode,
 		"normal_mode": game_state.normal_mode,
 		"timer_mode": game_state.timer_mode,
-		"challenge_mode": game_state.challenge_mode
+		"challenge_mode": game_state.challenge_mode,
+		"score_data": score_data  # Agregar datos de puntuación
 	}
 	
 	# Usar la función safe_change_scene para cambiar a la escena de victoria

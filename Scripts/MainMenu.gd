@@ -59,6 +59,7 @@ func update_ui_texts():
 	print("MainMenu: Textos actualizados con idioma: ", TranslationServer.get_locale())
 
 
+
 # Función para manejar cambios de idioma
 func _on_language_changed(_locale_code):
 	update_ui_texts()

@@ -291,6 +291,9 @@ func increment_move_count():
 	total_moves += 1
 	print("PuzzleGameStateManager: Incrementando movimientos. Total: ", total_moves, " - Modo flip activo: ", is_flip)
 	
+	# Notificar al score manager sobre movimiento inválido si es aplicable
+	# Esto se maneja desde el piece manager cuando detecta movimientos inválidos
+	
 	# Actualizar UI de movimientos normales
 	if puzzle_game.movesLabel:
 		puzzle_game.movesLabel.text = str(total_moves)

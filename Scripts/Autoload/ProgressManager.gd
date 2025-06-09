@@ -49,6 +49,9 @@ func _ready():
 	# Inicializar la progresión si es necesario
 	initialize_progress_if_needed()
 	
+	# Limpiar historial existente (eliminamos esta funcionalidad)
+	clean_existing_history()
+	
 	# Sincronizar lista de DLCs con GLOBAL
 	if has_node("/root/GLOBAL"):
 		if (GLOBAL.dlc_packs.size() > 0):
@@ -491,7 +494,8 @@ func save_puzzle_stats(stats: Dictionary, pack_id: String, puzzle_id: String, di
 			"best_flips_date": "",
 			"best_flip_moves": 99999,
 			"best_flip_moves_date": "",
-			"history": []
+			"best_score": 0,
+			"best_score_date": ""
 		}
 	
 	# Asegurar que todas las propiedades necesarias existen
@@ -502,9 +506,11 @@ func save_puzzle_stats(stats: Dictionary, pack_id: String, puzzle_id: String, di
 	if not progress_data.statistics[pack_id][puzzle_id][difficulty_key].has("best_flip_moves"):
 		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves"] = 99999
 		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves_date"] = ""
-		
-	if not progress_data.statistics[pack_id][puzzle_id][difficulty_key].has("history"):
-		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["history"] = []
+	
+	# Asegurar que el campo best_score existe (nuevo sistema de puntuación)
+	if not progress_data.statistics[pack_id][puzzle_id][difficulty_key].has("best_score"):
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_score"] = 0
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_score_date"] = ""
 	
 	# Asegurar que existe completions (antes era completion_count)
 	if not progress_data.statistics[pack_id][puzzle_id][difficulty_key].has("completions"):
@@ -530,15 +536,33 @@ func save_puzzle_stats(stats: Dictionary, pack_id: String, puzzle_id: String, di
 		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves"] = stats.flip_moves
 		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_flip_moves_date"] = stats.date
 	
-	# Guardar historial de partidas
-	var history_entry = stats.duplicate()
-	progress_data.statistics[pack_id][puzzle_id][difficulty_key]["history"].append(history_entry)
+	# Estadística para puntuación (mayor es mejor)
+	if stats.has("score") and stats.score > progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_score"]:
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_score"] = stats.score
+		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["best_score_date"] = stats.date
 	
-	# Limitar historial a las últimas 20 partidas
-	if progress_data.statistics[pack_id][puzzle_id][difficulty_key]["history"].size() > 20:
-		progress_data.statistics[pack_id][puzzle_id][difficulty_key]["history"].pop_front()
-	
+	# Ya no guardamos historial de partidas - solo los mejores resultados
 	save_progress_data()
+
+# Función para limpiar historial existente de los datos guardados
+func clean_existing_history():
+	"""Elimina el historial existente de todas las estadísticas guardadas"""
+	print("ProgressManager: Limpiando historial existente...")
+	var cleaned_count = 0
+	
+	for pack_id in progress_data.statistics.keys():
+		for puzzle_id in progress_data.statistics[pack_id].keys():
+			for difficulty_key in progress_data.statistics[pack_id][puzzle_id].keys():
+				var stats = progress_data.statistics[pack_id][puzzle_id][difficulty_key]
+				if stats.has("history"):
+					stats.erase("history")
+					cleaned_count += 1
+	
+	if cleaned_count > 0:
+		print("ProgressManager: Eliminado historial de ", cleaned_count, " dificultades")
+		save_progress_data()
+	else:
+		print("ProgressManager: No se encontró historial para limpiar")
 
 # Nueva función para obtener estadísticas de un puzzle
 func get_puzzle_stats(pack_id: String, puzzle_id: String) -> Dictionary:
@@ -546,6 +570,9 @@ func get_puzzle_stats(pack_id: String, puzzle_id: String) -> Dictionary:
 	
 	if progress_data.statistics.has(pack_id) and progress_data.statistics[pack_id].has(puzzle_id):
 		stats = progress_data.statistics[pack_id][puzzle_id].duplicate(true)
+		
+		# Migrar estadísticas antiguas automáticamente
+		_ensure_stats_migration(stats)
 		
 		# Asegurar que todas las dificultades tienen las propiedades nuevas
 		for difficulty_key in stats.keys():
@@ -555,20 +582,33 @@ func get_puzzle_stats(pack_id: String, puzzle_id: String) -> Dictionary:
 			if not stats[difficulty_key].has("best_flip_moves"):
 				stats[difficulty_key]["best_flip_moves"] = 99999
 				stats[difficulty_key]["best_flip_moves_date"] = ""
-			if not stats[difficulty_key].has("history"):
-				stats[difficulty_key]["history"] = []
-				
-			# Verificar el historial
-			if stats[difficulty_key].has("history"):
-				for entry in stats[difficulty_key].history:
-					if not entry.has("flips"):
-						entry["flips"] = 0
-					if not entry.has("flip_moves"):
-						entry["flip_moves"] = 0
-					if not entry.has("gamemode"):
-						entry["gamemode"] = 0
+			if not stats[difficulty_key].has("best_score"):
+				stats[difficulty_key]["best_score"] = 0
+				stats[difficulty_key]["best_score_date"] = ""
+				print("ProgressManager: Inicializando best_score para dificultad ", difficulty_key)
 	
 	return stats
+
+# Nueva función para migrar estadísticas antiguas
+func _ensure_stats_migration(stats: Dictionary):
+	"""Asegura que todas las estadísticas tengan los campos nuevos"""
+	for difficulty_key in stats.keys():
+		var difficulty_stats = stats[difficulty_key]
+		
+		# Asegurar campos de puntuación (nuevo)
+		if not difficulty_stats.has("best_score"):
+			difficulty_stats["best_score"] = 0
+			difficulty_stats["best_score_date"] = ""
+			print("ProgressManager: Migrado best_score para dificultad ", difficulty_key)
+		
+		# Asegurar otros campos si no existen
+		if not difficulty_stats.has("best_flips"):
+			difficulty_stats["best_flips"] = 99999
+			difficulty_stats["best_flips_date"] = ""
+		
+		if not difficulty_stats.has("best_flip_moves"):
+			difficulty_stats["best_flip_moves"] = 99999
+			difficulty_stats["best_flip_moves_date"] = ""
 
 # Nueva función para obtener las estadísticas generales de un jugador
 func get_player_stats() -> Dictionary:
@@ -587,14 +627,12 @@ func get_player_stats() -> Dictionary:
 				# Usar notación de diccionario
 				if puzzle_stats.has("completions"):
 					player_stats["total_puzzles_completed"] += puzzle_stats["completions"]
-				
-				# Sumar el tiempo de todas las partidas en el historial
-				if puzzle_stats.has("history"):
-					for entry in puzzle_stats["history"]:
-						if entry.has("time"):
-							player_stats["total_time_played"] += entry["time"]
-						if entry.has("moves"):
-							player_stats["total_moves"] += entry["moves"]
+					
+					# Sumar estadísticas basadas en los mejores resultados y número de completados
+					if puzzle_stats.has("best_time") and puzzle_stats["best_time"] < 99999:
+						player_stats["total_time_played"] += puzzle_stats["best_time"] * puzzle_stats["completions"]
+					if puzzle_stats.has("best_moves") and puzzle_stats["best_moves"] < 99999:
+						player_stats["total_moves"] += puzzle_stats["best_moves"] * puzzle_stats["completions"]
 	
 	# Contar packs completados
 	for pack_id in progress_data.packs.keys():

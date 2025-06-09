@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnx3dokwgr658"]
+
+[ext_resource type="Script" uid="uid://ch04w55pe77k6" path="res://Scenes/Components/GradientBackground/gradient_background.gd" id="1_bp5am"]
+[ext_resource type="Shader" uid="uid://cxrd3xydvw1j4" path="res://Scenes/Components/GradientBackground/gradient_background.gdshader" id="2_un4il"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p8nvl"]
+shader = ExtResource("2_un4il")
+shader_parameter/color_from = Color(0, 0, 0, 1)
+shader_parameter/color_to = Color(0, 0, 0, 1)
+shader_parameter/direction = Vector2(1, -1)
+
+[node name="GradientBackground" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bp5am")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_p8nvl")
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

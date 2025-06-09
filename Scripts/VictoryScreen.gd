@@ -10,6 +10,7 @@ extends Control
 @export var time_panel : PanelContainer  # Panel para el tiempo
 @export var flips_panel : PanelContainer  # Panel para los flips
 @export var expanseImagePanel : Panel
+@export var score_panel : PanelContainer  # Panel para la puntuación
 
 # Variables para almacenar los datos del puzzle
 var puzzle_data = null
@@ -22,6 +23,9 @@ var current_puzzle_id = ""
 var progress_manager = null
 var flip_count = 0      # Número de flips realizados
 var flip_move_count = 0  # Movimientos durante flips
+
+# Variables para datos de puntuación
+var score_data = {}     # Datos de puntuación del sistema de scoring
 
 # Referencias a nodos de la interfaz
 var image_view = null
@@ -80,8 +84,12 @@ func _ready():
 
 		if victory_data.has("puzzle_id"):
 			current_puzzle_id = victory_data.puzzle_id
-			
-	
+		
+		# Cargar datos de puntuación
+		if victory_data.has("score_data"):
+			score_data = victory_data.score_data
+			print("VictoryScreen: Datos de puntuación cargados: ", score_data)
+		
 		# Limpiar los datos de victoria para evitar problemas si se vuelve a esta escena
 
 	
@@ -445,6 +453,15 @@ func setup_result_panels():
 			"is_time": false,
 			"color": Color(0.3, 0.65, 0.99, 1),  # Azul claro
 			"compare_less": true  # Menor es mejor
+		},
+		{
+			"panel": score_panel,
+			"title": "PUNTUACIÓN",
+			"current_value": score_data.get("final_score", 0) if score_data and score_data.size() > 0 else 0,
+			"stat_key": "best_score",
+			"is_time": false,
+			"color": Color(0.95, 0.6, 0.1, 1),  # Naranja dorado
+			"compare_less": false  # Mayor es mejor para puntuación
 		}
 	]
 	
@@ -473,8 +490,16 @@ func setup_result_panels():
 			var best_value = current_value  # Por defecto, valor actual
 			var is_new_record = false
 			
-			if puzzle_stats.has(difficulty_key) and puzzle_stats[difficulty_key].has(panel_data.stat_key):
-				best_value = puzzle_stats[difficulty_key][panel_data.stat_key]
+			if puzzle_stats.has(difficulty_key):
+				var difficulty_stats = puzzle_stats[difficulty_key]
+				
+				# Verificar que el campo de estadística existe
+				if difficulty_stats.has(panel_data.stat_key):
+					best_value = difficulty_stats[panel_data.stat_key]
+				else:
+					# Si no existe el campo (como best_score en estadísticas antiguas), es un nuevo récord
+					print("VictoryScreen: Campo '", panel_data.stat_key, "' no existe en estadísticas, considerando como nuevo récord")
+					is_new_record = true
 				
 				# Determinar si es un nuevo récord según el criterio de comparación
 				if compare_less:
@@ -574,6 +599,7 @@ func save_stats_to_progress_manager(victory_data):
 		"flips": victory_data.get("flip_count", 0),  # Nuevo - número de flips
 		"flip_moves": victory_data.get("flip_move_count", 0),  # Nuevo - movimientos durante flips
 		"gamemode": victory_data.get("gamemode", 0),  # Nuevo - modalidad de juego
+		"score": score_data.get("final_score", 0),  # Nuevo - puntuación obtenida
 		"date": Time.get_datetime_string_from_system()
 	}
 	var difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)

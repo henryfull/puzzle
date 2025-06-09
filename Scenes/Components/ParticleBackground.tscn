@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bf4l7m2h4pnm8"]
+
+[ext_resource type="Script" uid="uid://dccrrq1tlutdn" path="res://Scripts/ParticleBackground.gd" id="1_particle"]
+
+[node name="ParticleBackground" type="Node2D"]
+script = ExtResource("1_particle")
+intensity = 0.7
+use_custom_colors = true
+custom_colors = Array[Color]([Color(0.4, 0.8, 1, 0.6), Color(0.8, 0.4, 0.9, 0.6), Color(0.4, 0.9, 0.6, 0.6), Color(1, 0.8, 0.4, 0.6), Color(0.8, 0.4, 1, 0.6), Color(0.4, 1, 0.9, 0.6)])

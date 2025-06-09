@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dh8d4yyjtjjsj"]
+[gd_scene load_steps=32 format=3 uid="uid://dh8d4yyjtjjsj"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://doif0cexxpv6t" path="res://Assets/Sounds/SFX/flip.wav" id="4_qnp3e"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="5_u0au7"]
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="5_uvymq"]
+[ext_resource type="PackedScene" uid="uid://bf4l7m2h4pnm8" path="res://Scenes/Components/ParticleBackground.tscn" id="7_7aw43"]
 [ext_resource type="Texture2D" uid="uid://bumaj141kr3bw" path="res://Assets/Images/GUID/backgrounds/bg_pausa.png" id="8_p2qx1"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="9_u0au7"]
 
@@ -103,7 +104,7 @@ bg_color = Color(6.16074e-06, 0.629349, 0.813684, 0.968627)
 
 [sub_resource type="FontVariation" id="FontVariation_u0au7"]
 
-[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer", "movesLabel", "maxMovesLabel", "maxMovesFlipLabel", "maxFlipsPanel", "maxFlipsLabel", "panelPaused", "button_options", "flip_button")]
+[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer", "movesLabel", "maxMovesLabel", "maxMovesFlipLabel", "maxFlipsPanel", "maxFlipsLabel", "panelPaused", "button_options", "flip_button", "score_label", "streak_label", "floating_points_label")]
 script = ExtResource("1_0gd45")
 pieces_container = NodePath("PiecesContainer")
 UILayer = NodePath("UILayer")
@@ -115,6 +116,9 @@ maxFlipsLabel = NodePath("UILayer/FlipButton/MaxFlipsPanel/MaxFlipsLabel")
 panelPaused = NodePath("UILayer/PanelPaused")
 button_options = NodePath("UILayer/OptionsButton")
 flip_button = NodePath("UILayer/FlipButton")
+score_label = NodePath("UILayer/ScoreLabel")
+streak_label = NodePath("UILayer/StreakLabel")
+floating_points_label = NodePath("UILayer/FloatingPointsLabel")
 max_extra_rows = 6
 
 [node name="AudioMove" type="AudioStreamPlayer" parent="."]
@@ -139,6 +143,7 @@ wait_time = 5.0
 layer = -1
 
 [node name="TextureRect" type="TextureRect" parent="BackgroundLayer"]
+visible = false
 z_index = -1
 anchors_preset = 15
 anchor_right = 1.0
@@ -166,6 +171,8 @@ size_flags_vertical = 3
 mouse_filter = 2
 color = Color(0.468252, 0.467392, 0.451786, 1)
 metadata/_edit_use_anchors_ = true
+
+[node name="ParticleBackground" parent="BackgroundLayer" instance=ExtResource("7_7aw43")]
 
 [node name="ButtonHideHUD" type="Button" parent="BackgroundLayer"]
 anchors_preset = 2
@@ -394,6 +401,92 @@ theme_override_fonts/font = ExtResource("5_uvymq")
 theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="UILayer"]
+offset_left = 30.0
+offset_top = 140.0
+offset_right = 147.0
+offset_bottom = 183.0
+pivot_offset = Vector2(55, 21)
+theme_override_colors/font_color = Color(0.95, 0.85, 0.3, 1)
+theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_font_sizes/font_size = 32
+text = "Puntos: 0"
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="UILayer/ScoreLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -5.0
+offset_right = 10.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
+
+[node name="StreakLabel" type="Label" parent="UILayer"]
+offset_left = 30.0
+offset_top = 190.0
+offset_right = 147.0
+offset_bottom = 233.0
+pivot_offset = Vector2(55, 21)
+theme_override_colors/font_color = Color(0.3, 0.9, 0.3, 1)
+theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_font_sizes/font_size = 28
+text = "Racha: 0"
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="UILayer/StreakLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -5.0
+offset_right = 10.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
+
+[node name="FloatingPointsLabel" type="Label" parent="UILayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 257.0
+offset_right = 100.0
+offset_bottom = 307.0
+grow_horizontal = 2
+pivot_offset = Vector2(100, 25)
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_font_sizes/font_size = 42
+text = "+75"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FloatingPointsPanel" type="Panel" parent="UILayer/FloatingPointsLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -8.0
+offset_right = 15.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
 [node name="FlipButton" type="Button" parent="UILayer"]
 anchors_preset = 7
