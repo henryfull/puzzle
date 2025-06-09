@@ -1,8 +1,9 @@
-# PuzzlePieceManager.gd
+# PuzzlePieceManager_Original.gd
 # Manager para gestionar todas las piezas del puzzle, grupos, fusiones y colocación
+# BACKUP FILE - NO SE ESTÁ USANDO EN EL JUEGO
 
 extends Node
-class_name PuzzlePieceManager
+# class_name PuzzlePieceManager  # COMENTADO PARA EVITAR CONFLICTOS
 
 # Referencias al juego principal
 var puzzle_game: PuzzleGame
@@ -797,11 +798,6 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 	# Reproducir sonido de fusión
 	print("PuzzlePieceManager: Reproduciendo sonido de fusión")
 	puzzle_game.play_merge_sound()
-	
-	# ✨ NUEVO: Notificar al score manager sobre la conexión de grupos
-	if puzzle_game.score_manager and puzzle_game.score_manager.is_scoring_enabled():
-		puzzle_game.score_manager.add_groups_connected()
-		print("PuzzlePieceManager: ✨ Puntuación actualizada por conexión de grupos")
 	
 	# 🔧 CRÍTICO: Verificar superposiciones después de fusionar
 	print("PuzzlePieceManager: Verificando superposiciones después de fusionar piezas...")

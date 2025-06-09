@@ -67,14 +67,14 @@ var border_offset: float = 3.0  # Distancia INTERIOR desde el borde del sprite
 @export var enable_visual_effects: bool = true  # Activar/desactivar efectos visuales
 
 @export_subgroup("Opacidad")
-@export_range(0.1, 1.0, 0.05) var single_piece_opacity: float = 0.7   # Opacidad para piezas sueltas
+@export_range(0.1, 1.0, 0.05) var single_piece_opacity: float = 0.9   # Opacidad para piezas sueltas
 @export_range(0.1, 1.0, 0.05) var grouped_piece_opacity: float = 1.0  # Opacidad para piezas agrupadas
 
 @export_subgroup("Brillo y Contraste")
-@export_range(0.3, 1.5, 0.05) var single_piece_brightness: float = 0.85   # Brillo para piezas sueltas
+@export_range(0.3, 1.5, 0.05) var single_piece_brightness: float = 0.95   # Brillo para piezas sueltas
 @export_range(0.3, 1.5, 0.05) var grouped_piece_brightness: float = 1.0   # Brillo para piezas agrupadas
-@export_range(1.0, 2.0, 0.05) var correct_position_brightness: float = 1.15  # Brillo extra para posición correcta
-@export_range(1.0, 2.0, 0.05) var dragging_brightness: float = 1.1     # Brillo cuando se arrastra
+@export_range(1.0, 2.0, 0.05) var correct_position_brightness: float = 1.05  # Brillo extra para posición correcta
+@export_range(1.0, 2.0, 0.05) var dragging_brightness: float = 1.0     # Brillo cuando se arrastra
 
 @export_subgroup("Configuración Avanzada")
 @export var brightness_variation: float = 0.4   # Variación de brillo (OBSOLETO - usar variables específicas arriba)

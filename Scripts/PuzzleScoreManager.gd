@@ -164,12 +164,14 @@ func add_move_without_grouping():
 	total_moves += 1
 	had_errors = true
 	
-	# Resetear racha por movimiento sin agrupamiento
-	streak_count = 0
-	
-	_subtract_points(-PENALTY_INVALID_MOVE)  # Restar 1 punto
-	
-	print("PuzzleScoreManager: Movimiento sin agrupamiento (", PENALTY_INVALID_MOVE, " puntos) - Racha reiniciada")
+	# En modo relax, no resetear racha ni aplicar penalizaciones
+	if should_apply_penalties():
+		# Resetear racha por movimiento sin agrupamiento
+		streak_count = 0
+		_subtract_points(-PENALTY_INVALID_MOVE)  # Restar 1 punto
+		print("PuzzleScoreManager: Movimiento sin agrupamiento (", PENALTY_INVALID_MOVE, " puntos) - Racha reiniciada")
+	else:
+		print("PuzzleScoreManager: Movimiento sin agrupamiento en modo relax - Sin penalización")
 	
 	streak_updated.emit(streak_count)
 
@@ -202,12 +204,14 @@ func add_invalid_move():
 	total_moves += 1
 	had_errors = true
 	
-	# Resetear racha SOLO para movimientos inválidos reales
-	streak_count = 0
-	
-	_subtract_points(-PENALTY_INVALID_MOVE)  # Restar puntos (penalty es negativo)
-	
-	print("PuzzleScoreManager: Movimiento inválido real (", PENALTY_INVALID_MOVE, " puntos) - Racha reiniciada")
+	# En modo relax, no resetear racha ni aplicar penalizaciones
+	if should_apply_penalties():
+		# Resetear racha SOLO para movimientos inválidos reales
+		streak_count = 0
+		_subtract_points(-PENALTY_INVALID_MOVE)  # Restar puntos (penalty es negativo)
+		print("PuzzleScoreManager: Movimiento inválido real (", PENALTY_INVALID_MOVE, " puntos) - Racha reiniciada")
+	else:
+		print("PuzzleScoreManager: Movimiento inválido en modo relax - Sin penalización")
 	
 	streak_updated.emit(streak_count)
 
@@ -216,12 +220,14 @@ func add_flip_use():
 	flip_uses += 1
 	used_flip = true
 	
-	# Resetear racha
-	streak_count = 0
-	
-	_subtract_points(-PENALTY_FLIP_USE)  # Restar puntos
-	
-	print("PuzzleScoreManager: Flip usado (", PENALTY_FLIP_USE, " puntos) - Racha reiniciada")
+	# En modo relax, no resetear racha ni aplicar penalizaciones
+	if should_apply_penalties():
+		# Resetear racha
+		streak_count = 0
+		_subtract_points(-PENALTY_FLIP_USE)  # Restar puntos
+		print("PuzzleScoreManager: Flip usado (", PENALTY_FLIP_USE, " puntos) - Racha reiniciada")
+	else:
+		print("PuzzleScoreManager: Flip usado en modo relax - Sin penalización")
 	
 	streak_updated.emit(streak_count)
 
@@ -323,10 +329,8 @@ func is_scoring_enabled() -> bool:
 	if not game_state_manager:
 		return true
 	
-	# En modo relax (modo 0 y 1), podrían no contar penalizaciones
-	if game_state_manager.relax_mode:
-		return false  # O true pero sin penalizaciones
-	
+	# El sistema de puntuación SIEMPRE está activo
+	# En modo relax, simplemente no se aplican penalizaciones (ver should_apply_penalties())
 	return true
 
 func should_apply_penalties() -> bool:

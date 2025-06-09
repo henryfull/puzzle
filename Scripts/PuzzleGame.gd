@@ -200,6 +200,12 @@ func _ready():
 	# Mostrar mensaje de bienvenida con opciones de centrado
 	_show_centering_welcome_message()
 	
+	# ✨ NUEVO: Verificar que el sistema de puntuación está funcionando
+	_debug_score_system()
+	
+	# ✨ NUEVO: Prueba de puntuación automática después de 3 segundos
+	_test_score_system_delayed()
+	
 	# 🚫 NUEVO: Configurar timer para eliminar diálogos automáticamente
 	_setup_dialog_blocker()
 	
@@ -260,6 +266,10 @@ func _connect_score_ui_signals():
 
 func _on_score_updated(new_score: int):
 	"""Actualiza la puntuación mostrada en el UILayer"""
+	# En modo relax, no mostrar puntuación
+	if game_state_manager and game_state_manager.relax_mode:
+		return
+	
 	if score_label:
 		score_label.text = "Puntos: " + str(new_score)
 	
@@ -274,6 +284,10 @@ func _on_score_updated(new_score: int):
 
 func _on_streak_updated(streak_count: int):
 	"""Actualiza la racha mostrada en el UILayer"""
+	# En modo relax, no mostrar racha
+	if game_state_manager and game_state_manager.relax_mode:
+		return
+	
 	if streak_label:
 		streak_label.text = "Racha: " + str(streak_count)
 		
@@ -369,6 +383,10 @@ func reset_score_display():
 
 func show_floating_points(points_text: String, bonus_type: String = ""):
 	"""Muestra puntos flotantes animados en el UILayer"""
+	# En modo relax, no mostrar puntos flotantes
+	if game_state_manager and game_state_manager.relax_mode:
+		return
+	
 	if not floating_points_label:
 		print("PuzzleGame: Error - floating_points_label no disponible")
 		return
@@ -710,6 +728,9 @@ func _on_puzzle_completed():
 		# Agregar tiempo de finalización
 		score_summary["completion_time"] = game_state_manager.elapsed_time
 		
+		# Mostrar puntuación final al usuario
+		show_success_message("🏆 Puntuación final: " + str(score_summary.final_score) + " puntos", 3.0)
+		
 		# Guardar la puntuación en el ranking manager
 		if ranking_manager:
 			ranking_manager.save_puzzle_score(current_pack_id, current_puzzle_id, score_summary)
@@ -1033,6 +1054,74 @@ func _setup_dialog_blocker():
 	print("PuzzleGame: Sistema de bloqueo de diálogos ULTRA-AGRESIVO activado")
 
 # 🚫 INTERCEPTOR FINAL: Sobrescribir métodos globales para bloquear diálogos
+func _debug_score_system():
+	"""Función de debug para verificar que el sistema de puntuación está funcionando"""
+	print("=== 🔍 DEBUG SISTEMA DE PUNTUACIÓN ===")
+	
+	# Verificar que el score manager existe
+	if score_manager:
+		print("✅ Score Manager: DISPONIBLE")
+		print("  - Scoring habilitado: ", score_manager.is_scoring_enabled())
+		print("  - Puntuación actual: ", score_manager.current_score)
+		print("  - Racha actual: ", score_manager.streak_count)
+	else:
+		print("❌ Score Manager: NO DISPONIBLE")
+	
+	# Verificar elementos de UI
+	if score_label:
+		print("✅ Score Label: DISPONIBLE")
+		print("  - Texto actual: '", score_label.text, "'")
+		print("  - Visible: ", score_label.visible)
+	else:
+		print("❌ Score Label: NO DISPONIBLE")
+	
+	if streak_label:
+		print("✅ Streak Label: DISPONIBLE") 
+		print("  - Texto actual: '", streak_label.text, "'")
+		print("  - Visible: ", streak_label.visible)
+	else:
+		print("❌ Streak Label: NO DISPONIBLE")
+	
+	if floating_points_label:
+		print("✅ Floating Points Label: DISPONIBLE")
+		print("  - Visible: ", floating_points_label.visible)
+	else:
+		print("❌ Floating Points Label: NO DISPONIBLE")
+	
+	# Verificar modo de juego
+	if game_state_manager:
+		print("✅ Game State Manager: DISPONIBLE")
+		print("  - Modo relax: ", game_state_manager.relax_mode)
+		print("  - Modo normal: ", game_state_manager.normal_mode)
+		print("  - Modo timer: ", game_state_manager.timer_mode)
+		print("  - Modo challenge: ", game_state_manager.challenge_mode)
+	else:
+		print("❌ Game State Manager: NO DISPONIBLE")
+	
+	print("========================================")
+
+func _test_score_system_delayed():
+	"""Prueba del sistema de puntuación después de unos segundos"""
+	await get_tree().create_timer(3.0).timeout
+	
+	print("🧪 INICIANDO PRUEBA DEL SISTEMA DE PUNTUACIÓN...")
+	
+	if score_manager and score_manager.is_scoring_enabled():
+		# Simular colocación de pieza correcta
+		score_manager.add_piece_placed_correctly()
+		print("🧪 Prueba 1: Pieza colocada correctamente")
+		
+		await get_tree().create_timer(1.0).timeout
+		
+		# Simular conexión de grupos
+		score_manager.add_groups_connected()
+		print("🧪 Prueba 2: Grupos conectados")
+		
+		show_success_message("🧪 Prueba de puntuación ejecutada - Revisa los puntos", 3.0)
+	else:
+		print("🧪 ERROR: Score manager no disponible o no habilitado")
+		show_error_message("🧪 Error: Sistema de puntuación no disponible", 3.0)
+
 func _setup_global_dialog_interceptors():
 	print("PuzzleGame: Configurando interceptores globales de diálogos...")
 	

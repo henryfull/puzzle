@@ -566,6 +566,7 @@ title = "Tiempo"
 color = Color(0.447059, 0.101961, 0.768627, 1)
 
 [node name="Flips" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -582,10 +583,10 @@ color = Color(0.329412, 0.65098, 0.992157, 1)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -87.5
-offset_top = 350.0
-offset_right = 87.5
-offset_bottom = 490.0
+offset_left = 102.0
+offset_top = 187.0
+offset_right = 277.0
+offset_bottom = 327.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_xuyag")
 title = "PUNTUACIÓN"

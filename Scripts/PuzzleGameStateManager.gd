@@ -77,6 +77,11 @@ func setup_game_mode():
 				puzzle_game.maxMovesLabel.visible = false
 				puzzle_game.maxMovesFlipLabel.visible = false
 				puzzle_game.maxFlipsPanel.visible = false
+			# Ocultar elementos de puntuación en modo relax
+			if puzzle_game.score_label:
+				puzzle_game.score_label.visible = false
+			if puzzle_game.streak_label:
+				puzzle_game.streak_label.visible = false
 		1:
 			relax_mode = true
 			# Ocultar contadores y reloj
@@ -86,6 +91,11 @@ func setup_game_mode():
 				puzzle_game.maxMovesLabel.visible = false
 				puzzle_game.maxMovesFlipLabel.visible = false
 				puzzle_game.maxFlipsPanel.visible = false
+			# Ocultar elementos de puntuación en modo relax
+			if puzzle_game.score_label:
+				puzzle_game.score_label.visible = false
+			if puzzle_game.streak_label:
+				puzzle_game.streak_label.visible = false
 
 		2:
 			normal_mode = true
@@ -96,6 +106,11 @@ func setup_game_mode():
 				puzzle_game.maxMovesLabel.visible = false
 				puzzle_game.maxMovesFlipLabel.visible = false
 				puzzle_game.maxFlipsPanel.visible = false
+			# Mostrar elementos de puntuación en modo normal
+			if puzzle_game.score_label:
+				puzzle_game.score_label.visible = true
+			if puzzle_game.streak_label:
+				puzzle_game.streak_label.visible = true
 
 		3:
 			timer_mode = true
@@ -114,6 +129,11 @@ func setup_game_mode():
 				puzzle_game.maxMovesFlipLabel.text = str(max_flip_moves)
 				puzzle_game.maxFlipsPanel.visible = true
 				puzzle_game.maxFlipsLabel.text = str(max_flips)
+			# Mostrar elementos de puntuación en modo contrarreloj
+			if puzzle_game.score_label:
+				puzzle_game.score_label.visible = true
+			if puzzle_game.streak_label:
+				puzzle_game.streak_label.visible = true
 			# Crear un timer para cuenta atrás
 			timer_countdown = Timer.new()
 			timer_countdown.wait_time = 1.0
@@ -146,6 +166,11 @@ func setup_game_mode():
 				puzzle_game.maxMovesLabel.visible = true
 				puzzle_game.maxMovesFlipLabel.visible = true
 				puzzle_game.maxFlipsPanel.visible = true
+			# Mostrar elementos de puntuación en modo desafío
+			if puzzle_game.score_label:
+				puzzle_game.score_label.visible = true
+			if puzzle_game.streak_label:
+				puzzle_game.streak_label.visible = true
 	
 	# Debug inicial del estado
 	debug_flip_state()

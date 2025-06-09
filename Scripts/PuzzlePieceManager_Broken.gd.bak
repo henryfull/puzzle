@@ -1,0 +1,384 @@
+# PuzzlePieceManager.gd
+# Manager principal para gestionar piezas del puzzle - REFACTORIZADO con Clean Code
+# Responsabilidades específicas delegadas a managers especializados
+
+extends Node
+class_name PuzzlePieceManager
+
+# === IMPORTS ===
+const PuzzleGridManagerClass = preload("res://Scripts/Managers/PuzzleGridManager.gd")
+const PuzzlePieceFactoryClass = preload("res://Scripts/Managers/PuzzlePieceFactory.gd")
+const PuzzleGroupManagerClass = preload("res://Scripts/Managers/PuzzleGroupManager.gd")
+const PuzzleVisualEffectsClass = preload("res://Scripts/Managers/PuzzleVisualEffects.gd")
+const PuzzleBorderManagerClass = preload("res://Scripts/Managers/PuzzleBorderManager.gd")
+const PuzzlePositioningHelperClass = preload("res://Scripts/Managers/PuzzlePositioningHelper.gd")
+
+# === DEPENDENCIAS ===
+var puzzle_game: PuzzleGame
+var grid_manager: Node
+var piece_factory: Node
+var group_manager: Node
+var visual_effects: Node
+var border_manager: Node
+var positioning_helper: Node
+
+# === CORE DATA ===
+var pieces: Array = []
+var puzzle_configuration: PuzzleConfiguration
+
+# === CONSTANTES ===
+const MAX_EXTRA_ROWS = 5
+const AUTO_CENTER_DELAY = 1.5
+const OVERLAP_FACTOR = 1.01  # Para eliminar gaps entre piezas
+
+#
+# === PIECE CLASS ===
+# Representa una pieza individual del puzzle
+#
+class Piece:
+	var node: Node2D
+	var sprite: Sprite2D
+	var original_position: Vector2
+	var current_cell: Vector2
+	var order_number: int
+	var group: Array[Piece] = []
+	
+	# Estado de arrastre
+	var is_dragging: bool = false
+	var drag_offset: Vector2 = Vector2.ZERO
+	var drag_start_cell: Vector2 = Vector2.ZERO
+	
+	func _init(piece_node: Node2D, piece_sprite: Sprite2D, original_pos: Vector2, order: int):
+		node = piece_node
+		sprite = piece_sprite
+		original_position = original_pos
+		current_cell = original_pos
+		drag_start_cell = original_pos
+		order_number = order
+		group = [self]
+	
+	func is_at_correct_position() -> bool:
+		return current_cell == original_position
+	
+	func is_in_group() -> bool:
+		return group.size() > 1
+	
+	func get_group_leader() -> Piece:
+		return group[0] if group.size() > 0 else self
+
+#
+# === PUZZLE CONFIGURATION ===
+# Configuración centralizada del puzzle
+#
+class PuzzleConfiguration:
+	var original_rows: int
+	var original_columns: int
+	var current_rows: int
+	var current_columns: int
+	var extra_rows_added: int = 0
+	var rows_added_top: int = 0
+	var rows_added_bottom: int = 0
+	
+	# Configuración de efectos
+	var use_tween_effect: bool = true
+	var tween_duration: float = 0.3
+	var flip_speed: float = 0.01
+	var golden_effect_enabled: bool = true
+	var golden_color: Color = Color(1, 1, 0.6, 1.0)
+	var golden_glow_duration: float = 0.7
+	
+	func _init(rows: int, columns: int):
+		original_rows = rows
+		original_columns = columns
+		current_rows = rows
+		current_columns = columns
+
+# === INICIALIZACIÓN ===
+func initialize(game: PuzzleGame) -> void:
+	puzzle_game = game
+	_initialize_managers()
+	_initialize_configuration()
+	_load_user_preferences()
+
+func _initialize_managers() -> void:
+	grid_manager = PuzzleGridManagerClass.new()
+	piece_factory = PuzzlePieceFactoryClass.new()
+	group_manager = PuzzleGroupManagerClass.new()
+	visual_effects = PuzzleVisualEffectsClass.new()
+	border_manager = PuzzleBorderManagerClass.new()
+	positioning_helper = PuzzlePositioningHelperClass.new()
+	
+	# Añadir como hijos
+	add_child(grid_manager)
+	add_child(piece_factory)
+	add_child(group_manager)
+	add_child(visual_effects)
+	add_child(border_manager)
+	add_child(positioning_helper)
+	
+	# Configurar dependencias
+	grid_manager.initialize(self)
+	piece_factory.initialize(self)
+	group_manager.initialize(self)
+	visual_effects.initialize(self)
+	border_manager.initialize(self)
+	positioning_helper.initialize(self)
+
+func _initialize_configuration() -> void:
+	puzzle_configuration = PuzzleConfiguration.new(
+		puzzle_game.default_rows,
+		puzzle_game.default_columns
+	)
+
+func _load_user_preferences() -> void:
+	if not has_node("/root/GLOBAL"):
+		return
+	
+	var settings = {}
+	if GLOBAL.get("settings") != null and GLOBAL.settings.get("puzzle") != null:
+		settings = GLOBAL.settings.puzzle
+	_apply_settings_to_configuration(settings)
+
+func _apply_settings_to_configuration(settings: Dictionary) -> void:
+	puzzle_configuration.use_tween_effect = settings.get("use_tween_effect", true)
+	puzzle_configuration.tween_duration = settings.get("tween_duration", 0.3)
+	puzzle_configuration.golden_effect_enabled = settings.get("golden_effect_enabled", true)
+	puzzle_configuration.golden_glow_duration = settings.get("golden_glow_duration", 0.7)
+
+# === MAIN PUZZLE CREATION ===
+func load_and_create_pieces(image_path: String, puzzle_back: Texture2D) -> void:
+	print("PuzzlePieceManager: Iniciando creación del puzzle")
+	
+	_reset_puzzle_configuration()
+	
+	var puzzle_texture = _load_puzzle_texture(image_path)
+	if not puzzle_texture:
+		return
+	
+	var layout = _calculate_puzzle_layout(puzzle_texture)
+	_update_puzzle_game_data(layout)
+	
+	await _create_all_pieces(puzzle_texture, puzzle_back, layout)
+	_finalize_puzzle_setup()
+
+func _reset_puzzle_configuration() -> void:
+	puzzle_configuration.current_rows = puzzle_configuration.original_rows
+	puzzle_configuration.current_columns = puzzle_configuration.original_columns
+	puzzle_configuration.extra_rows_added = 0
+	puzzle_configuration.rows_added_top = 0
+	puzzle_configuration.rows_added_bottom = 0
+
+func _load_puzzle_texture(image_path: String) -> Texture2D:
+	var texture = load(image_path)
+	if not texture:
+		push_warning("No se pudo cargar la imagen en: %s" % image_path)
+	return texture
+
+func _calculate_puzzle_layout(texture: Texture2D) -> Dictionary:
+	var viewport_size = puzzle_game.get_viewport_rect().size
+	var scale_factor = _calculate_scale_factor(texture, viewport_size)
+	
+	return {
+		"viewport_size": viewport_size,
+		"texture": texture,
+		"scale_factor": scale_factor,
+		"puzzle_width": texture.get_width() * scale_factor,
+		"puzzle_height": texture.get_height() * scale_factor,
+		"cell_size": Vector2(
+			texture.get_width() * scale_factor / puzzle_configuration.current_columns,
+			texture.get_height() * scale_factor / puzzle_configuration.current_rows
+		),
+		"puzzle_offset": (viewport_size - Vector2(
+			texture.get_width() * scale_factor,
+			texture.get_height() * scale_factor
+		)) * 0.5
+	}
+
+func _calculate_scale_factor(texture: Texture2D, viewport_size: Vector2) -> float:
+	var device_scale_factor = 0.95 if puzzle_game.is_mobile else puzzle_game.max_scale_percentage
+	var scale_w = (viewport_size.x * device_scale_factor) / texture.get_width()
+	var scale_h = (viewport_size.y * device_scale_factor) / texture.get_height()
+	return min(scale_w, scale_h, 1.0)
+
+func _update_puzzle_game_data(layout: Dictionary) -> void:
+	puzzle_game.set_puzzle_data(
+		layout.texture,
+		layout.puzzle_width,
+		layout.puzzle_height,
+		layout.cell_size,
+		layout.puzzle_offset
+	)
+
+func _create_all_pieces(texture: Texture2D, puzzle_back: Texture2D, layout: Dictionary) -> void:
+	grid_manager.clear()
+	pieces.clear()
+	
+	var shuffled_positions = _generate_shuffled_positions()
+	await piece_factory.create_pieces(texture, puzzle_back, layout, shuffled_positions, pieces)
+	
+	_register_pieces_in_grid()
+
+func _generate_shuffled_positions() -> Array:
+	var positions = []
+	for row in range(puzzle_configuration.current_rows):
+		for col in range(puzzle_configuration.current_columns):
+			positions.append(Vector2(col, row))
+	positions.shuffle()
+	return positions
+
+func _register_pieces_in_grid() -> void:
+	for piece in pieces:
+		grid_manager.set_piece_at(piece.current_cell, piece)
+		_update_piece_visual_state(piece)
+
+func _update_piece_visual_state(piece) -> void:
+	positioning_helper.update_piece_position_state(piece)
+	visual_effects.update_piece_visuals(piece)
+
+func _finalize_puzzle_setup() -> void:
+	group_manager.initialize_individual_groups(pieces)
+	border_manager.create_visual_borders()
+	visual_effects.update_all_visuals(pieces)
+	
+	await _apply_auto_centering()
+	border_manager.update_all_group_borders()
+
+func _apply_auto_centering() -> void:
+	await puzzle_game.get_tree().process_frame
+	await puzzle_game.get_tree().create_timer(AUTO_CENTER_DELAY).timeout
+	puzzle_game.force_complete_recenter(true)
+
+# === PUBLIC API ===
+func get_pieces() -> Array:
+	return pieces
+
+func get_pieces_data() -> Dictionary:
+	return {
+		"pieces": pieces,
+		"grid": grid_manager.get_grid(),
+		"configuration": puzzle_configuration
+	}
+
+func get_piece_at(cell: Vector2):
+	return grid_manager.get_piece_at(cell)
+
+func set_piece_at(cell: Vector2, piece) -> void:
+	grid_manager.set_piece_at(cell, piece)
+
+func remove_piece_at(cell: Vector2) -> void:
+	grid_manager.remove_piece_at(cell)
+
+func get_cell_of_piece(piece) -> Vector2:
+	return positioning_helper.get_cell_of_piece(piece)
+
+# === PIECE OPERATIONS ===
+func merge_pieces(piece1, piece2) -> void:
+	group_manager.merge_pieces(piece1, piece2)
+
+func place_group(piece) -> void:
+	group_manager.place_group(piece)
+
+func check_all_groups() -> void:
+	group_manager.check_all_groups()
+
+# === BOARD EXPANSION ===
+func add_extra_row() -> bool:
+	if puzzle_configuration.extra_rows_added >= MAX_EXTRA_ROWS:
+		return false
+	
+	puzzle_configuration.current_rows += 1
+	puzzle_configuration.extra_rows_added += 1
+	puzzle_configuration.rows_added_bottom += 1
+	
+	_update_puzzle_layout_after_expansion()
+	return true
+
+func _update_puzzle_layout_after_expansion() -> void:
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	var new_height = puzzle_data.cell_size.y * puzzle_configuration.current_rows
+	
+	puzzle_game.set_puzzle_data(
+		puzzle_data.texture,
+		puzzle_data.width,
+		new_height,
+		puzzle_data.cell_size,
+		puzzle_data.offset
+	)
+	
+	positioning_helper.update_all_piece_positions()
+
+# === OVERLAP RESOLUTION ===
+func resolve_all_overlaps() -> void:
+	positioning_helper.resolve_all_overlaps()
+
+func verify_no_overlaps() -> bool:
+	return positioning_helper.verify_no_overlaps()
+
+# === EFFECTS AND ANIMATIONS ===
+func apply_tween_effect(node: Node2D, target_position: Vector2) -> void:
+	visual_effects.apply_tween_effect(node, target_position, puzzle_configuration.tween_duration)
+
+func apply_golden_glow_effect(node: Node2D) -> void:
+	if puzzle_configuration.golden_effect_enabled:
+		visual_effects.apply_golden_glow_effect(node, puzzle_configuration.golden_color, puzzle_configuration.golden_glow_duration)
+
+# === CENTERING AND POSITIONING ===
+func force_recenter_all_pieces() -> void:
+	positioning_helper.force_recenter_all_pieces()
+
+func verify_piece_positioning() -> bool:
+	return positioning_helper.verify_piece_positioning()
+
+func apply_smart_centering_correction() -> void:
+	positioning_helper.apply_smart_centering_correction()
+
+# === BORDER MANAGEMENT ===
+func create_visual_borders() -> void:
+	border_manager.create_visual_borders()
+
+func set_group_borders_enabled(enabled: bool) -> void:
+	border_manager.set_group_borders_enabled(enabled)
+
+func update_all_group_borders() -> void:
+	border_manager.update_all_group_borders()
+
+# === CONFIGURATION GETTERS/SETTERS ===
+func get_configuration() -> PuzzleConfiguration:
+	return puzzle_configuration
+
+func set_auto_center_delay(delay: float) -> void:
+	# Esta función se mantiene para compatibilidad
+	pass
+
+func get_auto_center_delay() -> float:
+	return AUTO_CENTER_DELAY
+
+# === UTILITY METHODS ===
+func find_adjacent_pieces(piece, cell: Vector2) -> Array:
+	return group_manager.find_adjacent_pieces(piece, cell)
+
+func are_pieces_mergeable(piece1, piece2) -> bool:
+	return group_manager.are_pieces_mergeable(piece1, piece2)
+
+func get_group_leader(piece):
+	return group_manager.get_group_leader(piece)
+
+func update_piece_position_state(piece) -> void:
+	positioning_helper.update_piece_position_state(piece)
+
+# === CLEANUP ===
+func _exit_tree() -> void:
+	if grid_manager:
+		grid_manager.clear()
+	pieces.clear()
+
+# === LEGACY SUPPORT ===
+# Métodos mantenidos para compatibilidad con código existente
+func reorganize_pieces() -> void:
+	group_manager.reorganize_pieces()
+
+func recalculate_all_grid_positions() -> void:
+	positioning_helper.recalculate_all_grid_positions()
+
+func force_clean_grid() -> void:
+	grid_manager.force_clean_grid()

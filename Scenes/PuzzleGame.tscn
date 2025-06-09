@@ -457,6 +457,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
 [node name="FloatingPointsLabel" type="Label" parent="UILayer"]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5

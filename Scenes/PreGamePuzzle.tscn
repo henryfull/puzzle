@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://dr0k8dkmdl6c6"]
 
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="1_s60dh"]
-[ext_resource type="Script" uid="uid://b3v3xjtf02c0d" path="res://Scripts/PreGamePuzzle.gd" id="1_yjkc0"]
+[ext_resource type="Script" uid="uid://bc0fbogk3jotl" path="res://Scripts/PreGamePuzzle.gd" id="1_yjkc0"]
 [ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="5_4pyv4"]
 [ext_resource type="Texture2D" uid="uid://ds3ugdkfawct4" path="res://Assets/Images/tikis/tiki-stayed.png" id="6_h5dmi"]
 [ext_resource type="PackedScene" uid="uid://1yijsaj7tgnr" path="res://Scenes/Components/GoalPuzzle/GoalPuzzle.tscn" id="6_yjkc0"]

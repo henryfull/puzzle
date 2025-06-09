@@ -62,12 +62,12 @@ dragging_brightness = 1.05
 
 ### 🌙 **Imágenes Oscuras** (fotos nocturnas, arte oscuro)
 ```
-single_piece_opacity = 0.7
+single_piece_opacity = 0.9
 grouped_piece_opacity = 1.0
 single_piece_brightness = 0.9
-grouped_piece_brightness = 1.05
-correct_position_brightness = 1.2
-dragging_brightness = 1.15
+grouped_piece_brightness = 1.0
+correct_position_brightness = 1
+dragging_brightness = 1.10
 ```
 
 ### 🎨 **Imágenes Coloridas** (arte, ilustraciones vibrantes)

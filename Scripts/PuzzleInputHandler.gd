@@ -632,6 +632,17 @@ func process_piece_release() -> void:
 		if old_position != group_leader.current_cell:
 			print("PuzzleInputHandler: Pieza movida de ", old_position, " a ", group_leader.current_cell)
 			puzzle_game.game_state_manager.increment_move_count()
+			
+			# ✨ NUEVO: Notificar al score manager sobre el movimiento exitoso
+			if puzzle_game.score_manager and puzzle_game.score_manager.is_scoring_enabled():
+				if group_leader.group.size() == 1:
+					# Pieza individual colocada correctamente
+					puzzle_game.score_manager.add_piece_placed_correctly()
+				else:
+					# Grupo movido exitosamente
+					puzzle_game.score_manager.add_group_moved_successfully(group_leader.group.size())
+				
+				print("PuzzleInputHandler: ✨ Puntuación actualizada por movimiento exitoso")
 		else:
 			print("PuzzleInputHandler: Pieza no se movió, permanece en ", old_position)
 
