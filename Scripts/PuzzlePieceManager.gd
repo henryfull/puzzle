@@ -798,6 +798,11 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 	print("PuzzlePieceManager: Reproduciendo sonido de fusión")
 	puzzle_game.play_merge_sound()
 	
+	# 🎯 NUEVA FUNCIONALIDAD: Vibración cuando se forman grupos
+	if GLOBAL.is_haptic_enabled():
+		GLOBAL.trigger_haptic_feedback(150)  # Vibración de 150ms para formación de grupos
+		print("PuzzlePieceManager: Vibración activada por formación de grupo de ", new_group.size(), " piezas")
+	
 	# ✨ NUEVO: Notificar al score manager sobre la conexión de grupos
 	if puzzle_game.score_manager and puzzle_game.score_manager.is_scoring_enabled():
 		puzzle_game.score_manager.add_groups_connected()
@@ -850,6 +855,11 @@ func _handle_place_group(piece: Piece):
 	just_placed_piece = true
 	
 	print("PuzzlePieceManager: Colocación válida - procediendo con sistema de onda expansiva")
+	
+	# 🎯 NUEVA FUNCIONALIDAD: Vibración suave cuando se coloca un grupo exitosamente
+	if GLOBAL.is_haptic_enabled() and leader.group.size() > 1:
+		GLOBAL.trigger_haptic_feedback(80)  # Vibración suave de 80ms para colocación de grupos
+		print("PuzzlePieceManager: Vibración suave activada por colocación exitosa de grupo")
 	
 	# NUEVA LÓGICA: Sistema de "onda expansiva"
 	_place_group_with_wave_expansion(leader, target_cell)

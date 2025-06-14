@@ -260,6 +260,15 @@ func pause_game():
 		var timer = puzzle_game.get_node("GameTimer")
 		timer.paused = true
 	
+	# Pausar el timer de guardado automático para evitar guardados constantes durante la pausa
+	if has_node("SaveStateTimer"):
+		var save_timer = get_node("SaveStateTimer")
+		save_timer.paused = true
+		print("PuzzleGameStateManager: Timer de guardado pausado")
+	
+	# Realizar un guardado inmediato al entrar en pausa
+	_update_puzzle_state()
+	
 	# Mostrar mensaje de pausa
 	puzzle_game.show_success_message("Juego en pausa", 0.5)
 	
@@ -283,6 +292,12 @@ func resume_game():
 	if puzzle_game.has_node("GameTimer"):
 		var timer = puzzle_game.get_node("GameTimer")
 		timer.paused = false
+	
+	# Reanudar el timer de guardado automático
+	if has_node("SaveStateTimer"):
+		var save_timer = get_node("SaveStateTimer")
+		save_timer.paused = false
+		print("PuzzleGameStateManager: Timer de guardado reanudado")
 	
 	# Mostrar mensaje de reanudación
 	puzzle_game.show_success_message("Juego reanudado", 0.5)

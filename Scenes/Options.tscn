@@ -26,7 +26,7 @@ region = Rect2(150, 473, 102, 101)
 atlas = ExtResource("7_bdxpv")
 region = Rect2(272, 474, 101, 101)
 
-[node name="Options" type="Node2D" node_paths=PackedStringArray("sliderVolumeGeneral", "sliderVolumeSFX", "sliderVolumeMusic", "sliderPanSensitivity", "sliderTweenDuration", "checkTweenEffect")]
+[node name="Options" type="Node2D" node_paths=PackedStringArray("sliderVolumeGeneral", "sliderVolumeSFX", "sliderVolumeMusic", "sliderPanSensitivity", "sliderTweenDuration", "checkTweenEffect", "checkHapticEnabled")]
 script = ExtResource("1_7s1ry")
 sliderVolumeGeneral = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral/HSlider_Volumen_General")
 sliderVolumeSFX = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX/HSlider_Volumen_VFX")
@@ -34,6 +34,7 @@ sliderVolumeMusic = NodePath("CanvasLayer/PanelContainer2/MarginContainer/Scroll
 sliderPanSensitivity = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive/HSlider_Pan_Sensitivity")
 sliderTweenDuration = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2/HSlider_Tween_Duration")
 checkTweenEffect = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Tween_Effect")
+checkHapticEnabled = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Haptic_Enabled")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -279,6 +280,17 @@ max_value = 1.0
 step = 0.05
 value = 0.2
 
+[node name="LabelHapticEnabled" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Vibración"
+uppercase = true
+language = "es"
+
+[node name="CheckBox_Haptic_Enabled" type="CheckBox" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+
 [node name="HSeparator3" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -331,4 +343,5 @@ text = "Restaurar"
 [connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive/HSlider_Pan_Sensitivity" to="." method="_on_pan_sensitivity_changed"]
 [connection signal="toggled" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Tween_Effect" to="." method="_on_tween_effect_toggled"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2/HSlider_Tween_Duration" to="." method="_on_tween_duration_changed"]
+[connection signal="toggled" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Haptic_Enabled" to="." method="_on_haptic_enabled_toggled"]
 [connection signal="pressed" from="CanvasLayer/PanelContainer2/MarginContainer/HBoxContainer/RestoreButton" to="." method="_on_restore_button_pressed"]

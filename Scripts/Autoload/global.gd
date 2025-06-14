@@ -15,7 +15,8 @@ var settings = {
 	"puzzle": {       # Nueva sección para opciones del puzzle
 		"pan_sensitivity": 1.0,
 		"use_tween_effect": true,
-		"tween_duration": 0.2
+		"tween_duration": 0.2,
+		"haptic_enabled": true  # Nueva opción para vibración/háptica
 	},
 	"gameplay": {     # Nueva sección para opciones de gameplay
 		"columns": 6,
@@ -116,6 +117,7 @@ func load_settings():
 		settings.puzzle.pan_sensitivity = config.get_value("puzzle", "pan_sensitivity", 1.0)
 		settings.puzzle.use_tween_effect = config.get_value("puzzle", "use_tween_effect", true)
 		settings.puzzle.tween_duration = config.get_value("puzzle", "tween_duration", 0.2)
+		settings.puzzle.haptic_enabled = config.get_value("puzzle", "haptic_enabled", true)
 		
 		# Cargar límites del puzzle
 		puzzle_limits.max_moves = config.get_value("puzzle", "max_moves", 0)
@@ -184,6 +186,7 @@ func save_settings() -> void:
 	config.set_value("puzzle", "pan_sensitivity", settings.puzzle.pan_sensitivity)
 	config.set_value("puzzle", "use_tween_effect", settings.puzzle.use_tween_effect)
 	config.set_value("puzzle", "tween_duration", settings.puzzle.tween_duration)
+	config.set_value("puzzle", "haptic_enabled", settings.puzzle.haptic_enabled)
 	
 	# Guardar límites del puzzle
 	config.set_value("puzzle", "max_moves", puzzle_limits.max_moves)
@@ -330,6 +333,22 @@ func get_puzzle_goal_description(game_mode: int = -1) -> String:
 				desc_text += " No puedes realizar más de %d volteos." % puzzle_limits.max_flips
 	
 	return desc_text
+
+# Función para verificar si la vibración háptica está habilitada
+func is_haptic_enabled() -> bool:
+	if "puzzle" in settings and "haptic_enabled" in settings.puzzle:
+		return settings.puzzle.haptic_enabled
+	return true  # Valor por defecto
+
+# Función para activar la vibración háptica si está habilitada
+func trigger_haptic_feedback(duration_ms: int = 100):
+	if is_haptic_enabled() and is_mobile:
+		# En dispositivos móviles, usar Input.vibrate_handheld
+		if OS.has_feature("mobile"):
+			Input.vibrate_handheld(duration_ms)
+		print("Vibración activada por ", duration_ms, "ms")
+	else:
+		print("Vibración deshabilitada o no es dispositivo móvil")
 
 func setColorMode(panelColor, headerColor):
 	var global_gamemode = self.gamemode

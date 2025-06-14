@@ -309,6 +309,10 @@ func _on_bonus_applied(bonus_type: String, points: int):
 			bonus_message = "¡Bonus racha! +" + str(points)
 		"group_union":
 			bonus_message = "¡Grupos unidos! +" + str(points)
+			# 🎯 NUEVA FUNCIONALIDAD: Vibración cuando se unen grupos
+			if GLOBAL.is_haptic_enabled():
+				GLOBAL.trigger_haptic_feedback(200)  # Vibración de 200ms para grupos unidos
+				print("PuzzleGame: Vibración activada por unión de grupos")
 		"no_errors":
 			bonus_message = "¡Sin errores! +" + str(points)
 		"no_flip":

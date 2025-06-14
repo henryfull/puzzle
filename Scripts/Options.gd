@@ -11,6 +11,7 @@ var labelResolution: Label
 var labelPanSensitivity: Label
 var labelTweenEffect: Label
 var labelTweenDuration: Label
+var labelHapticEnabled: Label
 # Etiqueta para mostrar estado de conexión de plataforma
 var labelPlatformConnection: Label
 var buttonClose: Button
@@ -26,6 +27,7 @@ var platform_spinner = null
 @export var sliderPanSensitivity = HSlider
 @export var sliderTweenDuration = HSlider
 @export var checkTweenEffect = CheckBox
+@export var checkHapticEnabled = CheckBox
 var selectLanguage = OptionButton
 var selectResolution = OptionButton
 var sliderOptionGeneral = null
@@ -36,6 +38,7 @@ var sliderOptionSFX = null
 var pan_sensitivity: float = 1.0
 var use_tween_effect: bool = true
 var tween_duration: float = 0.2
+var haptic_enabled: bool = true
 
 func _ready():
 	print("Options: Inicializando...")
@@ -54,6 +57,7 @@ func _ready():
 	labelPanSensitivity = $%LabelPanSensitivity
 	labelTweenEffect = $%LabelTweenEffect
 	labelTweenDuration = $%LabelTweenDuration
+	labelHapticEnabled = $%LabelHapticEnabled
 	# Inicializar etiqueta de conexión de plataforma
 	labelPlatformConnection = $%LabelPlatformConnection
 	
@@ -119,6 +123,8 @@ func update_ui_texts():
 		labelTweenEffect.text = tr("options_tween_effect")
 	if labelTweenDuration:
 		labelTweenDuration.text = tr("options_tween_duration")
+	if labelHapticEnabled:
+		labelHapticEnabled.text = tr("options_haptic_enabled")
 	if labelPlatformConnection:
 		labelPlatformConnection.text = tr("options_platform_connection")
 	
@@ -424,6 +430,11 @@ func load_current_values():
 			if sliderTweenDuration and "tween_duration" in global.settings.puzzle:
 				sliderTweenDuration.value = global.settings.puzzle.tween_duration
 				tween_duration = global.settings.puzzle.tween_duration
+			
+			# Vibración háptica
+			if checkHapticEnabled and "haptic_enabled" in global.settings.puzzle:
+				checkHapticEnabled.button_pressed = global.settings.puzzle.haptic_enabled
+				haptic_enabled = global.settings.puzzle.haptic_enabled
 		else:
 			print("Options: No se encontraron ajustes de puzzle en GLOBAL.settings")
 			
@@ -448,6 +459,12 @@ func load_current_values():
 					tween_duration = saved_tween_duration
 					if sliderTweenDuration:
 						sliderTweenDuration.value = tween_duration
+					
+					# Cargar configuración de vibración háptica
+					var saved_haptic_enabled = options_manager.get_option("haptic_enabled", haptic_enabled)
+					haptic_enabled = saved_haptic_enabled
+					if checkHapticEnabled:
+						checkHapticEnabled.button_pressed = haptic_enabled
 		
 		# Idioma
 		var lang_selector = selectLanguage
@@ -574,6 +591,30 @@ func _on_tween_duration_changed(value):
 		var options_manager = get_node("/root/OptionsManager")
 		if options_manager.has_method("save_option"):
 			options_manager.save_option("tween_duration", value)
+
+func _on_haptic_enabled_toggled(toggled):
+	print("Options: Vibración háptica: ", toggled)
+	haptic_enabled = toggled
+	
+	# Guardar en GLOBAL
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Asegurarnos de que exista la sección puzzle en settings
+		if not "puzzle" in global.settings:
+			global.settings.puzzle = {}
+		
+		global.settings.puzzle.haptic_enabled = toggled
+		
+		# Guardar la configuración
+		if global.has_method("save_settings"):
+			global.save_settings()
+	
+	# Guardar también en OptionsManager para compatibilidad
+	if has_node("/root/OptionsManager"):
+		var options_manager = get_node("/root/OptionsManager")
+		if options_manager.has_method("save_option"):
+			options_manager.save_option("haptic_enabled", toggled)
 
 func _on_button_close_pressed() -> void:
 	OptionsManager.hide_options()
