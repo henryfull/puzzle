@@ -50,6 +50,7 @@ run/max_fps=60
 run/low_processor_mode=true
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)
 boot_splash/image="uid://ctfuu506avefk"
+config/icon="res://icon.svg"
 boot_splash/minimum_display_time=5
 config/quality/msaa_2d=0
 
