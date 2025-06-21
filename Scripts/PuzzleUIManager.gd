@@ -18,13 +18,6 @@ func initialize(game: Node2D):
 	# Ya no necesitamos crear dinámicamente la UI de puntuación
 	# Los elementos están directamente en el UILayer de la escena
 
-# Función para generar textura trasera desde viewport
-func generate_back_texture_from_viewport(viewport_scene_path: String) -> Texture2D:
-	# Implementación básica - placeholder
-	print("PuzzleUIManager: Generando textura trasera...")
-	# TODO: Implementar generación real de textura
-	return null
-
 # Función para mostrar mensaje de éxito
 func show_success_message(message: String, duration: float = 1.5):
 	var label = Label.new()
@@ -136,7 +129,6 @@ func on_flip_button_pressed():
 	if is_limited_mode and max_flips > 0 and current_flips >= max_flips:
 		can_increment_flip = false
 		print("PuzzleUIManager: ⚠️ Límite de flips alcanzado en modo limitado, pero permitiendo flip visual sin incrementar contador")
-		show_success_message("Límite de flips alcanzado (" + str(current_flips) + "/" + str(max_flips) + ") - Solo flip visual", 2.0)
 	elif not is_limited_mode:
 		print("PuzzleUIManager: ✅ Modo sin límites - Flip permitido sin restricciones")
 	
@@ -193,13 +185,7 @@ func on_flip_button_pressed():
 		print("PuzzleUIManager: Modo flip activo por 15 segundos para contar movimientos")
 		
 		# Mostrar mensaje visual indicando que el modo flip está activo
-		if is_limited_mode:
-			if can_increment_flip:
-				show_success_message("Modo Flip Activo - Los próximos movimientos contarán como movimientos de flip", 3.0)
-			else:
-				show_success_message("Modo Flip Visual Activo - Sin contar flip adicional", 3.0)
-		else:
-			show_success_message("Modo Flip Activo - Sin límites de flips", 2.0)
+
 	).set_delay(0.5)  # Delay fijo de medio segundo para asegurar que termine la animación
 
 # Función para revertir flip a normal sin contar un flip adicional
@@ -254,7 +240,7 @@ func _revert_flip_to_normal():
 		_cancel_flip_timers()
 		
 		# Mostrar mensaje visual
-		show_success_message("Vuelto a normal - Modo Flip Desactivado", 2.0)
+		# show_success_message("Vuelto a normal - Modo Flip Desactivado", 2.0)
 	).set_delay(0.5)  # Delay fijo de medio segundo para asegurar que termine la animación
 
 # Función llamada cuando expira el timer de flip
@@ -262,7 +248,7 @@ func _on_flip_timer_timeout():
 	print("PuzzleUIManager: Desactivando modo flip por timeout")
 	puzzle_game.game_state_manager.is_flip = false
 	puzzle_game.game_state_manager.debug_flip_state()
-	show_success_message("Modo Flip Desactivado", 1.5)
+	# show_success_message("Modo Flip Desactivado", 1.5)
 
 # Función auxiliar para cancelar todos los timers de flip activos
 func _cancel_flip_timers():
@@ -280,7 +266,7 @@ func deactivate_flip_mode():
 	print("PuzzleUIManager: Desactivando modo flip manualmente")
 	puzzle_game.game_state_manager.is_flip = false
 	puzzle_game.game_state_manager.debug_flip_state()
-	show_success_message("Modo Flip Desactivado", 1.5)
+	# show_success_message("Modo Flip Desactivado", 1.5)
 	
 	# Usar la función auxiliar para cancelar timers
 	_cancel_flip_timers()
@@ -302,7 +288,7 @@ func toggle_hud():
 			hide_button.visible = true
 		if show_button:
 			show_button.visible = false
-		show_success_message("HUD Mostrado", 1.0)
+		# show_success_message("HUD Mostrado", 1.0)
 	else:
 		# Ocultar HUD
 		if ui_layer:
@@ -311,7 +297,7 @@ func toggle_hud():
 			hide_button.visible = false
 		if show_button:
 			show_button.visible = true
-		show_success_message("HUD Oculto", 1.0)
+		# show_success_message("HUD Oculto", 1.0)
 
 # === FUNCIONES DE INTERFAZ DE PUNTUACIÓN ===
 # NOTA: Las funciones de UI de puntuación han sido movidas a PuzzleGame.gd

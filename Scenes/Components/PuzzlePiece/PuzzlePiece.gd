@@ -256,6 +256,11 @@ func get_puzzle_piece_data() -> Dictionary:
 		}
 	}
 	
+	# 🔧 CRÍTICO: La información de current_cell debe ser añadida por el PuzzleStateManager
+	# cuando llama a este método, ya que él tiene acceso al PuzzlePieceManager
+	# Por ahora, inicializamos con un valor por defecto
+	data["current_cell"] = null  # Será rellenado por el StateManager
+	
 	# Debug: imprimir datos de la pieza al serializar
 	print("PuzzlePiece: Serializando pieza ", order_number, " en posición global: ", global_position, ", local: ", position)
 	

@@ -122,8 +122,8 @@ func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 	extra_rows_added = 0
 	rows_added_top = 0
 	rows_added_bottom = 0
-	print("PuzzlePieceManager: Tamaño reiniciado a: ", current_columns, "x", current_rows)
-	
+	print("PuzzlePieceManager: Tamaño reiniciado a: ", current_columns, "x", current_rows)	
+
 	# 1) Cargar la textura
 	var puzzle_texture = load(image_path) if load(image_path) else null
 	if puzzle_texture == null:
@@ -322,8 +322,8 @@ func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 	print("PuzzlePieceManager: 🎯 Centrado automático completado al cargar el puzzle")
 	
 	# Mostrar mensaje breve al usuario
-	await puzzle_game.get_tree().create_timer(0.5).timeout
-	puzzle_game.show_success_message("🎯 Puzzle centrado automáticamente", 1.5)
+	# await puzzle_game.get_tree().create_timer(0.5).timeout
+	# puzzle_game.show_success_message("🎯 Puzzle centrado automáticamente", 1.5)
 
 # === GRID: GET/SET/REMOVE PIEZA EN CELDA ===
 func cell_key(cell: Vector2) -> String:
@@ -363,10 +363,10 @@ func get_cell_of_piece(piece_obj: Piece) -> Vector2:
 	var puzzle_data = puzzle_game.get_puzzle_data()
 	
 	# Ahora calculamos la celda usando las coordenadas ajustadas
-	var px = adjusted_pos.x - puzzle_data.offset.x
-	var py = adjusted_pos.y - puzzle_data.offset.y
-	var cx = int(round(px / puzzle_data.cell_size.x))
-	var cy = int(round(py / puzzle_data.cell_size.y))
+	var px = adjusted_pos.x - puzzle_data["offset"].x
+	var py = adjusted_pos.y - puzzle_data["offset"].y
+	var cx = int(round(px / puzzle_data["cell_size"].x))
+	var cy = int(round(py / puzzle_data["cell_size"].y))
 	
 	return Vector2(cx, cy)
 
@@ -431,21 +431,21 @@ func add_extra_row():
 	
 	# En lugar de recalcular el tamaño de las celdas, aumentamos el tamaño total del puzzle
 	var viewport_size = puzzle_game.get_viewport_rect().size
-	var puzzle_height = puzzle_data.cell_size.y * current_rows  # Usar las filas actuales del puzzle
+	var puzzle_height = puzzle_data["cell_size"].y * current_rows  # Usar las filas actuales del puzzle
 	
 	# 🔧 FIX: MANTENER el offset actual sin recalcularlo para evitar movimiento no deseado
 	# El puzzle debe mantener su posición actual cuando se expande
-	var puzzle_offset = puzzle_data.offset  # Mantener offset actual
+	var puzzle_offset = puzzle_data["offset"]  # Mantener offset actual
 	
 	print("PuzzlePieceManager: Manteniendo offset actual para expansión: ", puzzle_offset)
 	
 	# Actualizar datos del puzzle con la nueva altura pero el mismo offset
-	puzzle_game.set_puzzle_data(puzzle_data.texture, puzzle_data.width, puzzle_height, puzzle_data.cell_size, puzzle_offset)
+	puzzle_game.set_puzzle_data(puzzle_data["texture"], puzzle_data["width"], puzzle_height, puzzle_data["cell_size"], puzzle_offset)
 	
 	# Actualizar la posición de todas las piezas para reflejar el nuevo offset
 	var updated_puzzle_data = puzzle_game.get_puzzle_data()
 	for piece_obj in pieces:
-		piece_obj.node.position = updated_puzzle_data.offset + piece_obj.current_cell * updated_puzzle_data.cell_size
+		piece_obj.node.position = updated_puzzle_data["offset"] + piece_obj.current_cell * updated_puzzle_data["cell_size"]
 	
 	# Actualizar límites visuales
 	update_visual_borders()
@@ -483,27 +483,27 @@ func add_extra_row_top():
 	
 	# Aumentar el tamaño total del puzzle
 	var viewport_size = puzzle_game.get_viewport_rect().size
-	var puzzle_height = puzzle_data.cell_size.y * current_rows  # Usar las filas actuales del puzzle
+	var puzzle_height = puzzle_data["cell_size"].y * current_rows  # Usar las filas actuales del puzzle
 	
 	# 🔧 FIX: MANTENER el offset actual sin recalcularlo
 	# Cuando se añade una fila arriba, el offset debe ajustarse hacia arriba por una celda
 	# para compensar que las piezas se mueven hacia abajo pero queremos mantener el puzzle en la misma posición visual
-	var puzzle_offset = puzzle_data.offset
-	puzzle_offset.y -= puzzle_data.cell_size.y  # Ajustar offset hacia arriba por el tamaño de una celda
+	var puzzle_offset = puzzle_data["offset"]
+	puzzle_offset.y -= puzzle_data["cell_size"].y  # Ajustar offset hacia arriba por el tamaño de una celda
 	
 	print("PuzzlePieceManager: Ajustando offset para fila superior:")
-	print("  - Offset anterior: ", puzzle_data.offset)
+	print("  - Offset anterior: ", puzzle_data["offset"])
 	print("  - Nuevo offset: ", puzzle_offset)
 	print("  - Viewport size: ", viewport_size)
-	print("  - New puzzle size: ", Vector2(puzzle_data.width, puzzle_height))
+	print("  - New puzzle size: ", Vector2(puzzle_data["width"], puzzle_height))
 	
 	# Actualizar datos del puzzle
-	puzzle_game.set_puzzle_data(puzzle_data.texture, puzzle_data.width, puzzle_height, puzzle_data.cell_size, puzzle_offset)
+	puzzle_game.set_puzzle_data(puzzle_data["texture"], puzzle_data["width"], puzzle_height, puzzle_data["cell_size"], puzzle_offset)
 	
 	# Actualizar la posición visual de todas las piezas
 	var updated_puzzle_data = puzzle_game.get_puzzle_data()
 	for piece_obj in pieces:
-		piece_obj.node.position = updated_puzzle_data.offset + piece_obj.current_cell * updated_puzzle_data.cell_size
+		piece_obj.node.position = updated_puzzle_data["offset"] + piece_obj.current_cell * updated_puzzle_data["cell_size"]
 	
 	# Actualizar límites visuales
 	update_visual_borders()
@@ -627,7 +627,7 @@ func recalculate_all_grid_positions():
 					piece_obj.current_cell = free_cell
 					# Actualizar posición visual también
 					var puzzle_data = puzzle_game.get_puzzle_data()
-					var new_pos = puzzle_data.offset + free_cell * puzzle_data.cell_size
+					var new_pos = puzzle_data["offset"] + free_cell * puzzle_data["cell_size"]
 					piece_obj.node.global_position = new_pos
 				else:
 					print("PuzzlePieceManager: ⚠️ No se encontró celda libre para pieza ", piece_obj.order_number)
@@ -640,14 +640,14 @@ func recalculate_all_grid_positions():
 # Función auxiliar para encontrar celda libre cerca de una posición
 func _find_free_cell_near(target_cell: Vector2) -> Vector2:
 	var puzzle_data = puzzle_game.get_puzzle_data()
-	var max_search_radius = max(puzzle_data.rows, puzzle_data.columns)
+	var max_search_radius = max(current_rows, current_columns)
 	
 	for radius in range(1, max_search_radius + 1):
 		for dx in range(-radius, radius + 1):
 			for dy in range(-radius, radius + 1):
 				if abs(dx) == radius or abs(dy) == radius:  # Solo el borde del radio actual
 					var test_cell = target_cell + Vector2(dx, dy)
-					if test_cell.x >= 0 and test_cell.x < puzzle_data.columns and test_cell.y >= 0 and test_cell.y < puzzle_data.rows and not (test_cell in grid):
+					if test_cell.x >= 0 and test_cell.x < current_columns and test_cell.y >= 0 and test_cell.y < current_rows and not (test_cell in grid):
 						return test_cell
 	
 	return Vector2(-999, -999)  # No se encontró celda libre
@@ -772,7 +772,7 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 		set_piece_at(target_cell, p)
 		
 		# Calcular posición visual objetivo
-		var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
 		
 		# Actualizar el estado de la pieza
 		update_piece_position_state(p)
@@ -955,7 +955,7 @@ func _handle_reorganize_pieces():
 	
 	if groups_to_reorganize.is_empty() and individual_pieces_to_reorganize.is_empty():
 		print("PuzzlePieceManager: No hay grupos fuera del área original para reorganizar")
-		puzzle_game.show_success_message("Todos los grupos ya están en el área del puzzle", 1.5)
+		# puzzle_game.show_success_message("Todos los grupos ya están en el área del puzzle", 1.5)
 		return
 	
 	var total_pieces = individual_pieces_to_reorganize.size()
@@ -1004,7 +1004,7 @@ func _handle_reorganize_pieces():
 	print("  - extra_rows_added: ", extra_rows_added)
 	print("  - max_extra_rows permitidas: ", puzzle_game.max_extra_rows)
 
-	puzzle_game.show_success_message("Reorganización completa: huecos rellenados y grupos centrados", 1.5)
+	# puzzle_game.show_success_message("Reorganización completa: huecos rellenados y grupos centrados", 1.5)
 
 # Funciones auxiliares privadas
 
@@ -1058,7 +1058,7 @@ func _fill_internal_gaps_with_individual_pieces(individual_pieces: Array):
 		set_piece_at(gap, piece)
 		
 		# Actualizar posición visual
-		var target_position = puzzle_data.offset + gap * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + gap * puzzle_data["cell_size"]
 		if use_tween_effect:
 			apply_tween_effect(piece.node, target_position)
 		else:
@@ -1099,7 +1099,7 @@ func _reorganize_individual_pieces_to_center(individual_pieces: Array):
 		set_piece_at(target_cell, piece)
 		
 		# Actualizar posición visual
-		var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
 		if use_tween_effect:
 			apply_tween_effect(piece.node, target_position)
 		else:
@@ -1338,7 +1338,7 @@ func _move_group_to_anchor_preserving_structure(leader: Piece, anchor: Vector2):
 			piece.node.update_pieces_group(leader.group)
 		
 		# Actualizar posición visual con animación
-		var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
 		if use_tween_effect:
 			apply_tween_effect(piece.node, target_position)
 		else:
@@ -1606,7 +1606,7 @@ func _rollback_to_original_position(leader: Piece):
 		set_piece_at(piece.drag_start_cell, piece)
 		
 		# Actualizar posición visual con animación
-		var target_position = puzzle_data.offset + piece.drag_start_cell * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + piece.drag_start_cell * puzzle_data["cell_size"]
 		if use_tween_effect:
 			apply_tween_effect(piece.node, target_position)
 		else:
@@ -1754,7 +1754,7 @@ func _place_group_at_positions(leader: Piece, group_pieces: Array, positions: Ar
 			p.node.update_pieces_group(group_pieces)
 		
 		# Actualizar posición visual
-		var target_position = puzzle_data.offset + p_target * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + p_target * puzzle_data["cell_size"]
 		if use_tween_effect:
 			apply_tween_effect(p.node, target_position)
 		else:
@@ -2007,7 +2007,7 @@ func _place_group_at_anchor_simple(leader: Piece, anchor: Vector2):
 		set_piece_at(target_cell, piece)
 		
 		# Actualizar posición visual
-		var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
 		if use_tween_effect:
 			apply_tween_effect(piece.node, target_position)
 		else:
@@ -2037,7 +2037,7 @@ func _place_group_maintaining_structure(leader: Piece, group_pieces: Array, anch
 				piece.node.update_pieces_group(group_pieces)
 			
 			# Actualizar posición visual
-			var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+			var target_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
 			if use_tween_effect:
 				apply_tween_effect(piece.node, target_position)
 			else:
@@ -2262,8 +2262,8 @@ func create_visual_borders():
 	_ensure_background_limits_container()
 	
 	var puzzle_data = puzzle_game.get_puzzle_data()
-	var cell_size = puzzle_data.cell_size
-	var offset = puzzle_data.offset
+	var cell_size = puzzle_data["cell_size"]
+	var offset = puzzle_data["offset"]
 	
 	# Crear bordes para mostrar el área expandible
 	_create_expandable_area_borders(offset, cell_size)
@@ -2300,7 +2300,7 @@ func _ensure_background_limits_container():
 	var puzzle_data = puzzle_game.get_puzzle_data()
 	
 	# Centrar horizontalmente el contenedor en función del ancho del puzzle
-	var horizontal_center = viewport_size.x * 0.5 - puzzle_data.width * 0.5
+	var horizontal_center = viewport_size.x * 0.5 - puzzle_data["width"] * 0.5
 	background_limits_container.position.x = horizontal_center
 	
 	# El Y se mantiene en 0 para que las áreas usen posiciones absolutas en Y
@@ -2407,8 +2407,8 @@ func update_visual_borders():
 	
 	# Recrear las áreas con los nuevos datos
 	var puzzle_data = puzzle_game.get_puzzle_data()
-	var cell_size = puzzle_data.cell_size
-	var offset = puzzle_data.offset
+	var cell_size = puzzle_data["cell_size"]
+	var offset = puzzle_data["offset"]
 	
 	# Asegurar que el contenedor esté centrado correctamente
 	_ensure_background_limits_container()
@@ -2443,8 +2443,8 @@ func show_expansion_hint(direction: String):
 		"right":
 			message = "→ Límite lateral fijo"
 	
-	if message != "":
-		puzzle_game.show_success_message(message, 1.0)
+	# if message != "":
+	# 	puzzle_game.show_success_message(message, 1.0)
 
 # 🆕 Función para obtener información del estado actual de límites visuales
 func get_visual_borders_info() -> Dictionary:
@@ -2470,15 +2470,15 @@ func _verify_piece_positioning():
 	
 	print("📐 DATOS GENERALES:")
 	print("  - Viewport size: ", viewport_size)
-	print("  - Puzzle size: ", Vector2(puzzle_data.width, puzzle_data.height))
-	print("  - Offset calculado: ", puzzle_data.offset)
-	print("  - Tamaño de celda: ", puzzle_data.cell_size)
+	print("  - Puzzle size: ", Vector2(puzzle_data["width"], puzzle_data["height"]))
+	print("  - Offset calculado: ", puzzle_data["offset"])
+	print("  - Tamaño de celda: ", puzzle_data["cell_size"])
 	print("  - PiecesContainer.position: ", puzzle_game.pieces_container.position if puzzle_game.pieces_container else "N/A")
 	print("  - PuzzleGame.position: ", puzzle_game.position)
 	
 	# Verificar el centrado teórico
 	var expected_center = viewport_size * 0.5
-	var puzzle_center = puzzle_data.offset + Vector2(puzzle_data.width, puzzle_data.height) * 0.5
+	var puzzle_center = puzzle_data["offset"] + Vector2(puzzle_data["width"], puzzle_data["height"]) * 0.5
 	print("  - Centro esperado de pantalla: ", expected_center)
 	print("  - Centro calculado del puzzle: ", puzzle_center)
 	print("  - Discrepancia de centrado: ", puzzle_center - expected_center)
@@ -2495,7 +2495,7 @@ func _verify_piece_positioning():
 		print("    - Posición del sprite: ", first_piece.node.get_node("Sprite2D").position if first_piece.node.has_node("Sprite2D") else "N/A")
 		print("    - Posición global del nodo: ", first_piece.node.global_position)
 		
-		var expected_pos = puzzle_data.offset + first_piece.current_cell * puzzle_data.cell_size
+		var expected_pos = puzzle_data["offset"] + first_piece.current_cell * puzzle_data["cell_size"]
 		print("    - Posición esperada: ", expected_pos)
 		print("    - Discrepancia: ", first_piece.node.position - expected_pos)
 		
@@ -2503,7 +2503,7 @@ func _verify_piece_positioning():
 		print("  📍 ÚLTIMA PIEZA:")
 		print("    - Celda: ", last_piece.current_cell)
 		print("    - Posición del nodo: ", last_piece.node.position)
-		var expected_pos_last = puzzle_data.offset + last_piece.current_cell * puzzle_data.cell_size
+		var expected_pos_last = puzzle_data["offset"] + last_piece.current_cell * puzzle_data["cell_size"]
 		print("    - Posición esperada: ", expected_pos_last)
 		print("    - Discrepancia: ", last_piece.node.position - expected_pos_last)
 		
@@ -2514,8 +2514,8 @@ func _verify_piece_positioning():
 			var pos = piece_obj.node.position
 			min_pos.x = min(min_pos.x, pos.x)
 			min_pos.y = min(min_pos.y, pos.y)
-			max_pos.x = max(max_pos.x, pos.x + puzzle_data.cell_size.x)
-			max_pos.y = max(max_pos.y, pos.y + puzzle_data.cell_size.y)
+			max_pos.x = max(max_pos.x, pos.x + puzzle_data["cell_size"].x)
+			max_pos.y = max(max_pos.y, pos.y + puzzle_data["cell_size"].y)
 		
 		print("\n📏 LÍMITES REALES DEL PUZZLE:")
 		print("  - Esquina superior izquierda: ", min_pos)
@@ -2531,7 +2531,7 @@ func _verify_piece_positioning():
 		var actual_center = Vector2.ZERO
 		var piece_count = 0
 		for piece_obj in pieces:
-			actual_center += piece_obj.node.position + puzzle_data.cell_size * 0.5
+			actual_center += piece_obj.node.position + puzzle_data["cell_size"] * 0.5
 			piece_count += 1
 		actual_center /= piece_count
 		
@@ -2554,7 +2554,7 @@ func force_recenter_all_pieces():
 	
 	for piece_obj in pieces:
 		# Recalcular la posición correcta para cada pieza
-		var correct_position = puzzle_data.offset + piece_obj.current_cell * puzzle_data.cell_size
+		var correct_position = puzzle_data["offset"] + piece_obj.current_cell * puzzle_data["cell_size"]
 		piece_obj.node.position = correct_position
 		
 		# Asegurar que el sprite interno esté en (0,0)
@@ -2629,8 +2629,8 @@ func _apply_smart_centering_correction():
 		
 		# Actualizar el offset del puzzle en los datos globales
 		var puzzle_data = puzzle_game.get_puzzle_data()
-		var new_offset = puzzle_data.offset + correction_offset
-		puzzle_game.set_puzzle_data(puzzle_data.texture, puzzle_data.width, puzzle_data.height, puzzle_data.cell_size, new_offset)
+		var new_offset = puzzle_data["offset"] + correction_offset
+		puzzle_game.set_puzzle_data(puzzle_data["texture"], puzzle_data["width"], puzzle_data["height"], puzzle_data["cell_size"], new_offset)
 		
 		print("  - Nuevo offset del puzzle: ", new_offset)
 		print("PuzzlePieceManager: ✅ Corrección de centrado completada")
@@ -2829,8 +2829,8 @@ func _calculate_group_border_outline(group: Array) -> Array:
 	
 	# Obtener datos del puzzle para cálculos de posición
 	var puzzle_data = puzzle_game.get_puzzle_data()
-	var cell_size = puzzle_data.cell_size
-	var offset = puzzle_data.offset
+	var cell_size = puzzle_data["cell_size"]
+	var offset = puzzle_data["offset"]
 	
 	# Crear un mapa de las celdas ocupadas por el grupo
 	var group_cells = {}
@@ -3073,7 +3073,7 @@ func _force_complete_redistribution():
 					used_positions[target_cell] = true
 					
 					# Actualizar posición visual
-					var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+					var target_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
 					piece.node.position = target_position
 					
 					print("PuzzlePieceManager: Grupo - Pieza ", piece.order_number, " reubicada a ", target_cell)
@@ -3093,7 +3093,7 @@ func _force_complete_redistribution():
 			used_positions[free_position] = true
 			
 			# Actualizar posición visual
-			var target_position = puzzle_data.offset + free_position * puzzle_data.cell_size
+			var target_position = puzzle_data["offset"] + free_position * puzzle_data["cell_size"]
 			piece_obj.node.position = target_position
 			
 			print("PuzzlePieceManager: Individual - Pieza ", piece_obj.order_number, " reubicada a ", free_position)
@@ -3403,7 +3403,7 @@ func _move_piece_to_cell_safe(piece: Piece, new_cell: Vector2) -> bool:
 			
 			# Actualizar posición visual
 			var puzzle_data = puzzle_game.get_puzzle_data()
-			var target_position = puzzle_data.offset + target_cell * puzzle_data.cell_size
+			var target_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
 			group_piece.node.position = target_position
 		
 		return true
@@ -3429,7 +3429,7 @@ func _move_piece_to_cell_safe(piece: Piece, new_cell: Vector2) -> bool:
 		
 		# Actualizar posición visual
 		var puzzle_data = puzzle_game.get_puzzle_data()
-		var target_position = puzzle_data.offset + new_cell * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + new_cell * puzzle_data["cell_size"]
 		piece.node.position = target_position
 		
 		return true
@@ -3519,7 +3519,7 @@ func _emergency_overlap_resolution():
 		set_piece_at(new_cell, piece_obj)
 		
 		# Actualizar posición visual
-		var target_position = puzzle_data.offset + new_cell * puzzle_data.cell_size
+		var target_position = puzzle_data["offset"] + new_cell * puzzle_data["cell_size"]
 		piece_obj.node.position = target_position
 		
 		print("PuzzlePieceManager: Pieza ", piece_obj.order_number, " reubicada a ", new_cell, " (emergencia)")
@@ -3571,3 +3571,40 @@ func _ensure_no_overlapping_pieces_in_grid():
 		_rebuild_clean_grid()
 	else:
 		print("PuzzlePieceManager: ✅ No se encontraron superposiciones")
+
+# === NUEVAS FUNCIONES PARA MEJORAR LA RESTAURACIÓN ===
+
+# 🔧 NUEVA FUNCIÓN: Limpiar completamente el estado para preparar restauración
+func prepare_for_state_restoration():
+	print("PuzzlePieceManager: Preparando para restauración de estado...")
+	
+	# Limpiar grid
+	grid.clear()
+	
+	# Resetear estados de arrastre y agrupación
+	for piece_obj in pieces:
+		if piece_obj and piece_obj.node:
+			# Limpiar estado de arrastre completamente
+			piece_obj.dragging = false
+			piece_obj.drag_offset = Vector2.ZERO
+			piece_obj.drag_start_cell = piece_obj.current_cell  # Sincronizar drag_start_cell
+			
+			# Resetear grupo temporalmente
+			piece_obj.group = [piece_obj]
+			
+			# Limpiar referencias visuales de grupo si existen
+			if piece_obj.node.has_method("reset_group_visuals"):
+				piece_obj.node.reset_group_visuals()
+	
+	print("PuzzlePieceManager: Estado limpiado para restauración")
+
+# 🔧 NUEVA FUNCIÓN: Sincronizar drag_start_cell después de restaurar
+func sync_drag_start_cells():
+	print("PuzzlePieceManager: Sincronizando drag_start_cell para todas las piezas...")
+	
+	for piece_obj in pieces:
+		if piece_obj and piece_obj.node:
+			# Asegurar que drag_start_cell coincida con current_cell
+			piece_obj.drag_start_cell = piece_obj.current_cell
+	
+	print("PuzzlePieceManager: drag_start_cell sincronizado para ", pieces.size(), " piezas")

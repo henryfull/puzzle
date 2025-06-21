@@ -269,9 +269,6 @@ func pause_game():
 	# Realizar un guardado inmediato al entrar en pausa
 	_update_puzzle_state()
 	
-	# Mostrar mensaje de pausa
-	puzzle_game.show_success_message("Juego en pausa", 0.5)
-	
 	print("PuzzleGameStateManager: Juego pausado en tiempo:", elapsed_time)
 
 # Función para reanudar el juego
@@ -300,7 +297,6 @@ func resume_game():
 		print("PuzzleGameStateManager: Timer de guardado reanudado")
 	
 	# Mostrar mensaje de reanudación
-	puzzle_game.show_success_message("Juego reanudado", 0.5)
 	puzzle_game.panelPaused.visible = false
 	
 	print("PuzzleGameStateManager: Juego reanudado después de ", pause_duration, " segundos en pausa. Tiempo acumulado en pausa:", accumulated_time)
@@ -462,10 +458,7 @@ func restart_puzzle():
 	if timer_countdown:
 		timer_countdown.stop()
 	stop_game_timer()
-	
-	# Mostrar un mensaje al usuario
-	puzzle_game.show_success_message("Reiniciando puzzle " + str(puzzle_game.default_columns) + "x" + str(puzzle_game.default_rows))
-	
+		
 	# Esperar un momento antes de reiniciar el puzzle
 	await puzzle_game.get_tree().create_timer(0.5).timeout
 	
@@ -485,32 +478,10 @@ func restart_puzzle():
 	puzzle_game.piece_manager.current_rows = puzzle_game.default_rows
 	puzzle_game.piece_manager.current_columns = puzzle_game.default_columns
 	
-	# Reiniciar el puzzle con posiciones completamente aleatorias nuevas
-	var puzzle_back = await puzzle_game.ui_manager.generate_back_texture_from_viewport(puzzle_game.viewport_scene_path)
-	if puzzle_back:
-		puzzle_game.piece_manager.load_and_create_pieces(puzzle_game.image_path, puzzle_back)
-		
-		# Inicializar nuevo estado después de crear las piezas
-		if puzzle_state_manager:
-			puzzle_state_manager.start_new_puzzle_state(
-				puzzle_game.current_pack_id,
-				puzzle_game.current_puzzle_id,
-				GLOBAL.gamemode,
-				GLOBAL.current_difficult
-			)
-		
-		# Reiniciar timers de juego si es necesario
-		setup_game_mode()
-		
-		# Actualizar UI con contadores en cero
-		if puzzle_game.movesLabel:
-			puzzle_game.movesLabel.text = "0"
-		
-		print("PuzzleGameStateManager: Puzzle reiniciado completamente con posiciones aleatorias nuevas")
-	else:
-		# Si falla la generación de la textura trasera, recargamos la escena
-		print("PuzzleGameStateManager: Error al generar textura trasera, recargando escena...")
-		puzzle_game.get_tree().reload_current_scene()
+
+	# Si falla la generación de la textura trasera, recargamos la escena
+	print("PuzzleGameStateManager: Error al generar textura trasera, recargando escena...")
+	puzzle_game.get_tree().reload_current_scene()
 
 # Función para manejar gestos de 'volver atrás'
 func handle_back_gesture() -> bool:

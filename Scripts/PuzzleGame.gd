@@ -320,9 +320,6 @@ func _on_bonus_applied(bonus_type: String, points: int):
 		_:
 			bonus_message = "¡Bonus! +" + str(points)
 	
-	# Solo mostrar mensaje descriptivo en la parte superior
-	# Los puntos flotantes se manejan automáticamente en _on_score_updated()
-	show_success_message(bonus_message, 2.0)
 
 # === FUNCIONES PÚBLICAS PARA GESTIÓN DE PUNTUACIÓN EN EL UILAYER ===
 
@@ -477,9 +474,8 @@ func _setup_pieces_container():
 
 func _setup_puzzle():
 	# Primero, generar la textura trasera
-	var puzzle_back = await ui_manager.generate_back_texture_from_viewport(viewport_scene_path)
 	# Luego crear las piezas
-	await piece_manager.load_and_create_pieces(image_path, puzzle_back)
+	await piece_manager.load_and_create_pieces(image_path, null)
 
 func _unhandled_input(event: InputEvent) -> void:
 	input_handler.handle_input(event)
@@ -531,7 +527,6 @@ func apply_smart_centering():
 func adjust_edge_margin(new_margin: float):
 	if input_handler:
 		input_handler.set_edge_margin(new_margin)
-		show_success_message("🔧 Margen de borde: " + str(new_margin) + "px", 2.0)
 	else:
 		print("PuzzleGame: Error - input_handler no disponible")
 
@@ -553,16 +548,12 @@ func force_complete_recenter(silent_mode: bool = false):
 		silent_mode (bool): Si es true, no muestra mensajes al usuario
 	"""
 	
-	if not silent_mode:
-		show_success_message("🎯 Ejecutando recentrado completo...", 1.5)
-	
 	print("PuzzleGame: 🎯 INICIANDO RECENTRADO COMPLETO")
 	
 	# Paso 1: Diagnóstico inicial
 	print("PuzzleGame: Paso 1 - Diagnóstico inicial")
 	var initial_diagnosis = run_positioning_diagnosis()
 	if initial_diagnosis and not silent_mode:
-		show_success_message("✅ Puzzle ya está correctamente centrado", 2.0)
 		print("PuzzleGame: ✅ Puzzle ya está centrado correctamente")
 		return
 	
@@ -576,16 +567,14 @@ func force_complete_recenter(silent_mode: bool = false):
 	
 	if final_diagnosis:
 		if not silent_mode:
-			show_success_message("✅ Recentrado completado exitosamente", 2.0)
-		print("PuzzleGame: ✅ RECENTRADO COMPLETO EXITOSO")
+			print("PuzzleGame: ✅ RECENTRADO COMPLETO EXITOSO")
 	else:
 		# Como último recurso, forzar recentrado
 		print("PuzzleGame: Aplicando recentrado forzado como último recurso...")
 		force_recenter_puzzle()
 		
 		if not silent_mode:
-			show_success_message("🔧 Recentrado forzado aplicado", 2.0)
-		print("PuzzleGame: 🔧 RECENTRADO FORZADO COMPLETADO")
+			print("PuzzleGame: 🔧 RECENTRADO FORZADO COMPLETADO")
 
 # 🔧 NUEVAS FUNCIONES PARA RESOLUCIÓN DE SUPERPOSICIONES
 
@@ -596,9 +585,7 @@ func resolve_all_puzzle_overlaps():
 	print("PuzzleGame: 🔧 Ejecutando resolución de superposiciones...")
 	
 	if piece_manager and piece_manager.has_method("resolve_all_overlaps"):
-		show_success_message("🔧 Resolviendo superposiciones...", 1.5)
-		await piece_manager.resolve_all_overlaps()
-		show_success_message("✅ Superposiciones resueltas", 2.0)
+		piece_manager.resolve_all_overlaps()
 		print("PuzzleGame: ✅ Resolución de superposiciones completada")
 	else:
 		print("PuzzleGame: ❌ No se pudo acceder a funciones de resolución de superposiciones")
@@ -631,7 +618,6 @@ func force_clean_puzzle_grid():
 	
 	if piece_manager and piece_manager.has_method("force_clean_grid"):
 		piece_manager.force_clean_grid()
-		show_success_message("🧹 Grid del puzzle limpiado", 1.5)
 		print("PuzzleGame: ✅ Grid limpiado exitosamente")
 	else:
 		print("PuzzleGame: ❌ No se pudo limpiar el grid (funciones no disponibles)")
@@ -642,7 +628,6 @@ func run_comprehensive_puzzle_check():
 	Función integral que verifica y corrige todos los problemas del puzzle
 	"""
 	print("PuzzleGame: 🔧 Ejecutando verificación integral del puzzle...")
-	show_success_message("🔧 Verificando integridad del puzzle...", 2.0)
 	
 	# Paso 1: Verificar superposiciones
 	var has_overlaps = not verify_puzzle_integrity()
@@ -661,7 +646,6 @@ func run_comprehensive_puzzle_check():
 	var final_centering_check = run_positioning_diagnosis()
 	
 	if final_overlaps_check and final_centering_check:
-		show_success_message("✅ Puzzle verificado - Todo correcto", 3.0)
 		print("PuzzleGame: ✅ VERIFICACIÓN INTEGRAL COMPLETADA - Todo está correcto")
 	else:
 		show_error_message("⚠️ Algunos problemas persisten", 3.0)
@@ -731,9 +715,6 @@ func _on_puzzle_completed():
 		
 		# Agregar tiempo de finalización
 		score_summary["completion_time"] = game_state_manager.elapsed_time
-		
-		# Mostrar puntuación final al usuario
-		show_success_message("🏆 Puntuación final: " + str(score_summary.final_score) + " puntos", 3.0)
 		
 		# Guardar la puntuación en el ranking manager
 		if ranking_manager:
@@ -908,11 +889,6 @@ func _on_center_button_pressed():
 func _show_centering_welcome_message():
 	# Mostrar mensaje con información sobre centrado después de un pequeño delay
 	await get_tree().create_timer(1.5).timeout
-	
-	if is_mobile:
-		show_success_message("💡 Doble tap o botón 🎯 para centrar puzzle", 3.0)
-	else:
-		show_success_message("💡 Presiona 'C' para centrar puzzle 🎯", 3.0)
 
 # Función para mostrar el loading puzzle
 func _show_loading_puzzle():
@@ -1019,18 +995,6 @@ func force_remove_loading_puzzle():
 	else:
 		print("PuzzleGame: No hay loading puzzle para forzar eliminación")
 
-# Función de debug para verificar el estado del loading puzzle
-func debug_loading_puzzle_status():
-	print("=== DEBUG LOADING PUZZLE ===")
-	print("loading_puzzle_instance: ", loading_puzzle_instance)
-	if loading_puzzle_instance != null:
-		print("is_instance_valid: ", is_instance_valid(loading_puzzle_instance))
-		print("visible: ", loading_puzzle_instance.visible)
-		print("name: ", loading_puzzle_instance.name)
-		print("parent: ", loading_puzzle_instance.get_parent())
-		print("parent name: ", loading_puzzle_instance.get_parent().name if loading_puzzle_instance.get_parent() else "null")
-		print("parent layer: ", loading_puzzle_instance.get_parent().layer if loading_puzzle_instance.get_parent() is CanvasLayer else "not CanvasLayer")
-	print("============================")
 
 # Función para ocultar temporalmente la UI durante el loading
 func _hide_ui_for_loading():
@@ -1121,10 +1085,8 @@ func _test_score_system_delayed():
 		score_manager.add_groups_connected()
 		print("🧪 Prueba 2: Grupos conectados")
 		
-		show_success_message("🧪 Prueba de puntuación ejecutada - Revisa los puntos", 3.0)
 	else:
 		print("🧪 ERROR: Score manager no disponible o no habilitado")
-		show_error_message("🧪 Error: Sistema de puntuación no disponible", 3.0)
 
 func _setup_global_dialog_interceptors():
 	print("PuzzleGame: Configurando interceptores globales de diálogos...")
@@ -1224,12 +1186,16 @@ func _initialize_new_puzzle_state():
 func _restore_puzzle_state(puzzle_state_manager):
 	print("PuzzleGame: Restaurando estado de las piezas...")
 	
+	# 🔧 PASO 0: Deshabilitar eventos de entrada durante la restauración
+	disable_input_events()
+	
 	var saved_pieces_data = puzzle_state_manager.get_saved_pieces_data()
 	
 	print("PuzzleGame: Datos guardados - Piezas: ", saved_pieces_data.size())
 	
 	if saved_pieces_data.size() == 0:
 		print("PuzzleGame: No hay datos de piezas guardados, usando posiciones iniciales")
+		enable_input_events()  # Re-habilitar eventos antes de salir
 		return
 	
 	# Esperar múltiples frames para asegurar inicialización completa
@@ -1237,16 +1203,19 @@ func _restore_puzzle_state(puzzle_state_manager):
 	await get_tree().process_frame
 	await get_tree().process_frame
 	
-	# Preparar para restauración - no necesitamos desagrupar ya que trabajaremos con el PuzzlePieceManager
 	print("PuzzleGame: Preparando restauración de estado...")
 	
-	# Establecer las posiciones de todas las piezas según los datos guardados
+	# Obtener piezas actuales
 	var pieces = piece_manager.get_pieces()
 	print("PuzzleGame: Restaurando posiciones de ", pieces.size(), " piezas...")
 	
-	# 🔧 PASO 1: Limpiar grid completamente antes de restaurar
-	print("PuzzleGame: Limpiando grid antes de restaurar posiciones...")
-	piece_manager.grid.clear()
+	# 🔧 PASO 1: Limpiar completamente el estado usando el método del manager
+	print("PuzzleGame: Limpiando estado previo...")
+	piece_manager.prepare_for_state_restoration()
+	
+	# 🔧 PASO 2: Restaurar posiciones usando DATOS GUARDADOS directamente
+	print("PuzzleGame: Restaurando posiciones desde datos guardados...")
+	var successfully_restored = 0
 	
 	for piece_data in saved_pieces_data:
 		# Buscar la pieza correspondiente por order_number
@@ -1260,85 +1229,64 @@ func _restore_puzzle_state(puzzle_state_manager):
 			print("PuzzleGame: ⚠️ No se encontró pieza con order_number: ", piece_data.order_number)
 			continue
 		
-		# Restaurar posición global
-		if "current_position" in piece_data:
+		# 🔧 CRÍTICO: Usar current_cell GUARDADO directamente si existe
+		if "current_cell" in piece_data and piece_data.current_cell != null:
+			var saved_cell = Vector2(piece_data.current_cell.x, piece_data.current_cell.y)
+			target_piece.current_cell = saved_cell
+			print("PuzzleGame: Pieza ", piece_data.order_number, " restaurada a celda guardada: ", saved_cell)
+		elif "current_position" in piece_data:
+			# Fallback: calcular desde la posición si no hay celda guardada
 			target_piece.node.global_position = Vector2(
 				piece_data.current_position.x,
 				piece_data.current_position.y
 			)
+			target_piece.current_cell = piece_manager.get_cell_of_piece(target_piece)
+			print("PuzzleGame: Pieza ", piece_data.order_number, " calculada desde posición: ", target_piece.current_cell)
+		else:
+			print("PuzzleGame: ⚠️ No hay datos de posición para pieza: ", piece_data.order_number)
+			continue
 		
-		# Restaurar celda current_cell calculándola desde la posición
-		target_piece.current_cell = piece_manager.get_cell_of_piece(target_piece)
+		# Actualizar posición visual basada en la celda
+		var puzzle_data = get_puzzle_data()
+		var visual_position = puzzle_data["offset"] + target_piece.current_cell * puzzle_data["cell_size"]
+		target_piece.node.position = visual_position
 		
-		# Registrar en el grid después de establecer current_cell
+		# Registrar en el grid DESPUÉS de establecer current_cell
 		piece_manager.set_piece_at(target_piece.current_cell, target_piece)
 		
 		# Restaurar estado volteado si existe
 		if "flipped" in piece_data and target_piece.node.has_method("set_flipped"):
 			target_piece.node.set_flipped(piece_data.flipped)
 		
-		# Actualizar estado de posición correcta
-		piece_manager.update_piece_position_state(target_piece)
+		successfully_restored += 1
 	
-	print("PuzzleGame: Posiciones individuales restauradas")
+	print("PuzzleGame: ", successfully_restored, " piezas restauradas exitosamente")
 	
-	# 🔧 PASO 2: VERIFICAR Y RESOLVER SUPERPOSICIONES CRÍTICAS
-	print("PuzzleGame: 🔧 VERIFICANDO SUPERPOSICIONES DESPUÉS DE RESTAURAR...")
+	# 🔧 PASO 3: Verificar integridad del grid ANTES de restaurar grupos
+	print("PuzzleGame: Verificando integridad del grid...")
+	var grid_issues = _verify_grid_integrity()
+	if grid_issues > 0:
+		print("PuzzleGame: ⚠️ Detectados ", grid_issues, " problemas de grid - Aplicando corrección...")
+		_fix_grid_integrity_issues()
 	
-	# Ejecutar resolución integral de superposiciones
-	await piece_manager.resolve_all_overlapping_pieces_comprehensive()
-	
-	# 🔧 PASO 3: Restaurar grupos después de resolver superposiciones
+	# 🔧 PASO 4: Restaurar grupos SOLO después de verificar el grid
 	print("PuzzleGame: Restaurando estructura de grupos...")
+	_restore_piece_groups(saved_pieces_data, pieces)
 	
-	# Agrupar piezas según group_ids guardados
-	var groups_to_form = {}
+	# 🔧 PASO 5: Verificación final y actualización de estados
+	print("PuzzleGame: Actualizando estados finales...")
 	
-	for piece_data in saved_pieces_data:
-		if "group_id" in piece_data:
-			var group_id = piece_data.group_id
-			if not group_id in groups_to_form:
-				groups_to_form[group_id] = []
-			
-			# Buscar la pieza correspondiente
-			var target_piece = null
-			for piece_obj in pieces:
-				if piece_obj.order_number == piece_data.order_number:
-					target_piece = piece_obj
-					break
-			
-			if target_piece:
-				groups_to_form[group_id].append(target_piece)
+	# Sincronizar drag_start_cell para evitar conflictos de arrastre
+	piece_manager.sync_drag_start_cells()
 	
-	# Formar los grupos
-	for group_id in groups_to_form.keys():
-		var group_pieces = groups_to_form[group_id]
-		if group_pieces.size() > 1:
-			print("PuzzleGame: Formando grupo con ", group_pieces.size(), " piezas")
-			# Asignar todas las piezas al mismo grupo
-			for piece_obj in group_pieces:
-				piece_obj.group = group_pieces.duplicate()
-				
-				# Configurar ID de grupo visual
-				if piece_obj.node.has_method("set_group_id"):
-					piece_obj.node.set_group_id(group_id)
-				if piece_obj.node.has_method("update_pieces_group"):
-					piece_obj.node.update_pieces_group(group_pieces)
+	# Actualizar estado de posición correcta para todas las piezas
+	for piece_obj in pieces:
+		piece_manager.update_piece_position_state(piece_obj)
 	
-	# 🔧 PASO 4: VERIFICACIÓN FINAL CRÍTICA
-	print("PuzzleGame: 🔧 VERIFICACIÓN FINAL DESPUÉS DE RESTAURAR GRUPOS...")
-	
-	# Verificar y resolver cualquier superposición que pueda haber quedado
-	if not piece_manager.verify_no_overlaps():
-		print("PuzzleGame: ⚠️ DETECTADAS SUPERPOSICIONES DESPUÉS DE RESTAURAR GRUPOS - Resolviendo...")
-		await piece_manager.resolve_all_overlapping_pieces_comprehensive()
-	
-	# Verificar fusiones automáticas
-	print("PuzzleGame: Verificando fusiones automáticas...")
+	# Verificar y actualizar fusiones automáticas
 	piece_manager.check_all_groups()
 	
 	# Actualizar efectos visuales
-	print("PuzzleGame: Actualizando efectos visuales...")
 	for piece_obj in pieces:
 		if piece_obj.node.has_method("update_all_visuals"):
 			piece_obj.node.update_all_visuals()
@@ -1346,22 +1294,128 @@ func _restore_puzzle_state(puzzle_state_manager):
 	# Actualizar bordes de grupo
 	piece_manager.update_all_group_borders()
 	
-	# 🔧 PASO 5: VERIFICACIÓN FINAL Y CENTRADO
-	print("PuzzleGame: Ejecutando centrado automático después de restaurar...")
-	
-	# Esperar un frame antes del centrado
+	# 🔧 PASO 6: Centrado final sin resolución de superposiciones agresiva
+	print("PuzzleGame: Aplicando centrado final...")
 	await get_tree().process_frame
-	
-	# Aplicar centrado automático para corregir cualquier desplazamiento
 	force_complete_recenter(true)
 	
-	print("PuzzleGame: ✅ Estado del puzzle restaurado exitosamente con verificaciones de superposición")
+	# 🔧 PASO 7: Verificación final del estado restaurado
+	print("PuzzleGame: Ejecutando verificación final del estado...")
+	var state_verified = verify_puzzle_state_after_restoration()
 	
-	# Mostrar mensaje de confirmación al usuario
-	show_success_message("🔧 Partida cargada y verificada", 2.0)
+	if not state_verified:
+		print("PuzzleGame: ⚠️ Estado no verificado correctamente, aplicando correcciones finales...")
+		# Aplicar correcciones finales si es necesario
+		piece_manager.sync_drag_start_cells()
+		piece_manager.recalculate_all_grid_positions()
 	
-	# 🔧 CRÍTICO: Activar monitoreo automático de superposiciones
-	setup_overlap_monitoring()
+	# 🔧 PASO 8: Re-habilitar eventos de entrada
+	enable_input_events()
+	
+	print("PuzzleGame: ✅ Estado del puzzle restaurado exitosamente - Eventos habilitados")
+	
+	# NO activar monitoreo automático inmediatamente para evitar conflictos
+	# setup_overlap_monitoring() # Comentado temporalmente
+
+# 🔧 NUEVA FUNCIÓN: Verificar integridad del grid
+func _verify_grid_integrity() -> int:
+	var issues_found = 0
+	var cell_occupancy = {}
+	
+	for piece_obj in piece_manager.get_pieces():
+		if not piece_obj or not piece_obj.node:
+			continue
+		
+		var cell = piece_obj.current_cell
+		var cell_key_str = piece_manager.cell_key(cell)
+		
+		if cell_key_str in cell_occupancy:
+			issues_found += 1
+			print("PuzzleGame: ⚠️ Grid integrity issue: Celda ", cell, " ocupada por múltiples piezas")
+		else:
+			cell_occupancy[cell_key_str] = piece_obj
+		
+		# Verificar que la pieza esté registrada en el grid del manager
+		var grid_piece = piece_manager.get_piece_at(cell)
+		if grid_piece != piece_obj:
+			issues_found += 1
+			print("PuzzleGame: ⚠️ Grid integrity issue: Pieza ", piece_obj.order_number, " no está correctamente registrada en grid")
+	
+	return issues_found
+
+# 🔧 NUEVA FUNCIÓN: Corregir problemas de integridad del grid
+func _fix_grid_integrity_issues():
+	print("PuzzleGame: Corrigiendo problemas de integridad del grid...")
+	
+	# Reconstruir el grid completamente desde las posiciones current_cell
+	piece_manager.grid.clear()
+	
+	for piece_obj in piece_manager.get_pieces():
+		if not piece_obj or not piece_obj.node:
+			continue
+		
+		# Re-registrar cada pieza en su current_cell
+		piece_manager.set_piece_at(piece_obj.current_cell, piece_obj)
+	
+	print("PuzzleGame: Grid reconstruido completamente")
+
+# 🔧 NUEVA FUNCIÓN: Restaurar grupos de piezas de forma segura
+func _restore_piece_groups(saved_pieces_data: Array, pieces: Array):
+	print("PuzzleGame: Iniciando restauración segura de grupos...")
+	
+	# Crear mapa de groups por group_id
+	var groups_to_form = {}
+	
+	for piece_data in saved_pieces_data:
+		if not "group_id" in piece_data:
+			continue
+		
+		var group_id = piece_data.group_id
+		if group_id == -1 or group_id == null:
+			continue  # Pieza individual, no grupo
+		
+		if not group_id in groups_to_form:
+			groups_to_form[group_id] = []
+		
+		# Buscar la pieza correspondiente
+		var target_piece = null
+		for piece_obj in pieces:
+			if piece_obj.order_number == piece_data.order_number:
+				target_piece = piece_obj
+				break
+		
+		if target_piece:
+			groups_to_form[group_id].append(target_piece)
+	
+	# Formar los grupos de forma segura
+	var groups_formed = 0
+	for group_id in groups_to_form.keys():
+		var group_pieces = groups_to_form[group_id]
+		if group_pieces.size() > 1:
+			print("PuzzleGame: Formando grupo ", group_id, " con ", group_pieces.size(), " piezas")
+			
+			# Verificar que todas las piezas del grupo sean válidas
+			var valid_pieces = []
+			for piece_obj in group_pieces:
+				if piece_obj and piece_obj.node and is_instance_valid(piece_obj.node):
+					valid_pieces.append(piece_obj)
+			
+			if valid_pieces.size() > 1:
+				# Asignar el grupo a todas las piezas válidas
+				for piece_obj in valid_pieces:
+					piece_obj.group = valid_pieces.duplicate()
+					
+					# Configurar ID de grupo visual de forma segura
+					if piece_obj.node.has_method("set_group_id"):
+						piece_obj.node.set_group_id(group_id)
+					if piece_obj.node.has_method("update_pieces_group"):
+						piece_obj.node.update_pieces_group(valid_pieces)
+				
+				groups_formed += 1
+			else:
+				print("PuzzleGame: ⚠️ Grupo ", group_id, " descartado por piezas inválidas")
+	
+	print("PuzzleGame: ", groups_formed, " grupos restaurados exitosamente")
 
 # Restaurar los contadores del juego
 func _restore_game_counters(puzzle_state_manager):
@@ -1458,7 +1512,6 @@ func _emergency_save_state():
 func toggle_group_borders(enabled: bool):
 	if piece_manager:
 		piece_manager.set_group_borders_enabled(enabled)
-		show_success_message("🔲 Bordes de grupo " + ("activados" if enabled else "desactivados"), 2.0)
 	else:
 		print("PuzzleGame: Error - piece_manager no disponible")
 
@@ -1466,7 +1519,6 @@ func toggle_group_borders(enabled: bool):
 func set_group_border_thickness(thickness: float):
 	if piece_manager:
 		piece_manager.set_group_border_thickness(thickness)
-		show_success_message("🔲 Grosor de bordes: " + str(thickness) + "px", 2.0)
 	else:
 		print("PuzzleGame: Error - piece_manager no disponible")
 
@@ -1474,7 +1526,6 @@ func set_group_border_thickness(thickness: float):
 func set_group_border_opacity(opacity: float):
 	if piece_manager:
 		piece_manager.set_group_border_opacity(opacity)
-		show_success_message("🔲 Opacidad de bordes: " + str(int(opacity * 100)) + "%", 2.0)
 	else:
 		print("PuzzleGame: Error - piece_manager no disponible")
 
@@ -1482,7 +1533,6 @@ func set_group_border_opacity(opacity: float):
 func refresh_group_borders():
 	if piece_manager:
 		piece_manager.refresh_all_group_borders()
-		show_success_message("🔲 Bordes de grupo refrescados", 2.0)
 	else:
 		print("PuzzleGame: Error - piece_manager no disponible")
 
@@ -1490,7 +1540,6 @@ func refresh_group_borders():
 func toggle_group_borders_visibility(visible: bool):
 	if piece_manager:
 		piece_manager.toggle_group_borders_visibility(visible)
-		show_success_message("🔲 Bordes " + ("mostrados" if visible else "ocultados"), 1.5)
 	else:
 		print("PuzzleGame: Error - piece_manager no disponible")
 
@@ -1498,16 +1547,12 @@ func toggle_group_borders_visibility(visible: bool):
 func convert_borders_to_interior():
 	if piece_manager:
 		piece_manager.convert_borders_to_interior()
-		show_success_message("🔲 Bordes convertidos a interiores", 2.0)
 	else:
 		print("PuzzleGame: Error - piece_manager no disponible")
 
 # Función de utilidad para centrar el puzzle y actualizar bordes automáticamente
 func center_puzzle_and_update_borders(silent: bool = false):
 	force_complete_recenter(silent)
-	# Los bordes ya se actualizan automáticamente en force_complete_recenter
-	if not silent:
-		show_success_message("🎯 Puzzle centrado y bordes actualizados", 2.0)
 
 # 🔧 NUEVAS FUNCIONES PARA GESTIÓN AUTOMÁTICA DE SUPERPOSICIONES
 func setup_overlap_monitoring():
@@ -1550,11 +1595,7 @@ func force_overlap_resolution():
 		piece_manager.resolve_all_overlaps()
 		
 		# Verificar nuevamente después de la resolución
-		if piece_manager.verify_no_overlaps():
-			show_success_message("✅ Todas las superposiciones resueltas", 2.0)
-		else:
-			show_info_message("⚠️ Algunas superposiciones persisten", 2.0)
-			# Intentar resolución más agresiva
+		if !piece_manager.verify_no_overlaps():
 			piece_manager.recalculate_all_grid_positions()
 
 # Función mejorada para mostrar mensajes informativos (no de éxito)
@@ -1566,3 +1607,84 @@ func show_info_message(message: String, duration: float = 2.0):
 		ui_manager.show_message(message, duration)
 	else:
 		print("PuzzleGame: ", message)
+
+# 🔧 NUEVAS FUNCIONES PARA GESTIÓN DE EVENTOS DURANTE RESTAURACIÓN
+
+# Deshabilitar eventos de entrada temporalmente
+func disable_input_events():
+	print("PuzzleGame: Deshabilitando eventos de entrada durante restauración...")
+	if input_handler:
+		input_handler.set_process_unhandled_input(false)
+		input_handler.set_process_input(false)
+	
+	# Deshabilitar eventos en todas las piezas
+	if piece_manager:
+		var pieces = piece_manager.get_pieces()
+		for piece_obj in pieces:
+			if piece_obj and piece_obj.node and piece_obj.node.has_node("Area2D"):
+				var area2d = piece_obj.node.get_node("Area2D")
+				area2d.input_pickable = false
+
+# Habilitar eventos de entrada después de la restauración
+func enable_input_events():
+	print("PuzzleGame: Habilitando eventos de entrada después de restauración...")
+	if input_handler:
+		input_handler.set_process_unhandled_input(true)
+		input_handler.set_process_input(true)
+	
+	# Habilitar eventos en todas las piezas
+	if piece_manager:
+		var pieces = piece_manager.get_pieces()
+		for piece_obj in pieces:
+			if piece_obj and piece_obj.node and piece_obj.node.has_node("Area2D"):
+				var area2d = piece_obj.node.get_node("Area2D")
+				area2d.input_pickable = true
+
+# 🔧 FUNCIÓN MEJORADA PARA VERIFICAR ESTADO DESPUÉS DE RESTAURACIÓN
+func verify_puzzle_state_after_restoration():
+	print("PuzzleGame: Verificando estado del puzzle después de restauración...")
+	
+	if not piece_manager:
+		print("PuzzleGame: ❌ piece_manager no disponible")
+		return false
+	
+	var pieces = piece_manager.get_pieces()
+	var issues_found = 0
+	
+	# Verificar que no hay piezas sin current_cell válido
+	for piece_obj in pieces:
+		if not piece_obj or not piece_obj.node:
+			issues_found += 1
+			print("PuzzleGame: ⚠️ Pieza inválida encontrada")
+			continue
+		
+		# Verificar que current_cell esté dentro de límites válidos
+		if piece_obj.current_cell.x < 0 or piece_obj.current_cell.y < 0:
+			issues_found += 1
+			print("PuzzleGame: ⚠️ Pieza ", piece_obj.order_number, " tiene current_cell inválido: ", piece_obj.current_cell)
+		
+		# Verificar que drag_start_cell esté sincronizado
+		if piece_obj.drag_start_cell != piece_obj.current_cell:
+			issues_found += 1
+			print("PuzzleGame: ⚠️ Pieza ", piece_obj.order_number, " tiene drag_start_cell desincronizado")
+		
+		# Verificar que no esté en estado de arrastre
+		if piece_obj.dragging:
+			issues_found += 1
+			print("PuzzleGame: ⚠️ Pieza ", piece_obj.order_number, " está en estado de arrastre después de restauración")
+			piece_obj.dragging = false
+			if piece_obj.node.has_method("set_dragging"):
+				piece_obj.node.set_dragging(false)
+	
+	# Verificar integridad del grid
+	var grid_issues = piece_manager.verify_no_overlaps()
+	if not grid_issues:
+		issues_found += 1
+		print("PuzzleGame: ⚠️ Detectadas superposiciones en el grid después de restauración")
+	
+	if issues_found == 0:
+		print("PuzzleGame: ✅ Estado del puzzle verificado correctamente")
+		return true
+	else:
+		print("PuzzleGame: ❌ Se encontraron ", issues_found, " problemas en el estado del puzzle")
+		return false

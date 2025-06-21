@@ -47,7 +47,7 @@ func _handle_keyboard_input(event: InputEventKey):
 			current_visibility = piece_manager.border_areas[0].visible
 		piece_manager.toggle_visual_borders(!current_visibility)
 		var status = "mostrados" if !current_visibility else "ocultados"
-		puzzle_game.show_success_message("Límites " + status, 1.0)
+
 	
 	# DEBUG: Tecla 'C' para forzar recentrado completo
 	elif event.keycode == KEY_C and OS.is_debug_build():
@@ -65,32 +65,27 @@ func _handle_keyboard_input(event: InputEventKey):
 	elif event.keycode == KEY_PLUS or event.keycode == KEY_KP_ADD and OS.is_debug_build():
 		var new_delay = piece_manager.get_auto_center_delay() + 0.2
 		piece_manager.set_auto_center_delay(new_delay)
-		puzzle_game.show_success_message("⏰ Retraso aumentado a " + str(new_delay) + "s", 2.0)
 	
 	elif event.keycode == KEY_MINUS or event.keycode == KEY_KP_SUBTRACT and OS.is_debug_build():
 		var new_delay = max(0.0, piece_manager.get_auto_center_delay() - 0.2)
 		piece_manager.set_auto_center_delay(new_delay)
-		puzzle_game.show_success_message("⏰ Retraso reducido a " + str(new_delay) + "s", 2.0)
 	
 	# DEBUG: Tecla 'T' para mostrar el retraso actual
 	elif event.keycode == KEY_T and OS.is_debug_build():
 		var current_delay = piece_manager.get_auto_center_delay()
-		puzzle_game.show_success_message("⏰ Retraso actual: " + str(current_delay) + "s", 3.0)
 	
 	# 🔧 DEBUG: Teclas para ajustar el margen de bordes
 	elif event.keycode == KEY_BRACKETLEFT and OS.is_debug_build():
 		var new_margin = max(20.0, edge_margin - 10.0)
 		set_edge_margin(new_margin)
-		puzzle_game.show_success_message("🔧 Margen reducido a " + str(new_margin) + "px", 2.0)
 	
 	elif event.keycode == KEY_BRACKETRIGHT and OS.is_debug_build():
 		var new_margin = min(100.0, edge_margin + 10.0)
 		set_edge_margin(new_margin)
-		puzzle_game.show_success_message("🔧 Margen aumentado a " + str(new_margin) + "px", 2.0)
 	
 	# DEBUG: Tecla 'M' para mostrar el margen actual
-	elif event.keycode == KEY_M and OS.is_debug_build():
-		puzzle_game.show_success_message("🔧 Margen actual: " + str(edge_margin) + "px", 3.0)
+	# elif event.keycode == KEY_M and OS.is_debug_build():
+	# 	puzzle_game.show_success_message("🔧 Margen actual: " + str(edge_margin) + "px", 3.0)
 
 func handle_input(event: InputEvent) -> void:
 	# Manejo de teclas especiales
@@ -146,12 +141,10 @@ func _handle_screen_touch(event: InputEventScreenTouch):
 			# Es un doble tap, centrar el puzzle
 			print("PuzzleInputHandler: Doble tap detectado - Centrando puzzle...")
 			puzzle_game.force_complete_recenter()
-			puzzle_game.show_success_message("🎯 Puzzle centrado con doble tap", 2.0)
 		elif touch_count == 3:
 			# Es un triple tap, reorganizar las piezas que están fuera del área del puzzle
 			print("PuzzleInputHandler: Triple tap detectado - Reorganizando piezas...")
 			piece_manager.reorganize_pieces()
-			puzzle_game.show_success_message("🔄 Piezas reorganizadas con triple tap", 2.0)
 			# Reiniciar contador después del triple tap
 			touch_count = 0
 	
@@ -302,7 +295,7 @@ func update_board_position() -> void:
 	# Limitar el desplazamiento para que el tablero no se aleje demasiado
 	var viewport_size = puzzle_game.get_viewport_rect().size
 	var puzzle_data = puzzle_game.get_puzzle_data()
-	var board_size = Vector2(puzzle_data.width, puzzle_data.height)
+	var board_size = Vector2(puzzle_data["width"], puzzle_data["height"])
 	
 	# Calcular límites de desplazamiento más conservadores para mantener el puzzle visible
 	var margin = 200.0  # Margen mayor para mantener el puzzle más centrado
@@ -493,7 +486,7 @@ func _verify_and_fix_visual_conflicts(candidates: Array):
 			# Mover pieza a la celda libre
 			piece_to_move.current_cell = free_cell
 			var puzzle_data = puzzle_game.get_puzzle_data()
-			var new_position = puzzle_data.offset + free_cell * puzzle_data.cell_size
+			var new_position = puzzle_data["offset"] + free_cell * puzzle_data["cell_size"]
 			piece_to_move.node.global_position = new_position
 			
 			# Actualizar grid

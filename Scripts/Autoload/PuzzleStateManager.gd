@@ -133,22 +133,67 @@ func update_pieces_positions_from_manager(piece_manager):
 	# Obtener datos directamente del PuzzlePieceManager, que incluye current_cell
 	var manager_pieces = piece_manager.get_pieces()
 	for piece_obj in manager_pieces:
-		if piece_obj and piece_obj.node:
+		if piece_obj and piece_obj.node and is_instance_valid(piece_obj.node):
 			var piece_data = piece_obj.node.get_puzzle_piece_data()
 			
-			# 🔧 CRUCIAL: Añadir información de la celda actual desde el PuzzlePieceManager
-			piece_data["current_cell"] = {
-				"x": piece_obj.current_cell.x,
-				"y": piece_obj.current_cell.y
-			}
+			# 🔧 CRUCIAL: Verificar y corregir información de celda
+			if not piece_data.has("current_cell") or piece_data.current_cell == null:
+				print("PuzzleStateManager: ⚠️ Pieza ", piece_obj.order_number, " sin current_cell, calculando...")
+				piece_data["current_cell"] = {
+					"x": piece_obj.current_cell.x,
+					"y": piece_obj.current_cell.y
+				}
+			else:
+				# Verificar que los datos coincidan con el piece_obj
+				var saved_cell = Vector2(piece_data.current_cell.x, piece_data.current_cell.y)
+				if saved_cell != piece_obj.current_cell:
+					print("PuzzleStateManager: 🔧 Sincronizando current_cell para pieza ", piece_obj.order_number)
+					print("  - Nodo: ", saved_cell, " vs Manager: ", piece_obj.current_cell)
+					# Usar la información del manager como fuente de verdad
+					piece_data["current_cell"] = {
+						"x": piece_obj.current_cell.x,
+						"y": piece_obj.current_cell.y
+					}
 			
-			puzzle_state.pieces_data.append(piece_data)
-			pieces_count += 1
+			# 🔧 NUEVO: Validar datos antes de guardar
+			if _validate_piece_data(piece_data, piece_obj):
+				puzzle_state.pieces_data.append(piece_data)
+				pieces_count += 1
+			else:
+				print("PuzzleStateManager: ⚠️ Datos inválidos para pieza ", piece_obj.order_number, ", omitiendo...")
 	
-	print("PuzzleStateManager: Actualizadas posiciones de ", pieces_count, " piezas con información de celda")
+	print("PuzzleStateManager: Actualizadas posiciones de ", pieces_count, " piezas con información de celda verificada")
 	
 	# Forzar guardado inmediato después de actualizar posiciones
 	save_puzzle_state()
+
+# 🔧 NUEVA FUNCIÓN: Validar datos de pieza antes de guardar
+func _validate_piece_data(piece_data: Dictionary, piece_obj) -> bool:
+	# Verificar que tenga order_number
+	if not piece_data.has("order_number") or piece_data.order_number != piece_obj.order_number:
+		print("PuzzleStateManager: Datos inválidos - order_number faltante o incorrecto")
+		return false
+	
+	# Verificar que tenga current_position
+	if not piece_data.has("current_position"):
+		print("PuzzleStateManager: Datos inválidos - current_position faltante")
+		return false
+	
+	# Verificar que tenga current_cell
+	if not piece_data.has("current_cell") or piece_data.current_cell == null:
+		print("PuzzleStateManager: Datos inválidos - current_cell faltante")
+		return false
+	
+	# Verificar que current_cell tenga x e y
+	if not piece_data.current_cell.has("x") or not piece_data.current_cell.has("y"):
+		print("PuzzleStateManager: Datos inválidos - current_cell sin coordenadas x,y")
+		return false
+	
+	# Verificar que group_id exista (puede ser -1 para piezas individuales)
+	if not piece_data.has("group_id"):
+		piece_data["group_id"] = -1  # Valor por defecto para piezas individuales
+	
+	return true
 
 # Mantener función original para compatibilidad
 func update_pieces_positions(pieces_container: Node2D):
