@@ -135,13 +135,8 @@ func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 	var original_w = float(puzzle_texture.get_width())
 	var original_h = float(puzzle_texture.get_height())
 
-	# Ajustar el factor de escala según el dispositivo
-	var device_scale_factor = 1.0
-	if puzzle_game.is_mobile:
-		# En dispositivos móviles, usar un porcentaje mayor del espacio disponible
-		device_scale_factor = 0.95
-	else:
-		device_scale_factor = puzzle_game.max_scale_percentage
+	# Ajustar el factor de escala según el dispositivo usando la nueva función
+	var device_scale_factor = puzzle_game.get_device_scale_factor()
 	
 	# Factor para no exceder el porcentaje máximo de la pantalla
 	var scale_factor_w = (viewport_size.x * device_scale_factor) / original_w
@@ -150,6 +145,8 @@ func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 
 	var puzzle_width = original_w * final_scale_factor
 	var puzzle_height = original_h * final_scale_factor
+	
+	print("PuzzlePieceManager: Escala aplicada: ", device_scale_factor, " -> Tamaño final: ", Vector2(puzzle_width, puzzle_height), " (", round((puzzle_width / viewport_size.x) * 100), "% de pantalla)")
 
 	# 3) Definir el tamaño de cada celda
 	var cell_size = Vector2(puzzle_width / current_columns, puzzle_height / current_rows)

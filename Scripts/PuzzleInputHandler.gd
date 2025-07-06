@@ -111,42 +111,10 @@ func is_touch_in_safe_zone(position: Vector2) -> bool:
 
 func _handle_screen_touch(event: InputEventScreenTouch):
 	# 🚫 PREVENIR CONFLICTOS CON GESTOS DEL SISTEMA OPERATIVO
-	# Ignorar toques que están muy cerca de los bordes de la pantalla
+	# No procesar toques muy cerca de los bordes de la pantalla
 	if not is_touch_in_safe_zone(event.position):
-		print("PuzzleInputHandler: Toque ignorado por estar cerca del borde en: ", event.position)
+		print("Input táctil ignorado por estar demasiado cerca del borde de pantalla")
 		return
-	
-	# Detectar múltiples toques (doble y triple)
-	if event.pressed:
-		var current_time = Time.get_ticks_msec() / 1000.0
-		var time_diff = current_time - last_touch_time
-		var position_diff = event.position.distance_to(last_touch_position)
-		
-		# Reiniciar contador si ha pasado demasiado tiempo
-		if time_diff > triple_tap_threshold:
-			touch_count = 0
-		
-		# Incrementar contador de toques si están cerca en tiempo y posición
-		if time_diff < triple_tap_threshold and position_diff < double_tap_distance_threshold:
-			touch_count += 1
-		else:
-			touch_count = 1
-		
-		# Guardar tiempo y posición para el próximo toque
-		last_touch_time = current_time
-		last_touch_position = event.position
-		
-		# Procesar según el número de toques
-		if touch_count == 2:
-			# Es un doble tap, centrar el puzzle
-			print("PuzzleInputHandler: Doble tap detectado - Centrando puzzle...")
-			puzzle_game.force_complete_recenter()
-		elif touch_count == 3:
-			# Es un triple tap, reorganizar las piezas que están fuera del área del puzzle
-			print("PuzzleInputHandler: Triple tap detectado - Reorganizando piezas...")
-			piece_manager.reorganize_pieces()
-			# Reiniciar contador después del triple tap
-			touch_count = 0
 	
 	# Guardamos la información del toque en nuestro diccionario
 	if event.pressed:
@@ -154,8 +122,8 @@ func _handle_screen_touch(event: InputEventScreenTouch):
 	else:
 		touch_points.erase(event.index)
 		
-	# Para paneo en dispositivos móviles necesitamos DOS dedos
-	if puzzle_game.is_mobile:
+	# Para paneo en dispositivos móviles Y tablets necesitamos DOS dedos
+	if (puzzle_game.is_mobile or puzzle_game.is_tablet):
 		if touch_points.size() >= 2 and event.pressed:
 			# Iniciar paneo con dos dedos
 			is_panning = true
@@ -166,7 +134,7 @@ func _handle_screen_touch(event: InputEventScreenTouch):
 			is_panning = false
 	
 	# Si es un solo dedo, procesamos como un evento normal de clic de pieza
-	if touch_points.size() == 1 and puzzle_game.is_mobile:
+	if touch_points.size() == 1 and (puzzle_game.is_mobile or puzzle_game.is_tablet):
 		if event.pressed:
 			# Debemos pasar la posición específica del evento de toque, no el evento genérico
 			process_piece_click_touch(event.position, event.index)
@@ -187,7 +155,7 @@ func _handle_screen_drag(event: InputEventScreenDrag):
 	touch_points[event.index] = safe_position
 	
 	# Para paneo en dispositivos móviles necesitamos DOS dedos
-	if puzzle_game.is_mobile and touch_points.size() >= 2 and is_panning:
+	if (puzzle_game.is_mobile or puzzle_game.is_tablet) and touch_points.size() >= 2 and is_panning:
 		# En lugar de usar el centro de los dedos, usamos directamente la posición del dedo 
 		# que se está moviendo, lo que da un control más directo
 		var current_pos = safe_position
@@ -209,7 +177,7 @@ func _handle_screen_drag(event: InputEventScreenDrag):
 		update_board_position()
 	
 	# Si estamos arrastrando con un solo dedo y no estamos en modo paneo, mover piezas
-	elif puzzle_game.is_mobile and touch_points.size() == 1 and not is_panning:
+	elif (puzzle_game.is_mobile or puzzle_game.is_tablet) and touch_points.size() == 1 and not is_panning:
 		# Procesar como arrastre de pieza
 		var pieces = piece_manager.get_pieces()
 		for piece_obj in pieces:
@@ -232,7 +200,6 @@ func _handle_screen_drag(event: InputEventScreenDrag):
 					# Si la pieza tiene padre, asegurarse de que esté al frente
 					if p.node.get_parent() != null:
 						p.node.get_parent().move_child(p.node, p.node.get_parent().get_child_count() - 1)
-				
 				break
 
 func _handle_mouse_button(event: InputEventMouseButton):

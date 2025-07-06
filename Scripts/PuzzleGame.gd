@@ -71,10 +71,15 @@ var puzzle_offset: Vector2
 # Configuración
 @export var image_path: String = "res://Assets/Images/arte1.jpg"
 @export var max_scale_percentage: float = 0.9
+@export var tablet_scale_percentage: float = 0.8  # Escala específica para tablets
+@export var desktop_scale_percentage: float = 0.8  # Escala específica para ordenadores
+@export var mobile_scale_percentage: float = 1.0   # Escala específica para smartphones
 @export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
 @export var max_extra_rows: int = 5
 
 var is_mobile: bool = false
+var is_tablet: bool = false
+var is_desktop: bool = false
 var default_rows: int = 0
 var default_columns: int = 0
 
@@ -104,7 +109,8 @@ func _ready():
 	if OS.has_feature("mobile"):
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	
-	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
+	# Detectar tipo de dispositivo
+	_detect_device_type()
 	
 	# Verificar que los nodos de audio se han cargado correctamente
 	_test_audio_nodes()
@@ -211,6 +217,65 @@ func _ready():
 	
 	# 🚫 NUEVO: Interceptor ultra-agresivo - sobrescribir métodos globales
 	_setup_global_dialog_interceptors()
+
+func _detect_device_type():
+	"""Detecta el tipo de dispositivo para aplicar la escala correcta"""
+	var viewport_size = get_viewport_rect().size
+	var screen_diagonal = sqrt(pow(viewport_size.x, 2) + pow(viewport_size.y, 2))
+	
+	# Detectar si es móvil básico
+	var is_mobile_os = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
+	
+	if is_mobile_os:
+		# Distinguir entre móvil pequeño y tablet basándose en tamaño de pantalla
+		# Los tablets reales tienen AMBAS dimensiones relativamente grandes
+		# Smartphones: dimensión pequeña típicamente 360-450, dimensión grande 640-900+
+		# Tablets: dimensión pequeña típicamente 600+, dimensión grande 800+
+		var min_dimension = min(viewport_size.x, viewport_size.y)
+		var max_dimension = max(viewport_size.x, viewport_size.y)
+		var is_large_screen = min_dimension > 800 and max_dimension > 1000
+		
+		if is_large_screen:
+			is_tablet = true
+			is_mobile = false  # Los tablets no se tratan como móviles pequeños para el input
+			is_desktop = false
+			print("PuzzleGame: Dispositivo detectado como TABLET (diagonal: ", screen_diagonal, ", resolución: ", viewport_size, ")")
+		else:
+			is_mobile = true
+			is_tablet = false
+			is_desktop = false
+			print("PuzzleGame: Dispositivo detectado como MÓVIL (diagonal: ", screen_diagonal, ", resolución: ", viewport_size, ")")
+	else:
+		# Es un ordenador/desktop
+		is_desktop = true
+		is_tablet = false
+		is_mobile = false
+		print("PuzzleGame: Dispositivo detectado como ORDENADOR (resolución: ", viewport_size, ")")
+	
+	# IMPORTANTE: Para el input handler, las tablets siguen siendo "móviles"
+	# para mantener la funcionalidad táctil
+	print("PuzzleGame: Para input táctil - is_mobile usado por InputHandler: ", (is_mobile or is_tablet))
+
+func get_device_scale_factor() -> float:
+	"""Devuelve el factor de escala apropiado según el tipo de dispositivo"""
+	if is_tablet:
+		# Usar configuración guardada o valor por defecto
+		var tablet_scale = GLOBAL.settings.puzzle.get("tablet_scale", tablet_scale_percentage)
+		print("PuzzleGame: Aplicando escala de TABLET: ", tablet_scale)
+		return tablet_scale
+	elif is_desktop:
+		# Usar configuración guardada o valor por defecto
+		var desktop_scale = GLOBAL.settings.puzzle.get("desktop_scale", desktop_scale_percentage)
+		print("PuzzleGame: Aplicando escala de ORDENADOR: ", desktop_scale)
+		return desktop_scale
+	elif is_mobile:
+		# Usar configuración guardada o valor por defecto
+		var mobile_scale = GLOBAL.settings.puzzle.get("mobile_scale", mobile_scale_percentage)
+		print("PuzzleGame: Aplicando escala de MÓVIL: ", mobile_scale)
+		return mobile_scale
+	else:
+		print("PuzzleGame: Aplicando escala POR DEFECTO: ", max_scale_percentage)
+		return max_scale_percentage
 
 func _connect_button_signals():
 	# Conectar botón de opciones (pausa)
@@ -478,7 +543,74 @@ func _setup_puzzle():
 	await piece_manager.load_and_create_pieces(image_path, null)
 
 func _unhandled_input(event: InputEvent) -> void:
-	input_handler.handle_input(event)
+	# Combinación Ctrl+Shift+S para abrir configuración de escala (solo en desktop)
+	if event is InputEventKey and event.pressed and not is_mobile and not is_tablet:
+		if event.ctrl_pressed and event.shift_pressed and event.keycode == KEY_S:
+			_show_scale_config_dialog()
+			return  # No procesar más este evento
+	
+	# IMPORTANTE: Delegar TODOS los eventos al input handler para mantener funcionalidad táctil
+	if input_handler:
+		input_handler.handle_input(event)
+
+func _show_scale_config_dialog():
+	"""Muestra un diálogo simple para configurar escalas"""
+	var device_type = ""
+	var current_scale = 0.0
+	
+	if is_tablet:
+		device_type = "Tablet"
+		current_scale = GLOBAL.settings.puzzle.get("tablet_scale", 0.8)
+	elif is_desktop:
+		device_type = "Ordenador"
+		current_scale = GLOBAL.settings.puzzle.get("desktop_scale", 0.8)
+	elif is_mobile:
+		device_type = "Móvil"
+		current_scale = GLOBAL.settings.puzzle.get("mobile_scale", mobile_scale_percentage)
+	else:
+		device_type = "Desconocido"
+		current_scale = max_scale_percentage
+	
+	var message = "Configuración de Escala del Puzzle\n\n"
+	message += "Dispositivo detectado: " + device_type + "\n"
+	message += "Escala actual: " + str(current_scale) + "\n\n"
+	message += "Escalas recomendadas:\n"
+	message += "• 0.6 - Muy pequeño (máxima visibilidad)\n"
+	message += "• 0.7 - Pequeño (recomendado tablets)\n"
+	message += "• 0.8 - Medio (equilibrado)\n"
+	message += "• 0.9 - Grande (más detalle)\n"
+	message += "• 1.0 - Máximo (pantalla completa)\n\n"
+	message += "¿Qué escala deseas usar? (0.5-1.0)"
+	
+	# Crear un diálogo de entrada simple
+	var dialog = AcceptDialog.new()
+	dialog.title = "Configurar Escala del Puzzle"
+	dialog.dialog_text = message
+	
+	var line_edit = LineEdit.new()
+	line_edit.text = str(current_scale)
+	line_edit.placeholder_text = "0.8"
+	dialog.add_child(line_edit)
+	
+	add_child(dialog)
+	dialog.popup_centered()
+	
+	await dialog.confirmed
+	
+	var new_scale = float(line_edit.text)
+	if new_scale >= 0.5 and new_scale <= 1.0:
+		if is_tablet:
+			set_tablet_scale(new_scale)
+		elif is_desktop:
+			set_desktop_scale(new_scale)
+		elif is_mobile:
+			set_mobile_scale(new_scale)
+		
+		show_info_message("Escala configurada a: " + str(new_scale), 2.0)
+	else:
+		show_info_message("Escala inválida. Usa valores entre 0.5 y 1.0", 3.0)
+	
+	dialog.queue_free()
 
 func _notification(what):
 	# Interceptar cualquier notificación del sistema durante el puzzle
@@ -876,11 +1008,35 @@ func _connect_center_button():
 			center_button.connect("pressed", Callable(self, "_on_center_button_pressed"))
 		
 		# Mostrar u ocultar el botón según el dispositivo
-		center_button.visible = is_mobile
+		# El botón de centrado es útil en móviles pequeños y tablets
+		center_button.visible = is_mobile or is_tablet
 		
-		print("PuzzleGame: Botón de centrado conectado desde la escena (visible en móviles: ", is_mobile, ")")
+		print("PuzzleGame: Botón de centrado conectado desde la escena (visible en móviles/tablets: ", (is_mobile or is_tablet), ")")
 	else:
 		print("PuzzleGame: No se encontró botón de centrado en la escena")
+	
+	# Crear botón de configuración de escala para tablets y ordenadores
+	if is_tablet or is_desktop:
+		_create_scale_config_button()
+
+func _create_scale_config_button():
+	"""Crea un botón para configurar la escala en tablets y ordenadores"""
+	var scale_button = Button.new()
+	scale_button.name = "ScaleConfigButton"
+	scale_button.text = "⚙️"  # Icono de configuración
+	scale_button.custom_minimum_size = Vector2(50, 50)
+	
+	# Posicionarlo en la esquina superior derecha
+	scale_button.anchors_preset = Control.PRESET_TOP_RIGHT
+	scale_button.position = Vector2(-60, 10)
+	
+	# Añadirlo a la UI
+	if UILayer:
+		UILayer.add_child(scale_button)
+		scale_button.pressed.connect(_show_scale_config_dialog)
+		print("PuzzleGame: Botón de configuración de escala creado para ", ("tablet" if is_tablet else "ordenador"))
+	else:
+		print("PuzzleGame: No se pudo crear botón de configuración - UILayer no encontrado")
 
 func _on_center_button_pressed():
 	print("PuzzleGame: Botón de centrado presionado")
@@ -1386,7 +1542,7 @@ func _restore_piece_groups(saved_pieces_data: Array, pieces: Array):
 		
 		if target_piece:
 			groups_to_form[group_id].append(target_piece)
-	
+
 	# Formar los grupos de forma segura
 	var groups_formed = 0
 	for group_id in groups_to_form.keys():
@@ -1414,7 +1570,7 @@ func _restore_piece_groups(saved_pieces_data: Array, pieces: Array):
 				groups_formed += 1
 			else:
 				print("PuzzleGame: ⚠️ Grupo ", group_id, " descartado por piezas inválidas")
-	
+
 	print("PuzzleGame: ", groups_formed, " grupos restaurados exitosamente")
 
 # Restaurar los contadores del juego
@@ -1688,3 +1844,63 @@ func verify_puzzle_state_after_restoration():
 	else:
 		print("PuzzleGame: ❌ Se encontraron ", issues_found, " problemas en el estado del puzzle")
 		return false
+
+func set_tablet_scale(new_scale: float):
+	"""Cambia la escala específica para tablets"""
+	tablet_scale_percentage = new_scale
+	GLOBAL.settings.puzzle["tablet_scale"] = new_scale
+	GLOBAL.save_settings()
+	print("PuzzleGame: Nueva escala de tablet configurada: ", new_scale)
+	
+	# Si estamos en un tablet, actualizar el puzzle inmediatamente
+	if is_tablet and piece_manager:
+		print("PuzzleGame: Actualizando puzzle con nueva escala de tablet...")
+		_reload_puzzle_with_new_scale()
+
+func set_desktop_scale(new_scale: float):
+	"""Cambia la escala específica para ordenadores"""
+	desktop_scale_percentage = new_scale
+	GLOBAL.settings.puzzle["desktop_scale"] = new_scale
+	GLOBAL.save_settings()
+	print("PuzzleGame: Nueva escala de ordenador configurada: ", new_scale)
+	
+	# Si estamos en un ordenador, actualizar el puzzle inmediatamente
+	if is_desktop and piece_manager:
+		print("PuzzleGame: Actualizando puzzle con nueva escala de ordenador...")
+		_reload_puzzle_with_new_scale()
+
+func set_mobile_scale(new_scale: float):
+	"""Cambia la escala específica para smartphones"""
+	mobile_scale_percentage = new_scale
+	GLOBAL.settings.puzzle["mobile_scale"] = new_scale
+	GLOBAL.save_settings()
+	print("PuzzleGame: Nueva escala de smartphone configurada: ", new_scale)
+	
+	# Si estamos en un smartphone, actualizar el puzzle inmediatamente
+	if is_mobile and piece_manager:
+		print("PuzzleGame: Actualizando puzzle con nueva escala de smartphone...")
+		_reload_puzzle_with_new_scale()
+
+func _reload_puzzle_with_new_scale():
+	"""Recarga el puzzle aplicando la nueva escala"""
+	if not piece_manager:
+		print("PuzzleGame: No se puede recargar - piece_manager no disponible")
+		return
+	
+	# Obtener la imagen actual
+	var current_image = image_path
+	var puzzle_back = null
+	
+	# Generar nueva textura trasera si es necesario
+	if viewport_scene_path != "":
+		var viewport_scene = load(viewport_scene_path)
+		if viewport_scene:
+			var viewport_instance = viewport_scene.instantiate()
+			add_child(viewport_instance)
+			await get_tree().process_frame
+			var viewport_image = viewport_instance.get_texture().get_image()
+			puzzle_back = ImageTexture.new()
+			puzzle_back.create_from_image(viewport_image)
+			viewport_instance.queue_free()
+	
+	# Recargar las piezas con la nueva escala

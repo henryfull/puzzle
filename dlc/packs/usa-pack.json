@@ -1,0 +1,229 @@
+{
+	"id": "usa-pack",
+	"name": "USA Pack",
+	"description": "Puzzles inspirados en la cultura, lugares y símbolos icónicos de Estados Unidos.",
+	"image_path": "res://dlc/packs/usa-pack/thumbnail.png",
+	"unlocked": true,
+	"purchased": true,
+	"completed": false,
+	"difficulty": "medium",
+	"puzzles": [
+		{
+			"id": "bandera-usa",
+			"name": "Bandera de Estados Unidos",
+			"image": "res://dlc/packs/usa-pack/bandera usa.png",
+			"description": "La icónica bandera de Estados Unidos con sus barras y estrellas.",
+			"completed": false
+		},
+		{
+			"id": "gran-canon",
+			"name": "Gran Cañón",
+			"image": "res://dlc/packs/usa-pack/gran cañon.jpeg",
+			"description": "Una de las maravillas naturales más impresionantes del mundo.",
+			"completed": false
+		},
+		{
+			"id": "route-66",
+			"name": "Ruta 66",
+			"image": "res://dlc/packs/usa-pack/route 66.png",
+			"description": "La legendaria carretera que atraviesa el corazón de América.",
+			"completed": false
+		},
+		{
+			"id": "estatua-libertad",
+			"name": "Estatua de la Libertad",
+			"image": "res://dlc/packs/usa-pack/usa_estatua_libertad.png",
+			"description": "El símbolo universal de la libertad y la democracia.",
+			"completed": false
+		},
+		{
+			"id": "golden-gate",
+			"name": "Golden Gate",
+			"image": "res://dlc/packs/usa-pack/usa_golden_gate.png",
+			"description": "El famoso puente colgante de San Francisco.",
+			"completed": false
+		},
+		{
+			"id": "times-square",
+			"name": "Times Square",
+			"image": "res://dlc/packs/usa-pack/usa_times_square.png",
+			"description": "El corazón vibrante de Nueva York con sus luces de neón.",
+			"completed": false
+		},
+		{
+			"id": "empire-state",
+			"name": "Empire State Building",
+			"image": "res://dlc/packs/usa-pack/usa_empire_state.png",
+			"description": "El emblemático rascacielos de Nueva York.",
+			"completed": false
+		},
+		{
+			"id": "magic-kingdom",
+			"name": "Magic Kingdom",
+			"image": "res://dlc/packs/usa-pack/usa_magic_kingdom.png",
+			"description": "El parque temático más mágico del mundo en Disney World.",
+			"completed": false
+		},
+		{
+			"id": "las-vegas",
+			"name": "Las Vegas",
+			"image": "res://dlc/packs/usa-pack/usa_las_vegas.png",
+			"description": "La ciudad del entretenimiento con sus casinos y espectáculos.",
+			"completed": false
+		},
+		{
+			"id": "broadway",
+			"name": "Broadway",
+			"image": "res://dlc/packs/usa-pack/usa_broadway.png",
+			"description": "El distrito teatral más famoso del mundo en Nueva York.",
+			"completed": false
+		},
+		{
+			"id": "coachella",
+			"name": "Coachella",
+			"image": "res://dlc/packs/usa-pack/usa_coachella.png",
+			"description": "El festival de música y arte más icónico de Estados Unidos.",
+			"completed": false
+		},
+		{
+			"id": "auroras-boreales",
+			"name": "Auroras Boreales",
+			"image": "res://dlc/packs/usa-pack/usa_auroras_boreales.png",
+			"description": "El espectacular fenómeno natural visible en Alaska.",
+			"completed": false
+		},
+		{
+			"id": "aguila-calva",
+			"name": "Águila Calva",
+			"image": "res://dlc/packs/usa-pack/usa_aguila_calva.png",
+			"description": "El ave nacional de Estados Unidos, símbolo de fuerza y libertad.",
+			"completed": false
+		},
+		{
+			"id": "aguila-calva-2",
+			"name": "Águila Calva (Volando)",
+			"image": "res://dlc/packs/usa-pack/usa_aguila_calva2.png",
+			"description": "Una majestuosa águila calva en pleno vuelo.",
+			"completed": false
+		},
+		{
+			"id": "aguila-calva-jpeg",
+			"name": "Águila Calva (Retrato)",
+			"image": "res://dlc/packs/usa-pack/usa_aguila_calva.jpeg",
+			"description": "Un impresionante retrato del ave nacional americana.",
+			"completed": false
+		},
+		{
+			"id": "bisonte",
+			"name": "Bisonte Americano",
+			"image": "res://dlc/packs/usa-pack/usa_bisonte.png",
+			"description": "El mamífero terrestre más grande de América del Norte.",
+			"completed": false
+		},
+		{
+			"id": "oso",
+			"name": "Oso Americano",
+			"image": "res://dlc/packs/usa-pack/usa_oso.png",
+			"description": "Un poderoso oso negro en su hábitat natural.",
+			"completed": false
+		},
+		{
+			"id": "nfl",
+			"name": "NFL",
+			"image": "res://dlc/packs/usa-pack/usa_nfl.png",
+			"description": "La liga de fútbol americano más importante del mundo.",
+			"completed": false
+		},
+		{
+			"id": "nba",
+			"name": "NBA",
+			"image": "res://dlc/packs/usa-pack/usa_nba.png",
+			"description": "La liga de baloncesto profesional más prestigiosa.",
+			"completed": false
+		},
+		{
+			"id": "nhl",
+			"name": "NHL",
+			"image": "res://dlc/packs/usa-pack/usa_nhl.png",
+			"description": "La liga nacional de hockey sobre hielo.",
+			"completed": false
+		},
+		{
+			"id": "world-series",
+			"name": "World Series",
+			"image": "res://dlc/packs/usa-pack/usa_world_series.png",
+			"description": "El campeonato anual de béisbol de las Grandes Ligas.",
+			"completed": false
+		},
+		{
+			"id": "nascar",
+			"name": "NASCAR",
+			"image": "res://dlc/packs/usa-pack/usa_nascar.png",
+			"description": "Las carreras de autos más emocionantes de Estados Unidos.",
+			"completed": false
+		},
+		{
+			"id": "nascar-2",
+			"name": "NASCAR (Acción)",
+			"image": "res://dlc/packs/usa-pack/usa_nascar2.png",
+			"description": "La velocidad y emoción de las carreras NASCAR.",
+			"completed": false
+		},
+		{
+			"id": "hamburguesas-papas",
+			"name": "Hamburguesas y Papas",
+			"image": "res://dlc/packs/usa-pack/usa_hamburguesas_papas.png",
+			"description": "El clásico combo de comida americana.",
+			"completed": false
+		},
+		{
+			"id": "hamburguesas-papas-jpeg",
+			"name": "Hamburguesas y Papas (Deluxe)",
+			"image": "res://dlc/packs/usa-pack/usa_hamburguesas_papas.jpeg",
+			"description": "Una deliciosa hamburguesa americana con papas fritas.",
+			"completed": false
+		},
+		{
+			"id": "bbq-ribs",
+			"name": "Costillas BBQ",
+			"image": "res://dlc/packs/usa-pack/usa_bbq_ribs.png",
+			"description": "Las famosas costillas a la barbacoa estilo americano.",
+			"completed": false
+		},
+		{
+			"id": "philly-cheesesteak",
+			"name": "Philly Cheesesteak",
+			"image": "res://dlc/packs/usa-pack/usa_philly_cheesesteak.png",
+			"description": "El icónico sándwich de Filadelfia con carne y queso.",
+			"completed": false
+		},
+		{
+			"id": "mac-cheese",
+			"name": "Mac and Cheese",
+			"image": "res://dlc/packs/usa-pack/usa_mac_cheese.png",
+			"description": "El clásico plato de macarrones con queso.",
+			"completed": false
+		},
+		{
+			"id": "smores",
+			"name": "S'mores",
+			"image": "res://dlc/packs/usa-pack/usa_smores.png",
+			"description": "El postre tradicional de los campamentos americanos.",
+			"completed": false
+		},
+		{
+			"id": "chocolate-chip-cookies",
+			"name": "Galletas con Chispas de Chocolate",
+			"image": "res://dlc/packs/usa-pack/usa_chocolate_chip_cookies.jpeg",
+			"description": "Las famosas galletas americanas con chispas de chocolate.",
+			"completed": false
+		},
+		{
+			"id": "bagels-cream-cheese",
+			"name": "Bagels con Queso Crema",
+			"image": "res://dlc/packs/usa-pack/usa_bagels_cream_cheese.jpeg",
+			"description": "El desayuno típico de Nueva York con bagels y queso crema.",
+			"completed": false
+		}
+	]
+} 

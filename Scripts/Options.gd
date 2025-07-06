@@ -12,6 +12,10 @@ var labelPanSensitivity: Label
 var labelTweenEffect: Label
 var labelTweenDuration: Label
 var labelHapticEnabled: Label
+# Nuevas etiquetas para escalas de dispositivos
+var labelTabletScale: Label
+var labelDesktopScale: Label
+var labelMobileScale: Label
 # Etiqueta para mostrar estado de conexión de plataforma
 var labelPlatformConnection: Label
 var buttonClose: Button
@@ -33,12 +37,20 @@ var selectResolution = OptionButton
 var sliderOptionGeneral = null
 var sliderOptionMusic = null
 var sliderOptionSFX = null
+# Sliders para escalas de dispositivos (variables normales, se asignarán si existen en la escena)
+var sliderTabletScale: HSlider = null
+var sliderDesktopScale: HSlider = null
+var sliderMobileScale: HSlider = null
 
 # Valores por defecto para opciones de sensibilidad (deben coincidir con los de PuzzleGame)
 var pan_sensitivity: float = 1.0
 var use_tween_effect: bool = true
 var tween_duration: float = 0.2
 var haptic_enabled: bool = true
+# Valores por defecto para escalas de dispositivos
+var tablet_scale: float = 0.8
+var desktop_scale: float = 0.8
+var mobile_scale: float = 1.0
 
 func _ready():
 	print("Options: Inicializando...")
@@ -58,6 +70,30 @@ func _ready():
 	labelTweenEffect = $%LabelTweenEffect
 	labelTweenDuration = $%LabelTweenDuration
 	labelHapticEnabled = $%LabelHapticEnabled
+	# Inicializar etiquetas de escala
+	labelTabletScale = $%LabelTabletScale
+	labelDesktopScale = $%LabelDesktopScale
+	labelMobileScale = $%LabelMobileScale
+	
+	# Intentar inicializar sliders de escala si existen en la escena
+	if has_node("%SliderTabletScale"):
+		sliderTabletScale = $%SliderTabletScale
+		print("Options: Slider de tablet encontrado y asignado")
+	else:
+		print("Options: Slider de tablet no encontrado en la escena")
+	
+	if has_node("%SliderDesktopScale"):
+		sliderDesktopScale = $%SliderDesktopScale
+		print("Options: Slider de ordenador encontrado y asignado")
+	else:
+		print("Options: Slider de ordenador no encontrado en la escena")
+	
+	if has_node("%SliderMobileScale"):
+		sliderMobileScale = $%SliderMobileScale
+		print("Options: Slider de smartphone encontrado y asignado")
+	else:
+		print("Options: Slider de smartphone no encontrado en la escena")
+	
 	# Inicializar etiqueta de conexión de plataforma
 	labelPlatformConnection = $%LabelPlatformConnection
 	
@@ -125,6 +161,13 @@ func update_ui_texts():
 		labelTweenDuration.text = tr("options_tween_duration")
 	if labelHapticEnabled:
 		labelHapticEnabled.text = tr("options_haptic_enabled")
+	# Actualizar textos para las escalas de dispositivos
+	if labelTabletScale:
+		labelTabletScale.text = tr("options_tablet_scale")
+	if labelDesktopScale:
+		labelDesktopScale.text = tr("options_desktop_scale")
+	if labelMobileScale:
+		labelMobileScale.text = tr("options_mobile_scale")
 	if labelPlatformConnection:
 		labelPlatformConnection.text = tr("options_platform_connection")
 	
@@ -435,6 +478,30 @@ func load_current_values():
 			if checkHapticEnabled and "haptic_enabled" in global.settings.puzzle:
 				checkHapticEnabled.button_pressed = global.settings.puzzle.haptic_enabled
 				haptic_enabled = global.settings.puzzle.haptic_enabled
+			
+			# Escala de tablet
+			if sliderTabletScale != null and sliderTabletScale.is_inside_tree() and "tablet_scale" in global.settings.puzzle:
+				sliderTabletScale.value = global.settings.puzzle.tablet_scale
+				tablet_scale = global.settings.puzzle.tablet_scale
+				print("Options: Escala de tablet cargada: ", tablet_scale)
+			else:
+				print("Options: Slider de tablet no disponible o configuración no encontrada")
+			
+			# Escala de ordenador
+			if sliderDesktopScale != null and sliderDesktopScale.is_inside_tree() and "desktop_scale" in global.settings.puzzle:
+				sliderDesktopScale.value = global.settings.puzzle.desktop_scale
+				desktop_scale = global.settings.puzzle.desktop_scale
+				print("Options: Escala de ordenador cargada: ", desktop_scale)
+			else:
+				print("Options: Slider de ordenador no disponible o configuración no encontrada")
+			
+			# Escala de smartphone
+			if sliderMobileScale != null and sliderMobileScale.is_inside_tree() and "mobile_scale" in global.settings.puzzle:
+				sliderMobileScale.value = global.settings.puzzle.mobile_scale
+				mobile_scale = global.settings.puzzle.mobile_scale
+				print("Options: Escala de smartphone cargada: ", mobile_scale)
+			else:
+				print("Options: Slider de smartphone no disponible o configuración no encontrada")
 		else:
 			print("Options: No se encontraron ajustes de puzzle en GLOBAL.settings")
 			
@@ -708,3 +775,101 @@ func _on_restore_button_pressed() -> void:
 	else:
 		print("ERROR: No se encontró el nodo GLOBAL")
 		OS.alert("No se pudo restaurar el acceso a los puzzles.", "Error")
+
+# Nuevas funciones para manejar cambios en las escalas de dispositivos
+func _on_tablet_scale_changed(value):
+	print("Options: Escala de tablet cambiada a: ", value)
+	tablet_scale = value
+	
+	# Verificar que el slider existe antes de cualquier operación
+	if sliderTabletScale == null or not sliderTabletScale.is_inside_tree():
+		print("Options: Advertencia - Slider de tablet no disponible")
+		return
+	
+	# Guardar en GLOBAL
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Asegurar que exista la sección puzzle en settings
+		if not "puzzle" in global.settings:
+			global.settings.puzzle = {}
+		
+		global.settings.puzzle.tablet_scale = value
+		
+		# Guardar la configuración
+		if global.has_method("save_settings"):
+			global.save_settings()
+	
+	# Aplicar cambio en tiempo real si estamos en el juego
+	_apply_scale_change_to_game("tablet", value)
+
+func _on_desktop_scale_changed(value):
+	print("Options: Escala de ordenador cambiada a: ", value)
+	desktop_scale = value
+	
+	# Verificar que el slider existe antes de cualquier operación
+	if sliderDesktopScale == null or not sliderDesktopScale.is_inside_tree():
+		print("Options: Advertencia - Slider de ordenador no disponible")
+		return
+	
+	# Guardar en GLOBAL
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Asegurar que exista la sección puzzle en settings
+		if not "puzzle" in global.settings:
+			global.settings.puzzle = {}
+		
+		global.settings.puzzle.desktop_scale = value
+		
+		# Guardar la configuración
+		if global.has_method("save_settings"):
+			global.save_settings()
+	
+	# Aplicar cambio en tiempo real si estamos en el juego
+	_apply_scale_change_to_game("desktop", value)
+
+func _on_mobile_scale_changed(value):
+	print("Options: Escala de smartphone cambiada a: ", value)
+	mobile_scale = value
+	
+	# Verificar que el slider existe antes de cualquier operación
+	if sliderMobileScale == null or not sliderMobileScale.is_inside_tree():
+		print("Options: Advertencia - Slider de smartphone no disponible")
+		return
+	
+	# Guardar en GLOBAL
+	if has_node("/root/GLOBAL"):
+		var global = get_node("/root/GLOBAL")
+		
+		# Asegurar que exista la sección puzzle en settings
+		if not "puzzle" in global.settings:
+			global.settings.puzzle = {}
+		
+		global.settings.puzzle.mobile_scale = value
+		
+		# Guardar la configuración
+		if global.has_method("save_settings"):
+			global.save_settings()
+	
+	# Aplicar cambio en tiempo real si estamos en el juego
+	_apply_scale_change_to_game("mobile", value)
+
+func _apply_scale_change_to_game(device_type: String, scale_value: float):
+	"""Aplica el cambio de escala al juego actual si está activo"""
+	# Buscar el nodo del juego activo
+	var puzzle_game_node = get_tree().get_first_node_in_group("puzzle_game")
+	if puzzle_game_node == null:
+		# Intentar buscar por ruta conocida
+		puzzle_game_node = get_node_or_null("/root/PuzzleGame")
+	
+	if puzzle_game_node != null and puzzle_game_node.has_method("set_" + device_type + "_scale"):
+		print("Options: Aplicando escala ", scale_value, " al juego activo para ", device_type)
+		if device_type == "tablet":
+			puzzle_game_node.set_tablet_scale(scale_value)
+		elif device_type == "desktop":
+			puzzle_game_node.set_desktop_scale(scale_value)
+		elif device_type == "mobile":
+			puzzle_game_node.set_mobile_scale(scale_value)
+	else:
+		print("Options: No se encontró juego activo para aplicar escala de ", device_type)

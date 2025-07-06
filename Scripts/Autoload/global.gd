@@ -16,7 +16,10 @@ var settings = {
 		"pan_sensitivity": 1.0,
 		"use_tween_effect": true,
 		"tween_duration": 0.2,
-		"haptic_enabled": true  # Nueva opción para vibración/háptica
+		"haptic_enabled": true,  # Nueva opción para vibración/háptica
+		"tablet_scale": 0.8,     # Escala específica para tablets
+		"desktop_scale": 0.8,    # Escala específica para ordenadores
+		"mobile_scale": 1.0      # Escala específica para smartphones
 	},
 	"gameplay": {     # Nueva sección para opciones de gameplay
 		"columns": 6,
@@ -93,6 +96,9 @@ func _ready():
 	# Cargar configuración al iniciar el juego
 	load_settings()
 	
+	# Cargar los DLCs disponibles
+	load_dlcs()
+	
 	# Configurar la UI según el dispositivo
 	configure_ui_for_device()
 
@@ -118,6 +124,9 @@ func load_settings():
 		settings.puzzle.use_tween_effect = config.get_value("puzzle", "use_tween_effect", true)
 		settings.puzzle.tween_duration = config.get_value("puzzle", "tween_duration", 0.2)
 		settings.puzzle.haptic_enabled = config.get_value("puzzle", "haptic_enabled", true)
+		settings.puzzle.tablet_scale = config.get_value("puzzle", "tablet_scale", 0.8)
+		settings.puzzle.desktop_scale = config.get_value("puzzle", "desktop_scale", 0.8)
+		settings.puzzle.mobile_scale = config.get_value("puzzle", "mobile_scale", 1.0)
 		
 		# Cargar límites del puzzle
 		puzzle_limits.max_moves = config.get_value("puzzle", "max_moves", 0)
@@ -187,6 +196,9 @@ func save_settings() -> void:
 	config.set_value("puzzle", "use_tween_effect", settings.puzzle.use_tween_effect)
 	config.set_value("puzzle", "tween_duration", settings.puzzle.tween_duration)
 	config.set_value("puzzle", "haptic_enabled", settings.puzzle.haptic_enabled)
+	config.set_value("puzzle", "tablet_scale", settings.puzzle.tablet_scale)
+	config.set_value("puzzle", "desktop_scale", settings.puzzle.desktop_scale)
+	config.set_value("puzzle", "mobile_scale", settings.puzzle.mobile_scale)
 	
 	# Guardar límites del puzzle
 	config.set_value("puzzle", "max_moves", puzzle_limits.max_moves)
@@ -357,3 +369,24 @@ func setColorMode(panelColor, headerColor):
 	
 	panelColor.theme_type_variation = global_panel_color
 	headerColor.theme_type_variation = global_header_color
+
+# Función para cargar los DLCs desde el archivo JSON
+func load_dlcs():
+	print("GLOBAL: Cargando DLCs desde PacksData/sample_packs.json")
+	var file = FileAccess.open("res://PacksData/sample_packs.json", FileAccess.READ)
+	if file:
+		var json_text = file.get_as_text()
+		file.close()
+		var json_result = JSON.parse_string(json_text)
+		
+		if json_result and json_result.has("dlc_packs_names"):
+			dlc_packs = json_result.dlc_packs_names
+			print("GLOBAL: Cargados ", dlc_packs.size(), " packs DLC: ", dlc_packs)
+			
+			# Marcar todos los DLCs como comprados automáticamente
+			# Esto es para facilitar el acceso durante el desarrollo
+			save_settings()
+		else:
+			print("GLOBAL: No se encontraron dlc_packs_names en el archivo JSON")
+	else:
+		print("GLOBAL: No se pudo abrir el archivo PacksData/sample_packs.json")

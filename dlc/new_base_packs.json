@@ -27,8 +27,8 @@
 			"name": "Numbers",
 			"description": "Puzzles inspirados en números y matemáticas.",
 			"image_path": "res://Assets/Images/packs/numbers/thumbnail.png",
-			"unlocked": false,
-			"purchased": false,
+			"unlocked": true,
+			"purchased": true,
 			"completed": false,
 			"difficulty": "easy",
 			"puzzles": []
@@ -38,8 +38,8 @@
 			"name": "Wild Animals",
 			"description": "Puzzles inspirados en animales salvajes.",
 			"image_path": "res://Assets/Images/packs/wild-animals/thumbnail.png",
-			"unlocked": false,
-			"purchased": false,
+			"unlocked": true,
+			"purchased": true,
 			"completed": false,
 			"difficulty": "easy",
 			"puzzles": []
@@ -49,10 +49,21 @@
 			"name": "Farm Animals",
 			"description": "Puzzles inspirados en animales de granja.",
 			"image_path": "res://Assets/Images/packs/farm-animals/thumbnail.png",
-			"unlocked": false,
-			"purchased": false,
+			"unlocked": true,
+			"purchased": true,
 			"completed": false,
 			"difficulty": "easy",
+			"puzzles": []
+		},
+		{
+			"id": "usa-pack",
+			"name": "USA Pack",
+			"description": "Puzzles inspirados en la cultura, lugares y símbolos icónicos de Estados Unidos.",
+			"image_path": "res://Assets/Images/packs/usa-pack/thumbnail.png",
+			"unlocked": true,
+			"purchased": true,
+			"completed": false,
+			"difficulty": "medium",
 			"puzzles": []
 		},
 		{
@@ -60,8 +71,8 @@
 			"name": "Wild Animals Cartoon",
 			"description": "Puzzles inspirados en animales salvajes en formato cartoon.",
 			"image_path": "res://Assets/Images/packs/wild-animals-cartoon/thumbnail.png",
-			"unlocked": false,
-			"purchased": false,
+			"unlocked": true,
+			"purchased": true,
 			"completed": false,
 			"difficulty": "easy",
 			"puzzles": []

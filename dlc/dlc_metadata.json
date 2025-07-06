@@ -1,4 +1,4 @@
 {
-  "purchased_packs": ["fruits"],
-  "dlc_packs": ["numbers",  "wild-animals", "farm-animals", "artistic-cities", "wild-animals-cartoon"]
+  "purchased_packs": ["fruits", "numbers", "wild-animals", "farm-animals", "artistic-cities", "wild-animals-cartoon", "usa-pack"],
+  "dlc_packs": ["numbers",  "wild-animals", "farm-animals", "artistic-cities", "wild-animals-cartoon", "usa-pack"]
 } 

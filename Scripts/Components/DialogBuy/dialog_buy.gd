@@ -32,12 +32,9 @@ func _on_buy_button_pressed() -> void:
 			# 1. Primero registrar los DLCs como comprados (esto los añade a settings y GLOBAL)
 			registerPurcharse()
 			
-			# 2. Ahora que están registrados como comprados, cargarlos
-			var loaded_dlc_packs = progress_manager.load_dlc_packs()
-			print("DialogBuy: Se han cargado ", loaded_dlc_packs.size(), " packs DLC después de la compra")
-			
-			# 3. Refrescar los datos de DLCs para asegurar que todo está actualizado
+			# 2. Refrescar los datos de DLCs para asegurar que todo está actualizado
 			progress_manager.refresh_dlc_packs()
+			print("DialogBuy: Packs DLC actualizados después de la compra")
 			
 			# Emitir la señal para que el padre recargue los packs
 			emit_signal("purchase_completed")
