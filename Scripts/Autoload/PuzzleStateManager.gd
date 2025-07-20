@@ -4,6 +4,9 @@
 
 extends Node
 
+# Señal para notificar cuando se limpia el estado
+signal state_cleared
+
 # Constante para el archivo de guardado del estado
 const PUZZLE_STATE_FILE = "user://puzzle_state.json"
 
@@ -21,6 +24,17 @@ var puzzle_state = {
 		"flip_move_count": 0,
 		"time_left": 0.0
 	},
+	"score_data": {
+		"current_score": 0,
+		"streak_count": 0,
+		"pieces_placed_correctly": 0,
+		"groups_connected": 0,
+		"invalid_moves": 0,
+		"flip_uses": 0,
+		"undo_uses": 0,
+		"had_errors": false,
+		"used_flip": false
+	},
 	"pieces_data": [],
 	"groups_data": [],
 	"puzzle_config": {
@@ -37,21 +51,21 @@ var puzzle_state = {
 
 # Variables para el guardado automático
 var auto_save_timer: Timer
-var is_auto_save_enabled: bool = true
-var auto_save_interval: float = 2.0  # Guardar cada 2 segundos (más frecuente)
+var is_auto_save_enabled: bool = false  # Cambiado a false por defecto
+var auto_save_interval: float = 2.0  # Ya no se usa pero se mantiene por compatibilidad
 
 func _ready():
-	print("PuzzleStateManager: Inicializando sistema de guardado automático...")
+	print("PuzzleStateManager: Inicializando sistema de guardado POR ACCIONES...")
 	
 	# Cargar estado guardado si existe
 	load_puzzle_state()
 	
-	# Configurar timer de guardado automático
+	# Configurar timer de guardado automático (desactivado)
 	setup_auto_save_timer()
 	
-	print("PuzzleStateManager: Sistema inicializado")
+	print("PuzzleStateManager: Sistema inicializado con guardado por acciones únicamente")
 
-# Configurar el timer de guardado automático
+# Configurar el timer de guardado automático (ahora desactivado por defecto)
 func setup_auto_save_timer():
 	auto_save_timer = Timer.new()
 	auto_save_timer.name = "AutoSaveTimer"
@@ -60,11 +74,33 @@ func setup_auto_save_timer():
 	auto_save_timer.autostart = false
 	auto_save_timer.connect("timeout", Callable(self, "_on_auto_save_timeout"))
 	add_child(auto_save_timer)
+	
+	# NO iniciar automáticamente el timer
 
-# Callback del timer de guardado automático
+# Callback del timer de guardado automático (ya no se usa normalmente)
 func _on_auto_save_timeout():
 	if is_auto_save_enabled and puzzle_state.has_saved_state:
 		save_puzzle_state()
+
+# Nueva función para guardar estado por acción del jugador
+func save_on_player_action(action_description: String = "acción del jugador"):
+	if puzzle_state.has_saved_state:
+		print("PuzzleStateManager: Guardando estado por ", action_description)
+		save_puzzle_state()
+	else:
+		print("PuzzleStateManager: No hay estado activo para guardar")
+
+# Función para habilitar/deshabilitar guardado automático por timer (opcional)
+func set_auto_save_enabled(enabled: bool):
+	is_auto_save_enabled = enabled
+	if enabled and puzzle_state.has_saved_state:
+		if auto_save_timer and auto_save_timer.is_stopped():
+			auto_save_timer.start()
+		print("PuzzleStateManager: Guardado automático POR TIMER activado")
+	else:
+		if auto_save_timer and not auto_save_timer.is_stopped():
+			auto_save_timer.stop()
+		print("PuzzleStateManager: Guardado automático POR TIMER desactivado")
 
 # Inicializar un nuevo estado de puzzle
 func start_new_puzzle_state(pack_id: String, puzzle_id: String, game_mode: int = 2, difficulty: int = 3):
@@ -97,13 +133,23 @@ func start_new_puzzle_state(pack_id: String, puzzle_id: String, game_mode: int =
 	puzzle_state.pieces_data.clear()
 	puzzle_state.groups_data.clear()
 	
-	# Iniciar guardado automático
+	# Resetear datos de puntuación
+	puzzle_state.score_data.current_score = 0
+	puzzle_state.score_data.streak_count = 0
+	puzzle_state.score_data.pieces_placed_correctly = 0
+	puzzle_state.score_data.groups_connected = 0
+	puzzle_state.score_data.invalid_moves = 0
+	puzzle_state.score_data.flip_uses = 0
+	puzzle_state.score_data.undo_uses = 0
+	puzzle_state.score_data.had_errors = false
+	puzzle_state.score_data.used_flip = false
+	
+	# NO iniciar guardado automático por timer
 	if auto_save_timer and not auto_save_timer.is_stopped():
 		auto_save_timer.stop()
-	auto_save_timer.start()
 	
-	# Guardar estado inicial
-	save_puzzle_state()
+	# Guardar estado inicial por acción
+	save_on_player_action("inicio de puzzle")
 
 # Actualizar contadores del estado
 func update_counters(elapsed_time: float = -1, total_moves: int = -1, flip_count: int = -1, 
@@ -121,6 +167,86 @@ func update_counters(elapsed_time: float = -1, total_moves: int = -1, flip_count
 		puzzle_state.counters.flip_move_count = flip_move_count
 	if time_left >= 0:
 		puzzle_state.counters.time_left = time_left
+
+# Nueva función para actualizar datos de puntuación
+func update_score_data(score_manager):
+	if not puzzle_state.has_saved_state or not score_manager:
+		return
+	
+	print("PuzzleStateManager: Actualizando datos de puntuación...")
+	
+	puzzle_state.score_data.current_score = score_manager.current_score
+	puzzle_state.score_data.streak_count = score_manager.streak_count
+	puzzle_state.score_data.pieces_placed_correctly = score_manager.pieces_placed_correctly
+	puzzle_state.score_data.groups_connected = score_manager.groups_connected
+	puzzle_state.score_data.invalid_moves = score_manager.invalid_moves
+	puzzle_state.score_data.flip_uses = score_manager.flip_uses
+	puzzle_state.score_data.undo_uses = score_manager.undo_uses
+	puzzle_state.score_data.had_errors = score_manager.had_errors
+	puzzle_state.score_data.used_flip = score_manager.used_flip
+	
+	print("PuzzleStateManager: Puntuación guardada: ", puzzle_state.score_data.current_score)
+
+# Función especial para sincronizar contadores de flip entre GameStateManager y ScoreManager
+func sync_flip_counters_from_game_state(game_state_manager, score_manager):
+	if not puzzle_state.has_saved_state or not game_state_manager or not score_manager:
+		return
+	
+	print("PuzzleStateManager: Sincronizando contadores de flip...")
+	
+	# Sincronizar flip_uses del ScoreManager con flip_count del GameStateManager
+	score_manager.flip_uses = game_state_manager.flip_count
+	score_manager.used_flip = game_state_manager.flip_count > 0
+	
+	# Actualizar los datos guardados
+	puzzle_state.score_data.flip_uses = game_state_manager.flip_count
+	puzzle_state.score_data.used_flip = game_state_manager.flip_count > 0
+	
+	print("PuzzleStateManager: Contadores de flip sincronizados - flip_count: ", game_state_manager.flip_count, ", flip_move_count: ", game_state_manager.flip_move_count)
+
+# Función para restaurar datos de puntuación
+func restore_score_data_to_manager(score_manager):
+	if not puzzle_state.has_saved_state or not score_manager:
+		return false
+	
+	print("PuzzleStateManager: Restaurando datos de puntuación...")
+	
+	score_manager.current_score = puzzle_state.score_data.current_score
+	score_manager.streak_count = puzzle_state.score_data.streak_count
+	score_manager.pieces_placed_correctly = puzzle_state.score_data.pieces_placed_correctly
+	score_manager.groups_connected = puzzle_state.score_data.groups_connected
+	score_manager.invalid_moves = puzzle_state.score_data.invalid_moves
+	score_manager.flip_uses = puzzle_state.score_data.flip_uses
+	score_manager.undo_uses = puzzle_state.score_data.undo_uses
+	score_manager.had_errors = puzzle_state.score_data.had_errors
+	score_manager.used_flip = puzzle_state.score_data.used_flip
+	
+	# Emitir señales para actualizar la UI
+	score_manager.score_updated.emit(score_manager.current_score)
+	score_manager.streak_updated.emit(score_manager.streak_count)
+	
+	print("PuzzleStateManager: Puntuación restaurada: ", score_manager.current_score)
+	return true
+
+# Función especial para restaurar contadores de flip al GameStateManager desde los datos guardados
+func restore_flip_counters_to_game_state(game_state_manager):
+	if not puzzle_state.has_saved_state or not game_state_manager:
+		return false
+	
+	print("PuzzleStateManager: Restaurando contadores de flip al GameStateManager...")
+	
+	# Restaurar desde los contadores principales (más confiables)
+	game_state_manager.flip_count = puzzle_state.counters.flip_count
+	game_state_manager.flip_move_count = puzzle_state.counters.flip_move_count
+	
+	print("PuzzleStateManager: Contadores de flip restaurados - flip_count: ", game_state_manager.flip_count, ", flip_move_count: ", game_state_manager.flip_move_count)
+	return true
+
+# Obtener datos de puntuación guardados
+func get_saved_score_data() -> Dictionary:
+	if puzzle_state.has_saved_state:
+		return puzzle_state.score_data.duplicate()
+	return {}
 
 # Actualizar posiciones de las piezas desde el PuzzlePieceManager
 func update_pieces_positions_from_manager(piece_manager):
@@ -303,6 +429,21 @@ func validate_puzzle_state() -> bool:
 	if not puzzle_state.has("puzzle_config"):
 		return false
 	
+	# Verificar y agregar score_data si no existe (compatibilidad con archivos antiguos)
+	if not puzzle_state.has("score_data"):
+		print("PuzzleStateManager: Agregando datos de puntuación por defecto para compatibilidad")
+		puzzle_state.score_data = {
+			"current_score": 0,
+			"streak_count": 0,
+			"pieces_placed_correctly": 0,
+			"groups_connected": 0,
+			"invalid_moves": 0,
+			"flip_uses": 0,
+			"undo_uses": 0,
+			"had_errors": false,
+			"used_flip": false
+		}
+	
 	return true
 
 # Resetear estado a valores por defecto
@@ -319,6 +460,17 @@ func reset_puzzle_state():
 			"flip_count": 0,
 			"flip_move_count": 0,
 			"time_left": 0.0
+		},
+		"score_data": {
+			"current_score": 0,
+			"streak_count": 0,
+			"pieces_placed_correctly": 0,
+			"groups_connected": 0,
+			"invalid_moves": 0,
+			"flip_uses": 0,
+			"undo_uses": 0,
+			"had_errors": false,
+			"used_flip": false
 		},
 		"pieces_data": [],
 		"groups_data": [],
@@ -422,11 +574,23 @@ func setup_continue_game():
 
 # Limpiar completamente el estado (útil para empezar de cero)
 func clear_all_state():
+	print("PuzzleStateManager: 🔧 LIMPIANDO COMPLETAMENTE EL ESTADO...")
+	
+	# Resetear completamente el estado del puzzle
 	reset_puzzle_state()
+	
+	# Detener timer de guardado automático si existe
 	if auto_save_timer:
 		auto_save_timer.stop()
+	
+	# Guardar estado limpio al archivo
 	save_puzzle_state()
-	print("PuzzleStateManager: Estado completamente limpiado")
+	
+	print("PuzzleStateManager: ✅ Estado completamente limpiado y guardado")
+	
+	# 🔧 CRÍTICO: Notificar a otros sistemas que el estado se ha limpiado
+	# Esto permite que otros managers también reseteen sus contadores
+	state_cleared.emit()
 
 # === SISTEMA DE CONFIGURACIONES POR DEFECTO ===
 

@@ -214,11 +214,29 @@ func _on_PuzzleSelected(puzzle) -> void:
 	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
 	if puzzle_state_manager and puzzle_state_manager.has_saved_state():
 		var saved_puzzle_id = puzzle_state_manager.get_saved_puzzle_id()
-		var selected_puzzle_id = puzzle.get("id", "")
+		var saved_pack_id = puzzle_state_manager.get_saved_pack_id()
+		var saved_game_mode = puzzle_state_manager.puzzle_state.game_mode
+		var saved_difficulty = puzzle_state_manager.puzzle_state.difficulty
 		
-		if saved_puzzle_id != selected_puzzle_id:
-			print("PuzzleSelection: Seleccionando puzzle diferente al guardado (", saved_puzzle_id, " -> ", selected_puzzle_id, "), limpiando estado")
+		var selected_puzzle_id = puzzle.get("id", "")
+		var current_pack_id = GLOBAL.selected_pack.id if GLOBAL.selected_pack else ""
+		var current_game_mode = GLOBAL.gamemode
+		var current_difficulty = GLOBAL.current_difficult
+		
+		print("PuzzleSelection: Verificando compatibilidad con estado guardado...")
+		print("  - Guardado: Pack=", saved_pack_id, ", Puzzle=", saved_puzzle_id, ", Modo=", saved_game_mode, ", Dificultad=", saved_difficulty)
+		print("  - Seleccionado: Pack=", current_pack_id, ", Puzzle=", selected_puzzle_id, ", Modo=", current_game_mode, ", Dificultad=", current_difficulty)
+		
+		# Verificar si hay alguna diferencia
+		if (saved_pack_id != current_pack_id or 
+			saved_puzzle_id != selected_puzzle_id or 
+			saved_game_mode != current_game_mode or 
+			saved_difficulty != current_difficulty):
+			
+			print("PuzzleSelection: ❌ Puzzle seleccionado es diferente al guardado, limpiando estado")
 			puzzle_state_manager.clear_all_state()
+		else:
+			print("PuzzleSelection: ✅ Puzzle seleccionado coincide con el estado guardado")
 	
 	# Guardar el puzzle seleccionado en la variable global
 	GLOBAL.selected_puzzle = puzzle

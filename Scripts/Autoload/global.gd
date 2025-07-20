@@ -289,9 +289,19 @@ func calculate_puzzle_limits(game_mode: int = -1) -> void:
 	
 	puzzle_limits.max_time = total_tiles * time_per_tile
 	
-	# Calcular máximos de volteos
-	puzzle_limits.max_flips = int(total_tiles * 0.05)  # ~30% del total
-	puzzle_limits.max_flip_moves = int(total_tiles * 0.1)  # ~45% del total
+	# Calcular máximos de volteos con base más generosa
+	var flip_multiplier = 0.0
+	if total_tiles <= 20:  # Puzzles muy pequeños
+		flip_multiplier = 0.15  # 15% del total para puzzles pequeños
+	elif total_tiles <= 40:  # Puzzles pequeños a medianos
+		flip_multiplier = 0.12  # 12% del total
+	elif total_tiles <= 60:  # Puzzles medianos
+		flip_multiplier = 0.10  # 10% del total
+	else:  # Puzzles grandes
+		flip_multiplier = 0.08  # 8% del total
+	
+	puzzle_limits.max_flips = int(total_tiles * flip_multiplier)
+	puzzle_limits.max_flip_moves = int(total_tiles * 0.15)  # 15% del total para movimientos en flip
 	
 	# Ajustes según el modo de juego
 	match game_mode:
@@ -303,10 +313,15 @@ func calculate_puzzle_limits(game_mode: int = -1) -> void:
 		3:  # Contrareloj (TimeTrial)
 			puzzle_limits.max_time *= 0.7  # 30% menos de tiempo
 			puzzle_limits.max_moves = 0  # Sin límite de movimientos
+			# Asegurar mínimo de 1 flip en modo contrarreloj
+			puzzle_limits.max_flips = max(1, puzzle_limits.max_flips)
 		4:  # Desafío (Challenge)
-			puzzle_limits.max_moves = int(puzzle_limits.max_moves * 1.05)  # 20% menos de movimientos
+			puzzle_limits.max_moves = int(puzzle_limits.max_moves * 1.05)  # 5% más de movimientos
 			puzzle_limits.max_time *= 0.8  # 20% menos de tiempo
-			puzzle_limits.max_flips = int(puzzle_limits.max_flips * 0.85)  # 15% menos de volteos
+			puzzle_limits.max_flips = int(puzzle_limits.max_flips * 0.9)  # 10% menos de volteos
+			# 🔧 CRÍTICO: Asegurar mínimo de 1 flip en modo desafío
+			puzzle_limits.max_flips = max(1, puzzle_limits.max_flips)
+			puzzle_limits.max_flip_moves = max(2, puzzle_limits.max_flip_moves)  # Mínimo 2 movimientos en flip
 	
 	# Guardar la configuración
 	save_settings()

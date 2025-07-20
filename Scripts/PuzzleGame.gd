@@ -170,27 +170,43 @@ func _ready():
 # === FUNCIONES DE CONFIGURACIÓN INICIAL ===
 
 func _check_and_setup_saved_game() -> bool:
-	"""Verifica y configura una partida guardada si existe"""
+	"""Verifica y configura una partida guardada si existe y corresponde al puzzle actual"""
 	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
 	if not puzzle_state_manager or not puzzle_state_manager.has_saved_state():
+		print("PuzzleGame: No hay estado guardado disponible")
 		return false
 	
 	var saved_pack_id = puzzle_state_manager.get_saved_pack_id()
 	var saved_puzzle_id = puzzle_state_manager.get_saved_puzzle_id()
-	var current_pack_id_check = GLOBAL.selected_pack.id if GLOBAL.selected_pack else ""
-	var current_puzzle_id_check = GLOBAL.selected_puzzle.id if GLOBAL.selected_puzzle else ""
+	var saved_game_mode = puzzle_state_manager.puzzle_state.game_mode
+	var saved_difficulty = puzzle_state_manager.puzzle_state.difficulty
 	
-	# Solo continuar si es exactamente el mismo puzzle
-	if saved_pack_id == current_pack_id_check and saved_puzzle_id == current_puzzle_id_check:
-		print("PuzzleGame: Detectado estado guardado para el mismo puzzle, continuando partida...")
+	var current_pack_id = GLOBAL.selected_pack.id if GLOBAL.selected_pack else ""
+	var current_puzzle_id = GLOBAL.selected_puzzle.id if GLOBAL.selected_puzzle else ""
+	var current_game_mode = GLOBAL.gamemode
+	var current_difficulty = GLOBAL.current_difficult
+	
+	print("PuzzleGame: Verificando compatibilidad de estado guardado...")
+	print("  - Guardado: Pack=", saved_pack_id, ", Puzzle=", saved_puzzle_id, ", Modo=", saved_game_mode, ", Dificultad=", saved_difficulty)
+	print("  - Actual: Pack=", current_pack_id, ", Puzzle=", current_puzzle_id, ", Modo=", current_game_mode, ", Dificultad=", current_difficulty)
+	
+	# Verificar que TODOS los parámetros coincidan exactamente
+	if (saved_pack_id == current_pack_id and 
+		saved_puzzle_id == current_puzzle_id and 
+		saved_game_mode == current_game_mode and 
+		saved_difficulty == current_difficulty):
+		
+		print("PuzzleGame: ✅ Estado guardado coincide exactamente con el puzzle actual")
 		var continuing_game = puzzle_state_manager.setup_continue_game()
 		if continuing_game:
 			print("PuzzleGame: Configuración de continuación aplicada exitosamente")
 			return true
 		else:
-			print("PuzzleGame: No se pudo configurar la continuación, empezando nueva partida")
+			print("PuzzleGame: ❌ No se pudo configurar la continuación, empezando nueva partida")
+			puzzle_state_manager.clear_all_state()
 	else:
-		print("PuzzleGame: Estado guardado es para otro puzzle, empezando nueva partida")
+		print("PuzzleGame: ❌ Estado guardado NO coincide con el puzzle actual")
+		print("  - Diferencia detectada, limpiando estado guardado")
 		puzzle_state_manager.clear_all_state()
 	
 	return false
@@ -292,6 +308,43 @@ func _connect_button_signals():
 	for connection in button_connections:
 		if connection.button and not connection.button.is_connected("pressed", Callable(self, connection.method)):
 			connection.button.connect("pressed", Callable(self, connection.method))
+	
+	# Conectar señal de limpieza de estado
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager and not puzzle_state_manager.state_cleared.is_connected(_on_puzzle_state_cleared):
+		puzzle_state_manager.state_cleared.connect(_on_puzzle_state_cleared)
+
+func _on_puzzle_state_cleared():
+	"""Se llama cuando se limpia el estado del puzzle para resetear contadores"""
+	print("PuzzleGame: Estado limpiado, reseteando contadores...")
+	
+	# Resetear contadores del game_state_manager
+	if game_state_manager:
+		game_state_manager.total_moves = 0
+		game_state_manager.elapsed_time = 0.0
+		game_state_manager.flip_count = 0
+		game_state_manager.flip_move_count = 0
+		game_state_manager.time_left = 0.0
+		game_state_manager.is_flip = false
+		game_state_manager.is_paused = false
+		game_state_manager.accumulated_time = 0.0
+		print("PuzzleGame: Contadores del game_state_manager reseteados")
+	
+	# Resetear contadores del score_manager
+	if score_manager:
+		score_manager.current_score = 0
+		score_manager.streak_count = 0
+		score_manager.pieces_placed_correctly = 0
+		score_manager.groups_connected = 0
+		score_manager.invalid_moves = 0
+		score_manager.flip_uses = 0
+		score_manager.undo_uses = 0
+		score_manager.had_errors = false
+		score_manager.used_flip = false
+		print("PuzzleGame: Contadores del score_manager reseteados")
+	
+	# Actualizar UI
+	_update_ui_counters()
 
 # === FUNCIONES DE AUDIO CONSOLIDADAS ===
 
@@ -1190,6 +1243,48 @@ func _initialize_new_puzzle_state():
 	if puzzle_state_manager:
 		puzzle_state_manager.start_new_puzzle_state(current_pack_id, current_puzzle_id, GLOBAL.gamemode, GLOBAL.current_difficult)
 		print("PuzzleGame: Nuevo estado de puzzle inicializado")
+	
+	# 🔧 CRÍTICO: Resetear completamente todos los contadores del game_state_manager
+	if game_state_manager:
+		print("PuzzleGame: Reseteando contadores para nuevo puzzle...")
+		game_state_manager.total_moves = 0
+		game_state_manager.elapsed_time = 0.0
+		game_state_manager.flip_count = 0
+		game_state_manager.flip_move_count = 0
+		game_state_manager.time_left = 0.0
+		game_state_manager.is_flip = false
+		game_state_manager.is_paused = false
+		game_state_manager.accumulated_time = 0.0
+		
+		# Resetear también los límites según el modo actual
+		game_state_manager.max_moves = GLOBAL.puzzle_limits.max_moves
+		game_state_manager.max_flips = GLOBAL.puzzle_limits.max_flips
+		game_state_manager.max_flip_moves = GLOBAL.puzzle_limits.max_flip_moves
+		game_state_manager.time_left = GLOBAL.puzzle_limits.max_time
+		
+		print("PuzzleGame: Contadores reseteados - Movimientos: 0, Flips: 0, Tiempo: 0.0")
+	
+	# 🔧 CRÍTICO: Resetear también los contadores del score_manager
+	if score_manager:
+		print("PuzzleGame: Reseteando puntuación para nuevo puzzle...")
+		score_manager.current_score = 0
+		score_manager.streak_count = 0
+		score_manager.pieces_placed_correctly = 0
+		score_manager.groups_connected = 0
+		score_manager.invalid_moves = 0
+		score_manager.flip_uses = 0
+		score_manager.undo_uses = 0
+		score_manager.had_errors = false
+		score_manager.used_flip = false
+		
+		# Emitir señales para actualizar la UI
+		score_manager.score_updated.emit(0)
+		score_manager.streak_updated.emit(0)
+		
+		print("PuzzleGame: Puntuación reseteada - Score: 0, Streak: 0")
+	
+	# Actualizar la UI con los contadores reseteados
+	_update_ui_counters()
 
 func _restore_puzzle_state(puzzle_state_manager):
 	print("PuzzleGame: 🔧 Iniciando restauración UNIFICADA de estado...")
@@ -1271,8 +1366,21 @@ func _restore_game_counters(puzzle_state_manager):
 		if saved_counters.has("elapsed_time"):
 			game_state_manager.start_time = Time.get_unix_time_from_system() - saved_counters.elapsed_time
 		
+		# Restaurar contadores de flip específicamente
+		puzzle_state_manager.restore_flip_counters_to_game_state(game_state_manager)
+		
 		print("PuzzleGame: Contadores restaurados - Tiempo: ", saved_counters.get("elapsed_time", 0), 
-			  ", Movimientos: ", saved_counters.get("total_moves", 0))
+			  ", Movimientos: ", saved_counters.get("total_moves", 0),
+			  ", Flips: ", saved_counters.get("flip_count", 0),
+			  ", Movimientos en flip: ", saved_counters.get("flip_move_count", 0))
+	
+	# Restaurar datos de puntuación si existe el score manager
+	if score_manager and puzzle_state_manager.has_saved_state():
+		var score_restored = puzzle_state_manager.restore_score_data_to_manager(score_manager)
+		if score_restored:
+			print("PuzzleGame: Datos de puntuación restaurados exitosamente")
+		else:
+			print("PuzzleGame: No se pudieron restaurar los datos de puntuación")
 	
 	_update_ui_counters()
 
@@ -1283,11 +1391,25 @@ func _update_ui_counters():
 	if movesLabel:
 		movesLabel.text = str(game_state_manager.total_moves)
 	
+	# Actualizar UI de flips si están visibles
+	if maxFlipsLabel and maxFlipsLabel.visible:
+		var remaining_flips = game_state_manager.max_flips - game_state_manager.flip_count
+		maxFlipsLabel.text = str(max(0, remaining_flips))
+	
+	# Actualizar UI de movimientos en flip si están visibles  
+	if maxMovesFlipLabel and maxMovesFlipLabel.visible:
+		var remaining_flip_moves = game_state_manager.max_flip_moves - game_state_manager.flip_move_count
+		maxMovesFlipLabel.text = str(max(0, remaining_flip_moves))
+	
 	var timer_label = get_node("UILayer/TimerLabel") if has_node("UILayer/TimerLabel") else null
 	if timer_label and timer_label.visible:
 		var minutes = int(game_state_manager.elapsed_time) / 60
 		var seconds = int(game_state_manager.elapsed_time) % 60
 		timer_label.text = "%02d:%02d" % [minutes, seconds]
+	
+	print("PuzzleGame: UI actualizada - Movimientos: ", game_state_manager.total_moves, 
+		  ", Flips: ", game_state_manager.flip_count, 
+		  ", Movimientos en flip: ", game_state_manager.flip_move_count)
 
 func _handle_puzzle_completion_state():
 	print("PuzzleGame: Puzzle completado, limpiando estado guardado...")
@@ -1297,6 +1419,7 @@ func _handle_puzzle_completion_state():
 	print("PuzzleGame: Estado limpiado, pack y puzzle mantenidos para acceso rápido")
 
 func _update_saved_state():
+	# Solo actualizar datos en memoria, no guardar automáticamente al archivo
 	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
 	if not puzzle_state_manager or not puzzle_state_manager.has_saved_state():
 		return
@@ -1314,14 +1437,24 @@ func _update_saved_state():
 		puzzle_state_manager.update_pieces_positions_from_manager(piece_manager)
 	elif pieces_container:
 		puzzle_state_manager.update_pieces_positions(pieces_container)
+	
+	# Ya no se guarda automáticamente aquí - solo se actualizan los datos en memoria
 
 func _emergency_save_state():
 	print("PuzzleGame: Ejecutando guardado de emergencia...")
 	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
 	if puzzle_state_manager and puzzle_state_manager.has_saved_state():
 		_update_saved_state()
-		puzzle_state_manager.save_puzzle_state()
+		puzzle_state_manager.save_on_player_action("guardado de emergencia")
 		print("PuzzleGame: Guardado de emergencia completado")
+
+# Nueva función para guardar por acción específica del jugador
+func save_state_on_action(action_name: String):
+	print("PuzzleGame: Guardando estado por acción: ", action_name)
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager and puzzle_state_manager.has_saved_state():
+		_update_saved_state()  # Actualizar datos primero
+		puzzle_state_manager.save_on_player_action(action_name)  # Luego guardar
 
 # === FUNCIONES DE GESTIÓN AUTOMÁTICA DE SUPERPOSICIONES ===
 

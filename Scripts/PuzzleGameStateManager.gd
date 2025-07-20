@@ -45,14 +45,9 @@ func initialize(game: PuzzleGame):
 		if !options_manager.is_connected("options_closed", Callable(self, "_on_options_closed")):
 			options_manager.connect("options_closed", Callable(self, "_on_options_closed"))
 	
-	# Configurar timer para actualización periódica del estado guardado
-	var save_timer = Timer.new()
-	save_timer.name = "SaveStateTimer"
-	save_timer.wait_time = 3.0  # Actualizar estado cada 3 segundos (más frecuente)
-	save_timer.one_shot = false
-	save_timer.autostart = true
-	save_timer.connect("timeout", Callable(self, "_update_puzzle_state"))
-	add_child(save_timer)
+	# Timer de guardado eliminado - ahora se guarda solo por acciones del jugador
+	# El guardado ocurre cuando el jugador mueve piezas o hace flip
+	print("PuzzleGameStateManager: Sistema configurado para guardado por acciones únicamente")
 
 func setup_game_mode():
 	# Iniciar el temporizador para medir el tiempo de juego
@@ -260,14 +255,8 @@ func pause_game():
 		var timer = puzzle_game.get_node("GameTimer")
 		timer.paused = true
 	
-	# Pausar el timer de guardado automático para evitar guardados constantes durante la pausa
-	if has_node("SaveStateTimer"):
-		var save_timer = get_node("SaveStateTimer")
-		save_timer.paused = true
-		print("PuzzleGameStateManager: Timer de guardado pausado")
-	
-	# Realizar un guardado inmediato al entrar en pausa
-	_update_puzzle_state()
+	# Guardar estado al pausar (acción del jugador)
+	_save_state_on_player_action("pausar juego")
 	
 	print("PuzzleGameStateManager: Juego pausado en tiempo:", elapsed_time)
 
@@ -290,11 +279,8 @@ func resume_game():
 		var timer = puzzle_game.get_node("GameTimer")
 		timer.paused = false
 	
-	# Reanudar el timer de guardado automático
-	if has_node("SaveStateTimer"):
-		var save_timer = get_node("SaveStateTimer")
-		save_timer.paused = false
-		print("PuzzleGameStateManager: Timer de guardado reanudado")
+	# Guardar estado al reanudar (acción del jugador)
+	_save_state_on_player_action("reanudar juego")
 	
 	# Mostrar mensaje de reanudación
 	puzzle_game.panelPaused.visible = false
@@ -354,8 +340,8 @@ func increment_move_count():
 	else:
 		print("PuzzleGameStateManager: ⚪ Movimiento realizado en modo normal")
 	
-	# NUEVO: Actualizar estado guardado inmediatamente después de un movimiento
-	_update_puzzle_state()
+	# NUEVO: Guardar estado por acción del jugador (mover pieza)
+	_save_state_on_player_action("movimiento de pieza")
 	
 	# Debug del estado actual después del movimiento
 	debug_flip_state()
@@ -373,6 +359,9 @@ func _increment_flip_count():
 		
 		# Nota: Ya no se termina el juego al alcanzar el límite de flips
 		# El jugador simplemente no puede incrementar más el contador
+	
+	# NUEVO: Guardar estado por acción del jugador (flip)
+	_save_state_on_player_action("flip de piezas")
 
 func _increment_flip_move_count():
 	flip_move_count += 1
@@ -509,3 +498,25 @@ func show_options_menu():
 func _update_puzzle_state():
 	if puzzle_game and puzzle_game.has_method("_update_saved_state"):
 		puzzle_game._update_saved_state() 
+
+# Nueva función para guardar estado por acción del jugador
+func _save_state_on_player_action(action_type: String):
+	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
+	if puzzle_state_manager:
+		# Actualizar contadores en el estado antes de guardar
+		puzzle_state_manager.update_counters(elapsed_time, total_moves, flip_count, flip_move_count, time_left)
+		
+		# Sincronizar contadores de flip entre sistemas
+		if puzzle_game.score_manager:
+			puzzle_state_manager.sync_flip_counters_from_game_state(self, puzzle_game.score_manager)
+		
+		# Actualizar datos de puntuación si existe el score manager
+		if puzzle_game.score_manager:
+			puzzle_state_manager.update_score_data(puzzle_game.score_manager)
+		
+		# Actualizar posiciones de piezas desde el piece manager
+		if puzzle_game.piece_manager:
+			puzzle_state_manager.update_pieces_positions_from_manager(puzzle_game.piece_manager)
+		
+		# Guardar por acción específica
+		puzzle_state_manager.save_on_player_action(action_type) 
