@@ -18,7 +18,7 @@
 		{
 			"id": "gran-canon",
 			"name": "Gran Cañón",
-			"image": "res://dlc/packs/usa-pack/gran cañon.jpeg",
+			"image": "res://dlc/packs/usa-pack/usa_gran_canon.png",
 			"description": "Una de las maravillas naturales más impresionantes del mundo.",
 			"completed": false
 		},
