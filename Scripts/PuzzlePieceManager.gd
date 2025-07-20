@@ -178,7 +178,7 @@ func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 		"grid": grid,
 		"original_rows": original_rows, 
 		"progress_manager": puzzle_game.progress_manager,
-		"audio_merge": puzzle_game.audio_merge,
+		"play_merge_sound_func": Callable(puzzle_game, "play_merge_sound"),
 		"show_success_message_func": Callable(puzzle_game, "show_success_message"),
 		"update_piece_position_state_func": Callable(self, "update_piece_position_state"),
 		"change_scene_func": Callable(puzzle_game, "safe_change_scene"),

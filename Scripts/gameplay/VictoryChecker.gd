@@ -11,7 +11,7 @@ var cell_size_ref: Vector2
 var grid_ref: Dictionary
 var original_rows_ref: int # Usado para restaurar GLOBAL.rows
 var progress_manager_ref: Node
-var audio_merge_ref: AudioStreamPlayer
+var play_merge_sound_func_ref: Callable
 
 # Callables a métodos de PuzzleGame
 var show_success_message_func_ref: Callable
@@ -46,7 +46,7 @@ func initialize(params: Dictionary):
 	grid_ref = params.grid
 	original_rows_ref = params.original_rows
 	progress_manager_ref = params.progress_manager
-	audio_merge_ref = params.audio_merge
+	play_merge_sound_func_ref = params.play_merge_sound_func
 	show_success_message_func_ref = params.show_success_message_func
 	update_piece_position_state_func_ref = params.update_piece_position_state_func
 	change_scene_func_ref = params.change_scene_func
@@ -325,8 +325,8 @@ func _resolve_puzzle_completion(game_state: Dictionary):
 	puzzle_completed_internally = true
 	emit_signal("puzzle_is_complete")
 
-	if audio_merge_ref and is_instance_valid(audio_merge_ref):
-		audio_merge_ref.play()
+	if play_merge_sound_func_ref and play_merge_sound_func_ref.is_valid():
+		play_merge_sound_func_ref.call()
 	
 	show_success_message_func_ref.call("¡Puzzle Completado!", 1.0)
 	
