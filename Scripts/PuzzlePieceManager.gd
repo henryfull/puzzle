@@ -2955,6 +2955,20 @@ func clear_all_group_borders():
 	for group_id in group_border_lines.keys():
 		remove_group_border(group_id)
 
+# Función para ocultar temporalmente todos los bordes de grupo
+func hide_all_group_borders():
+	print("PuzzlePieceManager: Ocultando todos los bordes de grupo...")
+	for border_line in group_border_lines.values():
+		if is_instance_valid(border_line):
+			border_line.visible = false
+
+# Función para mostrar todos los bordes de grupo
+func show_all_group_borders():
+	print("PuzzlePieceManager: Mostrando todos los bordes de grupo...")
+	for border_line in group_border_lines.values():
+		if is_instance_valid(border_line):
+			border_line.visible = true
+
 # === FUNCIÓN CRÍTICA PARA EVITAR SUPERPOSICIONES ===
 
 # 🔧 NUEVA FUNCIÓN INTEGRAL DE DETECCIÓN Y RESOLUCIÓN DE SUPERPOSICIONES

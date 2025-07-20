@@ -8,16 +8,9 @@ class_name PuzzleInputHandler
 var puzzle_game: PuzzleGame
 var piece_manager: PuzzlePieceManager
 
-# Variables para gestionar el doble toque
-var last_touch_time: float = 0.0
-var double_tap_threshold: float = 0.3  # Tiempo en segundos para considerar un doble tap
-var last_touch_position: Vector2 = Vector2.ZERO
-var double_tap_distance_threshold: float = 50.0  # Distancia máxima para considerar un doble tap
-
-# Variables para gestionar el triple toque (reorganizar piezas)
-var touch_count: int = 0
-var last_triple_tap_time: float = 0.0
-var triple_tap_threshold: float = 0.5  # Tiempo para considerar un triple tap
+# ✨ SISTEMA DE DOBLE TAP DIRECTO Y SIMPLE
+var last_tap_time: float = 0.0
+var last_tap_pos: Vector2 = Vector2.ZERO
 
 # Variables para el paneo del tablero
 var is_panning := false
@@ -39,6 +32,8 @@ func initialize(game: PuzzleGame):
 	
 	load_user_preferences()
 
+
+
 func _handle_keyboard_input(event: InputEventKey):
 	# Alternar límites visuales con tecla 'B' (Borders)
 	if event.keycode == KEY_B:
@@ -49,9 +44,10 @@ func _handle_keyboard_input(event: InputEventKey):
 		var status = "mostrados" if !current_visibility else "ocultados"
 
 	
-	# DEBUG: Tecla 'C' para forzar recentrado completo
+	# DEBUG: Tecla 'C' para forzar recentrado directo
 	elif event.keycode == KEY_C and OS.is_debug_build():
-		puzzle_game.force_complete_recenter()
+		print("PuzzleInputHandler: Tecla C presionada - Centrando directamente")
+		center_puzzle()
 	
 	# DEBUG: Tecla 'D' para ejecutar diagnóstico
 	elif event.keycode == KEY_D and OS.is_debug_build():
@@ -115,6 +111,30 @@ func _handle_screen_touch(event: InputEventScreenTouch):
 	if not is_touch_in_safe_zone(event.position):
 		print("Input táctil ignorado por estar demasiado cerca del borde de pantalla")
 		return
+	
+	# ✨ NUEVO: Sistema de doble tap ultra-simple y directo
+	if event.pressed:
+		var current_time = Time.get_ticks_msec()
+		var time_diff = current_time - last_tap_time
+		var pos_diff = event.position.distance_to(last_tap_pos)
+		
+		print("PuzzleInputHandler: Tap detectado - Tiempo desde último: ", time_diff, "ms, Distancia: ", pos_diff, "px")
+		
+		# Si es un doble tap (menos de 500ms y menos de 100px de distancia)
+		if time_diff < 500 and pos_diff < 100 and last_tap_time > 0:
+			print("PuzzleInputHandler: ¡DOBLE TAP DETECTADO! Centrando directamente...")
+			
+			# Centrar DIRECTAMENTE sin pasar por funciones complejas
+			_center_puzzle_directly()
+			puzzle_game.show_success_message("🎯 Puzzle centrado", 2.0)
+			
+			# Resetear para evitar triple taps
+			last_tap_time = 0
+			last_tap_pos = Vector2.ZERO
+		else:
+			# Primer tap o tap fuera de rango
+			last_tap_time = current_time
+			last_tap_pos = event.position
 	
 	# Guardamos la información del toque en nuestro diccionario
 	if event.pressed:
@@ -212,9 +232,11 @@ func _handle_mouse_button(event: InputEventMouseButton):
 			# Finalizar paneo
 			is_panning = false
 	
-	# Manejo de doble clic para reorganizar piezas que están fuera del área del puzzle
-	# elif event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
-	# 	piece_manager.reorganize_pieces()
+	# ✨ NUEVO: Doble clic en PC para centrar puzzle directamente
+	elif event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
+		print("PuzzleInputHandler: ¡Doble clic detectado! Centrando directamente...")
+		_center_puzzle_directly()
+		puzzle_game.show_success_message("🎯 Puzzle centrado", 2.0)
 	
 	# Manejo de click izquierdo para las piezas
 	elif event.button_index == MOUSE_BUTTON_LEFT:
@@ -661,3 +683,138 @@ func reset_board_to_center():
 	if piece_manager:
 		piece_manager.update_all_group_borders()
 		print("PuzzleInputHandler: Bordes de grupo actualizados después de resetear al centro") 
+
+# ✨ NUEVA FUNCIÓN: Centrar puzzle de manera directa y completa
+func _center_puzzle_directly():
+	print("PuzzleInputHandler: *** INICIANDO CENTRADO DIRECTO COMPLETO ***")
+	
+	if not piece_manager or piece_manager.pieces.size() == 0:
+		print("PuzzleInputHandler: No hay piezas para centrar")
+		return
+	
+	# PASO 1: Calcular el centro de la pantalla
+	var viewport_size = puzzle_game.get_viewport_rect().size
+	var screen_center = viewport_size * 0.5
+	print("PuzzleInputHandler: Centro de pantalla: ", screen_center)
+	
+	# PASO 2: Calcular el centro actual del puzzle
+	var min_pos = Vector2(INF, INF)
+	var max_pos = Vector2(-INF, -INF)
+	var pieces = piece_manager.get_pieces()
+	
+	for piece_obj in pieces:
+		if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+			continue
+		var pos = piece_obj.node.global_position
+		min_pos.x = min(min_pos.x, pos.x)
+		min_pos.y = min(min_pos.y, pos.y)
+		max_pos.x = max(max_pos.x, pos.x)
+		max_pos.y = max(max_pos.y, pos.y)
+	
+	var puzzle_size = max_pos - min_pos
+	var current_center = min_pos + puzzle_size * 0.5
+	print("PuzzleInputHandler: Centro actual del puzzle: ", current_center)
+	print("PuzzleInputHandler: Tamaño del puzzle: ", puzzle_size)
+	
+	# PASO 3: Calcular el offset necesario para centrar
+	var offset_needed = screen_center - current_center
+	print("PuzzleInputHandler: Offset necesario: ", offset_needed)
+	
+	# PASO 4: CRÍTICO - Ocultar bordes antes de mover piezas
+	print("PuzzleInputHandler: Ocultando bordes de grupo temporalmente...")
+	piece_manager.hide_all_group_borders()
+	
+	# PASO 5: Aplicar el offset a TODAS las piezas Y actualizar datos internos
+	var pieces_moved = 0
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	
+	for piece_obj in pieces:
+		if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+			continue
+		
+		# Mover la pieza visualmente
+		piece_obj.node.global_position += offset_needed
+		
+		# CRÍTICO: También actualizar posición del sprite interno si existe
+		if piece_obj.node.has_node("Sprite2D"):
+			var sprite = piece_obj.node.get_node("Sprite2D") 
+			# El sprite debe permanecer en (0,0) relativo al nodo padre
+			sprite.position = Vector2.ZERO
+		
+		pieces_moved += 1
+	
+	print("PuzzleInputHandler: Piezas movidas visualmente: ", pieces_moved)
+	
+	# PASO 6: CRÍTICO - Actualizar el puzzle_offset en puzzle_data para mantener consistencia
+	var new_offset = puzzle_data["offset"] + offset_needed
+	puzzle_game.set_puzzle_data(
+		puzzle_data["texture"],
+		puzzle_data["width"], 
+		puzzle_data["height"],
+		puzzle_data["cell_size"],
+		new_offset
+	)
+	print("PuzzleInputHandler: Puzzle offset actualizado a: ", new_offset)
+	
+	# PASO 7: CRÍTICO - Resetear board_offset y sincronizar contenedor
+	board_offset = Vector2.ZERO
+	if puzzle_game.pieces_container:
+		puzzle_game.pieces_container.position = Vector2.ZERO
+		print("PuzzleInputHandler: Contenedor de piezas reseteado")
+	
+	# CRÍTICO: También resetear la posición del PuzzleGame si tiene offset
+	puzzle_game.position = Vector2.ZERO
+	print("PuzzleInputHandler: Posición de PuzzleGame reseteada")
+	
+	# PASO 8: Esperar un frame para que las posiciones se estabilicen
+	await puzzle_game.get_tree().process_frame
+	
+	# PASO 9: Verificar y actualizar información de grupos
+	print("PuzzleInputHandler: Verificando grupos después del centrado...")
+	piece_manager.check_all_groups()
+	
+	# PASO 10: Recrear y mostrar bordes de grupo en nuevas posiciones
+	print("PuzzleInputHandler: Recreando bordes de grupo en nuevas posiciones...")
+	piece_manager.clear_all_group_borders()
+	await puzzle_game.get_tree().process_frame
+	piece_manager.update_all_group_borders()
+	
+	# PASO 11: Verificación final de consistencia
+	print("PuzzleInputHandler: Verificación final...")
+	for piece_obj in pieces:
+		if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+			continue
+		
+		# Asegurar que el estado visual esté correcto
+		if piece_obj.node.has_method("update_all_visuals"):
+			piece_obj.node.update_all_visuals()
+	
+	# Debug final: Verificar que todo esté centrado
+	await puzzle_game.get_tree().process_frame
+	var final_min_pos = Vector2(INF, INF)
+	var final_max_pos = Vector2(-INF, -INF)
+	for piece_obj in pieces:
+		if not is_instance_valid(piece_obj) or not is_instance_valid(piece_obj.node):
+			continue
+		var pos = piece_obj.node.global_position
+		final_min_pos.x = min(final_min_pos.x, pos.x)
+		final_min_pos.y = min(final_min_pos.y, pos.y)
+		final_max_pos.x = max(final_max_pos.x, pos.x)
+		final_max_pos.y = max(final_max_pos.y, pos.y)
+	
+	var final_center = (final_min_pos + final_max_pos) * 0.5
+	print("PuzzleInputHandler: Centro final del puzzle: ", final_center)
+	print("PuzzleInputHandler: Centro de pantalla: ", screen_center)
+	print("PuzzleInputHandler: Discrepancia final: ", final_center - screen_center)
+	
+	print("PuzzleInputHandler: *** CENTRADO COMPLETO FINALIZADO ***")
+
+# ✨ FUNCIÓN PÚBLICA: Para centrar el puzzle desde cualquier lugar
+func center_puzzle():
+	"""
+	Función pública para centrar el puzzle desde cualquier lugar del código
+	"""
+	print("PuzzleInputHandler: Centrando puzzle via función pública...")
+	_center_puzzle_directly()
+	if puzzle_game.ui_manager:
+		puzzle_game.show_success_message("🎯 Puzzle centrado", 2.0)
