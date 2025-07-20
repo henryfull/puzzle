@@ -34,6 +34,13 @@ var golden_glow_duration: float = 0.7  # Duración total del efecto de brillo (e
 # Incrementa este valor si el puzzle sigue apareciendo mal centrado al cargar
 var auto_center_delay: float = 1.5  # Retraso en segundos antes del centrado automático
 
+# 🔧 VARIABLES DE CONTROL PARA SISTEMA UNIFICADO DE RESTAURACIÓN
+var auto_processes_enabled: bool = true  # Control maestro para procesos automáticos
+var auto_centering_enabled: bool = true  # Control para centrado automático
+var overlap_resolution_enabled: bool = true  # Control para resolución de superposiciones
+var group_checking_enabled: bool = true  # Control para verificación de grupos
+var border_updates_enabled: bool = true  # Control para actualización de bordes
+
 # Variables para límites visuales
 var border_areas: Array = []
 var background_limits_container: Node2D = null  # 🆕 Contenedor para los límites que siempre está centrado
@@ -556,6 +563,11 @@ func place_group(piece: Piece):
 	_handle_place_group(piece)
 
 func check_all_groups() -> void:
+	# Verificar si los procesos automáticos están habilitados
+	if not auto_processes_enabled or not group_checking_enabled:
+		print("PuzzlePieceManager: check_all_groups omitido - procesos automáticos deshabilitados")
+		return
+	
 	_handle_check_all_groups()
 
 # 🔧 NUEVAS FUNCIONES PÚBLICAS PARA RESOLUCIÓN DE SUPERPOSICIONES
@@ -564,6 +576,11 @@ func resolve_all_overlaps():
 	Función pública para resolver todas las superposiciones de forma integral
 	Retorna true si se encontraron y resolvieron superposiciones
 	"""
+	# Verificar si los procesos automáticos están habilitados
+	if not auto_processes_enabled or not overlap_resolution_enabled:
+		print("PuzzlePieceManager: resolve_all_overlaps omitido - procesos automáticos deshabilitados")
+		return false
+	
 	print("PuzzlePieceManager: Ejecutando resolución pública de superposiciones...")
 	
 	if has_method("resolve_all_overlapping_pieces_comprehensive"):
@@ -2927,6 +2944,11 @@ func _get_group_border_color(group_id: int) -> Color:
 
 # Función para actualizar todos los bordes de grupo
 func update_all_group_borders():
+	# Verificar si los procesos automáticos están habilitados
+	if not auto_processes_enabled or not border_updates_enabled:
+		print("PuzzlePieceManager: update_all_group_borders omitido - procesos automáticos deshabilitados")
+		return
+	
 	if not enable_group_borders_global:
 		clear_all_group_borders()
 		return
@@ -3619,3 +3641,39 @@ func sync_drag_start_cells():
 			piece_obj.drag_start_cell = piece_obj.current_cell
 	
 	print("PuzzlePieceManager: drag_start_cell sincronizado para ", pieces.size(), " piezas")
+
+# 🔧 FUNCIONES DE CONTROL PARA EL SISTEMA UNIFICADO DE RESTAURACIÓN
+
+func set_auto_processes_enabled(enabled: bool):
+	"""Activa/desactiva todos los procesos automáticos"""
+	auto_processes_enabled = enabled
+	auto_centering_enabled = enabled
+	overlap_resolution_enabled = enabled
+	group_checking_enabled = enabled
+	border_updates_enabled = enabled
+	print("PuzzlePieceManager: Procesos automáticos ", "activados" if enabled else "desactivados")
+
+func set_auto_centering_enabled(enabled: bool):
+	"""Activa/desactiva el centrado automático"""
+	auto_centering_enabled = enabled
+	print("PuzzlePieceManager: Centrado automático ", "activado" if enabled else "desactivado")
+
+func set_overlap_resolution_enabled(enabled: bool):
+	"""Activa/desactiva la resolución automática de superposiciones"""
+	overlap_resolution_enabled = enabled
+	print("PuzzlePieceManager: Resolución de superposiciones ", "activada" if enabled else "desactivada")
+
+func set_group_checking_enabled(enabled: bool):
+	"""Activa/desactiva la verificación automática de grupos"""
+	group_checking_enabled = enabled
+	print("PuzzlePieceManager: Verificación de grupos ", "activada" if enabled else "desactivada")
+
+func set_border_updates_enabled(enabled: bool):
+	"""Activa/desactiva las actualizaciones automáticas de bordes"""
+	border_updates_enabled = enabled
+	print("PuzzlePieceManager: Actualización de bordes ", "activada" if enabled else "desactivada")
+
+func clear_grid():
+	"""Limpia completamente el grid (para sistema unificado)"""
+	grid.clear()
+	print("PuzzlePieceManager: Grid limpiado completamente")

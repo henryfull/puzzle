@@ -610,6 +610,9 @@ func process_piece_release() -> void:
 		print("PuzzleInputHandler: Verificando superposiciones después de soltar pieza...")
 		piece_manager.resolve_all_overlaps()
 		
+		# 🔧 NUEVO: Verificación automática de sincronización de grupos después de mover
+		_verify_group_synchronization_after_move(group_leader)
+		
 		# Incrementar contador de movimientos solo si la posición cambió
 		if old_position != group_leader.current_cell:
 			print("PuzzleInputHandler: Pieza movida de ", old_position, " a ", group_leader.current_cell)
@@ -818,3 +821,31 @@ func center_puzzle():
 	_center_puzzle_directly()
 	if puzzle_game.ui_manager:
 		puzzle_game.show_success_message("🎯 Puzzle centrado", 2.0)
+
+# 🔧 NUEVA FUNCIÓN: Verificación automática de sincronización después de mover
+func _verify_group_synchronization_after_move(moved_group_leader):
+	"""Verifica automáticamente la sincronización de grupos después de mover una pieza"""
+	
+	# Solo verificar si el grupo tiene más de 1 pieza
+	if moved_group_leader.group.size() <= 1:
+		return
+	
+	print("PuzzleInputHandler: Verificando sincronización de grupo movido...")
+	
+	# Crear sincronizador temporal
+	var group_synchronizer = preload("res://Scripts/Autoload/GroupSynchronizer.gd").new()
+	group_synchronizer.initialize(puzzle_game, piece_manager)
+	
+	# Analizar solo el grupo que se movió
+	var group = moved_group_leader.group
+	var sync_issues = group_synchronizer._analyze_group_synchronization(group)
+	
+	if sync_issues > 0:
+		print("PuzzleInputHandler: ⚠️ Detectados ", sync_issues, " problemas de sincronización, corrigiendo...")
+		group_synchronizer._fix_group_synchronization(group)
+		print("PuzzleInputHandler: ✅ Problemas de sincronización corregidos automáticamente")
+	else:
+		print("PuzzleInputHandler: ✅ Grupo está correctamente sincronizado")
+	
+	# Limpiar
+	group_synchronizer.queue_free()
