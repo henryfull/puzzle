@@ -2,7 +2,7 @@
 	"id": "artistic-cities",
 	"name": "Artistic Cities",
 	"description": "Puzzles inspirados en ciudades artísticas del mundo.",
-	"image_path": "res://dlc/packs/artistic-cities/thumbnail.png",
+	"image_path": "res://dlc/packs/artistic-cities/thumbnail.jpg",
 	"unlocked": true,
 	"purchased": true,
 	"completed": false,
@@ -25,7 +25,7 @@
 		{
 			"id": "barcelona",
 			"name": "Barcelona",
-			"image": "res://dlc/packs/artistic-cities/barcelona.png",
+			"image": "res://dlc/packs/artistic-cities/barcelona.jpg",
 			"description": "Una vista artística de Barcelona, mostrando su arquitectura única.",
 			"completed": false
 		},
@@ -46,7 +46,7 @@
 		{
 			"id": "cartagena",
 			"name": "Cartagena",
-			"image": "res://dlc/packs/artistic-cities/cartagena.png",
+			"image": "res://dlc/packs/artistic-cities/cartagena.jpg",
 			"description": "Una representación colorida de la ciudad colonial de Cartagena, Colombia.",
 			"completed": false
 		},
@@ -109,14 +109,14 @@
 		{
 			"id": "new-york-day",
 			"name": "New York (Día)",
-			"image": "res://dlc/packs/artistic-cities/new-york-day.png",
+			"image": "res://dlc/packs/artistic-cities/new-york-day.jpg",
 			"description": "La vibrante ciudad de Nueva York durante el día, mostrando su icónico horizonte.",
 			"completed": false
 		},
 		{
 			"id": "new-york-night",
 			"name": "New York (Noche)",
-			"image": "res://dlc/packs/artistic-cities/new-york-night.png",
+			"image": "res://dlc/packs/artistic-cities/new-york-night.jpg",
 			"description": "Nueva York de noche, con sus características luces y rascacielos iluminados.",
 			"completed": false
 		},
@@ -130,7 +130,7 @@
 		{
 			"id": "paris",
 			"name": "Paris",
-			"image": "res://dlc/packs/artistic-cities/paris.png",
+			"image": "res://dlc/packs/artistic-cities/paris.jpg",
 			"description": "La romántica capital francesa con su emblemática Torre Eiffel.",
 			"completed": false
 		},

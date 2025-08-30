@@ -2,7 +2,7 @@
 	"id": "wild-animals-cartoon",
 	"name": "Wild Animals Cartoon",
 	"description": "Puzzles inspirados en animales salvajes en formato cartoon.",
-	"image_path": "res://dlc/packs/wild-animals-cartoon/thumbnail.png",
+	"image_path": "res://dlc/packs/wild-animals-cartoon/thumbnail.jpg",
 	"unlocked": false,
 	"purchased": false,
 	"completed": false,
