@@ -1,0 +1,83 @@
+[gd_scene load_steps=2 format=3 uid="uid://8hhc463dv5e6"]
+
+[ext_resource type="Script" uid="uid://b84myp3rvrs2t" path="res://Scenes/Components/Store/store.gd" id="1_ecgri"]
+
+[node name="Store" type="Control" node_paths=PackedStringArray("alert_dialog", "label", "buy_button", "consume_button", "checkButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ecgri")
+alert_dialog = NodePath("AlertDialog")
+label = NodePath("CanvasLayer/Label")
+buy_button = NodePath("CanvasLayer/VBoxContainer/BuyButton")
+consume_button = NodePath("CanvasLayer/VBoxContainer/ConsumeButton")
+checkButton = NodePath("CanvasLayer/VBoxContainer/CheckSku")
+
+[node name="AlertDialog" type="AcceptDialog" parent="."]
+initial_position = 1
+size = Vector2i(108, 126)
+visible = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.458824, 0.458824, 0.992157, 1)
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -105.5
+offset_right = 100.0
+offset_bottom = 105.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BuyButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Comprar"
+
+[node name="ConsumeButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "Consume"
+
+[node name="CheckSku" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+text = "Check"
+
+[node name="CloseButton" type="Button" parent="CanvasLayer"]
+custom_minimum_size = Vector2(50, 50)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -91.0
+offset_top = 106.0
+offset_right = -51.0
+offset_bottom = 163.0
+grow_horizontal = 0
+theme_type_variation = &"ButtonClose"
+text = "X"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/BuyButton" to="." method="_on_PurchaseButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/ConsumeButton" to="." method="_on_ConsumeButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/CheckSku" to="." method="_on_QuerySkuDetailsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/CloseButton" to="." method="exit_confirmed"]

@@ -131,7 +131,8 @@ func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 	rows_added_bottom = 0
 	print("PuzzlePieceManager: Tamaño reiniciado a: ", current_columns, "x", current_rows)	
 
-	# 1) Cargar la textura
+	# 1) Cargar la textura (método clásico)
+	print("PuzzlePieceManager: Cargando imagen del puzzle desde: ", image_path)
 	var puzzle_texture = load(image_path) if load(image_path) else null
 	if puzzle_texture == null:
 		push_warning("No se pudo cargar la imagen en: %s" % image_path)

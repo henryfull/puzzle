@@ -25,7 +25,8 @@ var settings = {
 		"columns": 6,
 		"rows": 8,
 		"progresive_difficulty": false
-	}
+	},
+	"purchases": {}  # Marca de compras por SKU
 }
 var columns: int = 6
 var rows: int = 8
@@ -47,6 +48,7 @@ var gamemode : int = 1
 var is_learner : bool = false
 var progresive_difficulty : bool = false
 var dlc_packs = []
+var name_pack_started = "started_pack"
 
 var modes = [
 	{"name": "difficulty_learner", "id": 0, "color": "ButtonBlue", "HeaderColor": "PanelHeaderBlue", "PanelColor": "PanelBlue", "description": "difficulty_learner_description", "tiki": "tiki-learn"},
@@ -143,6 +145,8 @@ func load_settings():
 		
 		# Cargar información de DLCs comprados
 		dlc_packs = config.get_value("dlc", "purchased_packs", [])
+		# Cargar mapa de compras por SKU
+		settings.purchases = config.get_value("purchases", "sku_flags", {})
 		
 		# Actualizar variables globales con la configuración cargada
 		columns = settings.gameplay.columns
@@ -214,6 +218,8 @@ func save_settings() -> void:
 	
 	# Guardar información de DLCs comprados
 	config.set_value("dlc", "purchased_packs", dlc_packs)
+	# Guardar mapa de compras por SKU
+	config.set_value("purchases", "sku_flags", settings.purchases)
 	
 	# Guardar el archivo
 	err = config.save(SETTINGS_FILE)

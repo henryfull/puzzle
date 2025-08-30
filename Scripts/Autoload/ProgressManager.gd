@@ -701,8 +701,15 @@ func force_load_all_dlcs():
 
 # Función para cargar los puzzles de un pack DLC específico
 func load_dlc_pack_puzzles(pack_id: String):
-	var pack_file_path = "res://dlc/packs/" + pack_id + ".json"
-	var pack_file = FileAccess.open(pack_file_path, FileAccess.READ)
+	# 1) Intentar desde almacenamiento del usuario (descargado)
+	var user_pack_path = "user://dlc/packs/" + pack_id + ".json"
+	var pack_file = FileAccess.open(user_pack_path, FileAccess.READ)
+	var pack_file_path = user_pack_path
+	
+	# 2) Si no existe en user://, usar el pack embebido en res://
+	if pack_file == null:
+		pack_file_path = "res://dlc/packs/" + pack_id + ".json"
+		pack_file = FileAccess.open(pack_file_path, FileAccess.READ)
 	
 	if pack_file:
 		var json_text = pack_file.get_as_text()

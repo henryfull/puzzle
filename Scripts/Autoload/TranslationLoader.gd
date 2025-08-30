@@ -2,13 +2,14 @@ extends Node
 
 var translations = {}  # Diccionario donde guardamos las traducciones
 var current_language = "es"  # Idioma por defecto (cambiado a español)
+var path_translations = "res://PacksData/translation.csv"
 
 # Señal para notificar cambios de idioma
 signal language_changed(locale_code)
 
 # Cargar el archivo CSV al iniciar
 func _ready():
-	load_csv("res://PacksData/translation.csv")
+	load_csv(path_translations)
 	load_language_from_config()
 	print("Idioma actual cargado: ", current_language)
 

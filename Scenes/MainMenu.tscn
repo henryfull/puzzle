@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dh7t7utu076oi"]
+[gd_scene load_steps=24 format=3 uid="uid://dh7t7utu076oi"]
 
 [ext_resource type="Script" uid="uid://cct0rg0djuimx" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
 [ext_resource type="Texture2D" uid="uid://cg6madwi8etli" path="res://Assets/Images/GUID/backgrounds/fondo 4.png" id="2_8um5k"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_ghw46"]
 [ext_resource type="PackedScene" uid="uid://bnl7nqpqlgw5v" path="res://Scenes/Components/GameModeSelection/GameMode.tscn" id="5_df05h"]
 [ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="6_xim88"]
+[ext_resource type="Texture2D" uid="uid://byrkdxad7g0jr" path="res://Assets/Images/icons/icon-google-play.png" id="10_loo7a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghw46"]
 bg_color = Color(0, 0, 0, 0.341176)
@@ -303,6 +304,13 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_8e205")
 
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer"]
+offset_left = 74.0
+offset_top = 142.0
+offset_right = 174.0
+offset_bottom = 242.0
+texture_normal = ExtResource("10_loo7a")
+
 [node name="GameMode" parent="." instance=ExtResource("5_df05h")]
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
@@ -312,3 +320,4 @@ texture = SubResource("AtlasTexture_8e205")
 [connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_achievements" to="." method="_on_AchievementsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/TextureButton" to="." method="_on_buy_button_pressed"]

@@ -7,6 +7,7 @@ var btn_achievements : Button
 var btn_exit : Button
 var label_version: Label
 var confirm_dialog_scene = preload("res://Scenes/Components/ConfirmExitDialog/ConfirmExitDialog.tscn")
+var store_scen = preload("res://Scenes/Components/Store/store.tscn")
 
 func _ready():
 	# Esperar un frame para asegurarnos de que GLOBAL y TranslationLoader estén inicializados
@@ -166,3 +167,10 @@ func _setup_saved_pack_and_go_to_puzzles(pack_id: String):
 	else:
 		print("MainMenu: No se encontró el pack guardado, yendo a selección de packs")
 		GLOBAL.change_scene_with_loading("res://Scenes/PackSelection.tscn")
+
+
+func _on_buy_button_pressed() -> void:
+	
+	var store = store_scen.instantiate()
+	store.exit_canceled.connect(func(): store.queue_free())
+	add_child(store)
