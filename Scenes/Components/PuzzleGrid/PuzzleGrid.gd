@@ -104,23 +104,20 @@ func _on_PuzzleSelected(puzzle):
 	print("PuzzleGrid: _on_PuzzleSelected() - SEÑAL RECIBIDA")
 	print("PuzzleGrid: Datos del puzzle recibidos: ", puzzle)
 	
-	# Primero, emitir la señal al componente padre (PuzzleSelection)
+	# Emitir la señal al componente padre (PuzzleSelection)
 	puzzle_selected.emit(puzzle)
-	
-	# Obtener el componente padre para verificar si se permite la selección
+
+	# Consultar al padre si maneja la selección (por ejemplo, para mostrar PreGame)
 	var parent = get_parent()
 	while parent and not parent.has_method("_on_PuzzleSelected"):
 		parent = parent.get_parent()
-	
-	# Si encontramos un padre con el método _on_PuzzleSelected, consultamos si se permite la selección
-	var selection_allowed = true
+
 	if parent and parent.has_method("_on_PuzzleSelected"):
-		selection_allowed = parent._on_PuzzleSelected(puzzle)
-	
-	# Si no se permite la selección (durante scroll), salir
-	if not selection_allowed:
-		print("PuzzleGrid: Selección no permitida por el componente padre (scroll activo)")
-		return
+		var handled = parent._on_PuzzleSelected(puzzle)
+		# Si el padre devuelve true, asume que ya gestionó la selección (mostrar PreGame) y salimos
+		if handled == true:
+			print("PuzzleGrid: Selección gestionada por el padre (PreGame mostrado)")
+			return
 	
 	# Si se permite la selección, continuar con la lógica de selección de puzzle
 	print("PuzzleGrid: Selección permitida, procesando puzzle")
@@ -137,19 +134,11 @@ func _on_PuzzleSelected(puzzle):
 	print("PuzzleGrid: Nombre del puzzle: ", puzzle.get("name", "NO NAME"))
 	print("PuzzleGrid: Guardando puzzle en GLOBAL.selected_puzzle")
 	
-	# Guardar el puzzle seleccionado en la variable global
+	# Si el padre no lo gestionó, continuamos con la navegación directa al juego
 	GLOBAL.selected_puzzle = puzzle
-	print("PuzzleGrid: Cambiando a escena PuzzleGame.tscn")
-	
-	# Verificar que la escena existe antes de cambiar
+	print("PuzzleGrid: Padre no gestionó selección; abriendo PuzzleGame.tscn")
+
 	if ResourceLoader.exists("res://Scenes/PuzzleGame.tscn"):
-		print("PuzzleGrid: La escena PuzzleGame.tscn existe, cambiando...")
 		get_tree().change_scene_to_file("res://Scenes/PuzzleGame.tscn")
 	else:
-		print("PuzzleGrid: ERROR - La escena PuzzleGame.tscn no existe")
-		# Intentar con otra ruta
-		if ResourceLoader.exists("res://Scenes/PuzzleGame.tscn"):
-			print("PuzzleGrid: Intentando con ruta alternativa...")
-			get_tree().change_scene_to_file("res://Scenes/PuzzleGame.tscn")
-		else:
-			print("PuzzleGrid: ERROR - No se pudo encontrar la escena del juego")
+		print("PuzzleGrid: ERROR - No se pudo encontrar la escena del juego")

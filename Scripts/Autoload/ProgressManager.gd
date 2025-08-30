@@ -678,8 +678,17 @@ func force_load_all_dlcs():
 				var already_exists = false
 				for i in range(packs_data.packs.size()):
 					if packs_data.packs[i].id == new_pack.id:
-						# Actualizar el pack existente con la nueva información
-						packs_data.packs[i] = new_pack
+						# Fusionar sin perder puzzles existentes si el nuevo pack no los trae
+						var existing = packs_data.packs[i]
+						var merged = existing.duplicate(true)
+						# Copiar metadatos del nuevo pack
+						for k in ["name", "description", "image_path", "unlocked", "purchased", "completed", "difficulty"]:
+							if new_pack.has(k):
+								merged[k] = new_pack[k]
+						# Solo reemplazar puzzles si el nuevo pack los tiene
+						if new_pack.has("puzzles") and typeof(new_pack.puzzles) == TYPE_ARRAY and new_pack.puzzles.size() > 0:
+							merged.puzzles = new_pack.puzzles
+						packs_data.packs[i] = merged
 						already_exists = true
 						break
 				
@@ -689,15 +698,15 @@ func force_load_all_dlcs():
 					print("ProgressManager: Añadido pack: ", new_pack.id)
 				else:
 					print("ProgressManager: Actualizado pack: ", new_pack.id)
-			
-			# Cargar puzzles para cada pack que esté comprado
+										
+			# Cargar puzzles para packs comprados que aún no tengan puzzles (evita sobrescribir packs base)
 			for pack in packs_data.packs:
 				if pack.get("purchased", false):
-					load_dlc_pack_puzzles(pack.id)
+					var has_puzzles = pack.has("puzzles") and typeof(pack.puzzles) == TYPE_ARRAY and pack.puzzles.size() > 0
+					if not has_puzzles:
+						load_dlc_pack_puzzles(pack.id)
 		else:
 			print("ProgressManager: ERROR - No se pudo cargar new_base_packs.json")
-	else:
-		print("ProgressManager: ERROR - No se pudo abrir new_base_packs.json")
 
 # Función para cargar los puzzles de un pack DLC específico
 func load_dlc_pack_puzzles(pack_id: String):
@@ -715,19 +724,42 @@ func load_dlc_pack_puzzles(pack_id: String):
 		var json_text = pack_file.get_as_text()
 		pack_file.close()
 		var json_result = JSON.parse_string(json_text)
-		
-		if json_result and json_result.has("puzzles"):
+
+		# Soportar dos formatos:
+		# 1) { "puzzles": [...] }
+		# 2) { "packs": [ { id: pack_id, puzzles: [...] } ] }
+		var puzzles := []
+		var pack_meta := {}
+
+		if json_result:
+			if json_result.has("puzzles") and typeof(json_result.puzzles) == TYPE_ARRAY:
+				puzzles = json_result.puzzles
+				pack_meta = json_result
+			elif json_result.has("packs") and typeof(json_result.packs) == TYPE_ARRAY:
+				for p in json_result.packs:
+					if typeof(p) == TYPE_DICTIONARY and p.has("id") and str(p.id) == str(pack_id):
+						if p.has("puzzles") and typeof(p.puzzles) == TYPE_ARRAY:
+							puzzles = p.puzzles
+							pack_meta = p
+						break
+
+		if puzzles.size() > 0:
 			# Encontrar el pack en packs_data y actualizar sus puzzles
 			for i in range(packs_data.packs.size()):
-				if packs_data.packs[i].id == pack_id:
-					packs_data.packs[i].puzzles = json_result.puzzles
-					print("ProgressManager: Cargados ", json_result.puzzles.size(), " puzzles para pack: ", pack_id)
-					
+				if packs_data.packs[i].id == pack_id:				
+					packs_data.packs[i].puzzles = puzzles
+					# Opcional: actualizar algunos metadatos si están presentes
+					for k in ["name", "description", "image_path", "unlocked", "purchased", "completed", "difficulty"]:
+						if pack_meta.has(k):
+							packs_data.packs[i][k] = pack_meta[k]
+					print("ProgressManager: Cargados ", puzzles.size(), " puzzles para pack: ", pack_id)
+
 					# Inicializar progresión para este pack
 					initialize_dlc_pack_progress(pack_id)
 					break
 		else:
-			print("ProgressManager: ERROR - No se encontraron puzzles en el pack: ", pack_id)
+			print("ProgressManager: ERROR - No se encontraron puzzles en el pack: ", pack_id, 
+				". Revisa el formato del JSON (se espera 'puzzles' o 'packs[0].puzzles')")
 	else:
 		print("ProgressManager: ERROR - No se pudo abrir el archivo del pack: ", pack_file_path)
 

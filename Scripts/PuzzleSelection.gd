@@ -207,7 +207,7 @@ func ensure_pack_selected():
 
 
 
-func _on_PuzzleSelected(puzzle) -> void:
+func _on_PuzzleSelected(puzzle):
 	print("PuzzleSelection: Puzzle seleccionado - ID: ", puzzle.get("id", "NO ID"), ", Nombre: ", puzzle.get("name", "NO NAME"))
 	
 	# Verificar si estamos seleccionando un puzzle diferente al guardado
@@ -257,3 +257,6 @@ func _on_PuzzleSelected(puzzle) -> void:
 	
 	# Actualizar la información del puzzle en la instancia
 	pre_game_instance.updateLayout()
+
+	# Indicar al llamador (PuzzleGrid) que la selección está permitida
+	return true
