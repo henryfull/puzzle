@@ -1,4 +1,6 @@
 {
-  "purchased_packs": ["fruits", "numbers", "wild-animals", "farm-animals", "artistic-cities", "wild-animals-cartoon", "usa-pack"],
-  "dlc_packs": ["numbers",  "wild-animals", "farm-animals", "artistic-cities", "wild-animals-cartoon", "usa-pack"]
+  "purchased_packs": ["fruits"],
+  "dlc_packs": ["fruits"],
+  "available_for_purchase": ["numbers", "wild-animals", "farm-animals", "artistic-cities", "wild-animals-cartoon", "usa-pack"],
+  "last_update": "2025-09-01T19:00:00Z"
 } 

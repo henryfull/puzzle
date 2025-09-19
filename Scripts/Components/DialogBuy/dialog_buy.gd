@@ -32,7 +32,14 @@ func _on_buy_button_pressed() -> void:
 			# 1. Primero registrar los DLCs como comprados (esto los añade a settings y GLOBAL)
 			registerPurcharse()
 			
-			# 2. Refrescar los datos de DLCs para asegurar que todo está actualizado
+			# 2. Instalar contenido base desde res:// para que el jugador tenga acceso inmediato
+			if has_node("/root/DLCService"):
+				var dlc = get_node("/root/DLCService")
+				# Si hay soporte de descarga remota se podría usar download_and_install_packs(dlc_to_purchase)
+				# Por ahora instalamos los JSON embebidos para que emita señales de progreso/instalación.
+				dlc.install_packs_from_base(dlc_to_purchase)
+			
+			# 3. Refrescar los datos de DLCs para asegurar que todo está actualizado
 			progress_manager.refresh_dlc_packs()
 			print("DialogBuy: Packs DLC actualizados después de la compra")
 			

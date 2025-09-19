@@ -660,11 +660,43 @@ func get_player_stats() -> Dictionary:
 # Funciones para gestionar packs DLC
 # ----------------------------------
 
-# Función para forzar la carga de todos los DLCs disponibles
+# Función para cargar solo DLCs comprados (verificar entitlements)
 func force_load_all_dlcs():
-	print("ProgressManager: Forzando carga de todos los DLCs disponibles")
+	print("ProgressManager: Cargando DLCs verificando compras...")
 	
-	# Cargar desde el archivo new_base_packs.json que tiene todos los packs
+	# Verificar entitlements con downloadService
+	var download_service = get_node_or_null("/root/IapService")
+	var purchased_dlcs = []
+	
+	if download_service:
+		print("ProgressManager: Verificando entitlements con downloadService...")
+		var entitlements = await download_service.fetch_entitlements()
+		
+		# Verificar si hay full unlock o packs específicos comprados
+		if download_service.has_full_unlock(entitlements):
+			print("ProgressManager: Usuario tiene full unlock, cargando todos los DLCs")
+			purchased_dlcs = get_all_available_dlc_ids()
+		else:
+			# Extraer packs comprados específicos
+			for entitlement in entitlements.get("entitlements", []):
+				if entitlement.status == "active" and entitlement.product_key.begins_with("pack_"):
+					var pack_id = entitlement.product_key.replace("pack_", "")
+					purchased_dlcs.append(pack_id)
+			print("ProgressManager: Packs DLC comprados: ", purchased_dlcs)
+	else:
+		print("ProgressManager: DownloadService no encontrado, usando verificación local")
+		# Usar sistema de verificación local alternativo
+		purchased_dlcs = get_locally_verified_dlcs()
+	
+	# Cargar metadatos de todos los DLCs disponibles
+	load_dlc_metadata()
+	
+	# Solo cargar contenido para packs comprados
+	load_purchased_dlc_content(purchased_dlcs)
+
+# Obtener todos los IDs de DLC disponibles
+func get_all_available_dlc_ids() -> Array:
+	var all_dlc_ids = []
 	var new_base_file = FileAccess.open("res://dlc/new_base_packs.json", FileAccess.READ)
 	if new_base_file:
 		var json_text = new_base_file.get_as_text()
@@ -672,41 +704,87 @@ func force_load_all_dlcs():
 		var json_result = JSON.parse_string(json_text)
 		
 		if json_result and json_result.has("packs"):
-			# Integrar todos los packs del new_base_packs.json
+			for pack in json_result.packs:
+				if pack.has("id"):
+					all_dlc_ids.append(pack.id)
+	
+	return all_dlc_ids
+
+# Verificación local de DLCs (fallback)
+func get_locally_verified_dlcs() -> Array:
+	var local_dlcs = []
+	
+	# Verificar en GLOBAL.dlc_packs
+	if has_node("/root/GLOBAL"):
+		var global_node = get_node("/root/GLOBAL")
+		if global_node.has_method("get") and global_node.get("dlc_packs"):
+			local_dlcs = global_node.dlc_packs.duplicate()
+	
+	# También verificar en metadata local
+	var metadata_file = FileAccess.open("user://dlc/dlc_metadata.json", FileAccess.READ)
+	if metadata_file:
+		var json_text = metadata_file.get_as_text()
+		metadata_file.close()
+		var metadata = JSON.parse_string(json_text)
+		if metadata and metadata.has("purchased_packs"):
+			for pack_id in metadata.purchased_packs:
+				if pack_id not in local_dlcs:
+					local_dlcs.append(pack_id)
+	
+	return local_dlcs
+
+# Cargar metadatos de DLC (info para mostrar en tienda)
+func load_dlc_metadata():
+	print("ProgressManager: Cargando metadatos de DLC para tienda...")
+	var new_base_file = FileAccess.open("res://dlc/new_base_packs.json", FileAccess.READ)
+	if new_base_file:
+		var json_text = new_base_file.get_as_text()
+		new_base_file.close()
+		var json_result = JSON.parse_string(json_text)
+		
+		if json_result and json_result.has("packs"):
+			# Añadir metadatos de DLC como "no comprado" por defecto
 			for new_pack in json_result.packs:
-				# Verificar si ya existe para evitar duplicados
 				var already_exists = false
 				for i in range(packs_data.packs.size()):
 					if packs_data.packs[i].id == new_pack.id:
-						# Fusionar sin perder puzzles existentes si el nuevo pack no los trae
-						var existing = packs_data.packs[i]
-						var merged = existing.duplicate(true)
-						# Copiar metadatos del nuevo pack
-						for k in ["name", "description", "image_path", "unlocked", "purchased", "completed", "difficulty"]:
-							if new_pack.has(k):
-								merged[k] = new_pack[k]
-						# Solo reemplazar puzzles si el nuevo pack los tiene
-						if new_pack.has("puzzles") and typeof(new_pack.puzzles) == TYPE_ARRAY and new_pack.puzzles.size() > 0:
-							merged.puzzles = new_pack.puzzles
-						packs_data.packs[i] = merged
 						already_exists = true
 						break
 				
 				if not already_exists:
-					# Añadir el pack si no existe
-					packs_data.packs.append(new_pack)
-					print("ProgressManager: Añadido pack: ", new_pack.id)
-				else:
-					print("ProgressManager: Actualizado pack: ", new_pack.id)
-										
-			# Cargar puzzles para packs comprados que aún no tengan puzzles (evita sobrescribir packs base)
-			for pack in packs_data.packs:
-				if pack.get("purchased", false):
-					var has_puzzles = pack.has("puzzles") and typeof(pack.puzzles) == TYPE_ARRAY and pack.puzzles.size() > 0
-					if not has_puzzles:
-						load_dlc_pack_puzzles(pack.id)
-		else:
-			print("ProgressManager: ERROR - No se pudo cargar new_base_packs.json")
+					# Añadir solo metadatos (sin puzzles)
+					var metadata_pack = new_pack.duplicate(true)
+					metadata_pack["is_dlc"] = true
+					metadata_pack["purchased"] = false
+					metadata_pack["unlocked"] = false
+					if metadata_pack.has("puzzles"):
+						metadata_pack.erase("puzzles")  # No cargar puzzles hasta comprar
+					
+					packs_data.packs.append(metadata_pack)
+					print("ProgressManager: Añadido metadata de DLC: ", new_pack.id)
+
+# Cargar contenido solo para DLCs comprados
+func load_purchased_dlc_content(purchased_pack_ids: Array):
+	print("ProgressManager: Cargando contenido para packs comprados: ", purchased_pack_ids)
+	
+	for pack_id in purchased_pack_ids:
+		# Marcar como comprado en los datos
+		mark_pack_as_purchased(pack_id)
+		
+		# Cargar puzzles del pack
+		load_dlc_pack_puzzles(pack_id)
+
+# Marcar un pack como comprado
+func mark_pack_as_purchased(pack_id: String):
+	for i in range(packs_data.packs.size()):
+		if packs_data.packs[i].id == pack_id:
+			packs_data.packs[i]["purchased"] = true
+			packs_data.packs[i]["unlocked"] = true
+			print("ProgressManager: Pack marcado como comprado: ", pack_id)
+			
+			# Inicializar progresión del pack
+			initialize_dlc_pack_progress(pack_id)
+			break
 
 # Función para cargar los puzzles de un pack DLC específico
 func load_dlc_pack_puzzles(pack_id: String):

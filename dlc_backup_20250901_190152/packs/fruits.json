@@ -1,0 +1,86 @@
+{
+	"packs": [
+		{
+			"id": "fruits",
+			"name": "Fruits",
+			"description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+			"image_path": "res://Assets/Images/packs/fruits/thumbnail.jpg",
+			"unlocked": true,
+			"purchased": true,
+			"completed": false,
+			"difficulty": "easy",
+			"puzzles": [
+				{
+					"id": "fruit1",
+					"name": "fruit_1",
+					"image": "res://Assets/Images/packs/fruits/image1.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit2",
+					"name": "fruit_2",
+					"image": "res://Assets/Images/packs/fruits/image2.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit3",
+					"name": "fruit_3",
+					"image": "res://Assets/Images/packs/fruits/image3.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit4",
+					"name": "fruit_4",
+					"image": "res://Assets/Images/packs/fruits/image4.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit5",
+					"name": "fruit_5",
+					"image": "res://Assets/Images/packs/fruits/image5.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit6",
+					"name": "fruit_6",
+					"image": "res://Assets/Images/packs/fruits/image6.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit7",
+					"name": "fruit_7",
+					"image": "res://Assets/Images/packs/fruits/image7.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit8",
+					"name": "fruit_8",
+					"image": "res://Assets/Images/packs/fruits/image8.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit9",
+					"name": "fruit_9",
+					"image": "res://Assets/Images/packs/fruits/image9.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				},
+				{
+					"id": "fruit10",
+					"name": "fruit_10",
+					"image": "res://Assets/Images/packs/fruits/image10.jpg",
+					"description": "Un cuadro abstracto con formas geométricas y colores vibrantes que crean un efecto visual único y dinámico.",
+					"completed": false
+				}
+			]
+		}
+	]
+} 

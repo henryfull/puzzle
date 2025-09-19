@@ -311,6 +311,18 @@ offset_right = 174.0
 offset_bottom = 242.0
 texture_normal = ExtResource("10_loo7a")
 
+[node name="FalsePurcharseButton" type="Button" parent="CanvasLayer"]
+custom_minimum_size = Vector2(240, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 172.0
+offset_right = 20.0
+offset_bottom = 212.0
+grow_horizontal = 2
+text = "Download"
+
 [node name="GameMode" parent="." instance=ExtResource("5_df05h")]
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
@@ -321,3 +333,4 @@ texture_normal = ExtResource("10_loo7a")
 [connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_OptionsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/TextureButton" to="." method="_on_buy_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/FalsePurcharseButton" to="." method="_on_false_purcharse_button_pressed"]

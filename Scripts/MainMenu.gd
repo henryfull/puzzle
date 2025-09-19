@@ -174,3 +174,7 @@ func _on_buy_button_pressed() -> void:
 	var store = store_scen.instantiate()
 	store.exit_canceled.connect(func(): store.queue_free())
 	add_child(store)
+
+
+func _on_false_purcharse_button_pressed() -> void:
+	pass # Replace with function body.

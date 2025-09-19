@@ -1,44 +1,147 @@
 extends Control
 
-@export var product_sku: String = "started_pack"
 signal exit_canceled
-
 
 @export var alert_dialog : AcceptDialog
 @export var label: Label
 
-@export var buy_button: Button
-@export var consume_button: Button
-@export var checkButton: Button
+# UI para mostrar DLC disponibles
+@export var dlc_container: VBoxContainer
+@export var scroll_container: ScrollContainer
 
-var payment = null # Deprecated: usamos IAPService
-var test_item_purchase_token = null
-var last_sku := ""
+# UI de progreso de descarga/instalación de DLC
+@onready var progress_panel: PanelContainer = $CanvasLayer/DownloadPanel
+@onready var progress_bar: ProgressBar = $CanvasLayer/DownloadPanel/Margin/VBox/Progress
+@onready var progress_detail: Label = $CanvasLayer/DownloadPanel/Margin/VBox/Detail
+
+# DLC Item scene for displaying individual DLC packs
+var dlc_item_scene = preload("res://Scenes/Components/Store/DLCItem.tscn")
+
+var available_dlcs = []
+var current_purchase_pack_id = ""
 
 func _process_successful_purchase(_sku: String, _purchase_token: String) -> void:
 	# Obsoleto: EntitlementsService gestiona el contenido adquirido.
 	pass
 
 func _ready():
-	label.text = "Conectando a servicios de compra...\nSKU: %s" % product_sku
-	_set_ui_enabled(false)
-	if has_node("/root/IAPService"):
-		var iap = get_node("/root/IAPService")
-		iap.connected.connect(_on_connected)
-		iap.disconnected.connect(_on_disconnected)
-		iap.connect_error.connect(_on_connect_error)
-		iap.sku_details.connect(_on_sku_details_query_completed)
-		iap.purchase_error.connect(_on_purchase_error)
-		iap.purchases_updated.connect(_on_purchases_updated)
-		iap.purchase_acknowledged.connect(_on_purchase_acknowledged)
+	label.text = "Cargando tienda DLC..."
+	
+	# Conectar al nuevo IapService para compras y descargas
+	if has_node("/root/IapService"):
+		var iap_service = get_node("/root/IapService")
+		if not iap_service.is_connected("purchase_started", Callable(self, "_on_purchase_started")):
+			iap_service.purchase_started.connect(Callable(self, "_on_purchase_started"))
+		if not iap_service.is_connected("purchase_completed", Callable(self, "_on_purchase_completed")):
+			iap_service.purchase_completed.connect(Callable(self, "_on_purchase_completed"))
+		if not iap_service.is_connected("download_started", Callable(self, "_on_download_started")):
+			iap_service.download_started.connect(Callable(self, "_on_download_started"))
+		if not iap_service.is_connected("download_progress", Callable(self, "_on_download_progress")):
+			iap_service.download_progress.connect(Callable(self, "_on_download_progress"))
+		if not iap_service.is_connected("download_completed", Callable(self, "_on_download_completed")):
+			iap_service.download_completed.connect(Callable(self, "_on_download_completed"))
+		if not iap_service.is_connected("installation_completed", Callable(self, "_on_installation_completed")):
+			iap_service.installation_completed.connect(Callable(self, "_on_installation_completed"))
+		
+		# Cargar DLC disponibles
+		_load_available_dlcs()
 	else:
-		show_alert('IAPService no está disponible')
-		_set_ui_enabled(false)
+		show_alert('IapService no está disponible')
+		label.text = "Error: Servicio de compras no disponible"
 
-func _set_ui_enabled(enabled: bool) -> void:
-	buy_button.disabled = not enabled
-	consume_button.disabled = not enabled
-	checkButton.disabled = not enabled
+# Cargar DLC disponibles para compra
+func _load_available_dlcs():
+	print("Store: Cargando DLC disponibles...")
+	
+	var iap_service = get_node("/root/IapService")
+	if iap_service:
+		available_dlcs = iap_service.get_available_packs_for_purchase()
+		print("Store: Encontrados ", available_dlcs.size(), " DLC disponibles")
+		_display_dlc_items()
+	else:
+		print("Store: Error - IapService no encontrado")
+
+# Mostrar items de DLC en la UI
+func _display_dlc_items():
+	if not dlc_container:
+		print("Store: Error - dlc_container no encontrado")
+		return
+	
+	# Limpiar items existentes
+	for child in dlc_container.get_children():
+		child.queue_free()
+	
+	if available_dlcs.is_empty():
+		label.text = "No hay DLC disponibles para compra\nTodos los packs ya están instalados"
+		return
+	
+	label.text = "DLC Disponibles (" + str(available_dlcs.size()) + ")"
+	
+	# Crear item para cada DLC
+	for dlc in available_dlcs:
+		var item = _create_dlc_item(dlc)
+		if item:
+			dlc_container.add_child(item)
+
+# Crear item individual de DLC
+func _create_dlc_item(dlc_data: Dictionary) -> Control:
+	# Por ahora crear un item simple hasta que tengamos la escena DLCItem
+	var item_container = HBoxContainer.new()
+	item_container.custom_minimum_size = Vector2(400, 80)
+	
+	# Panel de fondo
+	var panel = PanelContainer.new()
+	var vbox = VBoxContainer.new()
+	
+	# Nombre del pack
+	var name_label = Label.new()
+	name_label.text = dlc_data.get("name", "DLC Pack")
+	name_label.add_theme_font_size_override("font_size", 16)
+	
+	# Descripción
+	var desc_label = Label.new()
+	desc_label.text = dlc_data.get("description", "Pack de contenido adicional")
+	desc_label.add_theme_font_size_override("font_size", 12)
+	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	
+	# Precio y botón de compra
+	var bottom_hbox = HBoxContainer.new()
+	var price_label = Label.new()
+	price_label.text = dlc_data.get("price", "2.99€")
+	price_label.add_theme_font_size_override("font_size", 14)
+	
+	var buy_btn = Button.new()
+	buy_btn.text = "Comprar"
+	buy_btn.custom_minimum_size = Vector2(100, 30)
+	
+	# Conectar señal de compra
+	var pack_id = dlc_data.get("id", "")
+	if pack_id != "":
+		buy_btn.pressed.connect(func(): _purchase_dlc(pack_id))
+	
+	# Construir jerarquía
+	bottom_hbox.add_child(price_label)
+	bottom_hbox.add_child(buy_btn)
+	
+	vbox.add_child(name_label)
+	vbox.add_child(desc_label)
+	vbox.add_child(bottom_hbox)
+	
+	panel.add_child(vbox)
+	item_container.add_child(panel)
+	
+	return item_container
+
+# Iniciar compra de DLC
+func _purchase_dlc(pack_id: String):
+	print("Store: Iniciando compra de DLC: ", pack_id)
+	current_purchase_pack_id = pack_id
+	
+	var iap_service = get_node("/root/IapService")
+	if iap_service:
+		iap_service.purchase_and_install_pack(pack_id)
+	else:
+		show_alert("Error: Servicio de compras no disponible")
 
 
 func show_alert(text):
@@ -171,3 +274,88 @@ func exit_confirmed():
 	emit_signal("exit_canceled")
 
 	
+
+# ========== Manejo de señales del IapService ==========
+func _on_purchase_started(pack_id: String):
+	print("Store: Compra iniciada para: ", pack_id)
+	_show_progress_panel()
+	if progress_detail:
+		progress_detail.text = "Iniciando compra de: " + pack_id
+	if progress_bar:
+		progress_bar.value = 10.0
+
+func _on_purchase_completed(pack_id: String, success: bool):
+	print("Store: Compra completada para ", pack_id, " - Éxito: ", success)
+	if success:
+		if progress_detail:
+			progress_detail.text = "Compra exitosa: " + pack_id + "\nIniciando descarga..."
+		if progress_bar:
+			progress_bar.value = 30.0
+	else:
+		if progress_detail:
+			progress_detail.text = "Error en la compra de: " + pack_id
+		show_alert("Error en la compra de: " + pack_id)
+		_hide_progress_panel_delayed()
+
+func _on_download_started(pack_id: String):
+	print("Store: Descarga iniciada para: ", pack_id)
+	if progress_detail:
+		progress_detail.text = "Descargando: " + pack_id
+	if progress_bar:
+		progress_bar.value = 40.0
+
+func _on_download_progress(pack_id: String, progress: float):
+	print("Store: Progreso de descarga para ", pack_id, ": ", progress * 100, "%")
+	if progress_bar:
+		# Mapear progreso de descarga al rango 40-80%
+		var bar_progress = 40.0 + (progress * 40.0)
+		progress_bar.value = bar_progress
+	if progress_detail:
+		progress_detail.text = "Descargando: " + pack_id + "\n" + str(int(progress * 100)) + "% completado"
+
+func _on_download_completed(pack_id: String, success: bool):
+	print("Store: Descarga completada para ", pack_id, " - Éxito: ", success)
+	if success:
+		if progress_detail:
+			progress_detail.text = "Descarga completada: " + pack_id + "\nInstalando..."
+		if progress_bar:
+			progress_bar.value = 80.0
+	else:
+		if progress_detail:
+			progress_detail.text = "Error en la descarga de: " + pack_id
+		show_alert("Error en la descarga de: " + pack_id)
+		_hide_progress_panel_delayed()
+
+func _on_installation_completed(pack_id: String, success: bool):
+	print("Store: Instalación completada para ", pack_id, " - Éxito: ", success)
+	if success:
+		if progress_detail:
+			progress_detail.text = "¡Pack instalado exitosamente!\n" + pack_id
+		if progress_bar:
+			progress_bar.value = 100.0
+		show_alert("¡Pack " + pack_id + " instalado exitosamente!")
+		
+		# Recargar la lista de DLC disponibles
+		_reload_store_after_purchase()
+	else:
+		if progress_detail:
+			progress_detail.text = "Error en la instalación de: " + pack_id
+		show_alert("Error en la instalación de: " + pack_id)
+	
+	_hide_progress_panel_delayed()
+
+# Recargar tienda después de una compra exitosa
+func _reload_store_after_purchase():
+	await get_tree().create_timer(2.0).timeout  # Esperar un poco antes de recargar
+	print("Store: Recargando tienda después de compra...")
+	_load_available_dlcs()
+
+# ========== UI Progress helpers ==========
+func _show_progress_panel():
+	if progress_panel:
+		progress_panel.visible = true
+
+func _hide_progress_panel_delayed():
+	await get_tree().create_timer(2.0).timeout
+	if progress_panel:
+		progress_panel.visible = false

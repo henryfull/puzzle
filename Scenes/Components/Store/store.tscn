@@ -64,6 +64,40 @@ text = "Consume"
 layout_mode = 2
 text = "Check"
 
+[node name="DownloadPanel" type="PanelContainer" parent="CanvasLayer"]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -160.0
+offset_right = 500.0
+offset_bottom = -20.0
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/DownloadPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/DownloadPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="CanvasLayer/DownloadPanel/Margin/VBox"]
+layout_mode = 2
+text = "Descargando contenido..."
+
+[node name="Progress" type="ProgressBar" parent="CanvasLayer/DownloadPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Detail" type="Label" parent="CanvasLayer/DownloadPanel/Margin/VBox"]
+layout_mode = 2
+autowrap_mode = 2
+
 [node name="CloseButton" type="Button" parent="CanvasLayer"]
 custom_minimum_size = Vector2(50, 50)
 anchors_preset = 1

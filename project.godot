@@ -71,12 +71,17 @@ SettingsService="*res://Modules/core/SettingsService.gd"
 AudioService="*res://Modules/audio/AudioService.gd"
 TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
+IapService="*res://Modules/dlc/downloadService.gd"
 ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
 PuzzleStateManager="*res://Scripts/Autoload/PuzzleStateManager.gd"
 BackGestureHandler="*res://Scripts/Autoload/BackGestureHandler.gd"
 IAPService="*res://Modules/commerce/IAPService.gd"
 EntitlementsService="*res://Modules/commerce/EntitlementsService.gd"
 DLCService="*res://Modules/dlc/DLCService.gd"
+
+[commerce]
+
+sku_mapping_path="res://Modules/commerce/config/sku_mapping.json"
 
 [debug]
 
@@ -89,6 +94,10 @@ window/size/viewport_height=1280
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/handheld/orientation=5
+
+[dlc]
+
+base_url=""
 
 [editor]
 
@@ -130,11 +139,3 @@ renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
 anti_aliasing/quality/msaa_2d=3
 environment/defaults/default_clear_color=Color(0.301961, 0.301961, 0.301961, 1)
-
-[dlc]
-
-base_url=""
-
-[commerce]
-
-sku_mapping_path="res://Modules/commerce/config/sku_mapping.json"
