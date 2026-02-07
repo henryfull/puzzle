@@ -7,6 +7,7 @@ class_name PuzzleGame
 # Acceso al singleton ProgressManager
 @onready var progress_manager = get_node("/root/ProgressManager")
 var VictoryCheckerScene = preload("res://Scripts/gameplay/VictoryChecker.gd")
+var PuzzleDialogBlockerScene = preload("res://Scripts/gameplay/PuzzleDialogBlocker.gd")
 
 # Precargar los nuevos managers de puntuación
 var PuzzleScoreManagerScene = preload("res://Scripts/PuzzleScoreManager.gd")
@@ -78,6 +79,9 @@ var puzzle_completed = false
 var victory_checker: VictoryChecker
 var current_pack_id: String = ""
 var current_puzzle_id: String = ""
+var debug_runtime_tools_enabled: bool = false
+var dialog_blocker_enabled: bool = false
+var dialog_blocker_component: PuzzleDialogBlocker = null
 
 # === SONIDOS DISPONIBLES ===
 const SOUND_FILES = {
@@ -160,12 +164,17 @@ func _ready():
 	
 	_restore_ui_after_loading()
 	_show_centering_welcome_message()
+
+	_ensure_dialog_blocker_component()
 	
-	# Configurar sistemas de debug y bloqueo
-	_debug_score_system()
-	_test_score_system_delayed()
-	_setup_dialog_blocker()
-	_setup_global_dialog_interceptors()
+	# Herramientas de diagnóstico solo en builds de debug
+	debug_runtime_tools_enabled = OS.is_debug_build()
+	dialog_blocker_enabled = debug_runtime_tools_enabled
+	if debug_runtime_tools_enabled:
+		_debug_score_system()
+		_test_score_system_delayed()
+		_setup_dialog_blocker()
+		_setup_global_dialog_interceptors()
 
 # === FUNCIONES DE CONFIGURACIÓN INICIAL ===
 
@@ -589,6 +598,11 @@ func _setup_puzzle():
 # === FUNCIONES DE ENTRADA ===
 
 func _unhandled_input(event: InputEvent) -> void:
+	if puzzle_completed:
+		return
+	if game_state_manager and game_state_manager.is_paused:
+		return
+
 	# Configuración de escala para desktop
 	if event is InputEventKey and event.pressed and not is_mobile and not is_tablet:
 		if event.ctrl_pressed and event.shift_pressed and event.keycode == KEY_S:
@@ -635,6 +649,13 @@ func _show_scale_config_dialog():
 		show_info_message("Escala inválida. Usa valores entre 0.5 y 1.0", 3.0)
 	
 	dialog.queue_free()
+
+func _ensure_dialog_blocker_component() -> void:
+	if dialog_blocker_component and is_instance_valid(dialog_blocker_component):
+		return
+	dialog_blocker_component = PuzzleDialogBlockerScene.new()
+	add_child(dialog_blocker_component)
+	dialog_blocker_component.initialize(self)
 
 func _get_current_device_data() -> Dictionary:
 	"""Obtiene datos del dispositivo actual"""
@@ -1164,74 +1185,37 @@ func _test_score_system_delayed():
 # === FUNCIONES DE BLOQUEO DE DIÁLOGOS ===
 
 func _setup_dialog_blocker():
-	var dialog_timer = Timer.new()
-	dialog_timer.wait_time = 0.016
-	dialog_timer.timeout.connect(_block_all_dialogs)
-	dialog_timer.autostart = true
-	add_child(dialog_timer)
+	if not dialog_blocker_enabled:
+		if dialog_blocker_component:
+			dialog_blocker_component.set_enabled(false)
+		return
+	_ensure_dialog_blocker_component()
+	dialog_blocker_component.set_enabled(true)
 	print("PuzzleGame: Sistema de bloqueo de diálogos ULTRA-AGRESIVO activado")
 
 func _setup_global_dialog_interceptors():
+	if not dialog_blocker_enabled:
+		return
+	_ensure_dialog_blocker_component()
+	dialog_blocker_component.set_enabled(true)
 	print("PuzzleGame: Configurando interceptores globales de diálogos...")
-	
-	if has_node("/root"):
-		var root = get_node("/root")
-		if not root.child_entered_tree.is_connected(_on_global_child_added):
-			root.child_entered_tree.connect(_on_global_child_added)
-			print("PuzzleGame: Interceptor de nodos globales activado")
 
 func _on_global_child_added(node):
-	if node.is_in_group("exit_dialog") or node.name.contains("Dialog") or node.name.contains("Confirm"):
-		print("PuzzleGame: Interceptando creación de diálogo global: ", node.name)
-		node.visible = false
-		node.modulate.a = 0
-		call_deferred("_force_remove_node", node)
+	if dialog_blocker_component:
+		dialog_blocker_component.handle_global_child_added(node)
 
 func _force_remove_node(node):
-	if is_instance_valid(node):
-		print("PuzzleGame: Forzando eliminación de nodo: ", node.name)
+	if dialog_blocker_component:
+		dialog_blocker_component.force_remove_node(node)
+	elif is_instance_valid(node):
 		node.queue_free()
 
 func _process(_delta):
-	_block_all_dialogs()
+	pass
 
 func _block_all_dialogs():
-	var dialog_keywords = ["Dialog", "Confirm", "Exit", "Quit", "Alert", "Warning", "Popup", "Modal"]
-	
-	for child in get_children():
-		var should_remove = false
-		
-		for keyword in dialog_keywords:
-			if child.name.contains(keyword):
-				should_remove = true
-				break
-		
-		if child.is_in_group("exit_dialog") or child.is_in_group("dialog") or child.is_in_group("popup"):
-			should_remove = true
-		
-		if child is CanvasLayer:
-			for grandchild in child.get_children():
-				for keyword in dialog_keywords:
-					if grandchild.name.contains(keyword):
-						print("PuzzleGame: Eliminando diálogo en CanvasLayer: ", grandchild.name)
-						grandchild.visible = false
-						grandchild.modulate.a = 0
-						grandchild.queue_free()
-		
-		if should_remove:
-			print("PuzzleGame: Eliminando diálogo automáticamente: ", child.name)
-			child.visible = false
-			child.modulate.a = 0
-			child.queue_free()
-	
-	var current_scene = get_tree().current_scene
-	if current_scene and current_scene != self:
-		for child in current_scene.get_children():
-			if child.is_in_group("exit_dialog") or child.name.contains("Dialog") or child.name.contains("Confirm"):
-				print("PuzzleGame: Eliminando diálogo en escena global: ", child.name)
-				child.visible = false
-				child.modulate.a = 0
-				child.queue_free()
+	if dialog_blocker_component:
+		dialog_blocker_component.block_all_dialogs()
 
 func show_exit_dialog():
 	print("PuzzleGame: Intento de mostrar diálogo de salida durante puzzle - BLOQUEADO")

@@ -5,11 +5,13 @@ const SAVE_FILE = "user://progress.json"
 const ROUTE_DLC = "res://dlc"
 const PACKS_DATA_FILE = "res://PacksData/sample_packs.json"
 const DLC_PACKS_DIR = ROUTE_DLC + "/dlc_metadata.json"
+const LOCAL_DLC_BACKUP_PACKS_DIR = "res://dlc_backup_20250901_190152/packs"
+const FREE_TO_PLAY_MODE = true
 
 # Datos de progresión
 var progress_data = {
 	"packs": {},
-	"statistics": {}  # Nueva sección para estadísticas de partidas
+	"statistics": {} # Nueva sección para estadísticas de partidas
 }
 
 # Datos de packs originales (desde el archivo JSON)
@@ -145,8 +147,8 @@ func load_packs_data():
 			for i in range(packs_data.packs.size()):
 				var pack = packs_data.packs[i]
 				var dlc_tag = " (DLC)" if pack.get("is_dlc", false) else ""
-				print("ProgressManager: Pack ", i, " - ID: ", pack.id, ", Name: ", pack.name, 
-					", Unlocked: ", pack.get("unlocked", false), ", Puzzles: ", 
+				print("ProgressManager: Pack ", i, " - ID: ", pack.id, ", Name: ", pack.name,
+					", Unlocked: ", pack.get("unlocked", false), ", Puzzles: ",
 					pack.puzzles.size() if pack.has("puzzles") else "No puzzles", dlc_tag)
 		else:
 			print("ProgressManager: ERROR - No se pudo analizar el JSON de packs o no tiene la estructura esperada")
@@ -183,25 +185,111 @@ func initialize_progress_if_needed():
 	if packs_data.has("packs"):
 		for pack in packs_data.packs:
 			var pack_id = pack.id
-			
-			# Si el pack no existe en los datos de progresión, inicializarlo
-			if not progress_data.packs.has(pack_id):
-				progress_data.packs[pack_id] = {
-					"unlocked": pack.unlocked,
-					"purchased": pack.purchased,
-					"completed": pack.completed,
-					"puzzles": {}
-				}
-				
-				# Inicializar el primer puzzle como desbloqueado si el pack está desbloqueado
-				if pack.unlocked and pack.purchased and pack.puzzles.size() > 0:
-					progress_data.packs[pack_id].puzzles[pack.puzzles[0].id] = {
-						"completed": false,
-						"unlocked": true
-					}
-		
-		# Guardar los datos inicializados
-		save_progress_data()
+			if FREE_TO_PLAY_MODE:
+				pack["purchased"] = true
+			_ensure_pack_progress_entry(pack_id, pack)
+			_unlock_first_puzzle_if_needed(pack_id, pack)
+	
+	# Guardar para persistir migraciones/reconciliaciones
+	save_progress_data()
+
+func _ensure_pack_progress_entry(pack_id: String, pack_data: Dictionary) -> void:
+	if not progress_data.has("packs"):
+		progress_data["packs"] = {}
+	
+	if not progress_data.packs.has(pack_id):
+		progress_data.packs[pack_id] = {
+			"unlocked": pack_data.get("unlocked", false),
+			"purchased": pack_data.get("purchased", false),
+			"completed": pack_data.get("completed", false),
+			"puzzles": {}
+		}
+	
+	if not progress_data.packs[pack_id].has("puzzles"):
+		progress_data.packs[pack_id]["puzzles"] = {}
+	if not progress_data.packs[pack_id].has("completed"):
+		progress_data.packs[pack_id]["completed"] = false
+	if not progress_data.packs[pack_id].has("unlocked"):
+		progress_data.packs[pack_id]["unlocked"] = false
+	if not progress_data.packs[pack_id].has("purchased"):
+		progress_data.packs[pack_id]["purchased"] = false
+	
+	# Nunca degradar flags ya activados en progreso
+	progress_data.packs[pack_id]["unlocked"] = progress_data.packs[pack_id].get("unlocked", false) or pack_data.get("unlocked", false)
+	progress_data.packs[pack_id]["purchased"] = progress_data.packs[pack_id].get("purchased", false) or pack_data.get("purchased", false)
+	
+	if FREE_TO_PLAY_MODE:
+		progress_data.packs[pack_id]["purchased"] = true
+
+func _unlock_first_puzzle_if_needed(pack_id: String, pack_data: Dictionary) -> void:
+	if not progress_data.packs.has(pack_id):
+		return
+	if not pack_data.has("puzzles") or pack_data.puzzles.size() == 0:
+		return
+	if not progress_data.packs[pack_id].get("unlocked", false) or not progress_data.packs[pack_id].get("purchased", false):
+		return
+	
+	var first_puzzle_id = str(pack_data.puzzles[0].id)
+	if not progress_data.packs[pack_id].puzzles.has(first_puzzle_id):
+		progress_data.packs[pack_id].puzzles[first_puzzle_id] = {
+			"completed": false,
+			"unlocked": true
+		}
+	else:
+		progress_data.packs[pack_id].puzzles[first_puzzle_id]["unlocked"] = true
+		if not progress_data.packs[pack_id].puzzles[first_puzzle_id].has("completed"):
+			progress_data.packs[pack_id].puzzles[first_puzzle_id]["completed"] = false
+
+func _find_pack_index(pack_id: String) -> int:
+	if not packs_data.has("packs"):
+		return -1
+	for i in range(packs_data.packs.size()):
+		if packs_data.packs[i].id == pack_id:
+			return i
+	return -1
+
+func _extract_filename(path: String) -> String:
+	if path.is_empty():
+		return ""
+	return path.get_file()
+
+func _path_exists_any(path: String) -> bool:
+	if path.is_empty():
+		return false
+	if path.begins_with("user://"):
+		return FileAccess.file_exists(path)
+	return ResourceLoader.exists(path)
+
+func _resolve_pack_asset_path(pack_id: String, original_path: String, source_pack_file_path: String) -> String:
+	if original_path.is_empty():
+		return original_path
+	
+	if _path_exists_any(original_path):
+		return original_path
+	
+	var file_name = _extract_filename(original_path)
+	if file_name.is_empty():
+		return original_path
+	
+	var candidates: Array[String] = []
+	
+	# Relativo al origen del JSON cargado
+	var source_base_dir = source_pack_file_path.get_base_dir()
+	if not source_base_dir.is_empty():
+		candidates.append(source_base_dir + "/" + file_name)
+		if source_pack_file_path.begins_with("user://"):
+			candidates.append(source_base_dir + "/" + pack_id + "/" + file_name)
+	
+	# Rutas conocidas del proyecto
+	candidates.append("user://dlc/packs/" + pack_id + "/" + file_name)
+	candidates.append("res://dlc/packs/" + pack_id + "/" + file_name)
+	candidates.append(LOCAL_DLC_BACKUP_PACKS_DIR + "/" + pack_id + "/" + file_name)
+	
+	for candidate in candidates:
+		if _path_exists_any(candidate):
+			return candidate
+	
+	return original_path
 
 # Verifica si un pack está desbloqueado
 func is_pack_unlocked(pack_id: String) -> bool:
@@ -211,13 +299,20 @@ func is_pack_unlocked(pack_id: String) -> bool:
 
 # Verifica si un pack ha sido comprado
 func is_pack_purchased(pack_id: String) -> bool:
+	if FREE_TO_PLAY_MODE:
+		return true
 	if progress_data.packs.has(pack_id):
 		return progress_data.packs[pack_id].purchased
 	return false
 
 # Verifica si un pack está disponible para jugar (desbloqueado y comprado)
 func is_pack_available(pack_id: String) -> bool:
+	if FREE_TO_PLAY_MODE:
+		return is_pack_unlocked(pack_id)
 	return is_pack_unlocked(pack_id) and is_pack_purchased(pack_id)
+
+func is_free_to_play_mode() -> bool:
+	return FREE_TO_PLAY_MODE
 
 # Verifica si un puzzle está desbloqueado
 func is_puzzle_unlocked(pack_id: String, puzzle_id: String) -> bool:
@@ -266,17 +361,18 @@ func complete_puzzle(pack_id: String, puzzle_id: String):
 			var pack = packs_data.packs[i]
 			if pack.id == pack_id:
 				current_pack_index = i
-				for j in range(pack.puzzles.size()):
-					if pack.puzzles[j].id == puzzle_id:
-						current_puzzle_index = j
-						next_puzzle_index = j + 1
-						break
+				if pack.has("puzzles"):
+					for j in range(pack.puzzles.size()):
+						if pack.puzzles[j].id == puzzle_id:
+							current_puzzle_index = j
+							next_puzzle_index = j + 1
+							break
 				break
 	
 	print("ProgressManager: Índices - Pack: " + str(current_pack_index) + ", Puzzle actual: " + str(current_puzzle_index) + ", Siguiente puzzle: " + str(next_puzzle_index))
 	
 	# Si hay un siguiente puzzle, desbloquearlo
-	if current_pack_index >= 0 and next_puzzle_index >= 0 and next_puzzle_index < packs_data.packs[current_pack_index].puzzles.size():
+	if current_pack_index >= 0 and next_puzzle_index >= 0 and packs_data.packs[current_pack_index].has("puzzles") and next_puzzle_index < packs_data.packs[current_pack_index].puzzles.size():
 		var next_puzzle_id = packs_data.packs[current_pack_index].puzzles[next_puzzle_index].id
 		
 		# Asegurarse de que el siguiente puzzle esté desbloqueado
@@ -330,7 +426,7 @@ func unlock_next_pack(current_pack_id: String):
 			progress_data.packs[next_pack_id].unlocked = true
 		
 		# Si el pack está comprado, desbloquear su primer puzzle
-		if progress_data.packs[next_pack_id].purchased and packs_data.packs[next_pack_index].puzzles.size() > 0:
+		if progress_data.packs[next_pack_id].purchased and packs_data.packs[next_pack_index].has("puzzles") and packs_data.packs[next_pack_index].puzzles.size() > 0:
 			var first_puzzle_id = packs_data.packs[next_pack_index].puzzles[0].id
 			
 			if not progress_data.packs[next_pack_id].puzzles.has(first_puzzle_id):
@@ -370,25 +466,28 @@ func get_pack_with_progress(pack_id: String) -> Dictionary:
 					print("ProgressManager: - Completado: " + str(pack_data.completed))
 				
 				# Actualizar el estado de cada puzzle
-				for i in range(pack_data.puzzles.size()):
-					var puzzle_id = pack_data.puzzles[i].id
-					
-					# Establecer el estado de desbloqueo y completado
-					if progress_data.packs.has(pack_id) and progress_data.packs[pack_id].puzzles.has(puzzle_id):
-						pack_data.puzzles[i].completed = progress_data.packs[pack_id].puzzles[puzzle_id].completed
-						pack_data.puzzles[i].unlocked = progress_data.packs[pack_id].puzzles[puzzle_id].unlocked
+				if pack_data.has("puzzles"):
+					for i in range(pack_data.puzzles.size()):
+						var puzzle_id = pack_data.puzzles[i].id
 						
-						print("ProgressManager: Puzzle " + puzzle_id + " - Desbloqueado: " + 
-							str(pack_data.puzzles[i].unlocked) + ", Completado: " + 
-							str(pack_data.puzzles[i].completed))
-					else:
-						# Por defecto, solo el primer puzzle está desbloqueado si el pack está disponible
-						pack_data.puzzles[i].unlocked = (i == 0 and is_pack_available(pack_id))
-						pack_data.puzzles[i].completed = false
-						
-						print("ProgressManager: Puzzle " + puzzle_id + " no tiene datos de progresión, estado por defecto - Desbloqueado: " + 
-							str(pack_data.puzzles[i].unlocked) + ", Completado: " + 
-							str(pack_data.puzzles[i].completed))
+						# Establecer el estado de desbloqueo y completado
+						if progress_data.packs.has(pack_id) and progress_data.packs[pack_id].puzzles.has(puzzle_id):
+							pack_data.puzzles[i].completed = progress_data.packs[pack_id].puzzles[puzzle_id].completed
+							pack_data.puzzles[i].unlocked = progress_data.packs[pack_id].puzzles[puzzle_id].unlocked
+							
+							print("ProgressManager: Puzzle " + puzzle_id + " - Desbloqueado: " +
+								str(pack_data.puzzles[i].unlocked) + ", Completado: " +
+								str(pack_data.puzzles[i].completed))
+						else:
+							# Por defecto, solo el primer puzzle está desbloqueado si el pack está disponible
+							pack_data.puzzles[i].unlocked = (i == 0 and is_pack_available(pack_id))
+							pack_data.puzzles[i].completed = false
+							
+							print("ProgressManager: Puzzle " + puzzle_id + " no tiene datos de progresión, estado por defecto - Desbloqueado: " +
+								str(pack_data.puzzles[i].unlocked) + ", Completado: " +
+								str(pack_data.puzzles[i].completed))
+				else:
+					print("ProgressManager: El pack " + pack_id + " no tiene puzzles cargados (posible DLC no comprado)")
 				
 				break
 	
@@ -441,10 +540,11 @@ func get_next_unlocked_puzzle(pack_id: String, current_puzzle_id: String):
 	for pack in packs_data.packs:
 		if pack.id == pack_id:
 			current_pack = pack
-			for i in range(pack.puzzles.size()):
-				if pack.puzzles[i].id == current_puzzle_id:
-					current_puzzle_index = i
-					break
+			if pack.has("puzzles"):
+				for i in range(pack.puzzles.size()):
+					if pack.puzzles[i].id == current_puzzle_id:
+						current_puzzle_index = i
+						break
 			break
 	
 	if current_pack == null or current_puzzle_index == -1:
@@ -454,7 +554,7 @@ func get_next_unlocked_puzzle(pack_id: String, current_puzzle_id: String):
 	print("ProgressManager: Puzzle actual encontrado en índice: " + str(current_puzzle_index))
 	
 	# Verificar si hay un siguiente puzzle
-	if current_puzzle_index + 1 < current_pack.puzzles.size():
+	if current_pack.has("puzzles") and current_puzzle_index + 1 < current_pack.puzzles.size():
 		var next_puzzle = current_pack.puzzles[current_puzzle_index + 1]
 		print("ProgressManager: Siguiente puzzle encontrado: " + next_puzzle.id)
 		
@@ -655,13 +755,20 @@ func get_player_stats() -> Dictionary:
 		if progress_data.packs[pack_id].has("completed") and progress_data.packs[pack_id]["completed"]:
 			player_stats["packs_completed"] += 1
 	
-	return player_stats 
+	return player_stats
 
 # Funciones para gestionar packs DLC
 # ----------------------------------
 
 # Función para cargar solo DLCs comprados (verificar entitlements)
 func force_load_all_dlcs():
+	if FREE_TO_PLAY_MODE:
+		print("ProgressManager: Modo gratuito activo - cargando todo el contenido sin compras")
+		load_dlc_metadata()
+		var free_pack_ids = get_all_available_dlc_ids()
+		load_purchased_dlc_content(free_pack_ids)
+		return
+	
 	print("ProgressManager: Cargando DLCs verificando compras...")
 	
 	# Verificar entitlements con downloadService
@@ -671,22 +778,33 @@ func force_load_all_dlcs():
 	if download_service:
 		print("ProgressManager: Verificando entitlements con downloadService...")
 		var entitlements = await download_service.fetch_entitlements()
+		var has_remote_entitlements = typeof(entitlements) == TYPE_DICTIONARY and entitlements.has("entitlements")
 		
-		# Verificar si hay full unlock o packs específicos comprados
-		if download_service.has_full_unlock(entitlements):
-			print("ProgressManager: Usuario tiene full unlock, cargando todos los DLCs")
-			purchased_dlcs = get_all_available_dlc_ids()
+		if has_remote_entitlements:
+			# Verificar si hay full unlock o packs específicos comprados
+			if download_service.has_full_unlock(entitlements):
+				print("ProgressManager: Usuario tiene full unlock, cargando todos los DLCs")
+				purchased_dlcs = get_all_available_dlc_ids()
+			else:
+				# Extraer packs comprados específicos
+				for entitlement in entitlements.get("entitlements", []):
+					if entitlement.status == "active" and entitlement.product_key.begins_with("pack_"):
+						var pack_id = entitlement.product_key.replace("pack_", "")
+						if pack_id not in purchased_dlcs:
+							purchased_dlcs.append(pack_id)
+				print("ProgressManager: Packs DLC comprados por entitlement: ", purchased_dlcs)
 		else:
-			# Extraer packs comprados específicos
-			for entitlement in entitlements.get("entitlements", []):
-				if entitlement.status == "active" and entitlement.product_key.begins_with("pack_"):
-					var pack_id = entitlement.product_key.replace("pack_", "")
-					purchased_dlcs.append(pack_id)
-			print("ProgressManager: Packs DLC comprados: ", purchased_dlcs)
+			print("ProgressManager: Entitlements remotos vacíos/no disponibles, se usará fallback local")
 	else:
 		print("ProgressManager: DownloadService no encontrado, usando verificación local")
-		# Usar sistema de verificación local alternativo
-		purchased_dlcs = get_locally_verified_dlcs()
+	
+	# Fallback local SIEMPRE, incluso cuando falle red/entitlements
+	var local_dlcs = get_locally_verified_dlcs()
+	for local_pack_id in local_dlcs:
+		if local_pack_id not in purchased_dlcs:
+			purchased_dlcs.append(local_pack_id)
+	
+	print("ProgressManager: Packs DLC combinados (remote+local): ", purchased_dlcs)
 	
 	# Cargar metadatos de todos los DLCs disponibles
 	load_dlc_metadata()
@@ -755,10 +873,10 @@ func load_dlc_metadata():
 					# Añadir solo metadatos (sin puzzles)
 					var metadata_pack = new_pack.duplicate(true)
 					metadata_pack["is_dlc"] = true
-					metadata_pack["purchased"] = false
+					metadata_pack["purchased"] = FREE_TO_PLAY_MODE
 					metadata_pack["unlocked"] = false
 					if metadata_pack.has("puzzles"):
-						metadata_pack.erase("puzzles")  # No cargar puzzles hasta comprar
+						metadata_pack.erase("puzzles") # No cargar puzzles hasta comprar
 					
 					packs_data.packs.append(metadata_pack)
 					print("ProgressManager: Añadido metadata de DLC: ", new_pack.id)
@@ -771,20 +889,38 @@ func load_purchased_dlc_content(purchased_pack_ids: Array):
 		# Marcar como comprado en los datos
 		mark_pack_as_purchased(pack_id)
 		
-		# Cargar puzzles del pack
-		load_dlc_pack_puzzles(pack_id)
+		# Cargar puzzles solo cuando el pack sea DLC o no tenga contenido todavía.
+		# Evita sobreescribir packs base que ya traen puzzles completos.
+		var pack_index = _find_pack_index(pack_id)
+		if pack_index >= 0:
+			var pack_data = packs_data.packs[pack_index]
+			var is_dlc_pack = pack_data.get("is_dlc", false)
+			var has_embedded_puzzles = pack_data.has("puzzles") and pack_data.puzzles.size() > 0
+			
+			if is_dlc_pack or not has_embedded_puzzles:
+				load_dlc_pack_puzzles(pack_id)
+		else:
+			load_dlc_pack_puzzles(pack_id)
 
 # Marcar un pack como comprado
 func mark_pack_as_purchased(pack_id: String):
-	for i in range(packs_data.packs.size()):
-		if packs_data.packs[i].id == pack_id:
-			packs_data.packs[i]["purchased"] = true
-			packs_data.packs[i]["unlocked"] = true
-			print("ProgressManager: Pack marcado como comprado: ", pack_id)
-			
-			# Inicializar progresión del pack
-			initialize_dlc_pack_progress(pack_id)
-			break
+	var pack_index = _find_pack_index(pack_id)
+	if pack_index < 0:
+		print("ProgressManager: WARNING - No se encontró el pack al marcar compra: ", pack_id)
+		return
+	
+	packs_data.packs[pack_index]["purchased"] = true
+	if not FREE_TO_PLAY_MODE:
+		packs_data.packs[pack_index]["unlocked"] = true
+	print("ProgressManager: Pack marcado como comprado: ", pack_id)
+	
+	# Reconciliar progresión incluso si el pack ya existía
+	_ensure_pack_progress_entry(pack_id, packs_data.packs[pack_index])
+	progress_data.packs[pack_id]["purchased"] = true
+	if not FREE_TO_PLAY_MODE:
+		progress_data.packs[pack_id]["unlocked"] = true
+	_unlock_first_puzzle_if_needed(pack_id, packs_data.packs[pack_index])
+	save_progress_data()
 
 # Función para cargar los puzzles de un pack DLC específico
 func load_dlc_pack_puzzles(pack_id: String):
@@ -796,6 +932,11 @@ func load_dlc_pack_puzzles(pack_id: String):
 	# 2) Si no existe en user://, usar el pack embebido en res://
 	if pack_file == null:
 		pack_file_path = "res://dlc/packs/" + pack_id + ".json"
+		pack_file = FileAccess.open(pack_file_path, FileAccess.READ)
+	
+	# 3) Si tampoco existe, intentar desde backup local incluido en el proyecto
+	if pack_file == null:
+		pack_file_path = LOCAL_DLC_BACKUP_PACKS_DIR + "/" + pack_id + ".json"
 		pack_file = FileAccess.open(pack_file_path, FileAccess.READ)
 	
 	if pack_file:
@@ -820,11 +961,18 @@ func load_dlc_pack_puzzles(pack_id: String):
 							puzzles = p.puzzles
 							pack_meta = p
 						break
-
+		
 		if puzzles.size() > 0:
+			if pack_meta.has("image_path"):
+				pack_meta["image_path"] = _resolve_pack_asset_path(pack_id, str(pack_meta["image_path"]), pack_file_path)
+			
+			for j in range(puzzles.size()):
+				if puzzles[j].has("image"):
+					puzzles[j]["image"] = _resolve_pack_asset_path(pack_id, str(puzzles[j]["image"]), pack_file_path)
+			
 			# Encontrar el pack en packs_data y actualizar sus puzzles
 			for i in range(packs_data.packs.size()):
-				if packs_data.packs[i].id == pack_id:				
+				if packs_data.packs[i].id == pack_id:
 					packs_data.packs[i].puzzles = puzzles
 					# Opcional: actualizar algunos metadatos si están presentes
 					for k in ["name", "description", "image_path", "unlocked", "purchased", "completed", "difficulty"]:
@@ -836,43 +984,29 @@ func load_dlc_pack_puzzles(pack_id: String):
 					initialize_dlc_pack_progress(pack_id)
 					break
 		else:
-			print("ProgressManager: ERROR - No se encontraron puzzles en el pack: ", pack_id, 
+			print("ProgressManager: ERROR - No se encontraron puzzles en el pack: ", pack_id,
 				". Revisa el formato del JSON (se espera 'puzzles' o 'packs[0].puzzles')")
 	else:
 		print("ProgressManager: ERROR - No se pudo abrir el archivo del pack: ", pack_file_path)
 
 # Inicializa la progresión de un pack DLC específico
 func initialize_dlc_pack_progress(pack_id: String) -> void:
-	if not progress_data.packs.has(pack_id):
-		print("ProgressManager: Inicializando progresión para pack DLC: ", pack_id)
-		
-		# Buscar datos del pack en packs_data
-		var pack_data = null
-		if packs_data.has("packs"):
-			for pack in packs_data.packs:
-				if pack.id == pack_id:
-					pack_data = pack
-					break
-		
-		if pack_data:
-			progress_data.packs[pack_id] = {
-				"unlocked": pack_data.get("unlocked", true),  # Por defecto desbloqueado
-				"purchased": pack_data.get("purchased", false), # Por defecto no comprado
-				"completed": false,
-				"puzzles": {}
-			}
-			
-			# Si el pack está desbloqueado y comprado, desbloquear el primer puzzle
-			if progress_data.packs[pack_id].unlocked and progress_data.packs[pack_id].purchased and pack_data.puzzles.size() > 0:
-				progress_data.packs[pack_id].puzzles[pack_data.puzzles[0].id] = {
-					"completed": false,
-					"unlocked": true
-				}
-				
-			save_progress_data()
-			print("ProgressManager: Progresión inicializada para pack DLC: ", pack_id)
-		else:
-			print("ProgressManager: No se encontraron datos del pack DLC: ", pack_id)
+	# Buscar datos del pack en packs_data
+	var pack_data = null
+	if packs_data.has("packs"):
+		for pack in packs_data.packs:
+			if pack.id == pack_id:
+				pack_data = pack
+				break
+	
+	if pack_data == null:
+		print("ProgressManager: No se encontraron datos del pack DLC: ", pack_id)
+		return
+	
+	_ensure_pack_progress_entry(pack_id, pack_data)
+	_unlock_first_puzzle_if_needed(pack_id, pack_data)
+	save_progress_data()
+	print("ProgressManager: Progresión reconciliada para pack DLC: ", pack_id)
 
 
 # Comprueba si tenemos acceso a algún pack DLC específico
@@ -901,4 +1035,4 @@ func refresh_dlc_packs() -> void:
 	# Forzar recarga de todos los DLCs
 	force_load_all_dlcs()
 	
-	print("ProgressManager: Datos de packs DLC actualizados") 
+	print("ProgressManager: Datos de packs DLC actualizados")

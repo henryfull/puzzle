@@ -110,6 +110,7 @@ func on_flip_button_pressed():
 		return
 	
 	puzzle_game.game_state_manager.is_flip = true
+	_cancel_flip_timers()
 	puzzle_game.play_flip_sound()
 	# Variable para rastrear si encontramos una pieza seleccionada
 	var target_piece = null
@@ -176,9 +177,10 @@ func on_flip_button_pressed():
 		
 		# Crear timer para el modo flip
 		var flip_timer = Timer.new()
+		flip_timer.name = "FlipModeTimer"
 		flip_timer.wait_time = 15.0  # Mantener el modo flip por 15 segundos (más tiempo)
 		flip_timer.one_shot = true
-		flip_timer.connect("timeout", Callable(self, "_on_flip_timer_timeout"))
+		flip_timer.connect("timeout", Callable(self, "_on_flip_timer_timeout").bind(flip_timer))
 		puzzle_game.add_child(flip_timer)
 		flip_timer.start()
 		
@@ -244,22 +246,22 @@ func _revert_flip_to_normal():
 	).set_delay(0.5)  # Delay fijo de medio segundo para asegurar que termine la animación
 
 # Función llamada cuando expira el timer de flip
-func _on_flip_timer_timeout():
+func _on_flip_timer_timeout(flip_timer: Timer = null):
 	print("PuzzleUIManager: Desactivando modo flip por timeout")
 	puzzle_game.game_state_manager.is_flip = false
 	puzzle_game.game_state_manager.debug_flip_state()
+	if flip_timer and is_instance_valid(flip_timer):
+		flip_timer.queue_free()
 	# show_success_message("Modo Flip Desactivado", 1.5)
 
 # Función auxiliar para cancelar todos los timers de flip activos
 func _cancel_flip_timers():
 	print("PuzzleUIManager: Cancelando timers de flip activos")
-	var flip_timers = puzzle_game.get_children().filter(func(child): return child is Timer and child.has_signal("timeout"))
-	for timer in flip_timers:
-		if timer.is_connected("timeout", Callable(self, "_on_flip_timer_timeout")):
-			timer.stop()
-			timer.queue_free()
+	for child in puzzle_game.get_children():
+		if child is Timer and child.name == "FlipModeTimer":
+			child.stop()
+			child.queue_free()
 			print("PuzzleUIManager: Timer de flip cancelado")
-			break
 
 # Función para desactivar manualmente el modo flip
 func deactivate_flip_mode():

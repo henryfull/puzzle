@@ -105,7 +105,8 @@ func load_packs():
 		# Añadir el componente al contenedor
 		packs_container.add_child(pack_component)
 		print("Componente añadido para pack: ", pack.name)
-	if (GLOBAL.dlc_packs.size() == 0):
+	
+	if (GLOBAL.dlc_packs.size() == 0 and not progress_manager.is_free_to_play_mode()):
 		addNoPack()
 	# Desplazar automáticamente al último pack disponible por desbloquear
 	await get_tree().process_frame

@@ -45,7 +45,7 @@ Descarga Puzzle ahora y acompaña a tus peques en su aprendizaje mientras se div
 config/version="0.76.47"
 run/main_scene="uid://dh7t7utu076oi"
 config/auto_accept_quit=false
-config/features=PackedStringArray("4.4", "GL Compatibility")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 run/max_fps=60
 run/low_processor_mode=true
 boot_splash/bg_color=Color(0.72549, 0.854902, 1, 1)

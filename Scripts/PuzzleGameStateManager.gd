@@ -35,6 +35,8 @@ var start_time: float = 0.0  # Tiempo de inicio en segundos
 var elapsed_time: float = 0.0  # Tiempo transcurrido en segundos
 var is_timer_active: bool = false  # Para controlar si el temporizador está activo
 var total_moves: int = 0
+const MIN_MOVE_SAVE_INTERVAL_MS: int = 450
+var _last_move_save_ms: int = 0
 
 func initialize(game: PuzzleGame):
 	puzzle_game = game
@@ -49,9 +51,22 @@ func initialize(game: PuzzleGame):
 	# El guardado ocurre cuando el jugador mueve piezas o hace flip
 	print("PuzzleGameStateManager: Sistema configurado para guardado por acciones únicamente")
 
+func _cleanup_countdown_timer() -> void:
+	if timer_countdown and is_instance_valid(timer_countdown):
+		timer_countdown.stop()
+		timer_countdown.queue_free()
+	timer_countdown = null
+
 func setup_game_mode():
 	# Iniciar el temporizador para medir el tiempo de juego
 	start_game_timer()
+	_cleanup_countdown_timer()
+
+	# Reiniciar flags de modo para evitar estados arrastrados
+	relax_mode = false
+	normal_mode = false
+	timer_mode = false
+	challenge_mode = false
 
 	# Debug: Mostrar información del modo de juego
 	print("PuzzleGameStateManager: Configurando modo de juego - GLOBAL.gamemode: ", GLOBAL.gamemode)
@@ -131,6 +146,7 @@ func setup_game_mode():
 				puzzle_game.streak_label.visible = true
 			# Crear un timer para cuenta atrás
 			timer_countdown = Timer.new()
+			timer_countdown.name = "CountdownTimer"
 			timer_countdown.wait_time = 1.0
 			timer_countdown.one_shot = false
 			timer_countdown.connect("timeout", Callable(self, "_on_timer_countdown"))
@@ -175,6 +191,12 @@ func start_game_timer():
 	start_time = Time.get_unix_time_from_system()
 	is_timer_active = true
 	accumulated_time = 0.0
+
+	# Evitar duplicar timers al reconfigurar el modo de juego
+	if puzzle_game.has_node("GameTimer"):
+		var existing_timer = puzzle_game.get_node("GameTimer")
+		existing_timer.stop()
+		existing_timer.queue_free()
 	
 	# Crear y añadir un timer para actualizar el tiempo transcurrido
 	var timer = Timer.new()
@@ -211,6 +233,7 @@ func stop_game_timer():
 	if puzzle_game.has_node("GameTimer"):
 		var timer = puzzle_game.get_node("GameTimer")
 		timer.stop()
+		timer.queue_free()
 	
 	puzzle_game.panelPaused.visible = true
 	print("PuzzleGameStateManager: Temporizador de juego detenido. Tiempo total: ", elapsed_time, " segundos")
@@ -295,23 +318,27 @@ func _on_options_closed():
 
 # --- Timer de cuenta atrás para modo contrarreloj ---
 func _on_timer_countdown():
-	if timer_mode:
-		time_left -= 1.0
-		# Actualizar el label del reloj
-		if puzzle_game.has_node("UILayer/TimerLabel"):
-			var timer_label = puzzle_game.get_node("UILayer/TimerLabel")
-			var minutes = int(time_left) / 60
-			var seconds = int(time_left) % 60
-			timer_label.text = "%02d:%02d" % [minutes, seconds]
-		if time_left <= 0:
-			timer_countdown.stop()
-			defeat_reason = "Tiempo agotado"
-			_show_defeat_message(defeat_reason)
+	if not timer_mode or is_paused or puzzle_game.puzzle_completed or not is_timer_active:
+		return
+
+	time_left = max(time_left - 1.0, 0.0)
+	# Actualizar el label del reloj
+	if puzzle_game.has_node("UILayer/TimerLabel"):
+		var timer_label = puzzle_game.get_node("UILayer/TimerLabel")
+		var minutes = int(time_left) / 60
+		var seconds = int(time_left) % 60
+		timer_label.text = "%02d:%02d" % [minutes, seconds]
+
+	if time_left <= 0:
+		_cleanup_countdown_timer()
+		defeat_reason = "Tiempo agotado"
+		_show_defeat_message(defeat_reason)
 
 # --- Lógica de movimientos y flips ---
 func increment_move_count():
 	total_moves += 1
-	print("PuzzleGameStateManager: Incrementando movimientos. Total: ", total_moves, " - Modo flip activo: ", is_flip)
+	if OS.is_debug_build():
+		print("PuzzleGameStateManager: Incrementando movimientos. Total: ", total_moves, " - Modo flip activo: ", is_flip)
 	
 	# Notificar al score manager sobre movimiento inválido si es aplicable
 	# Esto se maneja desde el piece manager cuando detecta movimientos inválidos
@@ -325,7 +352,8 @@ func increment_move_count():
 		var remaining_moves = max_moves - total_moves
 		if puzzle_game.maxMovesLabel.visible:
 			puzzle_game.maxMovesLabel.text = str(remaining_moves)
-		print("PuzzleGameStateManager: Movimientos restantes en desafío: ", remaining_moves)
+		if OS.is_debug_build():
+			print("PuzzleGameStateManager: Movimientos restantes en desafío: ", remaining_moves)
 		
 		# Verificar derrota por movimientos
 		if total_moves >= max_moves:
@@ -335,10 +363,12 @@ func increment_move_count():
 	
 	# Si estamos en modo flip, incrementar contador de movimientos en flip
 	if is_flip:
-		print("PuzzleGameStateManager: ✅ Movimiento realizado en modo flip - Incrementando flip_move_count")
+		if OS.is_debug_build():
+			print("PuzzleGameStateManager: ✅ Movimiento realizado en modo flip - Incrementando flip_move_count")
 		_increment_flip_move_count()
 	else:
-		print("PuzzleGameStateManager: ⚪ Movimiento realizado en modo normal")
+		if OS.is_debug_build():
+			print("PuzzleGameStateManager: ⚪ Movimiento realizado en modo normal")
 	
 	# NUEVO: Guardar estado por acción del jugador (mover pieza)
 	_save_state_on_player_action("movimiento de pieza")
@@ -348,14 +378,16 @@ func increment_move_count():
 
 func _increment_flip_count():
 	flip_count += 1
-	print("PuzzleGameStateManager: 🔄 Incrementando flips. Total: ", flip_count, " - Activando modo flip")
+	if OS.is_debug_build():
+		print("PuzzleGameStateManager: 🔄 Incrementando flips. Total: ", flip_count, " - Activando modo flip")
 	
 	# Actualizar UI de flips en modos que lo requieren
 	if (timer_mode or challenge_mode) and max_flips > 0:
 		var remaining_flips = max_flips - flip_count
 		if puzzle_game.maxFlipsLabel:
 			puzzle_game.maxFlipsLabel.text = str(remaining_flips)
-		print("PuzzleGameStateManager: Flips restantes: ", remaining_flips)
+		if OS.is_debug_build():
+			print("PuzzleGameStateManager: Flips restantes: ", remaining_flips)
 		
 		# Nota: Ya no se termina el juego al alcanzar el límite de flips
 		# El jugador simplemente no puede incrementar más el contador
@@ -365,14 +397,16 @@ func _increment_flip_count():
 
 func _increment_flip_move_count():
 	flip_move_count += 1
-	print("PuzzleGameStateManager: 🔄 Incrementando movimientos en flip. Total: ", flip_move_count, " (is_flip=", is_flip, ")")
+	if OS.is_debug_build():
+		print("PuzzleGameStateManager: 🔄 Incrementando movimientos en flip. Total: ", flip_move_count, " (is_flip=", is_flip, ")")
 	
 	# Actualizar UI de movimientos en flip
 	if (timer_mode or challenge_mode) and max_flip_moves > 0:
 		var remaining_flip_moves = max_flip_moves - flip_move_count
 		if puzzle_game.maxMovesFlipLabel:
 			puzzle_game.maxMovesFlipLabel.text = str(remaining_flip_moves)
-		print("PuzzleGameStateManager: Movimientos en flip restantes: ", remaining_flip_moves)
+		if OS.is_debug_build():
+			print("PuzzleGameStateManager: Movimientos en flip restantes: ", remaining_flip_moves)
 		
 		# Verificar derrota por límite de movimientos en flip
 		if flip_move_count >= max_flip_moves:
@@ -381,6 +415,8 @@ func _increment_flip_move_count():
 
 # Función para verificar y debuggear el estado del flip
 func debug_flip_state():
+	if not OS.is_debug_build():
+		return
 	print("PuzzleGameStateManager: [DEBUG] Estado actual:")
 	print("  - is_flip: ", is_flip)
 	print("  - flip_count: ", flip_count)
@@ -407,8 +443,7 @@ func _show_defeat_message(reason: String):
 
 	# Pausar el juego y detener timers (por si acaso)
 	is_paused = true
-	if timer_countdown:
-		timer_countdown.stop()
+	_cleanup_countdown_timer()
 	stop_game_timer()
 
 # Funciones para VictoryChecker
@@ -444,8 +479,7 @@ func restart_puzzle():
 	is_flip = false
 	
 	# Resetear timers si existen
-	if timer_countdown:
-		timer_countdown.stop()
+	_cleanup_countdown_timer()
 	stop_game_timer()
 		
 	# Esperar un momento antes de reiniciar el puzzle
@@ -501,6 +535,15 @@ func _update_puzzle_state():
 
 # Nueva función para guardar estado por acción del jugador
 func _save_state_on_player_action(action_type: String):
+	if puzzle_game and puzzle_game.puzzle_completed:
+		return
+
+	if action_type == "movimiento de pieza":
+		var now_ms: int = Time.get_ticks_msec()
+		if now_ms - _last_move_save_ms < MIN_MOVE_SAVE_INTERVAL_MS:
+			return
+		_last_move_save_ms = now_ms
+
 	var puzzle_state_manager = get_node("/root/PuzzleStateManager")
 	if puzzle_state_manager:
 		# Actualizar contadores en el estado antes de guardar

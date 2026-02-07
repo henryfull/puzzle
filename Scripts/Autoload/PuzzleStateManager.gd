@@ -289,9 +289,6 @@ func update_pieces_positions_from_manager(piece_manager):
 				print("PuzzleStateManager: ⚠️ Datos inválidos para pieza ", piece_obj.order_number, ", omitiendo...")
 	
 	print("PuzzleStateManager: Actualizadas posiciones de ", pieces_count, " piezas con información de celda verificada")
-	
-	# Forzar guardado inmediato después de actualizar posiciones
-	save_puzzle_state()
 
 # 🔧 NUEVA FUNCIÓN: Validar datos de pieza antes de guardar
 func _validate_piece_data(piece_data: Dictionary, piece_obj) -> bool:
@@ -336,9 +333,6 @@ func update_pieces_positions(pieces_container: Node2D):
 			pieces_count += 1
 	
 	print("PuzzleStateManager: Actualizadas posiciones de ", pieces_count, " piezas (método legacy)")
-	
-	# Forzar guardado inmediato después de actualizar posiciones
-	save_puzzle_state()
 
 # Actualizar datos de grupos
 func update_groups_data(groups: Array):

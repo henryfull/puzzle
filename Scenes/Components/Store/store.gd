@@ -2,7 +2,7 @@ extends Control
 
 signal exit_canceled
 
-@export var alert_dialog : AcceptDialog
+@export var alert_dialog: AcceptDialog
 @export var label: Label
 
 # UI para mostrar DLC disponibles
@@ -15,11 +15,13 @@ signal exit_canceled
 @onready var progress_detail: Label = $CanvasLayer/DownloadPanel/Margin/VBox/Detail
 
 # DLC Item scene for displaying individual DLC packs
-var dlc_item_scene = preload("res://Scenes/Components/Store/DLCItem.tscn")
+# var dlc_item_scene = preload("res://Scenes/Components/Store/DLCItem.tscn")
 
 var available_dlcs = []
 var current_purchase_pack_id = ""
-
+var product_sku = ""
+var last_sku = ""
+var test_item_purchase_token = null
 func _process_successful_purchase(_sku: String, _purchase_token: String) -> void:
 	# Obsoleto: EntitlementsService gestiona el contenido adquirido.
 	pass
@@ -159,6 +161,17 @@ func _on_connected():
 	_set_ui_enabled(true)
 
 
+func _set_ui_enabled(enabled: bool) -> void:
+	if dlc_container:
+		dlc_container.mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
+	
+	# Habilitar/deshabilitar botones de compra si existen
+	for child in dlc_container.get_children():
+		var buy_btn = child.find_child("Button", true, false)
+		if buy_btn and buy_btn is Button:
+			buy_btn.disabled = !enabled
+
+
 func _on_query_purchases_response(_query_result):
 	# Gestionado por IAPService; dejamos el stub por compatibilidad
 	pass
@@ -195,7 +208,6 @@ func _on_sku_details_query_completed(sku_details):
 
 	# Mensaje flotante para confirmar visualmente.
 	show_alert("SKU cargado: %s" % sku_id)
-
 
 
 func _on_purchases_updated(purchases):
@@ -274,7 +286,6 @@ func exit_confirmed():
 	emit_signal("exit_canceled")
 
 	
-
 # ========== Manejo de señales del IapService ==========
 func _on_purchase_started(pack_id: String):
 	print("Store: Compra iniciada para: ", pack_id)
@@ -346,7 +357,7 @@ func _on_installation_completed(pack_id: String, success: bool):
 
 # Recargar tienda después de una compra exitosa
 func _reload_store_after_purchase():
-	await get_tree().create_timer(2.0).timeout  # Esperar un poco antes de recargar
+	await get_tree().create_timer(2.0).timeout # Esperar un poco antes de recargar
 	print("Store: Recargando tienda después de compra...")
 	_load_available_dlcs()
 

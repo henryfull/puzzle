@@ -37,19 +37,19 @@ region = Rect2(1854, 664, 116, 112)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xim88"]
 bg_color = Color(0.517647, 0.6, 0.94902, 0.784314)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xim88"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_koqhg"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmrfp"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_loo7a"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_if7li"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fh7cp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rrcx7"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fh7cp"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_if7li"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_loo7a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmrfp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_koqhg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xim88"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8e205"]
 atlas = ExtResource("4_ghw46")
@@ -281,13 +281,13 @@ offset_top = 164.0
 offset_right = 300.0
 offset_bottom = 214.0
 grow_horizontal = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_xim88")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_koqhg")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_cmrfp")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_loo7a")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_if7li")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rrcx7")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_fh7cp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_rrcx7")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_if7li")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_loo7a")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_cmrfp")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_koqhg")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xim88")
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Button"]
 layout_mode = 1

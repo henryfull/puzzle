@@ -22,6 +22,14 @@ var pan_sensitivity: float = 1.0  # Sensibilidad del desplazamiento
 # NUEVO: Configuración para prevenir conflictos con gestos del sistema
 var edge_margin: float = 40.0  # Margen en píxeles desde los bordes para ignorar toques
 
+# Evita recalcular/resolver superposiciones de forma agresiva en cada input
+const OVERLAP_RESOLUTION_COOLDOWN_MS: int = 250
+var _last_overlap_resolution_ms: int = 0
+const GROUP_SYNC_COOLDOWN_MS: int = 800
+const GROUP_SYNCHRONIZER_SCRIPT = preload("res://Scripts/Autoload/GroupSynchronizer.gd")
+var _last_group_sync_check_ms: int = 0
+var _group_synchronizer: Node = null
+
 func initialize(game: PuzzleGame):
 	puzzle_game = game
 	piece_manager = game.piece_manager
@@ -31,6 +39,17 @@ func initialize(game: PuzzleGame):
 	board_offset = Vector2.ZERO
 	
 	load_user_preferences()
+
+	# Reutilizar una sola instancia para evitar crear nodos por cada movimiento
+	if _group_synchronizer and is_instance_valid(_group_synchronizer):
+		_group_synchronizer.free()
+	_group_synchronizer = GROUP_SYNCHRONIZER_SCRIPT.new()
+	_group_synchronizer.initialize(puzzle_game, piece_manager)
+
+func _exit_tree() -> void:
+	if _group_synchronizer and is_instance_valid(_group_synchronizer):
+		_group_synchronizer.free()
+	_group_synchronizer = null
 
 
 
@@ -58,11 +77,11 @@ func _handle_keyboard_input(event: InputEventKey):
 		reset_board_to_center()
 	
 	# 🎯 DEBUG: Teclas para ajustar el retraso del centrado automático
-	elif event.keycode == KEY_PLUS or event.keycode == KEY_KP_ADD and OS.is_debug_build():
+	elif (event.keycode == KEY_PLUS or event.keycode == KEY_KP_ADD) and OS.is_debug_build():
 		var new_delay = piece_manager.get_auto_center_delay() + 0.2
 		piece_manager.set_auto_center_delay(new_delay)
 	
-	elif event.keycode == KEY_MINUS or event.keycode == KEY_KP_SUBTRACT and OS.is_debug_build():
+	elif (event.keycode == KEY_MINUS or event.keycode == KEY_KP_SUBTRACT) and OS.is_debug_build():
 		var new_delay = max(0.0, piece_manager.get_auto_center_delay() - 0.2)
 		piece_manager.set_auto_center_delay(new_delay)
 	
@@ -98,6 +117,23 @@ func handle_input(event: InputEvent) -> void:
 		_handle_mouse_button(event)
 	elif event is InputEventMouseMotion:
 		_handle_mouse_motion(event)
+
+func _resolve_overlaps_if_needed(context: String) -> void:
+	if not piece_manager:
+		return
+
+	# Primera barrera: si no hay superposiciones, no hacemos nada.
+	if piece_manager.verify_no_overlaps():
+		return
+
+	# Segunda barrera: evitar corregir de forma repetitiva durante ráfagas de eventos.
+	var now_ms: int = Time.get_ticks_msec()
+	if now_ms - _last_overlap_resolution_ms < OVERLAP_RESOLUTION_COOLDOWN_MS:
+		return
+
+	_last_overlap_resolution_ms = now_ms
+	print("PuzzleInputHandler: Resolviendo superposiciones detectadas (", context, ")")
+	piece_manager.resolve_all_overlaps()
 
 # Función mejorada para verificar si un toque está en una zona segura
 func is_touch_in_safe_zone(position: Vector2) -> bool:
@@ -324,7 +360,7 @@ func process_piece_click(event: InputEvent) -> void:
 		if clicked_piece:
 			# 🔧 CRÍTICO: Resolver cualquier superposición ANTES de iniciar el arrastre
 			print("PuzzleInputHandler: Verificando superposiciones antes de arrastrar...")
-			piece_manager.resolve_all_overlaps()
+			_resolve_overlaps_if_needed("before_drag_start")
 			
 			# Obtener el líder del grupo
 			var group_leader = piece_manager.get_group_leader(clicked_piece)
@@ -367,7 +403,7 @@ func _find_best_piece_at_position(mouse_pos: Vector2):
 	# 🔧 CRÍTICO: Verificar y resolver superposiciones ANTES de la detección
 	if not piece_manager.verify_no_overlaps():
 		print("PuzzleInputHandler: Resolviendo superposiciones automáticamente antes de detectar clic...")
-		piece_manager.resolve_all_overlaps()
+		_resolve_overlaps_if_needed("before_piece_pick")
 		# Actualizar la lista de piezas después de resolver superposiciones
 		pieces = piece_manager.get_pieces()
 	
@@ -436,54 +472,14 @@ func _find_best_piece_at_position(mouse_pos: Vector2):
 # 🔧 NUEVA FUNCIÓN PARA VERIFICAR Y RESOLVER CONFLICTOS VISUALES
 func _verify_and_fix_visual_conflicts(candidates: Array):
 	"""
-	Verifica si hay piezas superpuestas visualmente y las separa
+	Verifica posibles conflictos visuales de selección.
+	No reposiciona piezas para no introducir efectos secundarios durante el input.
 	"""
 	if candidates.size() <= 1:
 		return
 	
-	print("PuzzleInputHandler: Detectados ", candidates.size(), " candidatos con posible superposición visual")
-	
-	# Obtener posiciones actuales de las piezas candidatas
-	var positions = {}
-	for candidate in candidates:
-		var piece = candidate.piece
-		positions[piece.order_number] = piece.node.global_position
-	
-	# Verificar si hay superposiciones visuales (posiciones muy cercanas)
-	var visual_conflicts = []
-	for i in range(candidates.size()):
-		for j in range(i + 1, candidates.size()):
-			var piece_a = candidates[i].piece
-			var piece_b = candidates[j].piece
-			var distance = piece_a.node.global_position.distance_to(piece_b.node.global_position)
-			
-			# Si están muy cerca (menos de 30 píxeles), hay superposición visual
-			if distance < 30:
-				visual_conflicts.append([piece_a, piece_b])
-				print("PuzzleInputHandler: Conflicto visual detectado entre piezas ", piece_a.order_number, " y ", piece_b.order_number, " (distancia: ", distance, ")")
-	
-	# Resolver conflictos moviendo piezas a posiciones libres
-	for conflict in visual_conflicts:
-		var piece_to_move = conflict[1]  # Mover la segunda pieza (menor prioridad)
-		print("PuzzleInputHandler: Moviendo pieza ", piece_to_move.order_number, " para resolver conflicto visual")
-		
-		# Buscar una celda libre cercana para la pieza
-		var current_cell = piece_manager.get_cell_of_piece(piece_to_move)
-		var free_cell = piece_manager._find_free_cell_near(current_cell)
-		
-		if free_cell != Vector2(-999, -999):
-			# Mover pieza a la celda libre
-			piece_to_move.current_cell = free_cell
-			var puzzle_data = puzzle_game.get_puzzle_data()
-			var new_position = puzzle_data["offset"] + free_cell * puzzle_data["cell_size"]
-			piece_to_move.node.global_position = new_position
-			
-			# Actualizar grid
-			piece_manager.set_piece_at(free_cell, piece_to_move)
-			
-			print("PuzzleInputHandler: Pieza ", piece_to_move.order_number, " movida a celda libre: ", free_cell)
-		else:
-			print("PuzzleInputHandler: ⚠️ No se pudo encontrar celda libre para pieza ", piece_to_move.order_number)
+	if OS.is_debug_build():
+		print("PuzzleInputHandler: Detectados ", candidates.size(), " candidatos con z-index similar; se prioriza por orden de selección sin mover piezas.")
 
 # 🔧 FUNCIÓN MEJORADA DE VERIFICACIÓN DE MOUSE SOBRE PIEZA
 func _is_mouse_over_piece_improved(piece_obj, mouse_pos: Vector2) -> bool:
@@ -550,7 +546,7 @@ func process_piece_click_touch(touch_position: Vector2, touch_index: int) -> voi
 	
 	# 🔧 CRÍTICO: Resolver superposiciones antes de cualquier detección
 	print("PuzzleInputHandler: Verificando superposiciones antes de detectar toque...")
-	piece_manager.resolve_all_overlaps()
+	_resolve_overlaps_if_needed("before_touch_pick")
 	
 	# 🔧 MEJORADO: Usar la misma lógica mejorada para detección táctil
 	var clicked_piece = _find_best_piece_at_position(mouse_pos)
@@ -608,7 +604,7 @@ func process_piece_release() -> void:
 		
 		# 🔧 CRÍTICO: Verificar y resolver superposiciones después de colocar
 		print("PuzzleInputHandler: Verificando superposiciones después de soltar pieza...")
-		piece_manager.resolve_all_overlaps()
+		_resolve_overlaps_if_needed("after_piece_release")
 		
 		# 🔧 NUEVO: Verificación automática de sincronización de grupos después de mover
 		_verify_group_synchronization_after_move(group_leader)
@@ -829,23 +825,26 @@ func _verify_group_synchronization_after_move(moved_group_leader):
 	# Solo verificar si el grupo tiene más de 1 pieza
 	if moved_group_leader.group.size() <= 1:
 		return
+
+	var now_ms: int = Time.get_ticks_msec()
+	if now_ms - _last_group_sync_check_ms < GROUP_SYNC_COOLDOWN_MS:
+		return
+	_last_group_sync_check_ms = now_ms
 	
-	print("PuzzleInputHandler: Verificando sincronización de grupo movido...")
+	if OS.is_debug_build():
+		print("PuzzleInputHandler: Verificando sincronización de grupo movido...")
 	
-	# Crear sincronizador temporal
-	var group_synchronizer = preload("res://Scripts/Autoload/GroupSynchronizer.gd").new()
-	group_synchronizer.initialize(puzzle_game, piece_manager)
+	if not _group_synchronizer:
+		_group_synchronizer = GROUP_SYNCHRONIZER_SCRIPT.new()
+		_group_synchronizer.initialize(puzzle_game, piece_manager)
 	
 	# Analizar solo el grupo que se movió
 	var group = moved_group_leader.group
-	var sync_issues = group_synchronizer._analyze_group_synchronization(group)
+	var sync_issues = _group_synchronizer._analyze_group_synchronization(group)
 	
 	if sync_issues > 0:
 		print("PuzzleInputHandler: ⚠️ Detectados ", sync_issues, " problemas de sincronización, corrigiendo...")
-		group_synchronizer._fix_group_synchronization(group)
+		_group_synchronizer._fix_group_synchronization(group)
 		print("PuzzleInputHandler: ✅ Problemas de sincronización corregidos automáticamente")
-	else:
+	elif OS.is_debug_build():
 		print("PuzzleInputHandler: ✅ Grupo está correctamente sincronizado")
-	
-	# Limpiar
-	group_synchronizer.queue_free()

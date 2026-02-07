@@ -19,6 +19,25 @@ var is_initialized = false
 var is_locked = false
 var is_completed = false
 
+func _load_texture_from_path(path: String) -> Texture2D:
+	if path.is_empty():
+		return null
+	
+	if path.begins_with("user://"):
+		if not FileAccess.file_exists(path):
+			return null
+		var image := Image.new()
+		var err := image.load(path)
+		if err != OK:
+			return null
+		return ImageTexture.create_from_image(image)
+	
+	if not ResourceLoader.exists(path):
+		return null
+	
+	var texture = load(path)
+	return texture as Texture2D
+
 func _ready():
 	print("PuzzleItem: _ready()")
 	
@@ -92,12 +111,11 @@ func _apply_puzzle_data():
 		if puzzle_data.has(key) and not image_loaded:
 			var img_path = puzzle_data[key]
 			if typeof(img_path) == TYPE_STRING and img_path != "":
-				if ResourceLoader.exists(img_path):
-					var texture = load(img_path)
-					if texture and image_texture:
-						image_texture.texture = texture
-						print("PuzzleItem: Imagen cargada desde clave '" + key + "': ", img_path)
-						image_loaded = true
+				var texture = _load_texture_from_path(img_path)
+				if texture and image_texture:
+					image_texture.texture = texture
+					print("PuzzleItem: Imagen cargada desde clave '" + key + "': ", img_path)
+					image_loaded = true
 	
 	# Si no se cargó ninguna imagen, intentar con la opción "id" como nombre de imagen
 	if not image_loaded and puzzle_data.has("id"):
@@ -109,13 +127,12 @@ func _apply_puzzle_data():
 		]
 		
 		for path in possible_paths:
-			if ResourceLoader.exists(path):
-				var texture = load(path)
-				if texture and image_texture:
-					image_texture.texture = texture
-					print("PuzzleItem: Imagen cargada usando ID: ", path)
-					image_loaded = true
-					break
+			var texture = _load_texture_from_path(path)
+			if texture and image_texture:
+				image_texture.texture = texture
+				print("PuzzleItem: Imagen cargada usando ID: ", path)
+				image_loaded = true
+				break
 	
 	# Si todavía no se ha cargado ninguna imagen, cargar una por defecto
 	if not image_loaded:
@@ -157,12 +174,11 @@ func _load_default_image():
 	]
 	
 	for path in default_paths:
-		if ResourceLoader.exists(path):
-			var texture = load(path)
-			if texture:
-				image_texture.texture = texture
-				print("PuzzleItem: Imagen por defecto cargada: ", path)
-				return
+		var texture = _load_texture_from_path(path)
+		if texture:
+			image_texture.texture = texture
+			print("PuzzleItem: Imagen por defecto cargada: ", path)
+			return
 	
 	# Si no se pudo cargar ninguna imagen, mostrar un color de fondo con texto
 	print("ERROR: No se pudo cargar ninguna imagen por defecto, usando respaldo")

@@ -18,6 +18,25 @@ var requires_purchase = false
 # Añadir referencia al nodo parent para comprobar si está haciendo scroll
 var parent_node
 
+func _load_texture_from_path(path: String) -> Texture2D:
+	if path.is_empty():
+		return null
+	
+	if path.begins_with("user://"):
+		if not FileAccess.file_exists(path):
+			return null
+		var image := Image.new()
+		var err := image.load(path)
+		if err != OK:
+			return null
+		return ImageTexture.create_from_image(image)
+	
+	if not ResourceLoader.exists(path):
+		return null
+	
+	var texture = load(path)
+	return texture as Texture2D
+
 # Función para configurar el componente con los datos del pack
 func setup(data):
 	pack_data = data
@@ -33,7 +52,7 @@ func setup(data):
 # Función para cargar la imagen del pack
 func _load_pack_image():
 	if pack_data.has("image_path") and pack_data.image_path != "":
-		var image = load(pack_data.image_path)
+		var image = _load_texture_from_path(pack_data.image_path)
 		if image:
 			imagePuzzle.texture = image
 	else:
@@ -57,7 +76,7 @@ func _find_and_set_pack_image():
 	for path in possible_paths:
 		var file = FileAccess.open(path, FileAccess.READ)
 		if file:
-			var image = load(path)
+			var image = _load_texture_from_path(path)
 			if image:
 				imagePuzzle.texture = image
 				pack_data.image_path = path

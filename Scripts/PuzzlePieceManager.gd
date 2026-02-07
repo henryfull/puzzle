@@ -121,6 +121,25 @@ func set_auto_center_delay(new_delay: float):
 func get_auto_center_delay() -> float:
 	return auto_center_delay
 
+func _load_texture_from_path(path: String) -> Texture2D:
+	if path.is_empty():
+		return null
+	
+	if path.begins_with("user://"):
+		if not FileAccess.file_exists(path):
+			return null
+		var image := Image.new()
+		var err := image.load(path)
+		if err != OK:
+			return null
+		return ImageTexture.create_from_image(image)
+	
+	if not ResourceLoader.exists(path):
+		return null
+	
+	var texture = load(path)
+	return texture as Texture2D
+
 func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 	# IMPORTANTE: Reinicializar tamaño del puzzle al empezar nueva partida
 	print("PuzzlePieceManager: Reinicializando tamaño del puzzle")
@@ -133,7 +152,7 @@ func load_and_create_pieces(image_path: String, puzzle_back: Texture2D):
 
 	# 1) Cargar la textura (método clásico)
 	print("PuzzlePieceManager: Cargando imagen del puzzle desde: ", image_path)
-	var puzzle_texture = load(image_path) if load(image_path) else null
+	var puzzle_texture = _load_texture_from_path(image_path)
 	if puzzle_texture == null:
 		push_warning("No se pudo cargar la imagen en: %s" % image_path)
 		return
@@ -609,7 +628,7 @@ func verify_no_overlaps() -> bool:
 		else:
 			grid_check[cell] = piece_obj
 	
-	if not overlaps_detected:
+	if not overlaps_detected and OS.is_debug_build():
 		print("PuzzlePieceManager: ✅ No se detectaron superposiciones")
 	
 	return not overlaps_detected
