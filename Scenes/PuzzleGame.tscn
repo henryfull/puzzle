@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dh8d4yyjtjjsj"]
+[gd_scene format=3 uid="uid://dh8d4yyjtjjsj"]
 
 [ext_resource type="Script" uid="uid://ymxow6dlkfu7" path="res://Scripts/PuzzleGame.gd" id="1_0gd45"]
 [ext_resource type="AudioStream" uid="uid://4tonsc3xcic5" path="res://Assets/Sounds/SFX/plop.mp3" id="2_xo7l2"]
@@ -10,13 +10,14 @@
 [ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="5_uvymq"]
 [ext_resource type="PackedScene" uid="uid://bf4l7m2h4pnm8" path="res://Scenes/Components/ParticleBackground.tscn" id="7_7aw43"]
 [ext_resource type="Texture2D" uid="uid://bumaj141kr3bw" path="res://Assets/Images/GUID/backgrounds/bg_pausa.png" id="8_p2qx1"]
+[ext_resource type="FontFile" uid="uid://ds0wa3hdat50g" path="res://Assets/Fonts/Futura-Bold-03.ttf" id="8_tu11h"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="9_u0au7"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7gbeo"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fxwfr"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2356, 497, 97, 80)
+region_rect = Rect2(2233, 497, 97, 80)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_62oin"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qmbgg"]
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2356, 497, 97, 80)
 
@@ -24,23 +25,19 @@ region_rect = Rect2(2356, 497, 97, 80)
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2356, 497, 97, 80)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qmbgg"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_62oin"]
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2356, 497, 97, 80)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fxwfr"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7gbeo"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2233, 497, 97, 80)
+region_rect = Rect2(2356, 497, 97, 80)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oer6i"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r2a0d"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2233, 497, 97, 80)
+region_rect = Rect2(2356, 497, 97, 80)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gkcsf"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(2233, 497, 97, 80)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f8lc6"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7khmq"]
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2233, 497, 97, 80)
 
@@ -48,13 +45,17 @@ region_rect = Rect2(2233, 497, 97, 80)
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2233, 497, 97, 80)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7khmq"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f8lc6"]
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(2233, 497, 97, 80)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r2a0d"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gkcsf"]
 texture = ExtResource("4_58pa3")
-region_rect = Rect2(2356, 497, 97, 80)
+region_rect = Rect2(2233, 497, 97, 80)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oer6i"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(2233, 497, 97, 80)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u0au7"]
 bg_color = Color(1, 1, 1, 0.380392)
@@ -67,11 +68,7 @@ expand_margin_top = 10.0
 expand_margin_right = 17.0
 expand_margin_bottom = 10.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hq32h"]
-texture = ExtResource("4_58pa3")
-region_rect = Rect2(1600, 480, 101, 101)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2g7li"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_icw6g"]
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(1600, 480, 101, 101)
 
@@ -79,7 +76,11 @@ region_rect = Rect2(1600, 480, 101, 101)
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(1600, 480, 101, 101)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_icw6g"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2g7li"]
+texture = ExtResource("4_58pa3")
+region_rect = Rect2(1600, 480, 101, 101)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hq32h"]
 texture = ExtResource("4_58pa3")
 region_rect = Rect2(1600, 480, 101, 101)
 
@@ -104,7 +105,7 @@ bg_color = Color(6.16074e-06, 0.629349, 0.813684, 0.968627)
 
 [sub_resource type="FontVariation" id="FontVariation_u0au7"]
 
-[node name="PuzzleGame" type="Node2D" node_paths=PackedStringArray("pieces_container", "UILayer", "movesLabel", "maxMovesLabel", "maxMovesFlipLabel", "maxFlipsPanel", "maxFlipsLabel", "panelPaused", "button_options", "flip_button", "score_label", "streak_label", "floating_points_label")]
+[node name="PuzzleGame" type="Node2D" unique_id=620412685 node_paths=PackedStringArray("pieces_container", "UILayer", "movesLabel", "maxMovesLabel", "maxMovesFlipLabel", "maxFlipsPanel", "maxFlipsLabel", "panelPaused", "button_options", "flip_button", "score_label", "streak_label", "floating_points_label", "flip_image")]
 script = ExtResource("1_0gd45")
 pieces_container = NodePath("PiecesContainer")
 UILayer = NodePath("UILayer")
@@ -119,30 +120,31 @@ flip_button = NodePath("UILayer/FlipButton")
 score_label = NodePath("UILayer/ScoreLabel")
 streak_label = NodePath("UILayer/StreakLabel")
 floating_points_label = NodePath("UILayer/FloatingPointsLabel")
+flip_image = NodePath("UILayer/FlipButton/TextureRect")
 max_extra_rows = 6
 
-[node name="AudioMove" type="AudioStreamPlayer" parent="."]
+[node name="AudioMove" type="AudioStreamPlayer" parent="." unique_id=1418576845]
 stream = ExtResource("2_xo7l2")
 volume_db = -10.0
 bus = &"SFX"
 
-[node name="AudioMerge" type="AudioStreamPlayer" parent="."]
+[node name="AudioMerge" type="AudioStreamPlayer" parent="." unique_id=192236292]
 stream = ExtResource("3_iw5d8")
 volume_db = -5.0
 bus = &"SFX"
 
-[node name="AudioFlip" type="AudioStreamPlayer" parent="."]
+[node name="AudioFlip" type="AudioStreamPlayer" parent="." unique_id=1535137048]
 stream = ExtResource("4_qnp3e")
 volume_db = -8.0
 bus = &"SFX"
 
-[node name="VictoryTimer" type="Timer" parent="."]
+[node name="VictoryTimer" type="Timer" parent="." unique_id=160211147]
 wait_time = 5.0
 
-[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+[node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=1475049357]
 layer = -1
 
-[node name="TextureRect" type="TextureRect" parent="BackgroundLayer"]
+[node name="TextureRect" type="TextureRect" parent="BackgroundLayer" unique_id=1939044515]
 visible = false
 z_index = -1
 anchors_preset = 15
@@ -158,7 +160,7 @@ texture = ExtResource("5_u0au7")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="BackgroundLayer"]
+[node name="ColorRect" type="ColorRect" parent="BackgroundLayer" unique_id=1213320755]
 z_index = -1
 layout_direction = 1
 anchors_preset = 15
@@ -169,12 +171,12 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
 mouse_filter = 2
-color = Color(0.468252, 0.467392, 0.451786, 1)
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="ParticleBackground" parent="BackgroundLayer" instance=ExtResource("7_7aw43")]
+[node name="ParticleBackground" parent="BackgroundLayer" unique_id=779032568 instance=ExtResource("7_7aw43")]
 
-[node name="ButtonHideHUD" type="Button" parent="BackgroundLayer"]
+[node name="ButtonHideHUD" type="Button" parent="BackgroundLayer" unique_id=264259367]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -185,13 +187,13 @@ offset_bottom = -10.0
 grow_vertical = 0
 scale = Vector2(0.7, 0.7)
 mouse_default_cursor_shape = 2
-theme_override_styles/focus = SubResource("StyleBoxTexture_7gbeo")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_62oin")
-theme_override_styles/hover = SubResource("StyleBoxTexture_dga1b")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_qmbgg")
 theme_override_styles/normal = SubResource("StyleBoxTexture_fxwfr")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qmbgg")
+theme_override_styles/hover = SubResource("StyleBoxTexture_dga1b")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_62oin")
+theme_override_styles/focus = SubResource("StyleBoxTexture_7gbeo")
 
-[node name="ButtonShowHUD" type="Button" parent="BackgroundLayer"]
+[node name="ButtonShowHUD" type="Button" parent="BackgroundLayer" unique_id=396407930]
 visible = false
 anchors_preset = 2
 anchor_top = 1.0
@@ -203,22 +205,22 @@ offset_bottom = -10.0
 grow_vertical = 0
 scale = Vector2(0.7, 0.7)
 mouse_default_cursor_shape = 2
-theme_override_styles/focus = SubResource("StyleBoxTexture_oer6i")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_gkcsf")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_f8lc6")
-theme_override_styles/hover = SubResource("StyleBoxTexture_40j3j")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_7khmq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_r2a0d")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_7khmq")
+theme_override_styles/hover = SubResource("StyleBoxTexture_40j3j")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_f8lc6")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_gkcsf")
+theme_override_styles/focus = SubResource("StyleBoxTexture_oer6i")
 
-[node name="BackgroundLimits" type="Node2D" parent="."]
+[node name="BackgroundLimits" type="Node2D" parent="." unique_id=1675509163]
 
-[node name="PiecesContainer" type="Node2D" parent="."]
+[node name="PiecesContainer" type="Node2D" parent="." unique_id=228718340]
 z_index = 5
 y_sort_enabled = true
 
-[node name="UILayer" type="CanvasLayer" parent="."]
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=1584831947]
 
-[node name="MarginContainer" type="MarginContainer" parent="UILayer"]
+[node name="MarginContainer" type="MarginContainer" parent="UILayer" unique_id=1129388561]
 visible = false
 show_behind_parent = true
 custom_minimum_size = Vector2(0, 120)
@@ -232,24 +234,29 @@ grow_vertical = 0
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="ColorRect" type="ColorRect" parent="UILayer/MarginContainer"]
+[node name="ColorRect" type="ColorRect" parent="UILayer/MarginContainer" unique_id=246911859]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.109804)
 
-[node name="TimerLabel" type="Label" parent="UILayer"]
-offset_left = 30.0
-offset_top = 90.0
-offset_right = 147.0
-offset_bottom = 133.0
+[node name="TimerLabel" type="Label" parent="UILayer" unique_id=1053641662]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -159.0
+offset_top = 80.0
+offset_right = -30.0
+offset_bottom = 135.0
+grow_horizontal = 0
 pivot_offset = Vector2(55, 21)
-theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_fonts/font = ExtResource("8_tu11h")
 theme_override_font_sizes/font_size = 42
 text = "00:00"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="UILayer/TimerLabel"]
+[node name="Panel" type="Panel" parent="UILayer/TimerLabel" unique_id=853120591]
+visible = false
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -262,23 +269,24 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
-[node name="MovesLabel" type="Label" parent="UILayer"]
+[node name="MovesLabel" type="Label" parent="UILayer" unique_id=1334028097]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -126.0
-offset_top = 90.0
+offset_top = 140.0
 offset_right = -30.0
-offset_bottom = 133.0
+offset_bottom = 195.0
 grow_horizontal = 0
 pivot_offset = Vector2(55, 21)
-theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_fonts/font = ExtResource("8_tu11h")
 theme_override_font_sizes/font_size = 42
 text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="UILayer/MovesLabel"]
+[node name="Panel" type="Panel" parent="UILayer/MovesLabel" unique_id=971719143]
+visible = false
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -291,24 +299,25 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
-[node name="MaxMovesLabel" type="Label" parent="UILayer"]
+[node name="MaxMovesLabel" type="Label" parent="UILayer" unique_id=1550480860]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -126.0
-offset_top = 91.0
+offset_top = 140.0
 offset_right = -30.0
-offset_bottom = 134.0
+offset_bottom = 195.0
 grow_horizontal = 0
 pivot_offset = Vector2(55, 21)
 theme_override_colors/font_color = Color(0.788235, 0, 0, 1)
-theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_fonts/font = ExtResource("8_tu11h")
 theme_override_font_sizes/font_size = 42
 text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="UILayer/MaxMovesLabel"]
+[node name="Panel" type="Panel" parent="UILayer/MaxMovesLabel" unique_id=512205349]
+visible = false
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -321,24 +330,25 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
-[node name="MaxMovesFlipLabel" type="Label" parent="UILayer"]
+[node name="MaxMovesFlipLabel" type="Label" parent="UILayer" unique_id=419384038]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -126.0
-offset_top = 171.0
+offset_top = 190.0
 offset_right = -30.0
-offset_bottom = 214.0
+offset_bottom = 245.0
 grow_horizontal = 0
 pivot_offset = Vector2(55, 21)
 theme_override_colors/font_color = Color(1, 0.541176, 0, 1)
-theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_fonts/font = ExtResource("8_tu11h")
 theme_override_font_sizes/font_size = 42
 text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="UILayer/MaxMovesFlipLabel"]
+[node name="Panel" type="Panel" parent="UILayer/MaxMovesFlipLabel" unique_id=1266122272]
+visible = false
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -351,7 +361,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
-[node name="OptionsButton" type="Button" parent="UILayer"]
+[node name="OptionsButton" type="Button" parent="UILayer" unique_id=1018492773]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -365,14 +375,14 @@ grow_horizontal = 0
 grow_vertical = 0
 pivot_offset = Vector2(40, 40)
 mouse_default_cursor_shape = 2
-theme_override_styles/focus = SubResource("StyleBoxTexture_hq32h")
-theme_override_styles/hover = SubResource("StyleBoxTexture_2g7li")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gxtc4")
 theme_override_styles/normal = SubResource("StyleBoxTexture_icw6g")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_gxtc4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_2g7li")
+theme_override_styles/focus = SubResource("StyleBoxTexture_hq32h")
 icon_alignment = 1
 expand_icon = true
 
-[node name="SuccessMessage" type="Label" parent="UILayer"]
+[node name="SuccessMessage" type="Label" parent="UILayer" unique_id=70059672]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -387,7 +397,7 @@ theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ErrorMessage" type="Label" parent="UILayer"]
+[node name="ErrorMessage" type="Label" parent="UILayer" unique_id=761693102]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -402,19 +412,22 @@ theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ScoreLabel" type="Label" parent="UILayer"]
+[node name="ScoreLabel" type="Label" parent="UILayer" unique_id=122328685]
 offset_left = 30.0
-offset_top = 140.0
-offset_right = 147.0
-offset_bottom = 183.0
+offset_top = 80.0
+offset_right = 189.0
+offset_bottom = 123.0
 pivot_offset = Vector2(55, 21)
 theme_override_colors/font_color = Color(0.95, 0.85, 0.3, 1)
-theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.69411767)
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("8_tu11h")
 theme_override_font_sizes/font_size = 32
 text = "Puntos: 0"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="UILayer/ScoreLabel"]
+[node name="Panel" type="Panel" parent="UILayer/ScoreLabel" unique_id=1291113337]
+visible = false
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -429,19 +442,21 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
-[node name="StreakLabel" type="Label" parent="UILayer"]
+[node name="StreakLabel" type="Label" parent="UILayer" unique_id=1027033821]
 offset_left = 30.0
-offset_top = 190.0
-offset_right = 147.0
-offset_bottom = 233.0
+offset_top = 120.0
+offset_right = 160.0
+offset_bottom = 163.0
 pivot_offset = Vector2(55, 21)
 theme_override_colors/font_color = Color(0.3, 0.9, 0.3, 1)
-theme_override_fonts/font = ExtResource("5_uvymq")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_tu11h")
 theme_override_font_sizes/font_size = 28
 text = "Racha: 0"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="UILayer/StreakLabel"]
+[node name="Panel" type="Panel" parent="UILayer/StreakLabel" unique_id=1800932551]
+visible = false
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -456,7 +471,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
-[node name="FloatingPointsLabel" type="Label" parent="UILayer"]
+[node name="FloatingPointsLabel" type="Label" parent="UILayer" unique_id=274052934]
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
@@ -474,7 +489,7 @@ text = "+75"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FloatingPointsPanel" type="Panel" parent="UILayer/FloatingPointsLabel"]
+[node name="FloatingPointsPanel" type="Panel" parent="UILayer/FloatingPointsLabel" unique_id=134931549]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -489,7 +504,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0au7")
 
-[node name="FlipButton" type="Button" parent="UILayer"]
+[node name="FlipButton" type="Button" parent="UILayer" unique_id=35483451]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -497,34 +512,36 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -50.0
 offset_top = -120.0
-offset_right = 30.0
-offset_bottom = -40.0
+offset_right = 50.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset = Vector2(40, 40)
 mouse_default_cursor_shape = 2
-theme_type_variation = &"CircleButtonBlue"
+theme_type_variation = &"FlatButton"
+flat = true
 
-[node name="TextureRect" type="TextureRect" parent="UILayer/FlipButton"]
+[node name="TextureRect" type="TextureRect" parent="UILayer/FlipButton" unique_id=909920634]
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -50.5
-offset_top = -40.5
-offset_right = 50.5
-offset_bottom = 40.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(50.5, 40.5)
+pivot_offset = Vector2(44.5, 44.5)
 mouse_filter = 2
 texture = SubResource("AtlasTexture_mupxo")
 expand_mode = 1
+stretch_mode = 5
 
-[node name="MaxFlipsPanel" type="Panel" parent="UILayer/FlipButton"]
+[node name="MaxFlipsPanel" type="Panel" parent="UILayer/FlipButton" unique_id=36981689]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -537,7 +554,7 @@ offset_bottom = -10.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_p2qx1")
 
-[node name="MaxFlipsLabel" type="Label" parent="UILayer/FlipButton/MaxFlipsPanel"]
+[node name="MaxFlipsLabel" type="Label" parent="UILayer/FlipButton/MaxFlipsPanel" unique_id=1378991845]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -557,7 +574,7 @@ text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelPaused" type="Panel" parent="UILayer"]
+[node name="PanelPaused" type="Panel" parent="UILayer" unique_id=1444056240]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -566,7 +583,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mupxo")
 
-[node name="TextureRect" type="TextureRect" parent="UILayer/PanelPaused"]
+[node name="TextureRect" type="TextureRect" parent="UILayer/PanelPaused" unique_id=1709104288]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -575,7 +592,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("8_p2qx1")
 
-[node name="ColorRect" type="ColorRect" parent="UILayer/PanelPaused/TextureRect"]
+[node name="ColorRect" type="ColorRect" parent="UILayer/PanelPaused/TextureRect" unique_id=785649176]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -584,7 +601,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.717647)
 
-[node name="BackgroundTitle" parent="UILayer/PanelPaused" instance=ExtResource("9_u0au7")]
+[node name="BackgroundTitle" parent="UILayer/PanelPaused" unique_id=593803521 instance=ExtResource("9_u0au7")]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -599,7 +616,7 @@ grow_vertical = 1
 pivot_offset = Vector2(-72, 206)
 title = "Pausa"
 
-[node name="MarginContainer" type="MarginContainer" parent="UILayer/PanelPaused"]
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/PanelPaused" unique_id=691617001]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -614,35 +631,35 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(200, 250)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/PanelPaused/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/PanelPaused/MarginContainer" unique_id=573242445]
 layout_mode = 2
 
-[node name="ButtonContinue" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer"]
+[node name="ButtonContinue" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" unique_id=1217271833]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 theme_type_variation = &"ButtonBlue"
 text = "Continuar"
 
-[node name="ButtonRepeat" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer"]
+[node name="ButtonRepeat" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" unique_id=750669682]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 theme_type_variation = &"ButtonYellow"
 text = "Repetir"
 
-[node name="ButtonDifficult" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" instance=ExtResource("2_yvnqr")]
+[node name="ButtonDifficult" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" unique_id=1492639647 instance=ExtResource("2_yvnqr")]
 auto_translate_mode = 1
 visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="ButtonExit" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer"]
+[node name="ButtonExit" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" unique_id=1601541187]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 theme_type_variation = &"ButtonRed"
 text = "Salir"
 
-[node name="Label" type="Label" parent="UILayer/PanelPaused"]
+[node name="Label" type="Label" parent="UILayer/PanelPaused" unique_id=1041322086]
 visible = false
 layout_mode = 1
 anchors_preset = 8

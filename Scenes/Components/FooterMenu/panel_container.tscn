@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dy820u4d0bxw6"]
+[gd_scene format=3 uid="uid://dy820u4d0bxw6"]
 
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="1_ltfgy"]
 [ext_resource type="Script" uid="uid://cbmxmo2mo7q0o" path="res://Scenes/Components/FooterMenu/panel_container.gd" id="1_svwfg"]
@@ -28,7 +28,7 @@ region = Rect2(1353, 669, 97, 100)
 atlas = ExtResource("1_ltfgy")
 region = Rect2(2247, 884, 79, 101)
 
-[node name="FooterMenu" type="PanelContainer" node_paths=PackedStringArray("labelInit", "labelPack", "labelPuzzle", "labelAchivement", "labelStats")]
+[node name="FooterMenu" type="PanelContainer" unique_id=868884231 node_paths=PackedStringArray("labelInit", "labelPack", "labelPuzzle", "labelAchivement", "labelStats")]
 offset_top = -24.0
 offset_right = 660.0
 offset_bottom = 100.0
@@ -40,7 +40,7 @@ labelPuzzle = NodePath("MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer/
 labelAchivement = NodePath("MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer/Label")
 labelStats = NodePath("MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer/Label")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1665406360]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 10
@@ -48,21 +48,21 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 30
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1896520831]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 40
 
-[node name="PanelStatistics" type="Panel" parent="MarginContainer/HBoxContainer"]
+[node name="PanelStatistics" type="Panel" parent="MarginContainer/HBoxContainer" unique_id=1015380721]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelStatistics"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelStatistics" unique_id=1824892833]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -76,14 +76,14 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 12
 
-[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer"]
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer" unique_id=1444915278]
 custom_minimum_size = Vector2(110, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"CircleButtonGreen"
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer/Button"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer/Button" unique_id=1815514747]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -99,7 +99,7 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_svwfg")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelStatistics/VBoxContainer" unique_id=1682008439]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -109,14 +109,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="PanelAchivement" type="Panel" parent="MarginContainer/HBoxContainer"]
+[node name="PanelAchivement" type="Panel" parent="MarginContainer/HBoxContainer" unique_id=1550479224]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelAchivement"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelAchivement" unique_id=686053766]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -130,14 +130,14 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 12
 
-[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer"]
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer" unique_id=1951117335]
 custom_minimum_size = Vector2(110, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"CircleButtonBlue"
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer/Button"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer/Button" unique_id=1418756156]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -153,7 +153,7 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_tvbgl")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelAchivement/VBoxContainer" unique_id=1530190232]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -163,14 +163,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="PanelInit" type="Panel" parent="MarginContainer/HBoxContainer"]
+[node name="PanelInit" type="Panel" parent="MarginContainer/HBoxContainer" unique_id=1473223651]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelInit"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelInit" unique_id=1339186670]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -184,14 +184,14 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 12
 
-[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer"]
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer" unique_id=1331052670]
 custom_minimum_size = Vector2(110, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"CircleButtonRed"
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer/Button"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer/Button" unique_id=316497936]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -207,7 +207,7 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_r0bep")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelInit/VBoxContainer" unique_id=425376089]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -217,14 +217,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="PanelPack" type="Panel" parent="MarginContainer/HBoxContainer"]
+[node name="PanelPack" type="Panel" parent="MarginContainer/HBoxContainer" unique_id=1166949691]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelPack"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelPack" unique_id=1181836771]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -238,14 +238,13 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 12
 
-[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer"]
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer" unique_id=1719081159]
 custom_minimum_size = Vector2(110, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_type_variation = &"CircleButtonYellow"
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer/Button"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer/Button" unique_id=1634701558]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -261,7 +260,7 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_ojsni")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelPack/VBoxContainer" unique_id=1622587554]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -271,14 +270,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="PanelPuzzle" type="Panel" parent="MarginContainer/HBoxContainer"]
+[node name="PanelPuzzle" type="Panel" parent="MarginContainer/HBoxContainer" unique_id=1472952387]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxEmpty_r0bep")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelPuzzle"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PanelPuzzle" unique_id=1033752590]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -292,14 +291,14 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 12
 
-[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer"]
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer" unique_id=571478596]
 custom_minimum_size = Vector2(110, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"CircleButtonGreen"
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer/Button"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer/Button" unique_id=1630107868]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -315,7 +314,7 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_ehmef")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelPuzzle/VBoxContainer" unique_id=1374011065]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)

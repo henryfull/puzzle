@@ -1,42 +1,73 @@
-[gd_scene load_steps=10 format=3 uid="uid://dr0k8dkmdl6c6"]
+[gd_scene format=3 uid="uid://dr0k8dkmdl6c6"]
 
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="1_s60dh"]
 [ext_resource type="Script" uid="uid://bc0fbogk3jotl" path="res://Scripts/PreGamePuzzle.gd" id="1_yjkc0"]
-[ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="5_4pyv4"]
+[ext_resource type="FontFile" uid="uid://ds0wa3hdat50g" path="res://Assets/Fonts/Futura-Bold-03.ttf" id="4_4pyv4"]
+[ext_resource type="Texture2D" uid="uid://cj2bvtb20fcxo" path="res://Assets/Images/Pieces/piece_front.jpg" id="5_h5dmi"]
 [ext_resource type="Texture2D" uid="uid://ds3ugdkfawct4" path="res://Assets/Images/tikis/tiki-stayed.png" id="6_h5dmi"]
 [ext_resource type="PackedScene" uid="uid://1yijsaj7tgnr" path="res://Scenes/Components/GoalPuzzle/GoalPuzzle.tscn" id="6_yjkc0"]
-[ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="7_asu85"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="7_4pyv4"]
 [ext_resource type="PackedScene" uid="uid://b186xtyh83l2s" path="res://Scenes/Components/PanelDifficult/DifficultPanel.tscn" id="7_yjkc0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xq7c6"]
 atlas = ExtResource("1_s60dh")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_asu85"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.11674089, 0.116740905, 0.11674089, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 1
+shadow_offset = Vector2(5, 10)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h5dmi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7m6wt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_asu85"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kmlu8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tokwj"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmlu8"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(0.047058824, 0.047058824, 0.047058824, 0.91764706)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.529067, 0.529067, 0.529066, 1)
-corner_radius_top_left = 40
-corner_radius_top_right = 40
-corner_radius_bottom_right = 40
-corner_radius_bottom_left = 40
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
-[node name="PreGamePuzzle" type="Node2D" node_paths=PackedStringArray("panelColor", "headerColor", "title", "subtitle", "size", "tiki", "description", "playButton")]
+[node name="PreGamePuzzle" type="Node2D" unique_id=809067707 node_paths=PackedStringArray("panelColor", "title", "subtitle", "size", "imagePuzzle", "playButton", "goalPuzzle", "panelInfoGame")]
 script = ExtResource("1_yjkc0")
 panelColor = NodePath("CanvasLayer/PanelContainerColor")
-headerColor = NodePath("CanvasLayer/PanelHeader")
-title = NodePath("CanvasLayer/PanelHeader/VBoxContainer/TitleLabel")
-subtitle = NodePath("CanvasLayer/PanelHeader/VBoxContainer/SubTitleLabel")
-size = NodePath("CanvasLayer/PanelHeader/VBoxContainer/OptionLabel")
-tiki = NodePath("CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/ImageTiki")
-description = NodePath("CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/PanelContainer/Description")
-playButton = NodePath("CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer/PlayButton")
+title = NodePath("CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMode/LabelModeValue")
+subtitle = NodePath("CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxDifficult/LabelDifficultValue")
+size = NodePath("CanvasLayer/HeaderSection/MarginContainer/HBoxContainer/TitleLabel")
+imagePuzzle = NodePath("CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/BorderImage/ImagePuzzle")
+playButton = NodePath("CanvasLayer/FooterPanelActions/MarginContainer/HBoxContainer/PlayButton")
+goalPuzzle = NodePath("CanvasLayer/PanelInfoGame/MarginContainer/GoalPuzzle")
+panelInfoGame = NodePath("CanvasLayer/PanelInfoGame")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1805694374]
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1986549329]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -46,69 +77,147 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_xq7c6")
 expand_mode = 3
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1890446866]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.72549, 0.854902, 1, 0.356863)
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
 
-[node name="PanelHeader" type="Panel" parent="CanvasLayer"]
-z_index = 1
+[node name="PanelValues" type="PanelContainer" parent="CanvasLayer" unique_id=122266984]
+custom_minimum_size = Vector2(0, 50)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -200.0
-offset_top = 97.0
-offset_right = 200.0
-offset_bottom = 279.0
+offset_left = -310.0
+offset_top = 167.0
+offset_right = 310.0
+offset_bottom = 303.0
 grow_horizontal = 2
-theme_type_variation = &"PanelHeaderGreen"
+size_flags_vertical = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelHeader"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -43.0
-offset_bottom = 43.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-
-[node name="TitleLabel" type="Label" parent="CanvasLayer/PanelHeader/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelValues" unique_id=355349064]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("5_4pyv4")
-theme_override_font_sizes/font_size = 51
-text = "Super difícil"
-horizontal_alignment = 1
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer" unique_id=315688907]
+layout_mode = 2
+
+[node name="HBoxMode" type="HBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1366377669]
+layout_mode = 2
+
+[node name="LabelMode" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMode" unique_id=459506569]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "modo:"
 vertical_alignment = 1
+autowrap_mode = 2
 uppercase = true
 
-[node name="SubTitleLabel" type="Label" parent="CanvasLayer/PanelHeader/VBoxContainer"]
+[node name="LabelModeValue" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMode" unique_id=1965486204]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_4pyv4")
-text = "NAranja"
-horizontal_alignment = 1
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "Desafio"
+horizontal_alignment = 2
 vertical_alignment = 1
+autowrap_mode = 2
 uppercase = true
 
-[node name="OptionLabel" type="Label" parent="CanvasLayer/PanelHeader/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=28207658]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.990522, 0.733629, 0.429086, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("5_4pyv4")
-text = "4 x 6"
-horizontal_alignment = 1
+
+[node name="HBoxDifficult" type="HBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1174682819]
+layout_mode = 2
+
+[node name="LabelDifficult" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxDifficult" unique_id=2088870869]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "DIFFICULT:"
 vertical_alignment = 1
+autowrap_mode = 2
 uppercase = true
 
-[node name="ButtonClose" type="Button" parent="CanvasLayer"]
+[node name="LabelDifficultValue" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxDifficult" unique_id=849923547]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "Desafio"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1590404816]
+layout_mode = 2
+
+[node name="HBoxMaxTime" type="HBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=140373709]
+layout_mode = 2
+
+[node name="LabelMaxTime" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMaxTime" unique_id=1939527386]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "Max time:"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="LabelMaxTimeValue" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMaxTime" unique_id=314449458]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "02:30 min"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator3" type="HSeparator" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=292544098]
+layout_mode = 2
+
+[node name="HBoxMaxMoves" type="HBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1753699808]
+layout_mode = 2
+
+[node name="LabelMaxMoves" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMaxMoves" unique_id=137434156]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "Max Moves:"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="LabelMaxMovesValue" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMaxMoves" unique_id=2052194895]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "58"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator4" type="HSeparator" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1108098933]
+visible = false
+layout_mode = 2
+
+[node name="ButtonClose" type="Button" parent="CanvasLayer" unique_id=1515313514]
+visible = false
 z_index = 2
 clip_contents = true
 custom_minimum_size = Vector2(80, 80)
@@ -123,29 +232,32 @@ grow_horizontal = 2
 size_flags_vertical = 0
 theme_type_variation = &"ButtonClose"
 
-[node name="PanelContainerColor" type="PanelContainer" parent="CanvasLayer"]
+[node name="PanelContainerColor" type="PanelContainer" parent="CanvasLayer" unique_id=1854915303]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -294.0
-offset_top = 218.0
-offset_right = 294.0
-offset_bottom = -166.0
+offset_left = -302.0
+offset_top = 348.0
+offset_right = 302.0
+offset_bottom = -47.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_type_variation = &"PanelSinColor"
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainerColor"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainerColor" unique_id=2039396028]
 layout_mode = 2
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 100
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainerColor/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainerColor/MarginContainer" unique_id=1114337183]
 layout_mode = 2
+theme_override_constants/separation = 20
 
-[node name="ImageTiki" type="TextureRect" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer"]
+[node name="ImageTiki" type="TextureRect" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer" unique_id=1208954217]
+visible = false
 custom_minimum_size = Vector2(0, 380)
 layout_mode = 2
 size_flags_vertical = 4
@@ -153,49 +265,156 @@ texture = ExtResource("6_h5dmi")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer"]
+[node name="BorderImage" type="PanelContainer" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer" unique_id=1945775029]
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_asu85")
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 170)
+[node name="NoImageLabel" type="Label" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/BorderImage" unique_id=1039290653]
+custom_minimum_size = Vector2(460, 600)
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_kmlu8")
-
-[node name="GoalPuzzle" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/PanelContainer" instance=ExtResource("6_yjkc0")]
-custom_minimum_size = Vector2(330, 0)
-layout_mode = 2
-
-[node name="Description" type="Label" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/PanelContainer"]
-visible = false
-custom_minimum_size = Vector2(280, 170)
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("7_asu85")
-text = "Relájate mientras descubres maravillosos puzzles"
+size_flags_vertical = 1
+theme_override_fonts/font = ExtResource("4_4pyv4")
+theme_override_font_sizes/font_size = 72
+text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer"]
+[node name="ImagePuzzle" type="TextureRect" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/BorderImage" unique_id=676408657]
+custom_minimum_size = Vector2(460, 600)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("5_h5dmi")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer" unique_id=64029089]
+visible = false
 layout_mode = 2
 
-[node name="ButtonDifficult" type="Button" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="HeaderSection" type="PanelContainer" parent="CanvasLayer" unique_id=1855345438]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 70.0
+offset_bottom = 174.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelSinColor"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HeaderSection" unique_id=33468908]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HeaderSection/MarginContainer" unique_id=421010063]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=873637627 instance=ExtResource("7_4pyv4")]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+path = "res://Scenes/PackSelection.tscn"
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=580493811]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleSection"
+text = "Puzzle"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="Control" type="Control" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=725767093]
+visible = false
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="ButtonShowInfo" type="Button" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=273024289]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8646751, 0.86467516, 0.8646751, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxEmpty_h5dmi")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_7m6wt")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_asu85")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_kmlu8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tokwj")
+text = "?"
+
+[node name="PanelInfoGame" type="PanelContainer" parent="CanvasLayer" unique_id=982179323]
+visible = false
+custom_minimum_size = Vector2(0, 120)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -282.0
+offset_top = -280.0
+offset_right = 282.0
+offset_bottom = -160.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_type_variation = &"PanelSinColor"
+theme_override_styles/panel = SubResource("StyleBoxFlat_kmlu8")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelInfoGame" unique_id=162050109]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+
+[node name="GoalPuzzle" parent="CanvasLayer/PanelInfoGame/MarginContainer" unique_id=306422665 instance=ExtResource("6_yjkc0")]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+vertical_alignment = 1
+
+[node name="FooterPanelActions" type="PanelContainer" parent="CanvasLayer" unique_id=670911518]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -290.0
+offset_top = -113.0
+offset_right = 290.0
+offset_bottom = -33.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+theme_type_variation = &"PanelSinColor"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/FooterPanelActions" unique_id=1083440318]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/FooterPanelActions/MarginContainer" unique_id=638914150]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ButtonDifficult" type="Button" parent="CanvasLayer/FooterPanelActions/MarginContainer/HBoxContainer" unique_id=1642136262]
 custom_minimum_size = Vector2(280, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_type_variation = &"ButtonYellow"
-text = "Difficult"
+text = "common_difficulty"
 
-[node name="PlayButton" type="Button" parent="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="PlayButton" type="Button" parent="CanvasLayer/FooterPanelActions/MarginContainer/HBoxContainer" unique_id=992159251]
 custom_minimum_size = Vector2(280, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
-text = "JUGAR"
+theme_type_variation = &"GoldButton"
+text = "common_play"
 
-[node name="DifficultyPanel" parent="CanvasLayer" instance=ExtResource("7_yjkc0")]
+[node name="DifficultyPanel" parent="CanvasLayer" unique_id=1032480160 instance=ExtResource("7_yjkc0")]
 custom_minimum_size = Vector2(100, 60)
 anchors_preset = 0
 anchor_left = 0.0
@@ -211,5 +430,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 8
 
 [connection signal="pressed" from="CanvasLayer/ButtonClose" to="." method="_on_button_close_pressed"]
-[connection signal="pressed" from="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer/ButtonDifficult" to="." method="_on_button_difficult_pressed"]
-[connection signal="pressed" from="CanvasLayer/PanelContainerColor/MarginContainer/VBoxContainer/HBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="button_down" from="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer/ButtonShowInfo" to="." method="_on_button_show_info_button_down"]
+[connection signal="button_up" from="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer/ButtonShowInfo" to="." method="_on_button_show_info_button_up"]
+[connection signal="pressed" from="CanvasLayer/FooterPanelActions/MarginContainer/HBoxContainer/ButtonDifficult" to="." method="_on_button_difficult_pressed"]
+[connection signal="pressed" from="CanvasLayer/FooterPanelActions/MarginContainer/HBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

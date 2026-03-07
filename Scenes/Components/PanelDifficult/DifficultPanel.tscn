@@ -1,16 +1,60 @@
-[gd_scene load_steps=6 format=3 uid="uid://b186xtyh83l2s"]
+[gd_scene format=3 uid="uid://b186xtyh83l2s"]
 
 [ext_resource type="Script" uid="uid://n0jjwxfxxpdu" path="res://Scenes/Components/PanelDifficult/DifficultPanel.gd" id="1_pfj52"]
 [ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="2_8iy6g"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="3_j5n5s"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="4_8iy6g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pfj52"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8iy6g"]
-atlas = ExtResource("3_j5n5s")
-region = Rect2(1483, 480, 99, 103)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8iy6g"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.9801393, 0.9801393, 0.9801393, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
-[node name="DifficultyPanel" type="MarginContainer" node_paths=PackedStringArray("descriptionLabel", "difficulty_container")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nuf44"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.011764706, 0.32941177, 0.7529412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tlvk6"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.94063544, 0.94063604, 0.94063514, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nuf44"]
+atlas = ExtResource("3_j5n5s")
+region = Rect2(1315, 42, 84, 84)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tlvk6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_48ygf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r4xsp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3upa5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c6gwk"]
+
+[node name="DifficultyPanel" type="MarginContainer" unique_id=135629429 node_paths=PackedStringArray("difficulty_container", "_numPieces", "descriptionLabel", "progressiveDifficultButton", "_control")]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
@@ -22,22 +66,26 @@ offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pfj52")
-descriptionLabel = NodePath("DifficultyLayer/Panel/MarginContainer/VBoxContainer/PanelContainer/Label")
 difficulty_container = NodePath("DifficultyLayer/Panel/MarginContainer/VBoxContainer/ScrollContainer/DifficultyContainer")
+_numPieces = NodePath("DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxPieces/LabelPiecesValue")
+descriptionLabel = NodePath("DifficultyLayer/Panel/MarginContainer/VBoxContainer/PanelContainer/DescriptionLabel")
+progressiveDifficultButton = NodePath("DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/HBoxContainer/ButtonProfresiveDifficult")
+_control = NodePath("DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/HBoxContainer/Control")
 
-[node name="DifficultyLayer" type="CanvasLayer" parent="."]
+[node name="DifficultyLayer" type="CanvasLayer" parent="." unique_id=20842349]
 visible = false
 
-[node name="ColorRect" type="ColorRect" parent="DifficultyLayer"]
+[node name="ColorRect" type="ColorRect" parent="DifficultyLayer" unique_id=1168800486]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.72549, 0.854902, 1, 0.784314)
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="HeaderPanelColor" type="Panel" parent="DifficultyLayer"]
+[node name="HeaderPanelColor" type="Panel" parent="DifficultyLayer" unique_id=978812546]
+visible = false
 z_index = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -49,7 +97,7 @@ offset_bottom = 275.0
 grow_horizontal = 2
 theme_type_variation = &"PanelHeaderYellow"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DifficultyLayer/HeaderPanelColor"]
+[node name="VBoxContainer" type="VBoxContainer" parent="DifficultyLayer/HeaderPanelColor" unique_id=735903014]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -61,7 +109,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="TitleLabel" type="Label" parent="DifficultyLayer/HeaderPanelColor/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="DifficultyLayer/HeaderPanelColor/VBoxContainer" unique_id=1922075365]
 auto_translate_mode = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -73,7 +121,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="SubTitleLabel" type="Label" parent="DifficultyLayer/HeaderPanelColor/VBoxContainer"]
+[node name="SubTitleLabel" type="Label" parent="DifficultyLayer/HeaderPanelColor/VBoxContainer" unique_id=56952904]
 auto_translate_mode = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -83,54 +131,57 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Panel" type="PanelContainer" parent="DifficultyLayer"]
+[node name="Panel" type="PanelContainer" parent="DifficultyLayer" unique_id=1801092492]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -318.0
-offset_top = 225.0
+offset_top = 352.0
 offset_right = 318.0
 offset_bottom = -62.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_type_variation = &"PanelYellow"
+theme_type_variation = &"PanelSinColor"
 
-[node name="MarginContainer" type="MarginContainer" parent="DifficultyLayer/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="DifficultyLayer/Panel" unique_id=1100720285]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DifficultyLayer/Panel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="DifficultyLayer/Panel/MarginContainer" unique_id=2135965354]
 custom_minimum_size = Vector2(280, 380)
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer" unique_id=1843055061]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Selecciona la Dificultad"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer" unique_id=865423558]
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DifficultyContainer" type="VBoxContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="DifficultyContainer" type="GridContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=560261050]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 2
 
-[node name="HSeparator" type="HSeparator" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer" unique_id=414421024]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer" unique_id=170876803]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_pfj52")
 
-[node name="Label" type="Label" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/PanelContainer"]
+[node name="DescriptionLabel" type="Label" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/PanelContainer" unique_id=1264051795]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -138,49 +189,244 @@ text = "El modo APRENDIZ esta enfocado para que los niños aprendan formas, colo
 Cuando se selecciona un puzzle directamente te muestra la imagen y un texto relacionado con la imagen. "
 autowrap_mode = 3
 
-[node name="HSeparator2" type="HSeparator" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer" unique_id=1295103031]
 visible = false
 layout_mode = 2
 
-[node name="CloseButton" type="Button" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(280, 80)
+[node name="HBoxContainer" type="HBoxContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer" unique_id=1640851586]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_type_variation = &"ButtonRed"
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=372764105]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Dificultad progresiva:"
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=206001588]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer" unique_id=584469627]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer" unique_id=1210194542]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=1826050747]
+visible = false
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonProfresiveDifficult" type="Button" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=1028003215]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.001197443, 0.0011974453, 0.001197451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_8iy6g")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nuf44")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tlvk6")
 toggle_mode = true
-text = "Cancelar"
+text = "OFF"
 
-[node name="CheckButtonDifficult" type="CheckButton" parent="DifficultyLayer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Dificultad progresiva"
-
-[node name="ButtonClose" type="Button" parent="DifficultyLayer"]
-custom_minimum_size = Vector2(120, 120)
-offset_left = 30.0
-offset_top = 100.0
-offset_right = 150.0
-offset_bottom = 220.0
-pivot_offset = Vector2(60, 60)
-theme_type_variation = &"CircleButtonRed"
-
-[node name="TextureRect" type="TextureRect" parent="DifficultyLayer/ButtonClose"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+[node name="HeaderSection" type="PanelContainer" parent="DifficultyLayer" unique_id=1339675254]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 70.0
+offset_bottom = 174.0
 grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("AtlasTexture_8iy6g")
-expand_mode = 1
+size_flags_horizontal = 3
+theme_type_variation = &"PanelSinColor"
 
-[connection signal="pressed" from="DifficultyLayer/Panel/MarginContainer/VBoxContainer/CloseButton" to="." method="_exit_tree"]
-[connection signal="pressed" from="DifficultyLayer/Panel/MarginContainer/VBoxContainer/CheckButtonDifficult" to="." method="_on_check_button_pressed"]
-[connection signal="pressed" from="DifficultyLayer/ButtonClose" to="." method="_exit_tree"]
+[node name="MarginContainer" type="MarginContainer" parent="DifficultyLayer/HeaderSection" unique_id=3163036]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DifficultyLayer/HeaderSection/MarginContainer" unique_id=108364790]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonClose" type="TextureButton" parent="DifficultyLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=885107160]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_nuf44")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BackButton" parent="DifficultyLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=873637627 instance=ExtResource("4_8iy6g")]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+path = "res://Scenes/PackSelection.tscn"
+
+[node name="TitleLabel" type="Label" parent="DifficultyLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=837804310]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleSection"
+text = "common_difficulty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="Control" type="Control" parent="DifficultyLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=1332121177]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="ButtonShowInfo" type="Button" parent="DifficultyLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=985615905]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8646751, 0.86467516, 0.8646751, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxEmpty_tlvk6")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_48ygf")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_r4xsp")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_3upa5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_c6gwk")
+text = "?"
+
+[node name="PanelValues" type="PanelContainer" parent="DifficultyLayer" unique_id=1603098826]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -310.0
+offset_top = 167.0
+offset_right = 310.0
+offset_bottom = 303.0
+grow_horizontal = 2
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="DifficultyLayer/PanelValues" unique_id=1309610238]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DifficultyLayer/PanelValues/MarginContainer" unique_id=55877478]
+layout_mode = 2
+
+[node name="HBoxMode" type="HBoxContainer" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=2077210304]
+layout_mode = 2
+
+[node name="LabelMode" type="Label" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMode" unique_id=759389438]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "modo:"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="LabelModeValue" type="Label" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMode" unique_id=1219659259]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "Relax"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator" type="HSeparator" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=723260236]
+layout_mode = 2
+
+[node name="HBoxDifficult" type="HBoxContainer" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=173726022]
+layout_mode = 2
+
+[node name="LabelDifficult" type="Label" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxDifficult" unique_id=144873986]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "DIFFICULT:"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="LabelDifficultValue" type="Label" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxDifficult" unique_id=608894912]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "Desafio"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator2" type="HSeparator" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1253125689]
+visible = false
+layout_mode = 2
+
+[node name="HBoxMaxTime" type="HBoxContainer" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1168759389]
+visible = false
+layout_mode = 2
+
+[node name="LabelMaxTime" type="Label" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMaxTime" unique_id=1669307194]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "Max time:"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="LabelMaxTimeValue" type="Label" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMaxTime" unique_id=699894114]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "02:30 min"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator3" type="HSeparator" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=949552929]
+layout_mode = 2
+
+[node name="HBoxPieces" type="HBoxContainer" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1021756591]
+layout_mode = 2
+
+[node name="LabelPieces" type="Label" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxPieces" unique_id=64332646]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "Piezas:"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="LabelPiecesValue" type="Label" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer/HBoxPieces" unique_id=1209285197]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "64"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator4" type="HSeparator" parent="DifficultyLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=985397033]
+visible = false
+layout_mode = 2
+
+[connection signal="toggled" from="DifficultyLayer/Panel/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/HBoxContainer/ButtonProfresiveDifficult" to="." method="_on_button_profresive_difficult_toggled"]
+[connection signal="pressed" from="DifficultyLayer/HeaderSection/MarginContainer/HBoxContainer/ButtonClose" to="." method="_exit_tree"]

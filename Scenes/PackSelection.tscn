@@ -1,29 +1,29 @@
-[gd_scene load_steps=8 format=3 uid="uid://pvq1o6wdx44x"]
+[gd_scene format=3 uid="uid://pvq1o6wdx44x"]
 
 [ext_resource type="Script" uid="uid://db4glnv08qilj" path="res://Scripts/PackSelection.gd" id="1_wswaw"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_6xblp"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_6xblp"]
-[ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="4_oq1hd"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="4_ot00g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6xblp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oq1hd"]
 
-[node name="PackSelection" type="Node2D"]
+[node name="PackSelection" type="Node2D" unique_id=483176368]
 script = ExtResource("1_wswaw")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=271724926]
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=464275758]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.72549, 0.854902, 1, 1)
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=735495182]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -33,7 +33,7 @@ texture = ExtResource("2_6xblp")
 expand_mode = 3
 stretch_mode = 6
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/TextureRect"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/TextureRect" unique_id=1110232703]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -44,74 +44,90 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_6xblp")
 
-[node name="BackgroundTitle" parent="CanvasLayer/TextureRect/PanelContainer" instance=ExtResource("4_6xblp")]
+[node name="BackgroundTitle" parent="CanvasLayer/TextureRect/PanelContainer" unique_id=318497238 instance=ExtResource("4_6xblp")]
 z_index = 1
 layout_mode = 2
 title = "Packs"
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer" unique_id=1132979021]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -359.0
-offset_top = 91.0
+offset_top = 169.0
 offset_right = 359.0
-offset_bottom = -163.0
+offset_bottom = -43.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_oq1hd")
 
-[node name="ContainerPacks" type="VBoxContainer" parent="CanvasLayer/PanelContainer"]
+[node name="ContainerPacks" type="VBoxContainer" parent="CanvasLayer/PanelContainer" unique_id=1221642991]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/PanelContainer/ContainerPacks"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/PanelContainer/ContainerPacks" unique_id=1191066812]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer" unique_id=2112901878]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 120
+theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_bottom = 30
 
-[node name="PacksContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/MarginContainer"]
+[node name="PacksContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/MarginContainer" unique_id=1195990199]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 50
 
-[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/MarginContainer/PacksContainer"]
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/MarginContainer/PacksContainer" unique_id=1211581440]
 visible = false
 z_index = -1
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="BackButton" parent="CanvasLayer" instance=ExtResource("4_ot00g")]
-visible = false
-anchors_preset = 0
-anchor_top = 0.0
-anchor_bottom = 0.0
-offset_left = 50.0
-offset_top = 100.0
-offset_right = 170.0
-offset_bottom = 220.0
-grow_vertical = 1
-scale = Vector2(0.8, 0.8)
-path = "res://Scenes/MainMenu.tscn"
-
-[node name="FooterMenu" parent="CanvasLayer" instance=ExtResource("4_oq1hd")]
-anchors_preset = 12
-anchor_top = 1.0
+[node name="HeaderSection" type="PanelContainer" parent="CanvasLayer" unique_id=1301521183]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -120.0
-offset_right = 0.0
-offset_bottom = 0.0
+offset_top = 70.0
+offset_bottom = 174.0
 grow_horizontal = 2
-grow_vertical = 0
+size_flags_horizontal = 3
+theme_type_variation = &"PanelSinColor"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HeaderSection" unique_id=1236584311]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HeaderSection/MarginContainer" unique_id=1933865411]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=1262932951 instance=ExtResource("4_ot00g")]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=1712075849]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleSection"
+text = "Packs"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="Control" type="Control" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=750892106]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2

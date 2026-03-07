@@ -44,9 +44,9 @@ var border_updates_enabled: bool = true  # Control para actualización de bordes
 # Variables para límites visuales
 var border_areas: Array = []
 var background_limits_container: Node2D = null  # 🆕 Contenedor para los límites que siempre está centrado
-var original_area_color: Color = Color(0,0,0, 0.1)  # Verde claro para área original
-var expandable_area_color: Color = Color(0,0,0, 0.1)  # Amarillo para área expandible
-var limit_area_color: Color = Color(0,0,0, 0.1)  # Rojo muy suave para límites absolutos
+var original_area_color: Color = Color(0, 0, 0, 0.0)  # Transparente: mantener la estructura sin overlay visible
+var expandable_area_color: Color = Color(0, 0, 0, 0.0)  # Transparente: mantener la estructura sin overlay visible
+var limit_area_color: Color = Color(0, 0, 0, 0.0)  # Transparente: mantener la estructura sin overlay visible
 
 #
 # === SUBCLASE: Piece ===

@@ -1,14 +1,14 @@
-[gd_scene load_steps=24 format=3 uid="uid://dh7t7utu076oi"]
+[gd_scene format=3 uid="uid://dh7t7utu076oi"]
 
 [ext_resource type="Script" uid="uid://cct0rg0djuimx" path="res://Scripts/MainMenu.gd" id="1_pl40w"]
 [ext_resource type="Texture2D" uid="uid://cg6madwi8etli" path="res://Assets/Images/GUID/backgrounds/fondo 4.png" id="2_8um5k"]
 [ext_resource type="PackedScene" uid="uid://bf4l7m2h4pnm8" path="res://Scenes/Components/ParticleBackground.tscn" id="2_particle"]
-[ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="3_8saeu"]
 [ext_resource type="Texture2D" uid="uid://cvketyxjld53v" path="res://Assets/Images/tikitiki logo.png" id="3_8um5k"]
 [ext_resource type="PackedScene" uid="uid://bnx3dokwgr658" path="res://Scenes/Components/GradientBackground/gradient_background.tscn" id="3_cmrfp"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="4_ghw46"]
 [ext_resource type="PackedScene" uid="uid://bnl7nqpqlgw5v" path="res://Scenes/Components/GameModeSelection/GameMode.tscn" id="5_df05h"]
 [ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="6_xim88"]
+[ext_resource type="FontFile" uid="uid://ds0wa3hdat50g" path="res://Assets/Fonts/Futura-Bold-03.ttf" id="7_if7li"]
 [ext_resource type="Texture2D" uid="uid://byrkdxad7g0jr" path="res://Assets/Images/icons/icon-google-play.png" id="10_loo7a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghw46"]
@@ -22,13 +22,21 @@ expand_margin_top = 5.0
 expand_margin_right = 10.0
 expand_margin_bottom = 5.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_df05h"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_loo7a"]
 atlas = ExtResource("4_ghw46")
-region = Rect2(1585, 663, 124, 120)
+region = Rect2(1353, 669, 97, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ghw46"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_rrcx7"]
 atlas = ExtResource("4_ghw46")
-region = Rect2(1473, 669, 101, 100)
+region = Rect2(2247, 884, 79, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fh7cp"]
+atlas = ExtResource("4_ghw46")
+region = Rect2(1599, 669, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8e205"]
+atlas = ExtResource("4_ghw46")
+region = Rect2(1467, 667, 109, 103)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8um5k"]
 atlas = ExtResource("4_ghw46")
@@ -37,31 +45,20 @@ region = Rect2(1854, 664, 116, 112)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xim88"]
 bg_color = Color(0.517647, 0.6, 0.94902, 0.784314)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fh7cp"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rrcx7"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_if7li"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_loo7a"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmrfp"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_koqhg"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xim88"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8e205"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_if7li"]
 atlas = ExtResource("4_ghw46")
 region = Rect2(1988, 880, 109, 109)
 
-[node name="MainMenu" type="Node2D"]
+[node name="MainMenu" type="Node2D" unique_id=887835644 node_paths=PackedStringArray("btn_play", "btn_options", "btn_exit", "label_version")]
 script = ExtResource("1_pl40w")
+btn_play = NodePath("CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay")
+btn_options = NodePath("CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions")
+btn_exit = NodePath("CanvasLayer/MarginContainer/VBoxContainer/BTN_exit")
+label_version = NodePath("CanvasLayer/LabelVersion")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1452381892]
 
-[node name="ColorRect2" type="ColorRect" parent="CanvasLayer"]
-visible = false
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer" unique_id=744587506]
 z_index = -9
 anchors_preset = 15
 anchor_right = 1.0
@@ -70,7 +67,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.278299, 0.330951, 0.666247, 1)
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1000431675]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -81,7 +78,7 @@ texture = ExtResource("2_8um5k")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/TextureRect"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/TextureRect" unique_id=679093090]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -91,11 +88,11 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.505882)
 
-[node name="GradientBackground" parent="CanvasLayer" instance=ExtResource("3_cmrfp")]
+[node name="GradientBackground" parent="CanvasLayer" unique_id=480459163 instance=ExtResource("3_cmrfp")]
 
-[node name="ParticleBackground" parent="CanvasLayer" instance=ExtResource("2_particle")]
+[node name="ParticleBackground" parent="CanvasLayer" unique_id=1880523643 instance=ExtResource("2_particle")]
 
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer" unique_id=201546328]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -113,7 +110,7 @@ size_flags_vertical = 4
 texture = ExtResource("3_8um5k")
 expand_mode = 1
 
-[node name="LabelVersion" type="Label" parent="CanvasLayer"]
+[node name="LabelVersion" type="Label" parent="CanvasLayer" unique_id=697954937]
 offset_left = 30.0
 offset_top = 30.0
 offset_right = 130.0
@@ -123,7 +120,8 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 22
 text = "v. 0.99.999"
 
-[node name="Panel" type="Panel" parent="CanvasLayer/LabelVersion"]
+[node name="Panel" type="Panel" parent="CanvasLayer/LabelVersion" unique_id=1119523282]
+visible = false
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -134,7 +132,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ghw46")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=714516060]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -150,100 +148,202 @@ scale = Vector2(2, 2)
 pivot_offset = Vector2(60, 60)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme = ExtResource("3_8saeu")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer" unique_id=2086706160]
 layout_direction = 1
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="BTN_play" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(210, 60)
+[node name="ButtonColections" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=1246029474]
+custom_minimum_size = Vector2(200, 70)
 layout_mode = 2
-theme = ExtResource("3_8saeu")
-theme_type_variation = &"ButtonRed"
-theme_override_font_sizes/font_size = 32
-text = "Play"
-language = "auto"
 
-[node name="BTN_gameoptions" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(200, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Modos"
-
-[node name="BTN_exit" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(210, 50)
-layout_mode = 2
-theme_type_variation = &"ButtonYellow"
-theme_override_font_sizes/font_size = 32
-text = "Salir"
-
-[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer"]
-visible = false
-anchors_preset = 12
-anchor_top = 1.0
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonColections" unique_id=1587302914]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -210.0
-offset_bottom = -60.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
+theme_override_constants/margin_left = -25
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonColections/MarginContainer" unique_id=995739851]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonColections/MarginContainer/HBoxContainer" unique_id=640389070]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_loo7a")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonColections/MarginContainer/HBoxContainer" unique_id=1600227781]
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("3_8saeu")
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_fonts/font = ExtResource("7_if7li")
+theme_override_font_sizes/font_size = 16
+text = "Packs"
+uppercase = true
+
+[node name="Arrow" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonColections/MarginContainer/HBoxContainer" unique_id=1699306024]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_fonts/font = ExtResource("7_if7li")
+theme_override_font_sizes/font_size = 32
+text = ">"
+
+[node name="ButtonPlay" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=650698681]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_type_variation = &"GoldButton"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay" unique_id=2078572775]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = -25
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay/MarginContainer" unique_id=609487179]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay/MarginContainer/HBoxContainer" unique_id=737893695]
+modulate = Color(0.53997666, 0.26532334, 1, 1)
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_rrcx7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay/MarginContainer/HBoxContainer" unique_id=345210111]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="LabelPlay" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1095986111]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9713355, 0.9713355, 0.9713355, 1)
+theme_override_fonts/font = ExtResource("7_if7li")
+theme_override_font_sizes/font_size = 16
+text = "common_play"
+uppercase = true
+
+[node name="Label2" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1150702355]
+layout_mode = 2
+theme_type_variation = &"Sublabel"
+text = "Puzle de ...."
+
+[node name="Arrow" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay/MarginContainer/HBoxContainer" unique_id=1055257583]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("7_if7li")
+theme_override_font_sizes/font_size = 32
+text = ">"
+
+[node name="Control" type="Control" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=6890292]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="BTN_gameoptions" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=601114984]
+custom_minimum_size = Vector2(200, 70)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions" unique_id=849978613]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = -25
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions/MarginContainer" unique_id=1420123401]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions/MarginContainer/HBoxContainer" unique_id=151812880]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_loo7a")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions/MarginContainer/HBoxContainer" unique_id=2035158880]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_fonts/font = ExtResource("7_if7li")
+theme_override_font_sizes/font_size = 16
+text = "common_modes"
+uppercase = true
+
+[node name="Arrow" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions/MarginContainer/HBoxContainer" unique_id=1561628192]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_fonts/font = ExtResource("7_if7li")
+theme_override_font_sizes/font_size = 32
+text = ">"
+
+[node name="BTN_exit" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=742547643]
+visible = false
+custom_minimum_size = Vector2(210, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "common_exit"
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=1005768461]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=2136277697]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 50
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=1470798345]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_constants/separation = 20
+alignment = 1
 
-[node name="BTN_stats" type="Button" parent="CanvasLayer/MarginContainer2/HBoxContainer"]
+[node name="BTN_stats" type="TextureButton" parent="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1067055434]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+texture_normal = SubResource("AtlasTexture_fh7cp")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BTN_achievements" type="TextureButton" parent="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1349895925]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+texture_normal = SubResource("AtlasTexture_8e205")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BTN_options" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1581816155]
+visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-theme = ExtResource("3_8saeu")
-theme_type_variation = &"CircleButtonGreen"
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer2/HBoxContainer/BTN_stats"]
-layout_mode = 0
-offset_left = 30.0
-offset_top = 30.0
-offset_right = 70.0
-offset_bottom = 70.0
-texture = SubResource("AtlasTexture_df05h")
-expand_mode = 1
-
-[node name="BTN_achievements" type="Button" parent="CanvasLayer/MarginContainer2/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-theme = ExtResource("3_8saeu")
-theme_type_variation = &"CircleButtonYellow"
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer2/HBoxContainer/BTN_achievements"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("AtlasTexture_ghw46")
-expand_mode = 1
-
-[node name="BTN_options" type="Button" parent="CanvasLayer/MarginContainer2/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-theme_type_variation = &"CircleButtonBlue"
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer2/HBoxContainer/BTN_options"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/BTN_options" unique_id=1950271198]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -259,7 +359,8 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_8um5k")
 expand_mode = 1
 
-[node name="FooterMenu" parent="CanvasLayer" instance=ExtResource("6_xim88")]
+[node name="FooterMenu" parent="CanvasLayer" unique_id=727695445 instance=ExtResource("6_xim88")]
+visible = false
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -271,47 +372,32 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_xim88")
 
-[node name="Button" type="Button" parent="CanvasLayer"]
-custom_minimum_size = Vector2(50, 50)
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 250.0
-offset_top = 164.0
-offset_right = 300.0
-offset_bottom = 214.0
-grow_horizontal = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_fh7cp")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rrcx7")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_if7li")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_loo7a")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_cmrfp")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_koqhg")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_xim88")
+[node name="ButtonSettings" type="TextureButton" parent="CanvasLayer" unique_id=1555986533]
+custom_minimum_size = Vector2(80, 70)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -157.0
+offset_top = 73.0
+offset_right = -77.0
+offset_bottom = 143.0
+grow_horizontal = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = SubResource("AtlasTexture_if7li")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Button"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -54.5
-offset_top = -54.5
-offset_right = 54.5
-offset_bottom = 54.5
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("AtlasTexture_8e205")
-
-[node name="TextureButton" type="TextureButton" parent="CanvasLayer"]
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer" unique_id=318375247]
+visible = false
 offset_left = 74.0
 offset_top = 142.0
 offset_right = 174.0
 offset_bottom = 242.0
 texture_normal = ExtResource("10_loo7a")
 
-[node name="FalsePurcharseButton" type="Button" parent="CanvasLayer"]
+[node name="FalsePurcharseButton" type="Button" parent="CanvasLayer" unique_id=286329829]
+visible = false
 custom_minimum_size = Vector2(240, 0)
 anchors_preset = 5
 anchor_left = 0.5
@@ -323,14 +409,15 @@ offset_bottom = 212.0
 grow_horizontal = 2
 text = "Download"
 
-[node name="GameMode" parent="." instance=ExtResource("5_df05h")]
+[node name="GameMode" parent="." unique_id=881987361 instance=ExtResource("5_df05h")]
 
-[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_play" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/ButtonColections" to="." method="_on_button_colections_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay" to="." method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions" to="." method="_on_show_gameModes"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_exit" to="." method="_on_btn_exit_pressed"]
-[connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_stats" to="." method="_on_StatsButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_achievements" to="." method="_on_AchievementsButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/MarginContainer2/HBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]
-[connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/BTN_stats" to="." method="_on_StatsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/BTN_achievements" to="." method="_on_AchievementsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/BTN_options" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/ButtonSettings" to="." method="_on_OptionsButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/TextureButton" to="." method="_on_buy_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/FalsePurcharseButton" to="." method="_on_false_purcharse_button_pressed"]

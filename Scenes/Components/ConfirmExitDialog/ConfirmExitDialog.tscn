@@ -1,9 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c5r7ivbvlw6tl"]
+[gd_scene format=3 uid="uid://c5r7ivbvlw6tl"]
 
 [ext_resource type="Script" uid="uid://mx1oco1pjg1l" path="res://Scenes/Components/ConfirmExitDialog/ConfirmExitDialog.gd" id="1_7pf8o"]
-[ext_resource type="Theme" uid="uid://dyqkx5or01raf" path="res://Resources/default.tres" id="2_fntwn"]
 
-[node name="ConfirmExitDialog" type="Control"]
+[node name="ConfirmExitDialog" type="Control" unique_id=752663927]
 process_mode = 3
 z_index = 100
 layout_mode = 3
@@ -14,9 +13,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7pf8o")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=111162127]
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1233811919]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -24,68 +23,62 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.784314)
 
-[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=1141016838]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="CanvasLayer/CenterContainer"]
+[node name="Panel" type="PanelContainer" parent="CanvasLayer/CenterContainer" unique_id=2049714631]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/CenterContainer/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/CenterContainer/Panel" unique_id=1240421781]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer/Panel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer/Panel/MarginContainer" unique_id=821308270]
 layout_mode = 2
 alignment = 1
 
-[node name="TitleLabel" type="Label" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=1166379917]
 layout_mode = 2
-theme = ExtResource("2_fntwn")
 theme_override_font_sizes/font_size = 48
 text = "¿Salir del juego?"
 horizontal_alignment = 1
 
-[node name="MessageLabel" type="Label" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="MessageLabel" type="Label" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=1544565651]
 layout_mode = 2
-theme = ExtResource("2_fntwn")
+theme_type_variation = &"Sublabel"
 text = "¿Estás seguro que quieres salir?"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=1546123251]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="ButtonsContainer" type="HBoxContainer" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=868367515]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="CancelButton" type="Button" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer"]
+[node name="CancelButton" type="Button" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer" unique_id=37982527]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
-theme_type_variation = &"ButtonBlue"
 text = "Cancelar"
 
-[node name="ConfirmButton" type="Button" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer"]
+[node name="ConfirmButton" type="Button" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer" unique_id=1720707658]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
-theme = ExtResource("2_fntwn")
-theme_type_variation = &"ButtonRed"
 text = "Salir"
 
-[node name="Panels" type="Panel" parent="CanvasLayer/CenterContainer"]
+[node name="Panels" type="Panel" parent="CanvasLayer/CenterContainer" unique_id=1377673840]
 visible = false
 custom_minimum_size = Vector2(530, 300)
 layout_mode = 2
-theme = ExtResource("2_fntwn")
-theme_type_variation = &"PanelInside"
 
 [connection signal="pressed" from="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]

@@ -1,22 +1,28 @@
-[gd_scene load_steps=9 format=3 uid="uid://b6sg71qs17yj5"]
+[gd_scene format=3 uid="uid://b6sg71qs17yj5"]
 
 [ext_resource type="Script" uid="uid://c1twov7g0717y" path="res://Scripts/PuzzleSelection.gd" id="1_nt7kx"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_moqol"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="4_4mmlg"]
 [ext_resource type="PackedScene" uid="uid://dpw3l7nftx7kg" path="res://Scenes/Components/PuzzleGrid/PuzzleGrid.tscn" id="4_moqol"]
-[ext_resource type="PackedScene" uid="uid://dy820u4d0bxw6" path="res://Scenes/Components/FooterMenu/panel_container.tscn" id="5_moqol"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="6_jmjrx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4mmlg"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_moqol"]
-
-[node name="PuzzleSelection" type="Node2D"]
+[node name="PuzzleSelection" type="Node2D" unique_id=103500428]
 script = ExtResource("1_nt7kx")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=816991789]
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1294819681]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1545755903]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -28,7 +34,7 @@ texture = ExtResource("2_moqol")
 expand_mode = 3
 stretch_mode = 6
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/TextureRect"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/TextureRect" unique_id=1889181475]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -39,89 +45,45 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_4mmlg")
 
-[node name="BackgroundTitle" parent="CanvasLayer/TextureRect/PanelContainer" instance=ExtResource("4_4mmlg")]
+[node name="BackgroundTitle" parent="CanvasLayer/TextureRect/PanelContainer" unique_id=1796145659 instance=ExtResource("4_4mmlg")]
 z_index = 1
 layout_mode = 2
 title = "Packs"
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
-z_index = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = -4.0
-offset_top = 78.0
-offset_right = 3.0
-offset_bottom = 248.0
-grow_horizontal = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_moqol")
-
-[node name="BackgroundTitle" parent="CanvasLayer/PanelContainer" instance=ExtResource("4_4mmlg")]
-layout_mode = 2
-title = "Puzzles"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 68.0
-offset_bottom = 99.0
-grow_horizontal = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 20
-
-[node name="MarginLeft" type="MarginContainer" parent="CanvasLayer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-
-[node name="Volver" type="Button" parent="CanvasLayer/HBoxContainer/MarginLeft"]
-visible = false
-custom_minimum_size = Vector2(130, 60)
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Volver"
-
-[node name="Spacer" type="Control" parent="CanvasLayer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="MarginRight" type="MarginContainer" parent="CanvasLayer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_right = 20
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1956864345]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -344.0
-offset_top = 110.0
+offset_top = 162.0
 offset_right = 344.0
-offset_bottom = -141.0
+offset_bottom = -51.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/VBoxContainer" unique_id=214745166]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer/ScrollContainer" unique_id=1607589718]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
 theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 150
+theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 50
 
-[node name="PuzzleGrid" parent="CanvasLayer/VBoxContainer/ScrollContainer/MarginContainer" instance=ExtResource("4_moqol")]
+[node name="PuzzleGrid" parent="CanvasLayer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=360364454 instance=ExtResource("4_moqol")]
 layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 70
 
-[node name="TitlePuzzleSelection" type="Label" parent="CanvasLayer/VBoxContainer"]
+[node name="TitlePuzzleSelection" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=1801787246]
 visible = false
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
@@ -130,37 +92,52 @@ theme_override_font_sizes/font_size = 36
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VScrollBar" type="VScrollBar" parent="CanvasLayer/VBoxContainer"]
+[node name="VScrollBar" type="VScrollBar" parent="CanvasLayer/VBoxContainer" unique_id=294300642]
 visible = false
 layout_mode = 2
 max_value = 130.0
 
-[node name="HScrollBar" type="HScrollBar" parent="CanvasLayer/VBoxContainer"]
+[node name="HScrollBar" type="HScrollBar" parent="CanvasLayer/VBoxContainer" unique_id=134168900]
 visible = false
 layout_mode = 2
 
-[node name="FooterMenu" parent="CanvasLayer" instance=ExtResource("5_moqol")]
-anchors_preset = 12
-anchor_top = 1.0
+[node name="HeaderSection" type="PanelContainer" parent="CanvasLayer" unique_id=146225546]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -120.0
-offset_right = 0.0
-offset_bottom = 0.0
+offset_top = 70.0
+offset_bottom = 174.0
 grow_horizontal = 2
-grow_vertical = 0
+size_flags_horizontal = 3
+theme_type_variation = &"PanelSinColor"
 
-[node name="BackButton" parent="CanvasLayer" instance=ExtResource("6_jmjrx")]
-visible = false
-anchors_preset = 0
-anchor_top = 0.0
-anchor_bottom = 0.0
-offset_left = 50.0
-offset_top = 100.0
-offset_right = 170.0
-offset_bottom = 220.0
-grow_vertical = 1
-scale = Vector2(0.8, 0.8)
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HeaderSection" unique_id=230223228]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HeaderSection/MarginContainer" unique_id=1763762933]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=873637627 instance=ExtResource("6_jmjrx")]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
 path = "res://Scenes/PackSelection.tscn"
 
-[connection signal="pressed" from="CanvasLayer/HBoxContainer/MarginLeft/Volver" to="." method="_on_BackButton_pressed"]
+[node name="TitleLabel" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=130288417]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleSection"
+text = "puzzles"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="Control" type="Control" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=716420985]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2

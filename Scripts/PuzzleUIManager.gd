@@ -249,6 +249,8 @@ func _revert_flip_to_normal():
 func _on_flip_timer_timeout(flip_timer: Timer = null):
 	print("PuzzleUIManager: Desactivando modo flip por timeout")
 	puzzle_game.game_state_manager.is_flip = false
+	if puzzle_game.has_method("sync_flip_button_icon"):
+		puzzle_game.sync_flip_button_icon()
 	puzzle_game.game_state_manager.debug_flip_state()
 	if flip_timer and is_instance_valid(flip_timer):
 		flip_timer.queue_free()
@@ -267,6 +269,8 @@ func _cancel_flip_timers():
 func deactivate_flip_mode():
 	print("PuzzleUIManager: Desactivando modo flip manualmente")
 	puzzle_game.game_state_manager.is_flip = false
+	if puzzle_game.has_method("sync_flip_button_icon"):
+		puzzle_game.sync_flip_button_icon()
 	puzzle_game.game_state_manager.debug_flip_state()
 	# show_success_message("Modo Flip Desactivado", 1.5)
 	

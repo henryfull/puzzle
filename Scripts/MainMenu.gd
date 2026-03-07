@@ -1,21 +1,19 @@
 extends Node2D
 
-var btn_play: Button
-var btn_options : Button
+@export var btn_play: Button
+@export var btn_options : Button
 var btn_stats : Button
 var btn_achievements : Button
-var btn_exit : Button
-var label_version: Label
+@export var btn_exit : Button
+@export var label_version: Label
+
 var confirm_dialog_scene = preload("res://Scenes/Components/ConfirmExitDialog/ConfirmExitDialog.tscn")
 var store_scen = preload("res://Scenes/Components/Store/store.tscn")
 
 func _ready():
 	# Esperar un frame para asegurarnos de que GLOBAL y TranslationLoader estén inicializados
-	btn_options = $CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions
-	btn_play = $CanvasLayer/MarginContainer/VBoxContainer/BTN_play
 	btn_stats = $CanvasLayer/MarginContainer/VBoxContainer/BTN_stats
 	btn_achievements = $CanvasLayer/MarginContainer/VBoxContainer/BTN_achievements
-	btn_exit = $CanvasLayer/MarginContainer/VBoxContainer/BTN_exit
 	label_version = $CanvasLayer/LabelVersion
 
 	if OS.has_feature("ios"):
@@ -34,7 +32,6 @@ func _ready():
 			connect_stores.initialize_connection()
 	
 	# Actualizar los textos según el idioma actual
-	update_ui_texts()
 	
 	
 	# Conectar señal de cambio de idioma
@@ -52,18 +49,9 @@ func update_version_label():
 		label_version.text = "v. " + version
 		print("MainMenu: Versión del juego: ", version)
 
-# Función para actualizar los textos de la UI
-func update_ui_texts():
-	btn_options.text = tr("common_modes").to_upper()
-	btn_play.text = tr("common_play").to_upper()
-	btn_exit.text = tr("common_exit").to_upper()
-	print("MainMenu: Textos actualizados con idioma: ", TranslationServer.get_locale())
-
-
 
 # Función para manejar cambios de idioma
 func _on_language_changed(_locale_code):
-	update_ui_texts()
 	
 	# Actualizar textos del menú de opciones si está visible
 	if has_node("/root/OptionsManager"):
@@ -178,3 +166,7 @@ func _on_buy_button_pressed() -> void:
 
 func _on_false_purcharse_button_pressed() -> void:
 	pass # Replace with function body.
+
+
+func _on_button_colections_pressed() -> void:
+	GLOBAL.change_scene_with_loading("res://Scenes/PackSelection.tscn")

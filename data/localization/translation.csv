@@ -1,0 +1,210 @@
+key;es;en;ca
+common_yes;Sí;Yes;Sí
+common_no;No;No;No
+common_cancel;Cancelar;Cancel;Cancel·lar
+common_close;Cerrar;Close;Tancar
+common_confirm;Confirmar;Confirm;Confirmar
+common_retry;Reintentar;Retry;Tornar-ho a provar
+common_save;Guardar;Save;Desa
+common_load;Cargar;Load;Carregar
+common_exit;Salir;Exit;Sortir
+common_settings;Ajustes;Settings;Configuració
+common_options;Opciones;Options;Opcions
+common_credits;Créditos;Credits;Crèdits
+common_loading;Cargando...;Loading...;Carregant...
+common_paused;Pausa;Paused;Pausat
+common_resume;Continuar;Resume;Continuar
+common_back;Atrás;Back;Enrere
+common_error;Error;Error;Error
+common_success;Éxito;Success;Èxit
+common_warning;Advertencia;Warning;Advertència
+common_info;Información;Information;Informació
+common_message;Mensaje;Message;Missatge
+common_dice_one;Uno;One;Un
+common_dice_two;Dos;Two;Dos
+common_dice_three;Tres;Three;Tres
+common_dice_four;Cuatro;Four;Quatre
+common_dice_five;Cinco;Five;Cinc
+common_dice_six;Seis;Six;Sis
+common_tutorial_move;Usa las teclas de flecha para moverte.;Use the arrow keys to move.;Utilitza les tecles de fletxa per moure't.
+common_tutorial_attack;"Presiona ""A"" para atacar.";"Press ""A"" to attack.";"Prem ""A"" per atacar."
+common_tutorial_dice;Lanza los dados para determinar el poder del ataque.;Roll the dice to determine the attack power.;Llança els daus per determinar el poder de l'atac.
+common_music;Música;Music;Música
+common_sfx;Efectos de sonido;Sound Effects;Efectes de so
+common_general;General;General;General
+common_repeat;Repetir;Repeat;Repetir
+common_play;Jugar;Play;Jugar
+common_font_size;Tamaño de la letra;Font size;Tamany de la lletra
+common_resolution;Resolución;Resolution;Resolució
+common_language;Idioma;Language;Idioma
+common_unlock;Desbloquear;Unlock;Desbloquejar
+common_buy;Comprar;Buy;Comprar
+common_next;Siguiente;Next;Següent
+common_reset;Restablecer;Reset;Restableir
+common_time;Tiempo;Time;Temps
+common_moves;Movimientos;Moves;Moviments
+common_score;Puntuación;Score;Puntuació
+common_normal;Normal;Normal;Normal
+common_relax;Relax;Relax;Relax
+common_timetrial;Contra reloj;Time Trial;Contra rellotge
+common_challenge;Desafío;Challenge;Desafí
+common_bloqued_content;Este contenido esta bloqueado;This content is blocked;Aquest contingut esta bloquejat
+common_trophies;Trofeos;Trophies;Trofeus
+common_statistics;Estadísticas;Statistics;Estadístiques
+common_achievements;Logros;Achievements;Logros
+common_leaderboard;Tabla de posiciones;Leaderboard;Classificació
+common_leaderboard_global;Global;Global;Global
+common_leaderboard_friends;Amigos;Friends;Amics
+common_leaderboard_country;País;Country;País
+common_modes;Modos;Modes;Modes
+common_completed;Completado;Completed;Completat
+common_unlocked;Desbloqueado;Unlocked;Desbloquejat
+common_unlocked_all;Todos los modos desbloqueados;All modes unlocked;Tots els modes desbloquejats
+common_text;Texto;Text;Text
+common_difficulty;Dificultad;Difficulty;Dificultat
+common_select_mode;Seleccionar Modo;Select Mode;Seleccionar Mode
+common_colections;Colecciones;Collections;Col·leccions
+;;;
+options_restore_purchases;Restaurar;Reset;Restaurar
+options_restore_purchases_tooltip;Restaurar compras;Reset buy;Restaurar compres
+scene_mainmenu_title;Título del Juego;Game Title;Títol del Joc
+scene_mainmenu_new_game;Nuevo Juego;New Game;Nova Partida
+scene_mainmenu_continue;Continuar;Continue;Continuar
+scene_mainmenu_options;Opciones;Options;Opcions
+scene_mainmenu_exit;Salir;Exit;Sortir
+;;;
+scene_combat_turn;Turno;Turn;Torn
+scene_combat_player_turn;Turno del Jugador;Player's Turn;Torn del Jugador
+scene_combat_enemy_turn;Turno del Enemigo;Enemy's Turn;Torn de l'Enemic
+scene_combat_attack;Atacar;Attack;Atacar
+scene_combat_defend;Defender;Defend;Defensar
+scene_combat_special;Especial;Special;Especial
+scene_combat_end_turn;Finalizar Turno;End Turn;Finalitza el Torn
+scene_combat_round;Ronda;Round;Ronda
+scene_combat_victory;Victoria;Victory;Victòria
+scene_combat_defeat;Derrota;Defeat;Derrota
+;;;
+scene_deckbuilder_title;Construye tu Baraja;Build Your Deck;Construeix la teva Baralla
+scene_deckbuilder_card_pick;Selecciona una carta;Select a Card;Selecciona una Carta
+scene_deckbuilder_deck;Baraja;Deck;Baralla
+scene_deckbuilder_discard;Descarte;Discard;Descart
+scene_deckbuilder_draw;Robar;Draw;Robar
+;;;
+scene_dice_roll;Lanzar Dados;Roll Dice;Llançar Daus
+scene_dice_result;Resultado;Result;Resultat
+scene_dice_reroll;Volver a tirar;Roll Again;Torna a llançar
+;;;
+scene_inventory_title;Inventario;Inventory;Inventari
+scene_inventory_item;Artículo;Item;Article
+scene_inventory_use;Usar;Use;Utilitza
+scene_inventory_equip;Equipar;Equip;Equipar
+;;;
+scene_gameover_title;Fin del Juego;Game Over;Fi del Joc
+scene_gameover_retry;Reintentar;Retry;Tornar-ho a provar
+scene_gameover_main_menu;Menú Principal;Main Menu;Menú Principal
+;;;
+scene_character_name;Nombre;Name;Nom
+scene_character_nationality;Nacionalidad;Nationality;Nacionalitat
+scene_character_height;Altura;Height;Altura
+scene_character_weight;Peso;Weight;Pes
+scene_character_age;Edad;Age;Edat
+scene_character_kos;KO's;KO's;KO's
+scene_character_championships;Campeonatos;Championships;Campeonats
+scene_character_wins;Victorias;Victories;Victories
+scene_character_defeats;Derrotas;Defeats;Derrotes
+scene_character_ties;Empates;Ties;Empats
+scene_character_speciality;Especialidad;Speciality;Especilitat
+;;;
+difficulty_learner;Aprendiendo;Learning;Aprendent
+difficulty_very_easy;Muy fácil;Very Easy;Molt fàcil
+difficulty_easy;Fácil;Easy;Fàcil
+difficulty_normal;Normal;Normal;Normal
+difficulty_medium;Medio;Medium;Mitjà
+difficulty_challenge;Desafío;Challenge;Desafí
+difficulty_hard;Difícil;Hard;Difícil
+difficulty_very_hard;Muy difícil;Very Hard;Molt difícil
+difficulty_insane;Insano;Insane;Insà
+difficulty_expert;Experto;Expert;Expert
+difficulty_custom;Personalizado;Custom;Personalitzat
+difficulty_learner_description;El modo APRENDIZ esta enfocado para que los niños aprendan formas, colores, no números de manera visual. Cuando se selecciona un puzzle directamente te muestra la imagen y un texto relacionado con la imagen.;The LEARNER mode is focused for children to learn shapes, colors, not numbers in a visual way. When a puzzle is selected it directly shows the image and a text related to the image.;El mode APRENDIZ esta enfocado per a que els nens aprendin formes, colors, no números de manera visual. Quan es selecciona un trencaclosques directament et mostra la imatge i un text relacionat amb la imatge.
+difficulty_very_easy_description;Perfecto para principiantes con sólo 4 piezas. Ideal para niños pequeños que comienzan a desarrollar habilidades de resolución de puzles.;Perfect for beginners with only 4 pieces. Ideal for small children who are starting to develop puzzle-solving skills.;Perfecte per a principiants amb només 4 peces. Ideal per a nens petits que comencen a desenvolupar habilitats de resolució de trencaclosques.
+difficulty_easy_description;Con 9 piezas, este nivel ofrece un desafío suave que ayuda a mejorar la concentración y coordinación visual sin resultar frustrante.;With 9 pieces, this level offers a gentle challenge that helps improve visual concentration and coordination without becoming frustrating.;Amb 9 peces, aquest nivell ofereix un desafiament suau que ajuda a millorar la concentració visual i la coordinació sense resultar frustrant.
+difficulty_normal_description;El nivel estándar con 16 piezas. Equilibrado para jugadores casuales que buscan un reto moderado sin demasiada complejidad.;The standard level with 16 pieces. Balanced for casual players who seek a moderate challenge without too much complexity.;El nivell estàndard amb 16 peces. Equilibrat per a jugadors casuals que busquen un desafiament moderat sin molta complexitat.
+difficulty_medium_description;Aumenta la dificultad con 24 piezas. Requiere más atención al detalle y es adecuado para quienes ya dominan los niveles anteriores.;Increase the difficulty with 24 pieces. Requires more attention to detail and is suitable for those who already master the previous levels.;Augmenta la dificultat amb 24 peces. Requereix més atenció al detall i és adequat per a aquells que ja dominen els nivells anteriors.
+difficulty_challenge_description;Con 32 piezas, este nivel pone a prueba tu paciencia y habilidad para reconocer patrones. Recomendado para jugadores con experiencia.;With 32 pieces, this level puts your patience and pattern recognition skills to the test. Recommended for experienced players.;Amb 32 peces, aquest nivell posa a prova la teva paciència i la teva habilitat per reconèixer patrons. Recomanat per a jugadors amb experiència.
+difficulty_hard_description;48 piezas que exigen concentración sostenida y estrategia. Un verdadero reto que pondrá a prueba tus habilidades de resolución.;48 pieces that require sustained concentration and strategy. A true challenge that will test your puzzle-solving skills.;48 peces que exigeixen concentració sostenida i estratègia. Un veritable desafiament que posarà a prova les teves habilitats de resolució de trencaclosques.
+difficulty_very_hard_description;64 piezas para expertos. Requiere excelente memoria visual, paciencia y capacidad para trabajar sistemáticamente con muchas piezas similares.;64 pieces for experts. Requires excellent visual memory, patience, and the ability to work systematically with many similar pieces.;64 peces per a experts. Requereix excel·lent memòria visual, paciència i la capacitat de treballar sistemàticament amb muchas peces similars.
+difficulty_expert_description;El máximo desafío con 100 piezas. Solo para maestros del puzle con excepcional atención al detalle y resistencia mental.;The maximum challenge with 100 pieces. Only for puzzle masters with exceptional attention to detail and mental resilience.;El màxim desafiament amb 100 peces. Només per a mestres del trencaclosques amb excepcional atenció al detall i resistència mental.
+;;;
+game_mode_relax;El modo Relax esta pensado para vivir una experiencia relajante, dejando pasar el tiempo mientras resuelves bonitos puzzles.No hay tiempo, ni se cuentan los movimientos, solo tú y el puzzle.;The RELAX mode is designed to experience a relaxing experience, passing time while solving beautiful puzzles. There is no time, and the moves are not counted, only you and the puzzle.;El mode RELAX esta pensat per viure una experiència relaxada, passant el temps mentre resols trencaclosques. No hi ha temps, i no es compten els moviments, només tu i el trencaclosques.
+game_mode_normal;El modo Normal ofrece un equilibrio perfecto entre desafío y disfrute. No tienes tiempo limitado para resolver el puzzle, aunque se cuenta tanto el tiempo como los movimientos.;The NORMAL mode offers a perfect balance between challenge and enjoyment. You don't have a time limit to solve the puzzle, although both time and moves are counted.;El mode NORMAL ofereix un equilibri perfecte entre desafiament i gaudir. No tens un temps limitat per resoldre el trencaclosques, encara que es compta tant el temps com els moviments.
+game_mode_timetrial;El modo Time Trial es para los jugadores que buscan un desafío contra el reloj, tienes un tiempo limitado para resolver el puzzle;The TIME TRIAL mode is for players who seek a challenge against the clock, you have a time limit to solve the puzzle;El mode TIME TRIAL es per a jugadors que busquen un desafiament contra el rellotge, tens un temps limitat per resoldre el trencaclosques
+game_mode_chagenlle;El modo Challenge es la prueba definitiva para los expertos en puzzles. Movimientos limitados y tiempo ajustado te obligarán a pensar cada decisión con precisión.;The CHALLENGE mode is the ultimate test for puzzle experts, you have a time limit to solve the puzzle and the moves are limited. Limited moves and adjusted time will force you to think each decision with precision.;El mode CHALLENGE es el desafiament definitiu per a experts en trencaclosques. Els moviments limitats i el temps ajustat us obligaran a pensar cada decisió amb precisió.
+;;;
+usa_description_times_square;Cada año pasan por Times Square más de 50 millones de personas, convirtiéndolo en uno de los lugares más visitados del mundo. Las famosas luces y anuncios brillantes nunca se apagan, y la caída de la bola de Año Nuevo reúne aproximadamente un millón de asistentes cada año desde 1907.;Over 50 million people pass through Times Square every year, making it one of the most visited places in the world. The famous bright lights and billboards never turn off, and the New Year's ball drop has gathered approximately one million attendees each year since 1907.;Cada any passen per Times Square més de 50 milions de persones, convertint-lo en un dels llocs més visitats del món. Les famoses llums i anuncis brillants mai s'apaguen, i la caiguda de la bola de Cap d'Any reuneix aproximadament un milió d'assistents cada any des de 1907.
+usa_description_las_vegas;Esta ciudad del desierto, famosa por sus casinos y espectáculos, posee más habitaciones de hotel que cualquier otra ciudad en el mundo (más de 150.000). Curiosamente, la famosa frase 'Lo que pasa en Las Vegas, se queda en Las Vegas' nació en 2003 como campaña turística.;This desert city, famous for its casinos and shows, has more hotel rooms than any other city in the world (over 150,000). Curiously, the famous phrase 'What happens in Vegas, stays in Vegas' was born in 2003 as a tourism campaign.;Aquesta ciutat del desert, famosa pels seus casinos i espectacles, té més habitacions d'hotel que qualsevol altra ciutat del món (més de 150.000). Curiosament, la famosa frase 'El que passa a Las Vegas, es queda a Las Vegas' va néixer el 2003 com a campanya turística.
+usa_description_magic_kingdom;Inaugurado en 1971, Magic Kingdom es el parque temático más visitado del mundo con casi 21 millones de visitantes anuales. Tiene túneles subterráneos para que empleados se desplacen sin romper la magia y jamás verás basura en el suelo.;Opened in 1971, Magic Kingdom is the most visited theme park in the world with almost 21 million annual visitors. It has underground tunnels for employees to move around without breaking the magic and you'll never see trash on the ground.;Inaugurat el 1971, Magic Kingdom és el parc temàtic més visitat del món amb gairebé 21 milions de visitants anuals. Té túnels subterranis perquè els empleats es desplacin sense trencar la màgia i mai veuràs escombraries a terra.
+usa_description_estatua_libertad;La Estatua de la Libertad fue un regalo de Francia en 1886 para celebrar la amistad entre ambas naciones. Mide 93 metros desde la base hasta la antorcha, y su color verde se debe a la oxidación del cobre.;The Statue of Liberty was a gift from France in 1886 to celebrate the friendship between both nations. It measures 93 meters from the base to the torch, and its green color is due to copper oxidation.;L'Estàtua de la Llibertat va ser un regal de França el 1886 per celebrar l'amistat entre ambdues nacions. Mesura 93 metres des de la base fins la torxa, i el seu color verd es deu a l'oxidació del coure.
+usa_description_golden_gate;Construido en 1937, el Golden Gate tiene 2,7 kilómetros de largo. Su particular color naranja internacional fue elegido para mejorar su visibilidad en la niebla constante de San Francisco.;Built in 1937, the Golden Gate Bridge is 2.7 kilometers long. Its distinctive international orange color was chosen to improve its visibility in San Francisco's constant fog.;Construït el 1937, el Golden Gate té 2,7 quilòmetres de llarg. El seu particular color taronja internacional va ser triat per millorar la seva visibilitat en la boira constant de San Francisco.
+usa_description_hamburguesas_papas;Aunque la hamburguesa es popular mundialmente gracias a EE.UU., fue traída por inmigrantes alemanes de Hamburgo. En promedio, los estadounidenses comen más de 50.000 millones de hamburguesas al año, suficientes para dar 32 vueltas al planeta si las alineamos.;Although hamburgers are popular worldwide thanks to the USA, they were brought by German immigrants from Hamburg. On average, Americans eat over 50 billion hamburgers a year, enough to circle the planet 32 times if lined up.;Encara que l'hamburguesa és popular mundialment gràcies als EUA, va ser portada per immigrants alemanys d'Hamburg. En mitjana, els nord-americans mengen més de 50.000 milions d'hamburgueses a l'any, suficients per donar 32 voltes al planeta si les alineéssim.
+usa_description_bbq_ribs;Las costillas BBQ son emblemáticas del sur de Estados Unidos. Prepararlas lentamente durante horas es fundamental para lograr su sabor ahumado. Cada estado sureño tiene su propio estilo único, con salsas que varían desde dulces hasta picantes.;BBQ ribs are emblematic of the southern United States. Preparing them slowly for hours is essential to achieve their smoky flavor. Each southern state has its own unique style, with sauces ranging from sweet to spicy.;Les costelles BBQ són emblemàtiques del sud dels Estats Units. Preparar-les lentament durant hores és fonamental per aconseguir el seu sabor fumat. Cada estat del sud té el seu propi estil únic, amb salses que varien des de dolces fins picants.
+usa_description_philly_cheesesteak;Inventado en Filadelfia en la década de 1930 por Pat y Harry Olivieri, este sándwich lleva finas lonchas de carne, cebolla y queso fundido. Inicialmente fue un snack de trabajadores, pero hoy es un orgullo local con una fuerte rivalidad sobre quién prepara el mejor.;Invented in Philadelphia in the 1930s by Pat and Harry Olivieri, this sandwich features thin slices of meat, onion and melted cheese. Initially a worker's snack, today it's a local pride with fierce rivalry over who makes the best.;Inventat a Filadèlfia en la dècada de 1930 per Pat i Harry Olivieri, aquest entrepà porta fines llesques de carn, ceba i formatge fos. Inicialment va ser un aperitiu de treballadors, però avui és un orgull local amb una forta rivalitat sobre qui prepara el millor.
+usa_description_mac_cheese;Popularizado por Thomas Jefferson tras probarlo en Francia, este plato se convirtió rápidamente en favorito en Estados Unidos. Se venden más de 1 millón de cajas diarias solo de una conocida marca comercial. Su comodidad lo convierte en un clásico americano.;Popularized by Thomas Jefferson after trying it in France, this dish quickly became a favorite in the United States. Over 1 million boxes are sold daily from just one well-known commercial brand. Its convenience makes it an American classic.;Popularitzat per Thomas Jefferson després de provar-lo a França, aquest plat es va convertir ràpidament en favorit als Estats Units. Es venen més d'1 milió de caixes diàries només d'una coneguda marca comercial. La seva comoditat el converteix en un clàssic americà.
+usa_description_smores;"Los s'mores son imprescindibles en los campamentos estadounidenses desde 1927. Su nombre viene de ""some more"" (""algo más""), porque nadie puede resistirse a repetir. La receta tradicional incluye galletas Graham, chocolate derretido y malvaviscos tostados al fuego.";"S'mores have been essential at American camps since 1927. The name comes from ""some more"" because no one can resist having another. The traditional recipe includes Graham crackers, melted chocolate and fire-toasted marshmallows.";"Els s'mores són imprescindibles als campaments americans des de 1927. El seu nom ve de ""some more"" (""alguna cosa més""), perquè ningú pot resistir-se a repetir. La recepta tradicional inclou galetes Graham, xocolata desfeta i núvols torrats al foc."
+usa_description_bagels_cream_cheese;Originario de comunidades judías inmigrantes en Nueva York, los bagels fueron inventados en Polonia y llevados a EE.UU. a fines del siglo XIX. Hoy, Nueva York produce aproximadamente 1 millón de bagels diarios, tradicionalmente acompañados con queso crema.;Originating from Jewish immigrant communities in New York, bagels were invented in Poland and brought to the US in the late 19th century. Today, New York produces approximately 1 million bagels daily, traditionally served with cream cheese.;Originari de comunitats jueves immigrants a Nova York, els bagels van ser inventats a Polònia i portats als EUA a finals del segle XIX. Avui, Nova York produeix aproximadament 1 milió de bagels diaris, tradicionalment acompanyats amb formatge crema.
+usa_description_chocolate_chip_cookies;Inventadas por accidente en 1938 por Ruth Wakefield en Massachusetts cuando intentaba hacer galletas de chocolate completas. Se popularizaron durante la Segunda Guerra Mundial cuando soldados las compartían con otros países, convirtiéndose en símbolo culinario estadounidense.;Invented by accident in 1938 by Ruth Wakefield in Massachusetts when trying to make complete chocolate cookies. They became popular during World War II when soldiers shared them with other countries, becoming an American culinary symbol.;Inventades per accident el 1938 per Ruth Wakefield a Massachusetts quan intentava fer galetes de xocolata senceres. Es van popularitzar durant la Segona Guerra Mundial quan els soldats les compartien amb altres països, convertint-se en símbol culinari americà.
+usa_description_nfl;La NFL (Liga Nacional de Fútbol Americano) genera más ingresos que cualquier otra liga deportiva del mundo, con cerca de 12.000 millones de dólares anuales. Curiosamente, cada Super Bowl es visto por más de 100 millones de espectadores en EE.UU. solamente.;The NFL (National Football League) generates more revenue than any other sports league in the world, with around 12 billion dollars annually. Curiously, each Super Bowl is watched by more than 100 million viewers in the US alone.;La NFL (Lliga Nacional de Futbol Americà) genera més ingressos que qualsevol altra lliga esportiva del món, amb prop de 12.000 milions de dòlars anuals. Curiosament, cada Super Bowl és vist per més de 100 milions d'espectadors només als EUA.
+usa_description_nba;La NBA es considerada la mejor liga de baloncesto del mundo. Michael Jordan, considerado el mejor jugador de la historia, inicialmente fue rechazado de su equipo escolar por ser demasiado bajo (1,80 m). Hoy es símbolo global del deporte y cultura pop.;The NBA is considered the best basketball league in the world. Michael Jordan, considered the best player in history, was initially rejected from his school team for being too short (1.80 m). Today he is a global symbol of sports and pop culture.;La NBA és considerada la millor lliga de bàsquet del món. Michael Jordan, considerat el millor jugador de la història, inicialment va ser rebutjat del seu equip escolar per ser massa baix (1,80 m). Avui és símbol global de l'esport i la cultura pop.
+usa_description_world_series;"Aunque llamada ""Serie Mundial"", solo compiten equipos de Estados Unidos y Canadá. La tradición de cantar ""Take Me Out to the Ball Game"" en la séptima entrada empezó en 1934 y es tan esencial como el béisbol mismo para millones de fanáticos.";"Although called ""World Series"", only teams from the United States and Canada compete. The tradition of singing ""Take Me Out to the Ball Game"" in the seventh inning started in 1934 and is as essential as baseball itself for millions of fans.";"Tot i que s'anomena ""Sèrie Mundial"", només competeixen equips dels Estats Units i el Canadà. La tradició de cantar ""Take Me Out to the Ball Game"" a la setena entrada va començar el 1934 i és tan essencial com el beisbol mateix per a milions de fanàtics."
+usa_description_nhl;La NHL (Liga Nacional de Hockey) tiene una tradición particular: la Stanley Cup, su trofeo más importante, permite que cada jugador del equipo ganador lo conserve por un día. Ha recorrido el mundo entero y hasta servido de plato para cereales.;The NHL (National Hockey League) has a particular tradition: the Stanley Cup, its most important trophy, allows each player on the winning team to keep it for one day. It has traveled around the world and even served as a cereal bowl.;La NHL (Lliga Nacional d'Hockey) té una tradició particular: la Stanley Cup, el seu trofeu més important, permet que cada jugador de l'equip guanyador el conservi per un dia. Ha recorregut el món sencer i fins i tot ha servit de plat per a cereals.
+usa_description_nascar;Las carreras NASCAR comenzaron en los años 40 como competencias ilegales de coches modificados para evadir a la policía durante la Ley Seca. Hoy es un deporte masivo, con audiencias enormes, coches que alcanzan los 320 km/h y eventos vistos por millones.;NASCAR racing began in the 40s as illegal competitions of modified cars to evade police during Prohibition. Today it's a massive sport, with huge audiences, cars reaching 320 km/h and events watched by millions.;Les carreres NASCAR van començar als anys 40 com a competicions il·legals de cotxes modificats per evadir la policia durant la Llei Seca. Avui és un esport massiu, amb audiències enormes, cotxes que arriben als 320 km/h i esdeveniments vistos per milions.
+usa_description_broadway;"Broadway representa la cima del teatro estadounidense, con aproximadamente 41 teatros activos. Sus luces siempre se mantienen encendidas para honrar a la comunidad artística. El musical ""El Rey León"" ha generado más ingresos que cualquier película o producción teatral en la historia.";"Broadway represents the pinnacle of American theater, with approximately 41 active theaters. Its lights are always kept on to honor the artistic community. The musical ""The Lion King"" has generated more revenue than any movie or theatrical production in history.";"Broadway representa la cima del teatre americà, amb aproximadament 41 teatres actius. Les seves llums sempre es mantenen enceses per honrar la comunitat artística. El musical ""El Rei Lleó"" ha generat més ingressos que qualsevol pel·lícula o producció teatral de la història."
+usa_description_coachella;"Fundado en 1999, este festival de música es hoy uno de los más famosos del mundo. Cada año asisten más de 250.000 personas, y fue pionero en popularizar hologramas en conciertos, como cuando ""revivieron"" digitalmente al rapero Tupac Shakur en 2012.";"Founded in 1999, this music festival is today one of the most famous in the world. Every year more than 250,000 people attend, and it was a pioneer in popularizing holograms in concerts, such as when they digitally ""revived"" rapper Tupac Shakur in 2012.";"Fundat el 1999, aquest festival de música és avui un dels més famosos del món. Cada any assisteixen més de 250.000 persones, i va ser pioner en popularitzar hologrames en concerts, com quan van ""reviure"" digitalment el rapero Tupac Shakur el 2012."
+usa_description_smithsonian;El Smithsonian comprende 19 museos gratuitos, incluyendo el Museo del Aire y el Espacio, el más visitado en EE.UU. Alberga tesoros únicos como el traje de astronauta de Neil Armstrong y más de 154 millones de objetos históricos, científicos y culturales.;The Smithsonian comprises 19 free museums, including the Air and Space Museum, the most visited in the US. It houses unique treasures such as Neil Armstrong's astronaut suit and more than 154 million historical, scientific and cultural objects.;El Smithsonian comprèn 19 museus gratuïts, incloent el Museu de l'Aire i l'Espai, el més visitat dels EUA. Alberga tresors únics com el vestit d'astronauta de Neil Armstrong i més de 154 milions d'objectes històrics, científics i culturals.
+usa_description_met_museum;"El ""Met"" es el museo más grande de Estados Unidos, con más de dos millones de obras expuestas. Su colección incluye desde antigüedades egipcias hasta arte moderno. El emblemático edificio aparece en numerosas películas y recibe más de 6 millones de visitantes anuales.";"The ""Met"" is the largest museum in the United States, with more than two million works on display. Its collection includes everything from Egyptian antiquities to modern art. The iconic building appears in numerous films and receives more than 6 million annual visitors.";"El ""Met"" és el museu més gran dels Estats Units, amb més de dos milions d'obres exposades. La seva col·lecció inclou des d'antiguitats egípcies fins a art modern. L'emblemàtic edifici apareix en nombroses pel·lícules i rep més de 6 milions de visitants anuals."
+usa_description_empire_state;Este icónico edificio se construyó en solo 410 días durante la Gran Depresión (1930-1931). Durante años fue el edificio más alto del mundo, y en sus días despejados, es posible ver cinco estados diferentes desde su mirador en el piso 102.;This iconic building was built in just 410 days during the Great Depression (1930-1931). For years it was the tallest building in the world, and on clear days, you can see five different states from its observatory on the 102nd floor.;Aquest edifici icònic es va construir en només 410 dies durant la Gran Depressió (1930-1931). Durant anys va ser l'edifici més alt del món, i en els seus dies despejats, és possible veure cinc estats diferents des del seu mirador al pis 102.
+usa_description_auroras_boreales;Alaska es uno de los mejores lugares del mundo para ver auroras boreales, fenómeno causado por partículas solares al chocar con la atmósfera. Los nativos creen que son espíritus de sus ancestros jugando en el cielo, creando historias fascinantes alrededor de ellas.;Alaska is one of the best places in the world to see the northern lights, a phenomenon caused by solar particles colliding with the atmosphere. Natives believe they are spirits of their ancestors playing in the sky, creating fascinating stories around them.;Alaska és un dels millors llocs del món per veure aurores boreals, un fenomen causat per partícules solars que col·lideixen amb l'atmosfera. Els nadius creuen que són esperits dels seus avantpassats jugant al cel, creant històries fascinants al seu voltant.
+usa_description_bisonte;El bisonte americano, emblema del viejo oeste, casi fue extinto en el siglo XIX. Actualmente hay unos 500.000 ejemplares, muchos en parques nacionales como Yellowstone, donde pueden cruzar carreteras libremente, deteniendo el tráfico mientras pasan lentamente.;The American bison, emblem of the old west, was almost extinct in the 19th century. Currently there are about 500,000 specimens, many in national parks like Yellowstone, where they can freely cross roads, stopping traffic as they slowly pass by.;El bisó americà, emblema del vell oest, gairebé va ser extint al segle XIX. Actualment hi ha uns 500.000 exemplars, molts en parcs nacionals com Yellowstone, on poden creuar carreteres lliurement, aturant el tràfic mentre passen lentament.
+usa_description_oso;Estados Unidos alberga varias especies de osos, como el oso negro y el grizzly. Curiosamente, antes de hibernar, pueden consumir hasta 20.000 calorías diarias para prepararse. Son protagonistas de leyendas nativas por su fuerza y sabiduría.;The United States is home to several species of bears, such as the black bear and grizzly. Curiously, before hibernating, they can consume up to 20,000 calories daily to prepare. They are protagonists of native legends for their strength and wisdom.;Els Estats Units alberguen diverses espècies d'óssos, com l'ós negre i el grizzly. Curiosament, abans d'hibernar, poden consumir fins a 20.000 calories diàries per preparar-se. Són protagonistes de llegendes natives per la seva força i saviesa.
+usa_description_aguila_calva;Esta ave emblemática puede volar a más de 120 km/h en picada. Curiosamente, su nido es el más grande de América del Norte, llegando a pesar hasta dos toneladas. Fue elegida como símbolo nacional en 1782 por su majestuosidad y fuerza.;This emblematic bird can fly at more than 120 km/h in a dive. Curiously, its nest is the largest in North America, weighing up to two tons. It was chosen as a national symbol in 1782 for its majesty and strength.;Aquesta au emblemàtica pot volar a més de 120 km/h en picat. Curiosament, el seu niu és el més gran d'Amèrica del Nord, arribant a pesar fins a dues tones. Va ser triada com a símbol nacional el 1782 per la seva majestuositat i força.
+usa_description_secuoya;"Las secuoyas gigantes pueden vivir más de 3.000 años y alcanzar hasta 90 metros de altura. En California existe el ""General Sherman"", considerado el árbol más voluminoso del mundo, con más de 2.000 toneladas de peso, aún creciendo lentamente cada año.";"Giant sequoias can live more than 3,000 years and reach up to 90 meters in height. In California there is the ""General Sherman"", considered the most voluminous tree in the world, with more than 2,000 tons of weight, still growing slowly each year.";"Les sequoies gegants poden viure més de 3.000 anys i assolir fins a 90 metres d'alçada. A Califòrnia hi ha el ""General Sherman"", considerat l'arbre més voluminós del món, amb més de 2.000 tones de pes, encara creixent lentament cada any."
+;;;
+usa_times_square;Times Square;Times Square;Times Square
+usa_las_vegas;Las Vegas;Las Vegas;Las Vegas
+usa_magic_kingdom;Magic Kingdom;Magic Kingdom;Magic Kingdom
+usa_estatua_libertad;Estatua de la Libertad;Statue of Liberty;Estàtua de la Llibertat
+usa_golden_gate;Golden Gate Bridge;Golden Gate Bridge;Golden Gate Bridge
+usa_hamburguesas_papas;Hamburguesas y Papas Fritas;Hamburgers and French Fries;Hamburgueses i Patates Fregides
+usa_bbq_ribs;BBQ Ribs;BBQ Ribs;Costelles BBQ
+usa_philly_cheesesteak;Philly Cheesesteak;Philly Cheesesteak;Philly Cheesesteak
+usa_mac_cheese;Mac and Cheese;Mac and Cheese;Mac and Cheese
+usa_smores;S'mores;S'mores;S'mores
+usa_bagels_cream_cheese;Bagels con Cream Cheese;Bagels with Cream Cheese;Bagels amb Cream Cheese
+usa_chocolate_chip_cookies;Chocolate Chip Cookies;Chocolate Chip Cookies;Galetes amb Xips de Xocolata
+usa_nfl;Juegos de la NFL;NFL Games;Jocs de la NFL
+usa_nba;Juegos de la NBA;NBA Games;Jocs de la NBA
+usa_world_series;World Series (MLB);World Series (MLB);Sèrie Mundial (MLB)
+usa_nhl;Juegos de la NHL;NHL Games;Jocs de la NHL
+usa_nascar;NASCAR;NASCAR;NASCAR
+usa_broadway;Broadway Shows;Broadway Shows;Espectacles de Broadway
+usa_coachella;Coachella;Coachella;Coachella
+usa_smithsonian;Museos Smithsonian;Smithsonian Museums;Museus Smithsonian
+usa_met_museum;Metropolitan Museum of Art;Metropolitan Museum of Art;Metropolitan Museum of Art
+usa_empire_state;Empire State Building;Empire State Building;Empire State Building
+usa_auroras_boreales;Auroras boreales en Alaska;Northern Lights in Alaska;Aurores boreals a Alaska
+usa_bisonte;Bisonte cruzando la carretera;Bison crossing the road;Bisó creuant la carretera
+usa_oso;Oso en bosque otoñal;Bear in autumn forest;Ós en bosc tardorenc
+usa_aguila_calva;Águila calva volando;Bald eagle flying;Àguila calba volant
+usa_secuoya;Secuoya gigante;Giant sequoia;Sequoia gegant
+;;;
+options_pan_sensitivity;Sensibilidad;Sensitivity;Sensibilitat
+options_tween_effect;Efecto suave;Smooth effect;Efecte suau
+options_tween_duration;Duración efecto;Effect duration;Duració efecte
+options_platform_connection;Plataforma conectada;Connected platform;Plataforma connectada
+options_not_connected;No conectado;Not connected;No connectat
+options_gamecenter_sign_out_info;Para cerrar sesión en Game Center, debes hacerlo desde la configuración de iOS;To sign out of Game Center, you must do it from iOS settings;Per tancar la sessió a Game Center, has de fer-ho des de la configuració d'iOS
+common_connect;Conectar;Connect;Connectar
+options_connecting;Conectando...;Connecting...;Connectant...
+options_connection_error;Error de conexión;Connection error;Error de connexió
+options_connection_success;Conexión exitosa;Connection successful;Connexió exitosa
+options_no_services_available;No hay servicios de juego disponibles;No game services available;No hi ha serveis de joc disponibles

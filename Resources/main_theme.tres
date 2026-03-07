@@ -1,0 +1,104 @@
+[gd_resource type="Theme" format=3 uid="uid://cnnkt60s3defp"]
+
+[ext_resource type="FontFile" uid="uid://ds0wa3hdat50g" path="res://Assets/Fonts/Futura-Bold-03.ttf" id="1_rpoj5"]
+[ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="2_7ygoy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vocpi"]
+bg_color = Color(0.9529412, 0.11372549, 0.27058825, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ygoy"]
+bg_color = Color(1, 1, 1, 1)
+border_width_right = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6kckp"]
+bg_color = Color(1, 1, 1, 1)
+border_width_bottom = 5
+border_color = Color(1, 0.8117647, 0.23921569, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4loo"]
+bg_color = Color(0.9450107, 0.9450106, 0.9450106, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jniar"]
+bg_color = Color(0.9529412, 0.9529412, 0.9529412, 1)
+border_width_bottom = 5
+border_color = Color(1, 0.8117647, 0.23921569, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rpoj5"]
+bg_color = Color(0.9626116, 0.7629048, 3.85046e-07, 1)
+border_width_right = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lq07f"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rpoj5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lq07f"]
+bg_color = Color(1, 0.8117647, 0.23921569, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jgrfi"]
+bg_color = Color(0, 0, 0, 0.49411765)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7ygoy"]
+
+[resource]
+Button/colors/font_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_color = Color(0.049776524, 0.049776666, 0.04977683, 1)
+Button/colors/font_hover_pressed_color = Color(0.31315807, 0.14097077, 0.7404725, 1)
+Button/colors/font_pressed_color = Color(0.27058825, 0.11372549, 0.6509804, 1)
+Button/font_sizes/font_size = 24
+Button/fonts/font = ExtResource("1_rpoj5")
+Button/styles/focus = SubResource("StyleBoxFlat_vocpi")
+Button/styles/hover = SubResource("StyleBoxFlat_7ygoy")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_6kckp")
+Button/styles/normal = SubResource("StyleBoxFlat_b4loo")
+Button/styles/pressed = SubResource("StyleBoxFlat_jniar")
+GoldButton/base_type = &"Button"
+GoldButton/colors/font_color = Color(0, 0, 0, 1)
+GoldButton/font_sizes/font_size = 24
+GoldButton/fonts/font = ExtResource("1_rpoj5")
+GoldButton/styles/hover = SubResource("StyleBoxFlat_rpoj5")
+GoldButton/styles/hover_mirrored = SubResource("StyleBoxEmpty_lq07f")
+GoldButton/styles/hover_pressed = SubResource("StyleBoxEmpty_rpoj5")
+GoldButton/styles/normal = SubResource("StyleBoxFlat_lq07f")
+LabelOption/base_type = &"Label"
+LabelOption/font_sizes/font_size = 20
+LabelOption/fonts/font = ExtResource("2_7ygoy")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_jgrfi")
+PanelSinColor/base_type = &"PanelContainer"
+PanelSinColor/styles/panel = SubResource("StyleBoxEmpty_7ygoy")
+Sublabel/base_type = &"Label"
+Sublabel/colors/font_color = Color(0.18717614, 0.18717614, 0.18717614, 1)
+Sublabel/font_sizes/font_size = 12
+TitleSection/base_type = &"Label"
+TitleSection/font_sizes/font_size = 48
+TitleSection/fonts/font = ExtResource("1_rpoj5")

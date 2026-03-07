@@ -35,6 +35,7 @@ var loading_puzzle_instance: Node2D
 @export var score_label: Label
 @export var streak_label: Label
 @export var floating_points_label: Label
+@export var flip_image: TextureRect
 
 # Referencias a mensajes de éxito/error que deberían estar en la escena
 @onready var success_message_label: Label = $UILayer/SuccessMessage
@@ -82,6 +83,7 @@ var current_puzzle_id: String = ""
 var debug_runtime_tools_enabled: bool = false
 var dialog_blocker_enabled: bool = false
 var dialog_blocker_component: PuzzleDialogBlocker = null
+var flip_icon_tween: Tween
 
 # === SONIDOS DISPONIBLES ===
 const SOUND_FILES = {
@@ -89,6 +91,8 @@ const SOUND_FILES = {
 	"move": "res://Assets/Sounds/SFX/plop.mp3",
 	"merge": "res://Assets/Sounds/SFX/bubble.wav"
 }
+const FLIP_ICON_HALF_TURN_DEGREES := 180.0
+const FLIP_ICON_ANIMATION_DURATION := 0.24
 
 # === COLORES PARA RACHAS ===
 const STREAK_COLORS = {
@@ -354,6 +358,7 @@ func _on_puzzle_state_cleared():
 	
 	# Actualizar UI
 	_update_ui_counters()
+	sync_flip_button_icon()
 
 # === FUNCIONES DE AUDIO CONSOLIDADAS ===
 
@@ -932,9 +937,15 @@ func _on_button_repeat_pressed():
 	game_state_manager.restart_puzzle()
 
 func on_flip_button_pressed():
+	var was_flip_active := game_state_manager.is_flip
+
 	if score_manager and score_manager.is_scoring_enabled():
 		score_manager.add_flip_use()
 	ui_manager.on_flip_button_pressed()
+	if was_flip_active != game_state_manager.is_flip:
+		sync_flip_button_icon(true)
+	else:
+		sync_flip_button_icon()
 
 func _on_button_toggle_hud_pressed():
 	ui_manager.toggle_hud()
@@ -1247,7 +1258,7 @@ func _initialize_new_puzzle_state():
 		game_state_manager.time_left = GLOBAL.puzzle_limits.max_time
 		
 		print("PuzzleGame: Contadores reseteados - Movimientos: 0, Flips: 0, Tiempo: 0.0")
-	
+		
 	# 🔧 CRÍTICO: Resetear también los contadores del score_manager
 	if score_manager:
 		print("PuzzleGame: Reseteando puntuación para nuevo puzzle...")
@@ -1269,6 +1280,62 @@ func _initialize_new_puzzle_state():
 	
 	# Actualizar la UI con los contadores reseteados
 	_update_ui_counters()
+	sync_flip_button_icon()
+
+func sync_flip_button_icon(animated: bool = false) -> void:
+	if flip_image == null:
+		return
+
+	var is_flip_active := game_state_manager != null and game_state_manager.is_flip
+	if animated:
+		_animate_flip_button_icon(is_flip_active)
+		return
+
+	_stop_flip_button_icon_animation()
+	_apply_flip_button_icon_rest_state(is_flip_active)
+
+func _animate_flip_button_icon(is_flip_active: bool) -> void:
+	if flip_image == null:
+		return
+
+	_stop_flip_button_icon_animation()
+	flip_image.scale = Vector2.ONE
+
+	# Forzamos exactamente media vuelta visual por pulsación.
+	flip_image.rotation_degrees = 0.0 if is_flip_active else FLIP_ICON_HALF_TURN_DEGREES
+
+	flip_icon_tween = create_tween()
+	flip_icon_tween.tween_property(
+		flip_image,
+		"rotation_degrees",
+		FLIP_ICON_HALF_TURN_DEGREES if is_flip_active else FLIP_ICON_HALF_TURN_DEGREES * 2.0,
+		FLIP_ICON_ANIMATION_DURATION
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	flip_icon_tween.parallel().tween_property(
+		flip_image,
+		"scale",
+		Vector2(0.9, 0.9),
+		FLIP_ICON_ANIMATION_DURATION * 0.45
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	flip_icon_tween.chain().tween_property(
+		flip_image,
+		"scale",
+		Vector2.ONE,
+		FLIP_ICON_ANIMATION_DURATION * 0.55
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	flip_icon_tween.tween_callback(Callable(self, "_apply_flip_button_icon_rest_state").bind(is_flip_active))
+
+func _apply_flip_button_icon_rest_state(is_flip_active: bool) -> void:
+	if flip_image == null:
+		return
+
+	flip_image.rotation_degrees = FLIP_ICON_HALF_TURN_DEGREES if is_flip_active else 0.0
+	flip_image.scale = Vector2.ONE
+
+func _stop_flip_button_icon_animation() -> void:
+	if flip_icon_tween and flip_icon_tween.is_valid():
+		flip_icon_tween.kill()
+	flip_icon_tween = null
 
 func _restore_puzzle_state(puzzle_state_manager):
 	print("PuzzleGame: 🔧 Iniciando restauración UNIFICADA de estado...")
