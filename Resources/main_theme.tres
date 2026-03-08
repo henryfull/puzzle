@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://ds0wa3hdat50g" path="res://Assets/Fonts/Futura-Bold-03.ttf" id="1_rpoj5"]
 [ext_resource type="FontFile" uid="uid://c0n7te484g25r" path="res://Assets/Fonts/MadimiOne-Regular.ttf" id="2_7ygoy"]
+[ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="2_b4loo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vocpi"]
 bg_color = Color(0.9529412, 0.11372549, 0.27058825, 1)
@@ -41,6 +42,24 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_jniar"]
+atlas = ExtResource("2_b4loo")
+region = Rect2(1368, 487, 100, 101)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b4loo"]
+atlas = ExtResource("2_b4loo")
+region = Rect2(382, 474, 100, 101)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b4loo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jniar"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jgrfi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vocpi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6kckp"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rpoj5"]
 bg_color = Color(0.9626116, 0.7629048, 3.85046e-07, 1)
 border_width_right = 2
@@ -60,6 +79,43 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4x8ju"]
+content_margin_left = 5.0
+content_margin_top = 15.0
+content_margin_right = 5.0
+content_margin_bottom = 15.0
+bg_color = Color(1, 0.8117647, 0.23921569, 1)
+corner_radius_top_left = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_42u4b"]
+content_margin_left = 5.0
+content_margin_top = 15.0
+content_margin_right = 5.0
+content_margin_bottom = 15.0
+bg_color = Color(0.9999998, 0.85444593, 0.45899445, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gp45f"]
+content_margin_left = 5.0
+content_margin_top = 15.0
+content_margin_right = 5.0
+content_margin_bottom = 15.0
+bg_color = Color(0.79182035, 0.6256312, 1.1551381e-06, 1)
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.8117647, 0.23921569, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jgrfi"]
 bg_color = Color(0, 0, 0, 0.49411765)
@@ -82,6 +138,14 @@ Button/styles/hover = SubResource("StyleBoxFlat_7ygoy")
 Button/styles/hover_pressed = SubResource("StyleBoxFlat_6kckp")
 Button/styles/normal = SubResource("StyleBoxFlat_b4loo")
 Button/styles/pressed = SubResource("StyleBoxFlat_jniar")
+CheckBox/icons/checked = SubResource("AtlasTexture_jniar")
+CheckBox/icons/unchecked = SubResource("AtlasTexture_b4loo")
+CheckBox/styles/focus = SubResource("StyleBoxEmpty_b4loo")
+CheckBox/styles/hover = SubResource("StyleBoxEmpty_jniar")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxEmpty_jgrfi")
+CheckBox/styles/normal = SubResource("StyleBoxEmpty_vocpi")
+CheckBox/styles/pressed = SubResource("StyleBoxEmpty_6kckp")
+CheckButton/font_sizes/font_size = 24
 GoldButton/base_type = &"Button"
 GoldButton/colors/font_color = Color(0, 0, 0, 1)
 GoldButton/font_sizes/font_size = 24
@@ -90,9 +154,14 @@ GoldButton/styles/hover = SubResource("StyleBoxFlat_rpoj5")
 GoldButton/styles/hover_mirrored = SubResource("StyleBoxEmpty_lq07f")
 GoldButton/styles/hover_pressed = SubResource("StyleBoxEmpty_rpoj5")
 GoldButton/styles/normal = SubResource("StyleBoxFlat_lq07f")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_4x8ju")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_42u4b")
+HSlider/styles/slider = SubResource("StyleBoxFlat_gp45f")
 LabelOption/base_type = &"Label"
 LabelOption/font_sizes/font_size = 20
 LabelOption/fonts/font = ExtResource("2_7ygoy")
+OptionButton/font_sizes/font_size = 24
+OptionButton/fonts/font = ExtResource("1_rpoj5")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_jgrfi")
 PanelSinColor/base_type = &"PanelContainer"
 PanelSinColor/styles/panel = SubResource("StyleBoxEmpty_7ygoy")
@@ -102,3 +171,5 @@ Sublabel/font_sizes/font_size = 12
 TitleSection/base_type = &"Label"
 TitleSection/font_sizes/font_size = 48
 TitleSection/fonts/font = ExtResource("1_rpoj5")
+Tree/font_sizes/font_size = 24
+Tree/font_sizes/title_button_font_size = 24

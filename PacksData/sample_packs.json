@@ -2,8 +2,8 @@
 	"packs": [
 		{
 			"id": "fruits",
-			"name": "Fruits",
-			"description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+			"name": "pack_fruits_name",
+			"description": "pack_fruits_description",
 			"image_path": "res://Assets/Images/packs/fruits/thumbnail.png",
 			"unlocked": true,
 			"purchased": true,
@@ -98,7 +98,7 @@
 					"id": "fruit13",
 					"name": "fruit_passion_fruit",
 					"image": "res://Assets/Images/packs/fruits/passionfruit.jpg",
-					"description": "fruit_Ppassion_fruit_description",
+					"description": "fruit_passion_fruit_description",
 					"completed": false
 				},
 				{
@@ -163,8 +163,8 @@
 	"dlc_packs": [
 		{
 			"id": "numbers",
-			"name": "Numbers",
-			"description": "Puzzles inspirados en obras de arte moderno y abstracto.",
+			"name": "pack_numbers_name",
+			"description": "pack_numbers_description",
 			"image_path": "res://Assets/Images/packs/numbers/thumbnail.png",
 			"unlocked": false,
 			"purchased": false,
@@ -172,8 +172,8 @@
 		},
 		{
 			"id": "artistic-cities",
-			"name": "Artistic Cities",
-			"description": "Puzzles inspirados en ciudades artísticas del mundo.",
+			"name": "pack_artistic_cities_name",
+			"description": "pack_artistic_cities_description",
 			"image_path": "res://dlc/packs/artistic-cities/thumbnail.png",
 			"unlocked": false,
 			"purchased": false,
@@ -181,8 +181,8 @@
 		},
 		{
 			"id": "wild-animals",
-			"name": "Wild Animals",
-			"description": "Puzzles inspirados en animales salvajes del mundo.",
+			"name": "pack_wild_animals_name",
+			"description": "pack_wild_animals_description",
 			"image_path": "res://dlc/packs/wild-animals/thumbnail.png",
 			"unlocked": false,
 			"purchased": false,
@@ -190,8 +190,8 @@
 		},
 		{
 			"id": "wild-animals-cartoon",
-			"name": "Wild Animals Cartoon",
-			"description": "Puzzles inspirados en animales salvajes en formato cartoon.",
+			"name": "pack_wild_animals_cartoon_name",
+			"description": "pack_wild_animals_cartoon_description",
 			"image_path": "res://dlc/packs/wild-animals-cartoon/thumbnail.png",
 			"unlocked": false,
 			"purchased": false,

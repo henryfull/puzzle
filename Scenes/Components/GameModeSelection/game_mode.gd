@@ -24,7 +24,7 @@ func _ready():
 	is_mobile = OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios")
 	# Obtener referencias a los nodos
 	difficulty_panel = $"."
-	$GameModeLayer/Panel/MarginContainer/VBoxContainer/PlayButton.text = tr("common_play")
+	$GameModeLayer/Panel/MarginContainer/VBoxContainer/PlayButton.text = TranslationServer.translate("common_play")
 	# Crear los botones de dificultad
 	_create_difficulty_buttons()
 	
@@ -35,6 +35,22 @@ func _ready():
 	# Conectar a la señal propia
 	self.connect("show_difficult", Callable(self, "_on_toggle_difficult"))
 	updateColor()
+
+func update_ui_texts():
+	$GameModeLayer/Panel/MarginContainer/VBoxContainer/PlayButton.text = TranslationServer.translate("common_play")
+
+	for i in range(min(difficulty_buttons.size(), GLOBAL.modes.size())):
+		var diff = GLOBAL.modes[i]
+		var button: Button = difficulty_buttons[i]
+		if is_instance_valid(button):
+			button.text = TranslationServer.translate(diff.name)
+			button.tooltip_text = TranslationServer.translate(diff.description)
+
+	_update_button_text()
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
 
 func updateColor():
 	GLOBAL.setColorMode(panelColor, headerColor)
@@ -57,11 +73,11 @@ func _create_difficulty_buttons():
 	for i in range(GLOBAL.modes.size()):
 		var diff = GLOBAL.modes[i]
 		var button = Button.new()
-		button.text = tr(diff.name)
+		button.text = TranslationServer.translate(diff.name)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.mouse_filter = Control.MOUSE_FILTER_PASS
 		button.custom_minimum_size = Vector2(0, 120)
-		button.tooltip_text = tr(diff.description)
+		button.tooltip_text = TranslationServer.translate(diff.description)
 		
 		# Aplicar el tema de color si está definido
 		if diff.color != "":
@@ -83,7 +99,7 @@ func _update_button_text():
 		var diff = GLOBAL.modes[i]
 		if diff.id == GLOBAL.gamemode:
 			current_difficulty = diff.name
-			descriptionLabel.text = diff.description
+			descriptionLabel.text = TranslationServer.translate(diff.description)
 			selected_index = i
 			break
 	

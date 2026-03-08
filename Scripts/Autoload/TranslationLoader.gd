@@ -1,83 +1,73 @@
 extends Node
 
-var translations = {}  # Diccionario donde guardamos las traducciones
-var current_language = "es"  # Idioma por defecto (cambiado a español)
-var path_translations = "res://PacksData/translation.csv"
+const DEFAULT_LANGUAGE := "es"
+const SETTINGS_FILE := "user://settings.cfg"
+const SUPPORTED_LANGUAGES := ["es", "en", "ca"]
 
-# Señal para notificar cambios de idioma
+var current_language := DEFAULT_LANGUAGE
+
 signal language_changed(locale_code)
 
-# Cargar el archivo CSV al iniciar
-func _ready():
-	load_csv(path_translations)
+func _ready() -> void:
 	load_language_from_config()
-	print("Idioma actual cargado: ", current_language)
+	print("TranslationLoader: Idioma actual cargado: ", current_language)
 
-# Función para leer el CSV y almacenar los textos
-func load_csv(path):
-	var file = FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		print("Error al abrir el archivo de traducciones.")
-		return
-	
-	# Leer todas las líneas del CSV
-	var lines = file.get_as_text().split("\n")
-	var headers = lines[0].split(",")  # Primera línea con los nombres de los idiomas
-	
-	# Procesar cada línea del CSV
-	for i in range(1, lines.size()):
-		var row = lines[i].split(",")		
-		var key = row[0]  # La primera columna es la clave del texto
-		translations[key] = {}  # Diccionario para almacenar las traducciones
-		
-		# Asignar valores según el idioma
-		for j in range(1, row.size()):
-			var lang_code = headers[j]  # Código del idioma (es, en, fr, etc.)
-			translations[key][lang_code] = row[j]  # Guardamos la traducción
+func load_language_from_config() -> void:
+	var locale_code := DEFAULT_LANGUAGE
+	var config := ConfigFile.new()
+	var err := config.load(SETTINGS_FILE)
 
-# Cargar el idioma desde el archivo de configuración
-func load_language_from_config():
-	var config = ConfigFile.new()
-	var err = config.load("user://settings.cfg")
-	
 	if err == OK:
-		var locale_code = config.get_value("settings", "language", "es")  # Predeterminado: español
-		set_language(locale_code)
-		GLOBAL.settings.language = locale_code
-		
-		# Asegurarse de que el TranslationServer tenga el idioma correcto
-		TranslationServer.set_locale(locale_code)
-	else:
-		# Si no hay configuración, usar el idioma predeterminado
-		set_language(GLOBAL.settings.language)
-		
-		# Asegurarse de que el TranslationServer tenga el idioma correcto
-		TranslationServer.set_locale(GLOBAL.settings.language)
-	
-	# Notificar a la escena actual para actualizar textos
-	await get_tree().process_frame  # Esperar un frame para asegurarse de que la escena esté lista
-	var current_scene = get_tree().current_scene
-	if current_scene and current_scene.has_method("update_ui_texts"):
-		current_scene.update_ui_texts()
+		locale_code = str(config.get_value("settings", "language", DEFAULT_LANGUAGE))
+	elif has_node("/root/GLOBAL"):
+		locale_code = str(GLOBAL.settings.language)
 
-# Función para obtener un texto en el idioma actual
-func get_translation(key):
-	if key in translations and current_language in translations[key]:
-		return translations[key][current_language]
-	return key  # Devuelve la clave si no hay traducción
+	set_language(locale_code, false)
 
-# Cambiar el idioma en tiempo real
-func set_language(lang):
-	if translations.size() > 0 and translations.values()[0].has(lang):  # Verificar si el idioma existe
-		current_language = lang
-		GLOBAL.settings.language = lang
-		
-		# Emitir señal de cambio de idioma
-		emit_signal("language_changed", lang)
-		
-		# Notificar a la escena actual para actualizar textos
-		var current_scene = get_tree().current_scene
-		if current_scene and current_scene.has_method("update_ui_texts"):
-			current_scene.update_ui_texts()
-		
-		print("Idioma establecido a: ", lang)
+func set_language(lang: String, save_config: bool = true) -> void:
+	var normalized_language := _normalize_language(lang)
+	current_language = normalized_language
+
+	if has_node("/root/GLOBAL"):
+		GLOBAL.settings.language = normalized_language
+
+	TranslationServer.set_locale(normalized_language)
+
+	if save_config:
+		_save_language_to_config(normalized_language)
+
+	emit_signal("language_changed", normalized_language)
+	call_deferred("_refresh_translatable_ui")
+	print("TranslationLoader: Idioma establecido a: ", normalized_language)
+
+func _normalize_language(lang: String) -> String:
+	if SUPPORTED_LANGUAGES.has(lang):
+		return lang
+
+	return DEFAULT_LANGUAGE
+
+func _save_language_to_config(locale_code: String) -> void:
+	var config := ConfigFile.new()
+	var err := config.load(SETTINGS_FILE)
+	if err != OK and err != ERR_FILE_NOT_FOUND:
+		print("TranslationLoader: Error al cargar settings.cfg: ", err)
+
+	config.set_value("settings", "language", locale_code)
+
+	err = config.save(SETTINGS_FILE)
+	if err != OK:
+		print("TranslationLoader: Error al guardar settings.cfg: ", err)
+
+func _refresh_translatable_ui() -> void:
+	var root := get_tree().root
+	if root == null:
+		return
+
+	_refresh_node(root)
+
+func _refresh_node(node: Node) -> void:
+	if node.has_method("update_ui_texts"):
+		node.update_ui_texts()
+
+	for child in node.get_children():
+		_refresh_node(child)

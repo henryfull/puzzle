@@ -15,25 +15,43 @@ func _ready():
 	if(!defeat_data):
 		return
 
-	# Mostrar estadísticas
-	var stats_text = ""
-	if defeat_data.has("total_moves"):
-		stats_text += "Movimientos: %d\n" % defeat_data.total_moves
-	if defeat_data.has("elapsed_time"):
-		var minutes = int(defeat_data.elapsed_time) / 60
-		var seconds = int(defeat_data.elapsed_time) % 60
-		stats_text += "Tiempo: %02d:%02d\n" % [minutes, seconds]
-	if defeat_data.has("flip_count"):
-		stats_text += "Flips: %d\n" % defeat_data.flip_count
-	if defeat_data.has("flip_move_count"):
-		stats_text += "Movimientos en flip: %d\n" % defeat_data.flip_move_count
-	stats_label.text = stats_text
+	update_ui_texts()
 
-	# Motivo de derrota
+func _format_time_value(time_in_seconds: float) -> String:
+	var minutes = int(time_in_seconds) / 60
+	var seconds = int(time_in_seconds) % 60
+	return "%02d:%02d" % [minutes, seconds]
+
+func update_ui_texts():
+	if not defeat_data:
+		return
+
+	var lines: Array[String] = []
+	if defeat_data.has("total_moves"):
+		lines.append(TranslationServer.translate("defeat_moves") % int(defeat_data.total_moves))
+	if defeat_data.has("elapsed_time"):
+		lines.append(TranslationServer.translate("defeat_time") % _format_time_value(defeat_data.elapsed_time))
+	if defeat_data.has("flip_count"):
+		lines.append(TranslationServer.translate("defeat_flips") % int(defeat_data.flip_count))
+	if defeat_data.has("flip_move_count"):
+		lines.append(TranslationServer.translate("defeat_flip_moves") % int(defeat_data.flip_move_count))
+
+	stats_label.text = "\n".join(lines)
+
 	if defeat_data.has("reason"):
-		reason_label.text = defeat_data.reason
+		reason_label.text = TranslationServer.translate(str(defeat_data.reason))
 	else:
-		reason_label.text = "desconocido"
+		reason_label.text = TranslationServer.translate("common_unknown")
+
+	if retry_button:
+		retry_button.text = TranslationServer.translate("common_repeat")
+
+	if back_button:
+		back_button.text = TranslationServer.translate("common_back")
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
 
 
 func _on_retry_pressed():

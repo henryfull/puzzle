@@ -6,11 +6,13 @@ extends Control
 @export var puzzleImage2D: Sprite2D
 @export var textView: RichTextLabel
 @export var labelTitle : Label
-@export var moves : PanelContainer
-@export var time_panel : PanelContainer  # Panel para el tiempo
-@export var flips_panel : PanelContainer  # Panel para los flips
 @export var expanseImagePanel : Panel
-@export var score_panel : PanelContainer  # Panel para la puntuación
+@export var time_label: Label
+@export var moves_label: Label
+@export var score_label: Label
+@export var new_time_label: Label
+@export var new_moves_label: Label
+@export var new_score_label: Label
 
 # Variables para almacenar los datos del puzzle
 var puzzle_data = null
@@ -46,6 +48,7 @@ func _ready():
 	
 	# Obtener referencia al ProgressManager
 	progress_manager = get_node("/root/ProgressManager")
+	setup_ui()
 	
 	# Obtener los datos de victoria desde GLOBAL
 	if GLOBAL.has_method("get") and GLOBAL.get("victory_data") != null:
@@ -93,9 +96,6 @@ func _ready():
 		# Limpiar los datos de victoria para evitar problemas si se vuelve a esta escena
 
 	
-	# Configurar la interfaz básica
-	setup_ui()
-	
 	# Si tenemos datos del puzzle, mostrarlos
 	if puzzle_data != null:
 		update_ui_with_puzzle_data()
@@ -129,30 +129,9 @@ func _ready():
 
 # Función para configurar la interfaz básica
 func setup_ui():
-	# Obtener referencias a los nodos existentes
-	var vbox_container = $CanvasLayer/Body/VBoxContainer
-	
-	# Asegurarse de que el contenedor principal ocupe toda la pantalla
-	$CanvasLayer.layer = 10  # Asegurarse de que esté por encima de todo
-	
-	# Obtener referencias a los elementos de la interfaz
-	var title = labelTitle
-	title.text = "COMPLETADO"
-	
-	var info = labelInfo
-	info.text = "Has completado el puzzle"
-	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	info.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	info.add_theme_font_size_override("font_size", 16)
-	info.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
-	
-
-	
-
-	
 	# Configurar el Sprite2D si existe
 	var sprite = puzzleImage2D
-	if sprite:
+	if sprite and sprite.texture:
 		# Obtener el tamaño del contenedor
 		var container_size = get_viewport_rect().size
 		
@@ -200,13 +179,13 @@ func setup_ui():
 	# Configurar el botón de alternancia
 	toggle_button = $CanvasLayer/VBoxContainer/BlockButtonChange/Button
 	if toggle_button:
-		toggle_button.text = "Texto"
 		toggle_button.custom_minimum_size = Vector2(150, 40)
 		toggle_button.add_theme_stylebox_override("normal", _create_button_style(Color(0.1, 0.3, 0.5, 1.0)))
 		toggle_button.add_theme_stylebox_override("hover", _create_button_style(Color(0.2, 0.4, 0.6, 1.0)))
 		toggle_button.add_theme_stylebox_override("pressed", _create_button_style(Color(0.05, 0.2, 0.4, 1.0)))
 		toggle_button.add_theme_color_override("font_color", Color(1, 1, 1))
-		toggle_button.connect("pressed", Callable(self, "_on_toggle_view_pressed"))
+		if not toggle_button.is_connected("pressed", Callable(self, "_on_toggle_view_pressed")):
+			toggle_button.connect("pressed", Callable(self, "_on_toggle_view_pressed"))
 	
 	# Configurar los botones existentes
 	var hbox_buttons = $CanvasLayer/VBoxContainer/HBoxContainer
@@ -223,34 +202,47 @@ func setup_ui():
 				button.add_theme_stylebox_override("pressed", _create_button_style(Color(0.05, 0.2, 0.4, 1.0)))
 				button.add_theme_color_override("font_color", Color(1, 1, 1))
 
+	_refresh_toggle_button_text()
+
+func update_ui_texts():
+	if labelTitle:
+		labelTitle.text = TranslationServer.translate("common_completed").to_upper()
+
+	update_ui_with_puzzle_data()
+	_refresh_toggle_button_text()
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
+
+func _refresh_toggle_button_text():
+	if toggle_button:
+		toggle_button.text = TranslationServer.translate("common_image") if !showing_image else TranslationServer.translate("common_text")
+
 # Función para actualizar la interfaz con los datos del puzzle
 func update_ui_with_puzzle_data():
 	# Actualizar la información de movimientos y tiempo
 	var info_label = labelInfo
 	if info_label:
-		var minutes = int(elapsed_time) / 60
-		var seconds = int(elapsed_time) % 60
-		info_label.text = tr("Has completado el puzzle en ") + str(total_moves) + tr(" movimientos") + "\n" + tr("Tiempo: ") + "%02d:%02d" % [minutes, seconds]
+		info_label.text = TranslationServer.translate("victory_completed_in_prefix") + " " + str(total_moves) + TranslationServer.translate("victory_moves_suffix") + "\n" + TranslationServer.translate("victory_time_prefix") + " " + _format_time_value(elapsed_time)
 	
 	# Actualizar la información de estadísticas
 	var stats_label = statsLabel
-	if stats_label:
+	if stats_label and progress_manager:
 		# Obtener las estadísticas del puzzle actual
 		var puzzle_stats = progress_manager.get_puzzle_stats(current_pack_id, current_puzzle_id)
-		var difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
+		var difficulty_key = _get_difficulty_key()
 		
 		if puzzle_stats.has(difficulty_key):
 			var stats = puzzle_stats[difficulty_key]
-			var best_time_minutes = int(stats.best_time) / 60
-			var best_time_seconds = int(stats.best_time) % 60
 			
-			var stats_text = tr("Mejor tiempo: ") + "%02d:%02d" % [best_time_minutes, best_time_seconds] + "\n"
-			stats_text += tr("Mejor movimientos: ") + str(stats.best_moves) + "\n"
-			stats_text += tr("Veces completado: ") + str(stats.completions)
+			var stats_text = "%s: %s\n" % [TranslationServer.translate("stats_best_time"), _format_time_value(stats.best_time)]
+			stats_text += "%s: %s\n" % [TranslationServer.translate("stats_best_moves"), str(stats.best_moves)]
+			stats_text += "%s: %s" % [TranslationServer.translate("stats_completions"), str(stats.completions)]
 			
 			stats_label.text = stats_text
 		else:
-			stats_label.text = tr("No hay estadísticas previas")
+			stats_label.text = TranslationServer.translate("stats_no_previous")
 	
 	# Actualizar todos los paneles de resultados
 	setup_result_panels()
@@ -290,23 +282,24 @@ func update_ui_with_puzzle_data():
 	if puzzle_data and puzzle_data.has("name"):
 		var name_label = labelNamePuzzle
 		if name_label:
-			name_label.text = tr(puzzle_data.name).to_upper()
+			name_label.text = TranslationServer.translate(puzzle_data.name).to_upper()
 			name_label.visible = true
 	
 	# Actualizar el texto descriptivo
 	if puzzle_data and puzzle_data.has("description") and text_view:
 		# Formatear el texto para resaltar el nombre científico si existe
 		var description = puzzle_data.description
-		var formatted_text = tr(description)
+		var localized_description = TranslationServer.translate(description)
+		var formatted_text = localized_description
 		
 		# Buscar posibles nombres científicos (en cursiva o entre comillas)
 		var regex = RegEx.new()
 		regex.compile("([A-Z][a-z]+ [a-z]+)")
-		var result = regex.search(description)
+		var result = regex.search(localized_description)
 		
 		if result:
 			var scientific_name = result.get_string()
-			formatted_text = description.replace(scientific_name, "[color=red]" + scientific_name + "[/color]")
+			formatted_text = localized_description.replace(scientific_name, "[color=red]" + scientific_name + "[/color]")
 		
 		# Añadir formato adicional para mejorar la legibilidad
 		formatted_text = "[center][font_size=20]" + formatted_text + "[/font_size][/center]"
@@ -330,8 +323,7 @@ func _on_toggle_view_pressed():
 		text_view.visible = !showing_image
 	
 	# Actualizar el texto del botón
-	if toggle_button:
-		toggle_button.text = "Imagen" if !showing_image else "Texto"
+	_refresh_toggle_button_text()
 
 # Función para crear un estilo de botón
 func _create_button_style(color: Color) -> StyleBoxFlat:
@@ -387,12 +379,12 @@ func show_unlocked_achievements():
 	# Encontrar la sección de estadísticas para añadir información de logros
 	var stats_label = statsLabel
 	if stats_label:
-		var achievement_text = "¡Logros desbloqueados!\n"
+		var achievement_text = TranslationServer.translate("common_achievements") + "\n"
 		
 		for achievement_id in unlocked_achievements:
 			var achievement_data = achievements_manager.get_achievement(achievement_id)
 			if achievement_data.size() > 0:
-				achievement_text += "- " + achievement_data.name + "\n"
+				achievement_text += "- " + TranslationServer.translate(achievement_data.name) + "\n"
 		
 		stats_label.text = achievement_text
 		stats_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -403,13 +395,13 @@ func show_unlocked_achievements():
 	# También añadir información a la vista de texto
 	if text_view and text_view.bbcode_enabled:
 		var current_text = text_view.text
-		var achievement_bbcode = "\n\n[center][color=#003399][font_size=22]¡LOGROS DESBLOQUEADOS![/font_size][/color][/center]\n\n"
+		var achievement_bbcode = "\n\n[center][color=#003399][font_size=22]" + TranslationServer.translate("common_achievements").to_upper() + "[/font_size][/color][/center]\n\n"
 		
 		for achievement_id in unlocked_achievements:
 			var achievement_data = achievements_manager.get_achievement(achievement_id)
 			if achievement_data.size() > 0:
-				achievement_bbcode += "[center][color=#0055AA][font_size=20]" + achievement_data.name + "[/font_size][/color]\n"
-				achievement_bbcode += "[font_size=18]" + achievement_data.desc + "[/font_size][/center]\n\n"
+				achievement_bbcode += "[center][color=#0055AA][font_size=20]" + TranslationServer.translate(achievement_data.name) + "[/font_size][/color]\n"
+				achievement_bbcode += "[font_size=18]" + TranslationServer.translate(achievement_data.desc) + "[/font_size][/center]\n\n"
 		
 		text_view.text = current_text + achievement_bbcode
 	
@@ -420,170 +412,51 @@ func show_unlocked_achievements():
 	if stats_label:
 		stats_label.visible = true 
 
-# Función para configurar todos los paneles de resultados
+# Función para configurar los valores mostrados en la pantalla de victoria
 func setup_result_panels():
-	var puzzle_stats = progress_manager.get_puzzle_stats(current_pack_id, current_puzzle_id)
-	var difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
-	
-	# Estructura para definir los paneles y sus datos
-	var panels_data = [
-		{
-			"panel": moves,
-			"title": "MOVIMIENTOS",
-			"current_value": total_moves,
-			"stat_key": "best_moves",
-			"is_time": false,
-			"color": Color(0.2, 0.9, 0.4, 1),  # Verde
-			"compare_less": true  # Menor es mejor
-		},
-		{
-			"panel": time_panel,
-			"title": "TIEMPO",
-			"current_value": elapsed_time,
-			"stat_key": "best_time",
-			"is_time": true,
-			"color": Color(0.1, 0.5, 0.9, 1),  # Azul
-			"compare_less": true  # Menor es mejor
-		},
-		{
-			"panel": flips_panel,
-			"title": "FLIPS",
-			"current_value": flip_move_count,
-			"stat_key": "best_flips",
-			"is_time": false,
-			"color": Color(0.3, 0.65, 0.99, 1),  # Azul claro
-			"compare_less": true  # Menor es mejor
-		},
-		{
-			"panel": score_panel,
-			"title": "PUNTUACIÓN",
-			"current_value": score_data.get("final_score", 0) if score_data and score_data.size() > 0 else 0,
-			"stat_key": "best_score",
-			"is_time": false,
-			"color": Color(0.95, 0.6, 0.1, 1),  # Naranja dorado
-			"compare_less": false  # Mayor es mejor para puntuación
-		}
-	]
-	
-	# Si existe un panel específico para movimientos durante flips, agregarlo
-	if has_node("FlipMovesPanel"):
-		var flip_moves_panel = get_node("FlipMovesPanel")
-		panels_data.append({
-			"panel": flip_moves_panel,
-			"title": "MOV. FLIPS",
-			"current_value": flip_move_count,
-			"stat_key": "best_flip_moves",
-			"is_time": false,
-			"color": Color(0.6, 0.3, 0.9, 1),  # Púrpura
-			"compare_less": true  # Menor es mejor
-		})
-	
-	# Configurar cada panel
-	for panel_data in panels_data:
-		var panel = panel_data.panel
-		if panel:
-			var current_value = panel_data.current_value
-			var is_time = panel_data.is_time
-			var compare_less = panel_data.compare_less
-			
-			# Determinar el mejor valor
-			var best_value = current_value  # Por defecto, valor actual
-			var is_new_record = false
-			
-			if puzzle_stats.has(difficulty_key):
-				var difficulty_stats = puzzle_stats[difficulty_key]
-				
-				# Verificar que el campo de estadística existe
-				if difficulty_stats.has(panel_data.stat_key):
-					best_value = difficulty_stats[panel_data.stat_key]
-				else:
-					# Si no existe el campo (como best_score en estadísticas antiguas), es un nuevo récord
-					print("VictoryScreen: Campo '", panel_data.stat_key, "' no existe en estadísticas, considerando como nuevo récord")
-					is_new_record = true
-				
-				# Determinar si es un nuevo récord según el criterio de comparación
-				if compare_less:
-					# Menor es mejor (movimientos, tiempo)
-					if current_value < best_value:
-						is_new_record = true
-				else:
-					# Mayor es mejor (puntuación)
-					if current_value > best_value:
-						is_new_record = true
-			else:
-				# Si no hay estadísticas previas, es un nuevo récord
-				is_new_record = true
-			
-			# Configurar el panel
-			configure_result_panel(
-				panel, 
-				panel_data.title, 
-				current_value, 
-				best_value, 
-				is_new_record, 
-				is_time, 
-				panel_data.color
-			)
+	var difficulty_stats := _get_current_difficulty_stats()
+	var final_score = score_data.get("final_score", 0) if score_data and score_data.size() > 0 else 0
 
-# Función genérica para configurar un panel de resultados
-func configure_result_panel(panel: PanelContainer, title_text: String, current_value, best_value, is_new_record: bool, is_time: bool = false, panel_color: Color = Color(0.1, 0.7, 0.3, 1)):
-	if panel:
-		# Establecer el título
-		panel.titleLabel.text = tr(title_text)
-		
-		# Establecer el color del panel
-		# panel.color = panel_color
-		
-		# Formatear y establecer el valor actual
-		var value_text = ""
-		if is_time:
-			var minutes = int(current_value) / 60
-			var seconds = int(current_value) % 60
-			value_text = "%02d:%02d" % [minutes, seconds]
-		else:
-			value_text = str(current_value)
-		
-		panel.value.text = value_text
-		
-		# Configurar el aspecto y texto según el resultado
-		if is_new_record:
-			# Es un nuevo récord - lo destacamos
-			panel.bestValue.text = tr("¡NUEVO!")
-			panel.bestValue.add_theme_color_override("font_color", Color(1, 0.8, 0, 1))  # Color dorado
-			panel.bestValue.add_theme_font_size_override("font_size", 24)
-			
-			# Cambiar el color del panel para destacarlo
-			var panel_style = panel.get("theme_override_styles/panel")
-			if panel_style is StyleBoxFlat:
-				# Guardar el color original para la animación
-				var original_color = panel_style.bg_color
-				
-				# Establecer un color más brillante
-				panel_style.bg_color = panel_color
-				
-				# Crear una animación sencilla de pulso
-				var tween = create_tween().set_loops(3)
-				var highlight_color = panel_color.lightened(0.2)
-				tween.tween_property(panel_style, "bg_color", highlight_color, 0.5)
-				tween.tween_property(panel_style, "bg_color", original_color, 0.5)
-		elif (is_time and abs(current_value - best_value) < 0.5) or (!is_time and current_value == best_value):
-			# Igualó su mejor marca
-			panel.bestValue.text = tr("IGUAL")
-			panel.bestValue.add_theme_color_override("font_color", Color(0.2, 0.6, 1, 1))  # Azul
-			panel.bestValue.add_theme_font_size_override("font_size", 18)
-		else:
-			# No superó su mejor marca
-			var best_text = ""
-			if is_time:
-				var best_minutes = int(best_value) / 60
-				var best_seconds = int(best_value) % 60
-				best_text = "%02d:%02d" % [best_minutes, best_seconds]
-			else:
-				best_text = str(best_value)
-				
-			panel.bestValue.text = best_text
-			panel.bestValue.add_theme_color_override("font_color", Color(1, 1, 1, 1))  # Blanco normal
-			panel.bestValue.add_theme_font_size_override("font_size", 18)
+	time_label.text = _format_time_value(elapsed_time)
+	moves_label.text = str(total_moves)
+	score_label.text = str(final_score)
+	_set_new_record_state(new_time_label, _is_better_result(difficulty_stats, "best_time", elapsed_time, true, 99999.0))
+	_set_new_record_state(new_moves_label, _is_better_result(difficulty_stats, "best_moves", total_moves, true, 99999))
+	_set_new_record_state(new_score_label, _is_better_result(difficulty_stats, "best_score", final_score, false, 0))
+
+func _get_current_difficulty_stats() -> Dictionary:
+	if not progress_manager:
+		return {}
+
+	var puzzle_stats: Dictionary = progress_manager.get_puzzle_stats(current_pack_id, current_puzzle_id)
+	var difficulty_key := _get_difficulty_key()
+
+	if puzzle_stats.has(difficulty_key):
+		return puzzle_stats[difficulty_key]
+
+	return {}
+
+func _get_difficulty_key() -> String:
+	return str(difficulty.columns) + "x" + str(difficulty.rows)
+
+func _format_time_value(time_in_seconds: float) -> String:
+	var minutes = int(time_in_seconds) / 60
+	var seconds = int(time_in_seconds) % 60
+	return "%02d:%02d" % [minutes, seconds]
+
+func _is_better_result(difficulty_stats: Dictionary, stat_key: String, current_value, compare_less: bool, default_value) -> bool:
+	if difficulty_stats.is_empty():
+		return true
+
+	var best_value = difficulty_stats.get(stat_key, default_value)
+	if compare_less:
+		return current_value < best_value
+
+	return current_value > best_value
+
+func _set_new_record_state(target_label: Label, is_new_record: bool) -> void:
+	if target_label:
+		target_label.visible = is_new_record
 
 # Nueva función para guardar todas las estadísticas en el ProgressManager
 func save_stats_to_progress_manager(victory_data):
@@ -602,7 +475,7 @@ func save_stats_to_progress_manager(victory_data):
 		"score": score_data.get("final_score", 0),  # Nuevo - puntuación obtenida
 		"date": Time.get_datetime_string_from_system()
 	}
-	var difficulty_key = str(difficulty.columns) + "x" + str(difficulty.rows)
+	var difficulty_key = _get_difficulty_key()
 	# Crear la clave de dificultad basada en las dimensiones del puzzle
 	# Guardar las estadísticas con los 4 parámetros en el orden correcto
 	progress_manager.save_puzzle_stats(stats, current_pack_id, current_puzzle_id, difficulty_key)
@@ -613,3 +486,7 @@ func showExpaneseImage():
 	# Primero se muestra el fondo negro del expanseImage
 	expanseImagePanel.visible = true
 	
+
+
+func _on_texture_button_exit_pressed() -> void:
+	pass # Replace with function body.

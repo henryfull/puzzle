@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dfyoip8j6ru34"]
+[gd_scene format=3 uid="uid://dfyoip8j6ru34"]
 
 [ext_resource type="Script" uid="uid://dqg2j70qnmhkq" path="res://Scenes/Components/ExpanseImage/expanse_image.gd" id="1_263as"]
 [ext_resource type="Texture2D" uid="uid://dxtmuh7tejufw" path="res://Assets/Images/arte2.jpg" id="2_xxs0c"]
@@ -9,11 +9,15 @@ bg_color = Color(0, 0, 0, 0.772549)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xxs0c"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxs0c"]
+atlas = ExtResource("3_xxs0c")
+region = Rect2(1315, 42, 84, 84)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_2p2p7"]
 atlas = ExtResource("3_xxs0c")
 region = Rect2(1989, 487, 88, 103)
 
-[node name="ExpanseImage" type="Panel"]
+[node name="ExpanseImage" type="Panel" unique_id=1603191657]
 z_index = 4
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +27,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_xuyag")
 script = ExtResource("1_263as")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=894326828]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,37 +36,36 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_xxs0c")
 
-[node name="ImageExpanse" type="TextureRect" parent="PanelContainer"]
+[node name="ImageExpanse" type="TextureRect" parent="PanelContainer" unique_id=1059788548]
 layout_mode = 2
 texture = ExtResource("2_xxs0c")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ButtonClose" type="Button" parent="."]
+[node name="ButtonClose" type="TextureButton" parent="." unique_id=31759127]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 228.0
-offset_top = 101.0
-offset_right = 308.0
-offset_bottom = 181.0
-grow_horizontal = 2
+offset_left = 48.0
+offset_top = 96.0
+offset_right = 128.0
+offset_bottom = 176.0
 theme_type_variation = &"ButtonClose"
+texture_normal = SubResource("AtlasTexture_xxs0c")
 
-[node name="ButtonReset" type="Button" parent="."]
+[node name="ButtonReset" type="Button" parent="." unique_id=8197113]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -294.0
-offset_top = 101.0
-offset_right = -214.0
-offset_bottom = 181.0
-grow_horizontal = 2
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -117.0
+offset_top = 93.0
+offset_right = -37.0
+offset_bottom = 173.0
+grow_horizontal = 0
 theme_type_variation = &"CircleButtonYellow"
+flat = true
 
-[node name="TextureRect" type="TextureRect" parent="ButtonReset"]
+[node name="TextureRect" type="TextureRect" parent="ButtonReset" unique_id=371277480]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -76,8 +79,8 @@ offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_2p2p7")
-expand_mode = 3
-stretch_mode = 4
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="pressed" from="ButtonClose" to="." method="_on_button_close_pressed"]
 [connection signal="pressed" from="ButtonReset" to="." method="_on_button_reset_pressed"]

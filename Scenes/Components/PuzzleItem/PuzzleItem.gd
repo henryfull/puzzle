@@ -85,6 +85,14 @@ func _ready():
 			print("ERROR: No se encontró el nodo name_label")
 		push_error("No se pudieron encontrar todos los nodos necesarios para PuzzleItem")
 
+func update_ui_texts():
+	if is_initialized and puzzle_data:
+		_apply_puzzle_data()
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
+
 # Aplicar los datos del puzzle a los componentes de UI
 func _apply_puzzle_data():
 	if not puzzle_data:
@@ -99,7 +107,7 @@ func _apply_puzzle_data():
 	
 	# Actualizar el texto del nombre
 	if puzzle_data.has("name") and name_label:
-		name_label.text = tr(puzzle_data.name)
+		name_label.text = TranslationServer.translate(puzzle_data.name)
 	
 	# Intentar cargar la imagen con diferentes claves que podrían estar en el puzzle_data
 	var image_loaded = false
@@ -192,7 +200,7 @@ func _load_default_image():
 	
 	# Añadir un texto al placeholder
 	var placeholder_label = Label.new()
-	placeholder_label.text = "Sin imagen"
+	placeholder_label.text = TranslationServer.translate("game_no_image")
 	placeholder_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	placeholder_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	placeholder_label.add_theme_font_size_override("font_size", 20)

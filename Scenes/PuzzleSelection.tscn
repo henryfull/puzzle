@@ -48,7 +48,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_4mmlg")
 [node name="BackgroundTitle" parent="CanvasLayer/TextureRect/PanelContainer" unique_id=1796145659 instance=ExtResource("4_4mmlg")]
 z_index = 1
 layout_mode = 2
-title = "Packs"
+title = "common_packs"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1956864345]
 anchors_preset = 13
@@ -132,7 +132,7 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"TitleSection"
-text = "puzzles"
+text = "common_puzzles"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

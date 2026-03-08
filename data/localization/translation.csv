@@ -64,6 +64,17 @@ common_text;Texto;Text;Text
 common_difficulty;Dificultad;Difficulty;Dificultat
 common_select_mode;Seleccionar Modo;Select Mode;Seleccionar Mode
 common_colections;Colecciones;Collections;Col·leccions
+common_new;nuevo;new;nou
+common_image;Imagen;Image;Imatge
+common_flips;Flips;Flips;Flips
+common_date;Fecha;Date;Data
+common_unknown;Desconocido;Unknown;Desconegut
+common_pack;Pack;Pack;Pack
+common_packs;Packs;Packs;Packs
+common_puzzles;Puzzles;Puzzles;Trencaclosques
+common_download;Descargar;Download;Descarregar
+common_check;Comprobar;Check;Comprovar
+common_consume;Consumir;Consume;Consumir
 ;;;
 options_restore_purchases;Restaurar;Reset;Restaurar
 options_restore_purchases_tooltip;Restaurar compras;Reset buy;Restaurar compres
@@ -72,6 +83,7 @@ scene_mainmenu_new_game;Nuevo Juego;New Game;Nova Partida
 scene_mainmenu_continue;Continuar;Continue;Continuar
 scene_mainmenu_options;Opciones;Options;Opcions
 scene_mainmenu_exit;Salir;Exit;Sortir
+mainmenu_play_subtitle;Puzzle de...;Puzzle of...;Trencaclosques de...
 ;;;
 scene_combat_turn;Turno;Turn;Torn
 scene_combat_player_turn;Turno del Jugador;Player's Turn;Torn del Jugador
@@ -200,6 +212,10 @@ usa_secuoya;Secuoya gigante;Giant sequoia;Sequoia gegant
 options_pan_sensitivity;Sensibilidad;Sensitivity;Sensibilitat
 options_tween_effect;Efecto suave;Smooth effect;Efecte suau
 options_tween_duration;Duración efecto;Effect duration;Duració efecte
+options_haptic_enabled;Vibración;Haptics;Vibracio
+options_tablet_scale;Escala tablet;Tablet scale;Escala tauleta
+options_desktop_scale;Escala ordenador;Desktop scale;Escala ordinador
+options_mobile_scale;Escala móvil;Mobile scale;Escala mobil
 options_platform_connection;Plataforma conectada;Connected platform;Plataforma connectada
 options_not_connected;No conectado;Not connected;No connectat
 options_gamecenter_sign_out_info;Para cerrar sesión en Game Center, debes hacerlo desde la configuración de iOS;To sign out of Game Center, you must do it from iOS settings;Per tancar la sessió a Game Center, has de fer-ho des de la configuració d'iOS
@@ -208,3 +224,108 @@ options_connecting;Conectando...;Connecting...;Connectant...
 options_connection_error;Error de conexión;Connection error;Error de connexió
 options_connection_success;Conexión exitosa;Connection successful;Connexió exitosa
 options_no_services_available;No hay servicios de juego disponibles;No game services available;No hi ha serveis de joc disponibles
+options_restore_completed_title;Restauración completada;Restore completed;Restauració completada
+options_restore_restart_message;La restauración se ha completado. El juego se reiniciará para aplicar los cambios.;Restore is complete. The game will restart to apply the changes.;La restauració s'ha completat. El joc es reiniciarà per aplicar els canvis.
+options_restore_first_packs_message;Se han desbloqueado y habilitado para jugar los dos primeros packs (Fruits y Numbers). Por favor, reinicia completamente el juego para asegurar que los cambios se apliquen correctamente.;The first two packs (Fruits and Numbers) have been unlocked and enabled. Please fully restart the game to ensure the changes are applied correctly.;S'han desbloquejat i habilitat per jugar els dos primers packs (Fruits i Numbers). Reinicia completament el joc per assegurar que els canvis s'apliquin correctament.
+options_restore_failed;No se pudo restaurar el acceso a los puzzles.;Could not restore access to the puzzles.;No s'ha pogut restaurar l'accés als trencaclosques.
+victory_completed_title;Has completado el puzzle;You completed the puzzle;Has completat el trencaclosques
+victory_completed_in_prefix;Has completado el puzzle en;You completed the puzzle in;Has completat el trencaclosques en
+victory_moves_suffix; movimientos; moves; moviments
+victory_time_prefix;Tiempo:;Time:;Temps:
+stats_best_time;Mejor tiempo;Best time;Millor temps
+stats_best_moves;Mejor movimientos;Best moves;Millors moviments
+stats_completions;Veces completado;Times completed;Vegades completat
+stats_no_previous;No hay estadísticas previas;There are no previous stats;No hi ha estadístiques prèvies
+stats_less_flips;Menor flips;Lowest flips;Menys flips
+stats_less_flip_moves;Menor mov. flip;Lowest flip moves;Menys mov. flip
+stats_best_score;Mejor puntuación;Best score;Millor puntuació
+store_loading;Cargando tienda DLC...;Loading DLC store...;Carregant la botiga DLC...
+store_service_unavailable;Error: Servicio de compras no disponible;Error: Purchase service unavailable;Error: Servei de compres no disponible
+store_no_dlcs_available;No hay DLC disponibles para compra\nTodos los packs ya están instalados;No DLCs are available for purchase\nAll packs are already installed;No hi ha DLC disponibles per comprar\nTots els packs ja estan instal·lats
+store_available_dlcs;DLC Disponibles (%d);Available DLCs (%d);DLC disponibles (%d)
+store_default_pack_name;DLC Pack;DLC Pack;Pack DLC
+store_default_pack_description;Pack de contenido adicional;Additional content pack;Pack de contingut addicional
+store_connected_querying;Conectado. Consultando compras y detalles del producto...;Connected. Querying purchases and product details...;Connectat. Consultant compres i detalls del producte...
+store_product_not_found;No se encontró el producto en la Play Store: %s;Product not found in the Play Store: %s;No s'ha trobat el producte a la Play Store: %s
+store_product_found;Producto encontrado:;Product found:;Producte trobat:
+store_product_id;ID: %s;ID: %s;ID: %s
+store_product_name;Nombre: %s;Name: %s;Nom: %s
+store_product_price;Precio: %s;Price: %s;Preu: %s
+store_product_type;Tipo: %s;Type: %s;Tipus: %s
+store_product_description;Descripción:\n%s;Description:\n%s;Descripció:\n%s
+store_sku_loaded;SKU cargado: %s;SKU loaded: %s;SKU carregat: %s
+store_purchase_confirmed;Compra confirmada: %s;Purchase confirmed: %s;Compra confirmada: %s
+store_purchase_consumed_success;Compra consumida correctamente: %s;Purchase consumed successfully: %s;Compra consumida correctament: %s
+store_connect_error;Error de conexión %d: %s;Connect error %d: %s;Error de connexió %d: %s
+store_purchase_error;Error de compra %d: %s;Purchase error %d: %s;Error de compra %d: %s
+store_purchase_ack_error;Error de confirmación de compra %d: %s;Purchase acknowledgement error %d: %s;Error de confirmació de compra %d: %s
+store_purchase_consumption_error;Error consumiendo compra %d: %s, token: %s;Purchase consumption error %d: %s, token: %s;Error consumint compra %d: %s, token: %s
+store_sku_details_error;Error consultando detalles del SKU %d: %s;SKU details query error %d: %s;Error consultant detalls de l'SKU %d: %s
+store_disconnected_retry;Desconectado. Reintentando conexión en 10s...;Disconnected. Retrying connection in 10s...;Desconnectat. Reintentant la connexió en 10s...
+store_consume_not_supported;Consume no soportado en esta tienda genérica;Consume not supported in this generic store;Consum no suportat en aquesta botiga genèrica
+store_purchase_starting;Iniciando compra de: %s;Starting purchase for: %s;Iniciant compra de: %s
+store_purchase_success_download;Compra exitosa: %s\nIniciando descarga...;Purchase successful: %s\nStarting download...;Compra exitosa: %s\nIniciant descàrrega...
+store_purchase_failed;Error en la compra de: %s;Purchase failed for: %s;Error en la compra de: %s
+store_download_panel_title;Descargando contenido...;Downloading content...;Descarregant contingut...
+store_download_started;Descargando: %s;Downloading: %s;Descarregant: %s
+store_download_progress;Descargando: %s\n%d%% completado;Downloading: %s\n%d%% completed;Descarregant: %s\n%d%% completat
+store_download_completed_install;Descarga completada: %s\nInstalando...;Download completed: %s\nInstalling...;Descàrrega completada: %s\nInstal·lant...
+store_download_failed;Error en la descarga de: %s;Download failed for: %s;Error en la descàrrega de: %s
+store_install_success;¡Pack instalado exitosamente!\n%s;Pack installed successfully!\n%s;Pack instal·lat correctament!\n%s
+store_install_success_alert;¡Pack %s instalado exitosamente!;Pack %s installed successfully!;Pack %s instal·lat correctament!
+store_install_failed;Error en la instalación de: %s;Installation failed for: %s;Error en la instal·lació de: %s
+game_score_label;Puntos: %d;Points: %d;Punts: %d
+game_streak_label;Racha: %d;Streak: %d;Ratxa: %d
+game_bonus_streak;¡Bonus racha! +%d;Streak bonus! +%d;Bonus de ratxa! +%d
+game_bonus_group_union;¡Grupos unidos! +%d;Groups merged! +%d;Grups units! +%d
+game_bonus_no_errors;¡Sin errores! +%d;No errors! +%d;Sense errors! +%d
+game_bonus_no_flip;¡Sin flip! +%d;No flip! +%d;Sense flip! +%d
+game_bonus_generic;¡Bonus! +%d;Bonus! +%d;Bonus! +%d
+game_scale_dialog_title;Configurar escala del puzzle;Configure puzzle scale;Configura l'escala del trencaclosques
+game_detected_device;Dispositivo detectado;Detected device;Dispositiu detectat
+game_current_scale;Escala actual;Current scale;Escala actual
+game_recommended_scales;Escalas recomendadas;Recommended scales;Escales recomanades
+game_scale_option_06;0.6 - Muy pequeño (máxima visibilidad);0.6 - Very small (maximum visibility);0.6 - Molt petit (visibilitat maxima)
+game_scale_option_07;0.7 - Pequeño (recomendado tablets);0.7 - Small (recommended for tablets);0.7 - Petit (recomanat per a tauletes)
+game_scale_option_08;0.8 - Medio (equilibrado);0.8 - Medium (balanced);0.8 - Mitja (equilibrat)
+game_scale_option_09;0.9 - Grande (más detalle);0.9 - Large (more detail);0.9 - Gran (mes detall)
+game_scale_option_10;1.0 - Máximo (pantalla completa);1.0 - Maximum (full screen);1.0 - Maxim (pantalla completa)
+game_scale_prompt;¿Qué escala deseas usar? (0.5-1.0);Which scale do you want to use? (0.5-1.0);Quina escala vols fer servir? (0.5-1.0)
+game_scale_placeholder;0.8;0.8;0.8
+game_device_tablet;Tablet;Tablet;Tauleta
+game_device_desktop;Ordenador;Computer;Ordinador
+game_device_mobile;Móvil;Mobile;Mobil
+game_device_unknown;Desconocido;Unknown;Desconegut
+game_scale_configured;Escala configurada a: %s;Scale set to: %s;Escala configurada a: %s
+game_scale_invalid;Escala inválida. Usa valores entre 0.5 y 1.0;Invalid scale. Use values between 0.5 and 1.0;Escala invàlida. Fes servir valors entre 0.5 i 1.0
+game_restore_error;Error al restaurar la partida: %s;Error restoring the game: %s;Error en restaurar la partida: %s
+game_groups_fixed;🔧 %d problemas de grupos corregidos;🔧 %d group issues fixed;🔧 %d problemes de grups corregits
+game_groups_ok;✅ Todos los grupos están correctos;✅ All groups are correct;✅ Tots els grups són correctes
+game_autocorrect_positions;🔧 Auto-corrección de posiciones;🔧 Auto-correcting positions;🔧 Auto-correcció de posicions
+game_centered_puzzle;🎯 Puzzle centrado;🎯 Puzzle centered;🎯 Trencaclosques centrat
+game_max_flips_reached;No puedes realizar más flips (%d/%d);You cannot do more flips (%d/%d);No pots fer més flips (%d/%d)
+game_invalid_pack;Error: Pack inválido o sin ID;Error: Invalid pack or missing ID;Error: Pack invàlid o sense ID
+game_no_puzzles_in_pack;No hay puzzles disponibles en este pack;No puzzles are available in this pack;No hi ha trencaclosques disponibles en aquest pack
+game_no_pack_available;Error: No se encontraron packs disponibles;Error: No available packs were found;Error: No s'han trobat packs disponibles
+game_no_image;Sin imagen;No image;Sense imatge
+game_issues_persist;Algunos problemas persisten;Some issues remain;Alguns problemes persisteixen
+defeat_moves;Movimientos: %d;Moves: %d;Moviments: %d
+defeat_time;Tiempo: %s;Time: %s;Temps: %s
+defeat_flips;Flips: %d;Flips: %d;Flips: %d
+defeat_flip_moves;Movimientos en flip: %d;Flip moves: %d;Moviments en flip: %d
+defeat_near_miss;¡Has estado cerca!;You were close!;Has estat a prop!
+defeat_reason;Motivo:;Reason:;Motiu:
+notification_connected_to;Conectado a %s;Connected to %s;Connectat a %s
+notification_connection_error_to;Error al conectar a %s: %s;Error connecting to %s: %s;Error en connectar a %s: %s
+puzzle_selection_pack_title;Pack: %s;Pack: %s;Pack: %s
+pack_fruits_name;Frutas;Fruits;Fruites
+pack_fruits_description;Puzzles inspirados en obras de arte moderno y abstracto.;Puzzles inspired by modern and abstract artwork.;Trencaclosques inspirats en obres d'art modern i abstracte.
+pack_numbers_name;Números;Numbers;Nombres
+pack_numbers_description;Puzzles inspirados en obras de arte moderno y abstracto.;Puzzles inspired by modern and abstract artwork.;Trencaclosques inspirats en obres d'art modern i abstracte.
+pack_artistic_cities_name;Ciudades artísticas;Artistic Cities;Ciutats artístiques
+pack_artistic_cities_description;Puzzles inspirados en ciudades artísticas del mundo.;Puzzles inspired by artistic cities around the world.;Trencaclosques inspirats en ciutats artístiques del món.
+pack_wild_animals_name;Animales salvajes;Wild Animals;Animals salvatges
+pack_wild_animals_description;Puzzles inspirados en animales salvajes del mundo.;Puzzles inspired by wild animals around the world.;Trencaclosques inspirats en animals salvatges del món.
+pack_wild_animals_cartoon_name;Animales salvajes cartoon;Wild Animals Cartoon;Animals salvatges cartoon
+pack_wild_animals_cartoon_description;Puzzles inspirados en animales salvajes en formato cartoon.;Puzzles inspired by wild animals in cartoon style.;Trencaclosques inspirats en animals salvatges en format cartoon.
+fruit_passion_fruit_description;El maracuyá es una fruta tropical aromática con pulpa jugosa y semillas crujientes. Su sabor combina notas dulces y ácidas, y se usa mucho en zumos y postres.;Passion fruit is an aromatic tropical fruit with juicy pulp and crunchy seeds. Its flavor mixes sweet and tangy notes, and it is often used in juices and desserts.;La fruita de la passió és una fruita tropical aromàtica amb polpa sucosa i llavors cruixents. El seu sabor combina notes dolces i àcides, i s'utilitza sovint en sucs i postres.

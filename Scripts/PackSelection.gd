@@ -82,7 +82,7 @@ func load_packs():
 		# Si todavía no hay packs después del intento directo
 		if packs.size() == 0:
 			var error_label = Label.new()
-			error_label.text = "Error: No se encontraron packs disponibles"
+			error_label.text = TranslationServer.translate("game_no_pack_available")
 			error_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			error_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			error_label.custom_minimum_size = Vector2(0, 100)
@@ -208,4 +208,11 @@ func _on_purchase_completed() -> void:
 	print("PackSelection: Compra de DLC completada, recargando packs...")
 	# Recargar los packs para mostrar los nuevos
 	load_packs()
+
+func update_ui_texts():
+	load_packs()
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
 	

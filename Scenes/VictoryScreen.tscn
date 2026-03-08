@@ -1,46 +1,52 @@
-[gd_scene load_steps=29 format=3 uid="uid://sc0afjqsuaff"]
+[gd_scene format=3 uid="uid://sc0afjqsuaff"]
 
 [ext_resource type="Script" uid="uid://bgaispr1am2nj" path="res://Scripts/VictoryScreen.gd" id="1_g6yxt"]
 [ext_resource type="Texture2D" uid="uid://c8e3l3s0vy870" path="res://Assets/Images/GUID/backgrounds/bg_victory.jpg" id="2_fv7sy"]
 [ext_resource type="Texture2D" uid="uid://c45ug4yw5vyjd" path="res://Assets/Images/arte1.jpg" id="2_i68vf"]
 [ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="3_8kq2x"]
-[ext_resource type="FontFile" uid="uid://ccmyvp70fd5pe" path="res://Assets/Fonts/LuckiestGuy.ttf" id="3_11iis"]
+[ext_resource type="FontFile" uid="uid://ds0wa3hdat50g" path="res://Assets/Fonts/Futura-Bold-03.ttf" id="3_r53cv"]
 [ext_resource type="Texture2D" uid="uid://d0hgnlc4lvvps" path="res://Assets/Images/icons/star_3.png" id="4_11iis"]
 [ext_resource type="FontFile" uid="uid://bhf7vk2mqh3sp" path="res://Assets/Fonts/Avenir.ttc" id="4_fv7sy"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="5_j7jqh"]
-[ext_resource type="PackedScene" uid="uid://ps3gg6vw4h7f" path="res://Scenes/Components/BestResult/panel_container_result.tscn" id="9_cek7k"]
 [ext_resource type="PackedScene" uid="uid://dfyoip8j6ru34" path="res://Scenes/Components/ExpanseImage/ExpanseImage.tscn" id="10_r53cv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cek7k"]
 atlas = ExtResource("2_fv7sy")
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rg3ah"]
-atlas = ExtResource("5_j7jqh")
-region = Rect2(643, 773, 472, 95)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ua571"]
-texture = SubResource("AtlasTexture_rg3ah")
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_11iis"]
 
 [sub_resource type="Curve" id="Curve_11iis"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, -0.0159942), 0.0, 0.0, 0, 0, Vector2(0.504292, 0.976372), 0.0, 0.0, 0, 0, Vector2(0.976395, 0.0548891), 0.0, 0.0, 0, 0]
 point_count = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ua571"]
+bg_color = Color(1, 0.8117647, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9922467, 0.9830163, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_size = 1
+shadow_offset = Vector2(0, 5)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r53cv"]
-bg_color = Color(0.282353, 0.419608, 1, 1)
+bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
+shadow_size = 4
+shadow_offset = Vector2(5, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cek7k"]
-bg_color = Color(0.764706, 0.811765, 1, 1)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
+bg_color = Color(0.9625351, 0.97056013, 0.9999992, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
 border_color = Color(0.282353, 0.419608, 1, 1)
 corner_radius_top_left = 40
 corner_radius_top_right = 40
@@ -48,7 +54,7 @@ corner_radius_bottom_right = 40
 corner_radius_bottom_left = 40
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rg3ah"]
-bg_color = Color(0.764706, 0.811765, 1, 1)
+bg_color = Color(0.9338113, 0.9478908, 0.99999887, 1)
 corner_radius_top_left = 40
 corner_radius_top_right = 40
 corner_radius_bottom_right = 40
@@ -57,7 +63,11 @@ corner_radius_bottom_left = 40
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjnxs"]
 content_margin_left = 30.0
 content_margin_right = 30.0
-bg_color = Color(0.282353, 0.419608, 1, 1)
+bg_color = Color(0.003921569, 0, 0.09803922, 0.76862746)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
@@ -75,13 +85,65 @@ corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dxs6"]
+bg_color = Color(0, 0, 0, 0.59607846)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c5778"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(2107, 487, 101, 81)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_r53cv"]
 atlas = ExtResource("5_j7jqh")
 region = Rect2(2108, 487, 101, 81)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_xuyag"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(272, 474, 101, 101)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ua571"]
 atlas = ExtResource("5_j7jqh")
 region = Rect2(272, 474, 101, 101)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0i7ly"]
+bg_color = Color(0, 0, 0, 0.19607843)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.99215686, 0.32941177, 0.6039216, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rg3ah"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(1482, 480, 99, 103)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c5778"]
+bg_color = Color(0, 0, 0, 0.19607843)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.8117647, 0.23921569, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0i7ly"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(1989, 487, 88, 103)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fv7sy"]
 atlas = ExtResource("5_j7jqh")
@@ -91,62 +153,42 @@ region = Rect2(1990, 487, 87, 103)
 atlas = ExtResource("5_j7jqh")
 region = Rect2(1988, 669, 121, 103)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ua571"]
-resource_local_to_scene = true
-bg_color = Color(0.101961, 0.768627, 0.372549, 1)
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 4
-shadow_offset = Vector2(0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dxs6"]
-resource_local_to_scene = true
-bg_color = Color(0.101961, 0.768627, 0.372549, 1)
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 4
-shadow_offset = Vector2(0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c5778"]
-resource_local_to_scene = true
-bg_color = Color(0.101961, 0.768627, 0.372549, 1)
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 4
-shadow_offset = Vector2(0, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xuyag"]
-resource_local_to_scene = true
-bg_color = Color(0.101961, 0.768627, 0.372549, 1)
+bg_color = Color(0, 0, 0, 0.19607843)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32941177, 0.99215686, 0.6627451, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 4
-shadow_offset = Vector2(0, 1)
 
-[node name="VictoryScreen" type="Control" node_paths=PackedStringArray("labelNamePuzzle", "labelInfo", "statsLabel", "puzzleImage2D", "textView", "labelTitle", "moves", "time_panel", "flips_panel", "expanseImagePanel", "score_panel")]
+[sub_resource type="AtlasTexture" id="AtlasTexture_s7sor"]
+atlas = ExtResource("5_j7jqh")
+region = Rect2(1988, 669, 120, 103)
+
+[node name="VictoryScreen" type="Control" unique_id=1825174013 node_paths=PackedStringArray("labelNamePuzzle", "puzzleImage2D", "textView", "labelTitle", "expanseImagePanel", "time_label", "moves_label", "score_label", "new_time_label", "new_moves_label", "new_score_label")]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_g6yxt")
 labelNamePuzzle = NodePath("CanvasLayer/Body/PanelContainer/LabelNamePuzzle")
-labelInfo = NodePath("CanvasLayer/Header/Panel2/LabelInfo")
-statsLabel = NodePath("CanvasLayer/Header/Panel2/StatsLabel")
 puzzleImage2D = NodePath("CanvasLayer/Body/MarginContainer/Panel2/PuzzleImage2D")
 textView = NodePath("CanvasLayer/Body/MarginContainer/Panel2/Panel/TextView")
-labelTitle = NodePath("CanvasLayer/Header/Panel/LabelTitle")
-moves = NodePath("CanvasLayer/Movimientos")
-time_panel = NodePath("CanvasLayer/Tiempo")
-flips_panel = NodePath("CanvasLayer/Flips")
+labelTitle = NodePath("CanvasLayer/Panel/LabelTitle")
 expanseImagePanel = NodePath("CanvasLayer/ExpanseImage")
-score_panel = NodePath("CanvasLayer/Puntuacion")
+time_label = NodePath("CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxTime/LabelTimeValue")
+moves_label = NodePath("CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMoves/LabelMovesValue")
+score_label = NodePath("CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxScore/LabelScoreValue")
+new_time_label = NodePath("CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxTime/NewTimeLabel")
+new_moves_label = NodePath("CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMoves/NewMovesLabel")
+new_score_label = NodePath("CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxScore/NewScoreLabel")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1570041148]
 layer = 10
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=592929317]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -155,42 +197,59 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_cek7k")
 expand_mode = 3
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=20628038]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 1, 0.188235)
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
 
-[node name="Header" type="MarginContainer" parent="CanvasLayer"]
-z_index = 1
+[node name="CPUParticles2D" type="CPUParticles2D" parent="CanvasLayer" unique_id=519464318]
+position = Vector2(398, 691)
+scale = Vector2(3, 3)
+amount = 80
+texture = ExtResource("4_11iis")
+lifetime = 10.0
+preprocess = 1.21
+speed_scale = 1.75
+randomness = 1.0
+fixed_fps = 60
+draw_order = 1
+emission_shape = 3
+emission_rect_extents = Vector2(121, 171)
+gravity = Vector2(0, 0)
+initial_velocity_max = 20.0
+radial_accel_max = 100.0
+scale_amount_min = 0.01
+scale_amount_max = 0.05
+hue_variation_max = 0.48
+hue_variation_curve = SubResource("Curve_11iis")
+
+[node name="Panel" type="Panel" parent="CanvasLayer" unique_id=991236213]
+custom_minimum_size = Vector2(0, 90)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -302.0
+offset_left = -310.0
 offset_top = 90.0
-offset_right = 302.0
-offset_bottom = 288.0
+offset_right = 310.0
+offset_bottom = 180.0
 grow_horizontal = 2
-
-[node name="Panel" type="Panel" parent="CanvasLayer/Header"]
-custom_minimum_size = Vector2(0, 110)
-layout_mode = 2
 size_flags_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxTexture_ua571")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ua571")
 
-[node name="LabelTitle" type="Label" parent="CanvasLayer/Header/Panel"]
+[node name="LabelTitle" type="Label" parent="CanvasLayer/Panel" unique_id=232592908]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -302.0
-offset_top = -34.5
-offset_right = 302.0
-offset_bottom = 34.5
+offset_left = -287.0
+offset_top = -42.0
+offset_right = 287.0
+offset_bottom = 42.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -199,93 +258,194 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 0
-theme_override_fonts/font = ExtResource("3_11iis")
-theme_override_font_sizes/font_size = 68
-text = "COMPLETADO"
+theme_override_fonts/font = ExtResource("3_r53cv")
+theme_override_font_sizes/font_size = 48
+text = "common_completed"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Panel2" type="Panel" parent="CanvasLayer/Header"]
+[node name="PanelValues" type="PanelContainer" parent="CanvasLayer" unique_id=764687337]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -310.0
+offset_top = 200.0
+offset_right = 310.0
+offset_bottom = 350.0
+grow_horizontal = 2
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelValues" unique_id=299929709]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer" unique_id=1083136995]
+layout_mode = 2
+
+[node name="HBoxMode" type="HBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=2009078554]
 visible = false
-custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-size_flags_vertical = 8
-theme_override_styles/panel = SubResource("StyleBoxEmpty_11iis")
 
-[node name="LabelInfo" type="Label" parent="CanvasLayer/Header/Panel2"]
+[node name="LabelMode" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMode" unique_id=1021815092]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-offset_right = 604.0
-offset_bottom = 22.0
-theme_override_font_sizes/font_size = 16
-text = "Has completado el puzzle en 0 movimientos"
-horizontal_alignment = 1
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="LabelModeValue" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMode" unique_id=1917284276]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1747211108]
+visible = false
+layout_mode = 2
+
+[node name="HBoxTime" type="HBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1974253151]
+layout_mode = 2
+
+[node name="LabelTime" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxTime" unique_id=1344139649]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "common_time"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="NewTimeLabel" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxTime" unique_id=711813716]
+visible = false
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+theme_override_colors/font_color = Color(1, 0.8117647, 0.23921569, 1)
+text = "common_new"
+horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="StatsLabel" type="Label" parent="CanvasLayer/Header/Panel2"]
+[node name="LabelTimeValue" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxTime" unique_id=1794586340]
+custom_minimum_size = Vector2(150, 20)
 layout_mode = 2
-offset_top = 42.0
-offset_right = 604.0
-offset_bottom = 64.0
-theme_override_font_sizes/font_size = 16
-text = "No hay estadísticas previas"
-horizontal_alignment = 1
+theme_type_variation = &"LabelOption"
+horizontal_alignment = 2
 vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="CanvasLayer"]
-position = Vector2(342, 603)
-scale = Vector2(3, 3)
-amount = 20
-texture = ExtResource("4_11iis")
-speed_scale = 1.75
-explosiveness = 0.5
-randomness = 0.4
-fixed_fps = 60
-draw_order = 1
-emission_shape = 3
-emission_rect_extents = Vector2(121, 171)
-gravity = Vector2(0, 2)
-initial_velocity_max = 20.0
-radial_accel_min = 100.0
-radial_accel_max = 100.0
-scale_amount_min = 0.03
-scale_amount_max = 0.03
-hue_variation_max = 0.48
-hue_variation_curve = SubResource("Curve_11iis")
+[node name="HSeparator3" type="HSeparator" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1771611144]
+layout_mode = 2
 
-[node name="Body" type="MarginContainer" parent="CanvasLayer"]
+[node name="HBoxMoves" type="HBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=291229959]
+layout_mode = 2
+
+[node name="LabelMoves" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMoves" unique_id=423892182]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "common_moves"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="NewMovesLabel" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMoves" unique_id=1339395950]
+visible = false
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+theme_override_colors/font_color = Color(1, 0.8117647, 0.23921569, 1)
+text = "common_new"
+horizontal_alignment = 2
+
+[node name="LabelMovesValue" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxMoves" unique_id=1237243306]
+custom_minimum_size = Vector2(150, 20)
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="HSeparator4" type="HSeparator" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1482288844]
+layout_mode = 2
+
+[node name="HBoxScore" type="HBoxContainer" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer" unique_id=1707976487]
+layout_mode = 2
+
+[node name="LabelScore" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxScore" unique_id=544784540]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
+text = "common_score"
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="NewScoreLabel" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxScore" unique_id=1954199315]
+visible = false
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+theme_override_colors/font_color = Color(1, 0.8117647, 0.23921569, 1)
+text = "common_new"
+horizontal_alignment = 2
+
+[node name="LabelScoreValue" type="Label" parent="CanvasLayer/PanelValues/MarginContainer/VBoxContainer/HBoxScore" unique_id=1932447007]
+custom_minimum_size = Vector2(150, 20)
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="Body" type="MarginContainer" parent="CanvasLayer" unique_id=894053995]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -290.0
-offset_top = -290.0
-offset_right = 290.0
-offset_bottom = 464.0
+offset_left = -240.0
+offset_top = -250.0
+offset_right = 240.0
+offset_bottom = 470.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Body"]
+[node name="Panel" type="Panel" parent="CanvasLayer/Body" unique_id=1840507758]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_r53cv")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Body"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Body" unique_id=756414547]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="Panel2" type="PanelContainer" parent="CanvasLayer/Body/MarginContainer"]
+[node name="Panel2" type="PanelContainer" parent="CanvasLayer/Body/MarginContainer" unique_id=1907212870]
 clip_children = 1
 clip_contents = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cek7k")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Body/MarginContainer/Panel2"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Body/MarginContainer/Panel2" unique_id=1774302214]
+visible = false
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -293,31 +453,31 @@ texture = ExtResource("2_i68vf")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Body/MarginContainer/Panel2"]
+[node name="Panel" type="Panel" parent="CanvasLayer/Body/MarginContainer/Panel2" unique_id=791050719]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rg3ah")
 
-[node name="TextView" type="RichTextLabel" parent="CanvasLayer/Body/MarginContainer/Panel2/Panel"]
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 2
+[node name="TextView" type="RichTextLabel" parent="CanvasLayer/Body/MarginContainer/Panel2/Panel" unique_id=1914840935]
+custom_minimum_size = Vector2(420, 500)
+layout_mode = 0
 offset_left = 8.0
-offset_top = 103.0
-offset_right = 508.0
-offset_bottom = 603.0
+offset_top = 56.0
+offset_right = 448.0
+offset_bottom = 679.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 10
-theme_override_constants/text_highlight_v_padding = 10
-theme_override_constants/text_highlight_h_padding = 0
 theme_override_constants/line_separation = 10
+theme_override_constants/text_highlight_h_padding = 0
+theme_override_constants/text_highlight_v_padding = 10
+theme_override_constants/table_h_separation = 10
+theme_override_constants/table_v_separation = 0
 theme_override_fonts/normal_font = ExtResource("4_fv7sy")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
-theme_override_font_sizes/normal_font_size = 24
-theme_override_font_sizes/bold_font_size = 24
 bbcode_enabled = true
 text = "[center][font_size=20]Descripción del puzzle. Aquí se mostrará información detallada sobre la imagen que se muestra.[/font_size][/center]"
 fit_content = true
@@ -326,11 +486,12 @@ autowrap_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PuzzleImage2D" type="Sprite2D" parent="CanvasLayer/Body/MarginContainer/Panel2"]
-position = Vector2(274, 336)
+[node name="PuzzleImage2D" type="Sprite2D" parent="CanvasLayer/Body/MarginContainer/Panel2" unique_id=746156013]
+position = Vector2(236.00002, 358)
+scale = Vector2(0.6884423, 0.703125)
 texture = ExtResource("2_i68vf")
 
-[node name="PackImage" type="TextureRect" parent="CanvasLayer/Body/MarginContainer/Panel2"]
+[node name="PackImage" type="TextureRect" parent="CanvasLayer/Body/MarginContainer/Panel2" unique_id=1851303764]
 visible = false
 clip_contents = true
 layout_mode = 2
@@ -338,32 +499,32 @@ texture = ExtResource("2_i68vf")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body" unique_id=295762364]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 8
+size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_yjnxs")
 
-[node name="LabelNamePuzzle" type="Label" parent="CanvasLayer/Body/PanelContainer"]
+[node name="LabelNamePuzzle" type="Label" parent="CanvasLayer/Body/PanelContainer" unique_id=818904522]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "NOMBRE DEL PUZZLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Body"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Body" unique_id=1221424160]
 visible = false
 layout_mode = 2
 alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Body/VBoxContainer" unique_id=576665281]
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_fjces")
 
-[node name="ImageView" type="VBoxContainer" parent="CanvasLayer/Body/VBoxContainer/PanelContainer"]
+[node name="ImageView" type="VBoxContainer" parent="CanvasLayer/Body/VBoxContainer/PanelContainer" unique_id=1415263726]
 visible = false
 clip_contents = true
 custom_minimum_size = Vector2(520, 640)
@@ -372,28 +533,49 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 alignment = 1
 
-[node name="BlockButtonChange" type="HBoxContainer" parent="CanvasLayer/Body/VBoxContainer"]
+[node name="BlockButtonChange" type="HBoxContainer" parent="CanvasLayer/Body/VBoxContainer" unique_id=1668955329]
 visible = false
 layout_mode = 2
 alignment = 1
 
-[node name="LabelPuzzle" type="Label" parent="CanvasLayer/Body/VBoxContainer"]
+[node name="LabelPuzzle" type="Label" parent="CanvasLayer/Body/VBoxContainer" unique_id=1096268652]
 visible = false
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Body/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Body/VBoxContainer" unique_id=1465047653]
 layout_mode = 2
 size_flags_horizontal = 4
 alignment = 1
 
-[node name="Volver" type="Button" parent="CanvasLayer/Body/VBoxContainer/HBoxContainer"]
+[node name="Volver" type="Button" parent="CanvasLayer/Body/VBoxContainer/HBoxContainer" unique_id=79594160]
 visible = false
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
-text = "Volver"
+text = "common_back"
 
-[node name="FlipButton" type="Button" parent="CanvasLayer"]
+[node name="PanelFlip" type="PanelContainer" parent="CanvasLayer" unique_id=326810442]
+offset_left = 598.0
+offset_top = 389.0
+offset_right = 668.0
+offset_bottom = 459.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5dxs6")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelFlip" unique_id=1483899937]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer/PanelFlip/MarginContainer" unique_id=1890620601]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_c5778")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="FlipButton" type="Button" parent="CanvasLayer" unique_id=133437680]
+visible = false
 z_index = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -401,16 +583,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 238.0
-offset_top = -317.0
+offset_top = -251.0
 offset_right = 318.0
-offset_bottom = -237.0
+offset_bottom = -171.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(40, 40)
 mouse_default_cursor_shape = 2
-theme_type_variation = &"CircleButtonBlue"
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/FlipButton"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/FlipButton" unique_id=1592670782]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -429,7 +610,28 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_r53cv")
 expand_mode = 1
 
-[node name="ButtonExpanse" type="Button" parent="CanvasLayer"]
+[node name="PanelExpand" type="PanelContainer" parent="CanvasLayer" unique_id=980890837]
+offset_left = 43.0
+offset_top = 390.0
+offset_right = 113.0
+offset_bottom = 460.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5dxs6")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelExpand" unique_id=435930194]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer/PanelExpand/MarginContainer" unique_id=929961085]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_xuyag")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ButtonExpanse" type="Button" parent="CanvasLayer" unique_id=1300504420]
+visible = false
 z_index = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -437,16 +639,16 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -322.0
-offset_top = -317.0
+offset_top = -251.0
 offset_right = -242.0
-offset_bottom = -237.0
+offset_bottom = -171.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(40, 40)
 mouse_default_cursor_shape = 2
 theme_type_variation = &"CircleButtonYellow"
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/ButtonExpanse"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/ButtonExpanse" unique_id=1245588292]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -465,40 +667,82 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_ua571")
 expand_mode = 1
 
-[node name="Footer" type="MarginContainer" parent="CanvasLayer"]
+[node name="Footer" type="MarginContainer" parent="CanvasLayer" unique_id=1281671530]
 anchors_preset = -1
 anchor_left = 0.084
 anchor_top = 0.906
 anchor_right = 0.921
 anchor_bottom = 1.0
 offset_left = -21.48
-offset_top = -29.6801
-offset_right = 17.8799
+offset_top = -29.680054
+offset_right = 17.880005
 offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Footer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Footer" unique_id=1300413660]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 100
+alignment = 1
 
-[node name="BackButton" parent="CanvasLayer/Footer/HBoxContainer" instance=ExtResource("3_8kq2x")]
-custom_minimum_size = Vector2(120, 120)
+[node name="PanelExit" type="PanelContainer" parent="CanvasLayer/Footer/HBoxContainer" unique_id=504081559]
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_0i7ly")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Footer/HBoxContainer/PanelExit" unique_id=1478825815]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="TextureButtonExit" type="TextureButton" parent="CanvasLayer/Footer/HBoxContainer/PanelExit/MarginContainer" unique_id=1545250332]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_rg3ah")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BackButton" parent="CanvasLayer/Footer/HBoxContainer" unique_id=2040360011 instance=ExtResource("3_8kq2x")]
+visible = false
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 4
 path = "res://Scenes/PuzzleSelection.tscn"
 
-[node name="Repetir" type="Button" parent="CanvasLayer/Footer/HBoxContainer"]
+[node name="PanelRetryButton" type="PanelContainer" parent="CanvasLayer/Footer/HBoxContainer" unique_id=936984317]
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_c5778")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Footer/HBoxContainer/PanelRetryButton" unique_id=908010020]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer/Footer/HBoxContainer/PanelRetryButton/MarginContainer" unique_id=1000098417]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_0i7ly")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Repetir" type="Button" parent="CanvasLayer/Footer/HBoxContainer" unique_id=755128936]
+visible = false
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-tooltip_text = "Repeat"
+tooltip_text = "common_repeat"
 theme_type_variation = &"CircleButtonYellow"
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Footer/HBoxContainer/Repetir"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Footer/HBoxContainer/Repetir" unique_id=122261901]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -515,15 +759,16 @@ texture = SubResource("AtlasTexture_fv7sy")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Siguiente" type="Button" parent="CanvasLayer/Footer/HBoxContainer"]
-custom_minimum_size = Vector2(120, 120)
+[node name="Siguiente" type="Button" parent="CanvasLayer/Footer/HBoxContainer" unique_id=116768599]
+visible = false
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-tooltip_text = "Next"
+tooltip_text = "common_next"
 theme_type_variation = &"CircleButtonGreen"
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Footer/HBoxContainer/Siguiente"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Footer/HBoxContainer/Siguiente" unique_id=346056786]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -539,64 +784,36 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_11iis")
 expand_mode = 1
 
-[node name="Movimientos" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -275.0
-offset_top = 186.0
-offset_right = -100.0
-offset_bottom = 326.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ua571")
-title = "Movimientos"
-color = Color(0.101961, 0.768627, 0.372549, 1)
-
-[node name="Tiempo" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -87.5
-offset_top = 188.0
-offset_right = 87.5
-offset_bottom = 328.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_5dxs6")
-title = "Tiempo"
-color = Color(0.447059, 0.101961, 0.768627, 1)
-
-[node name="Flips" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
-visible = false
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 101.0
-offset_top = 188.0
-offset_right = 276.0
-offset_bottom = 328.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_c5778")
-title = "Flips"
-color = Color(0.329412, 0.65098, 0.992157, 1)
-
-[node name="Puntuacion" parent="CanvasLayer" instance=ExtResource("9_cek7k")]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 102.0
-offset_top = 187.0
-offset_right = 277.0
-offset_bottom = 327.0
-grow_horizontal = 2
+[node name="PanelNextButton" type="PanelContainer" parent="CanvasLayer/Footer/HBoxContainer" unique_id=1632154911]
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_xuyag")
-title = "PUNTUACIÓN"
-color = Color(0.95, 0.6, 0.1, 1)
 
-[node name="ExpanseImage" parent="CanvasLayer" instance=ExtResource("10_r53cv")]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Footer/HBoxContainer/PanelNextButton" unique_id=1485032444]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="TextureButton" type="TextureButton" parent="CanvasLayer/Footer/HBoxContainer/PanelNextButton/MarginContainer" unique_id=1480598342]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_s7sor")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ExpanseImage" parent="CanvasLayer" unique_id=1243318788 instance=ExtResource("10_r53cv")]
 visible = false
 
 [connection signal="pressed" from="CanvasLayer/Body/VBoxContainer/HBoxContainer/Volver" to="." method="_on_MainMenuButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelFlip/MarginContainer/TextureButton" to="." method="_on_toggle_view_pressed"]
 [connection signal="pressed" from="CanvasLayer/FlipButton" to="." method="_on_toggle_view_pressed"]
+[connection signal="pressed" from="CanvasLayer/PanelExpand/MarginContainer/TextureButton" to="." method="showExpaneseImage"]
 [connection signal="pressed" from="CanvasLayer/ButtonExpanse" to="." method="showExpaneseImage"]
+[connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/PanelExit/MarginContainer/TextureButtonExit" to="." method="_on_MainMenuButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/PanelRetryButton/MarginContainer/TextureButton" to="." method="_on_RepeatButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/Repetir" to="." method="_on_RepeatButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/Siguiente" to="." method="_on_NextPuzzleButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Footer/HBoxContainer/PanelNextButton/MarginContainer/TextureButton" to="." method="_on_NextPuzzleButton_pressed"]

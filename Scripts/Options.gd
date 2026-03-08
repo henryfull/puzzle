@@ -146,38 +146,42 @@ func _ready():
 # Función para actualizar los textos de la UI según el idioma actual
 func update_ui_texts():
 
-	labelResolution.text = tr("common_resolution")
-	labelLanguage.text = tr("common_language")
-	labelGeneral.text = tr("common_general")
-	labelMusic.text = tr("common_music")
-	labelSFX.text = tr("common_sfx")
+	labelResolution.text = TranslationServer.translate("common_resolution")
+	labelLanguage.text = TranslationServer.translate("common_language")
+	labelGeneral.text = TranslationServer.translate("common_general")
+	labelMusic.text = TranslationServer.translate("common_music")
+	labelSFX.text = TranslationServer.translate("common_sfx")
 	
 	# Actualizar textos para las nuevas etiquetas
 	if labelPanSensitivity:
-		labelPanSensitivity.text = tr("options_pan_sensitivity")
+		labelPanSensitivity.text = TranslationServer.translate("options_pan_sensitivity")
 	if labelTweenEffect:
-		labelTweenEffect.text = tr("options_tween_effect")
+		labelTweenEffect.text = TranslationServer.translate("options_tween_effect")
 	if labelTweenDuration:
-		labelTweenDuration.text = tr("options_tween_duration")
+		labelTweenDuration.text = TranslationServer.translate("options_tween_duration")
 	if labelHapticEnabled:
-		labelHapticEnabled.text = tr("options_haptic_enabled")
+		labelHapticEnabled.text = TranslationServer.translate("options_haptic_enabled")
 	# Actualizar textos para las escalas de dispositivos
 	if labelTabletScale:
-		labelTabletScale.text = tr("options_tablet_scale")
+		labelTabletScale.text = TranslationServer.translate("options_tablet_scale")
 	if labelDesktopScale:
-		labelDesktopScale.text = tr("options_desktop_scale")
+		labelDesktopScale.text = TranslationServer.translate("options_desktop_scale")
 	if labelMobileScale:
-		labelMobileScale.text = tr("options_mobile_scale")
+		labelMobileScale.text = TranslationServer.translate("options_mobile_scale")
 	if labelPlatformConnection:
-		labelPlatformConnection.text = tr("options_platform_connection")
+		labelPlatformConnection.text = TranslationServer.translate("options_platform_connection")
 	
-	#buttonClose.text = tr("common_back")
-	buttonRestore.text = tr("options_restore_purchases")
+	#buttonClose.text = TranslationServer.translate("common_back")
+	buttonRestore.text = TranslationServer.translate("options_restore_purchases")
 	
 	# Actualizar estado de conexión de plataforma
 	update_platform_connection_status()
 	
 	print("Options: Textos actualizados con idioma: ", TranslationServer.get_locale())
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
 
 # Callback cuando se conecta exitosamente a un servicio
 func _on_connected_to_service(service_name):
@@ -187,7 +191,7 @@ func _on_connected_to_service(service_name):
 	_remove_spinner()
 	
 	# Mostrar mensaje de éxito
-	OS.alert(tr("options_connection_success") + ": " + service_name, tr("common_success"))
+	OS.alert(TranslationServer.translate("options_connection_success") + ": " + service_name, TranslationServer.translate("common_success"))
 
 # Callback cuando falla la conexión a un servicio
 func _on_connection_failed(service_name, error_message):
@@ -197,7 +201,7 @@ func _on_connection_failed(service_name, error_message):
 	_remove_spinner()
 	
 	# Mostrar mensaje de error al usuario
-	OS.alert(tr("options_connection_error") + ": " + error_message, tr("common_error"))
+	OS.alert(TranslationServer.translate("options_connection_error") + ": " + error_message, TranslationServer.translate("common_error"))
 	
 	if buttonPlatformConnect:
 		buttonPlatformConnect.disabled = false
@@ -213,10 +217,10 @@ func update_platform_connection_status():
 	
 	# Si está en proceso de autenticación, mostrar estado de carga
 	if authenticating:
-		platform_status.text = tr("options_connecting")
+		platform_status.text = TranslationServer.translate("options_connecting")
 		platform_status.add_theme_color_override("font_color", Color(0.3, 0.3, 0.8, 1)) # Azul
 		if buttonPlatformConnect:
-			buttonPlatformConnect.text = tr("common_cancel")
+			buttonPlatformConnect.text = TranslationServer.translate("common_cancel")
 			buttonPlatformConnect.disabled = true
 		return
 		
@@ -257,13 +261,13 @@ func update_platform_connection_status():
 		platform_status.text = platform_name
 		platform_status.add_theme_color_override("font_color", Color(0, 0.7, 0, 1)) # Verde
 		if buttonPlatformConnect:
-			buttonPlatformConnect.text = tr("common_exit")
+			buttonPlatformConnect.text = TranslationServer.translate("common_exit")
 			buttonPlatformConnect.disabled = false
 	else:
-		platform_status.text = tr("options_not_connected")
+		platform_status.text = TranslationServer.translate("options_not_connected")
 		platform_status.add_theme_color_override("font_color", Color(0.7, 0, 0, 1)) # Rojo
 		if buttonPlatformConnect:
-			buttonPlatformConnect.text = tr("common_connect")
+			buttonPlatformConnect.text = TranslationServer.translate("common_connect")
 			
 			# Verificar si hay servicios disponibles
 			var services_available = false
@@ -316,7 +320,7 @@ func _on_platform_connect_pressed():
 	# Verificar si ConnectStores existe
 	if not has_node("/root/ConnectStores"):
 		print("Options: ERROR - ConnectStores no está disponible como autoload")
-		OS.alert("Error: El servicio de conexión no está disponible", "Error")
+		OS.alert(TranslationServer.translate("store_service_unavailable"), TranslationServer.translate("common_error"))
 		return
 	
 	var connect_stores_instance = get_node("/root/ConnectStores")
@@ -334,7 +338,7 @@ func _on_platform_connect_pressed():
 			buttonPlatformConnect.disabled = false
 		return
 	
-	var is_connected = platform_status and platform_status.text != tr("options_not_connected")
+	var is_connected = platform_status and platform_status.text != TranslationServer.translate("options_not_connected")
 	print("Options: Estado actual de conexión: " + str(is_connected))
 	
 	if is_connected:
@@ -344,7 +348,7 @@ func _on_platform_connect_pressed():
 			# Intentar cerrar sesión según la plataforma
 			if stores_instance.is_ios and Engine.has_singleton("GameCenter"):
 				# Game Center no tiene función de cierre de sesión directo
-				OS.alert(tr("options_gamecenter_sign_out_info"), tr("common_info"))
+				OS.alert(TranslationServer.translate("options_gamecenter_sign_out_info"), TranslationServer.translate("common_info"))
 			elif stores_instance.is_android and Engine.has_singleton("GooglePlay"):
 				var play_services = Engine.get_singleton("GooglePlay")
 				if play_services.has_method("sign_out"):
@@ -365,7 +369,7 @@ func _on_platform_connect_pressed():
 					play_services.sign_out()
 			elif Engine.has_singleton("GameCenter"):
 				# Game Center no permite cerrar sesión directamente
-				OS.alert(tr("options_gamecenter_sign_out_info"), tr("common_info"))
+				OS.alert(TranslationServer.translate("options_gamecenter_sign_out_info"), TranslationServer.translate("common_info"))
 	else:
 		# Iniciar proceso de autenticación
 		authenticating = true
@@ -425,7 +429,7 @@ func _on_platform_connect_pressed():
 			if not connection_successful:
 				authenticating = false
 				_remove_spinner()
-				OS.alert(tr("options_no_services_available"), tr("common_error"))
+				OS.alert(TranslationServer.translate("options_no_services_available"), TranslationServer.translate("common_error"))
 				update_platform_connection_status()
 				return
 			
@@ -754,7 +758,7 @@ func _on_restore_button_pressed() -> void:
 		if has_node("/root/SceneManager"):
 			var scene_manager = get_node("/root/SceneManager")
 			if scene_manager.has_method("change_scene"):
-				OS.alert("La restauración se ha completado. El juego se reiniciará para aplicar los cambios.", "Restauración completada")
+				OS.alert(TranslationServer.translate("options_restore_restart_message"), TranslationServer.translate("options_restore_completed_title"))
 				scene_manager.change_scene("res://Scenes/MainMenu.tscn")
 				return
 		
@@ -771,10 +775,10 @@ func _on_restore_button_pressed() -> void:
 				packs_manager.update_ui()
 		
 		# Mostrar mensaje final
-		OS.alert("Se han desbloqueado y habilitado para jugar los dos primeros packs (Fruits y Numbers). Por favor, reinicia completamente el juego para asegurar que los cambios se apliquen correctamente.", "Restauración completada")
+		OS.alert(TranslationServer.translate("options_restore_first_packs_message"), TranslationServer.translate("options_restore_completed_title"))
 	else:
 		print("ERROR: No se encontró el nodo GLOBAL")
-		OS.alert("No se pudo restaurar el acceso a los puzzles.", "Error")
+		OS.alert(TranslationServer.translate("options_restore_failed"), TranslationServer.translate("common_error"))
 
 # Nuevas funciones para manejar cambios en las escalas de dispositivos
 func _on_tablet_scale_changed(value):

@@ -32,7 +32,7 @@ func _ready():
 			connect_stores.initialize_connection()
 	
 	# Actualizar los textos según el idioma actual
-	
+	update_ui_texts()
 	
 	# Conectar señal de cambio de idioma
 	if has_node("/root/TranslationLoader"):
@@ -52,10 +52,32 @@ func update_version_label():
 
 # Función para manejar cambios de idioma
 func _on_language_changed(_locale_code):
-	
+	update_ui_texts()
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
+
+func update_ui_texts():
+	var collections_label = get_node_or_null("CanvasLayer/MarginContainer/VBoxContainer/ButtonColections/MarginContainer/HBoxContainer/Label")
+	if collections_label:
+		collections_label.text = TranslationServer.translate("common_packs").to_upper()
+
+	var play_subtitle = get_node_or_null("CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay/MarginContainer/HBoxContainer/VBoxContainer/Label2")
+	if play_subtitle:
+		play_subtitle.text = TranslationServer.translate("mainmenu_play_subtitle")
+
+	var download_button = get_node_or_null("CanvasLayer/FalsePurcharseButton")
+	if download_button:
+		download_button.text = TranslationServer.translate("common_download")
+
 	# Actualizar textos del menú de opciones si está visible
 	if has_node("/root/OptionsManager"):
 		get_node("/root/OptionsManager").update_texts_if_visible()
+
+	for child in get_children():
+		if child.has_method("update_ui_texts"):
+			child.update_ui_texts()
 
 func _on_PlayButton_pressed():
 	# Si el menú de opciones está visible, ocultarlo primero

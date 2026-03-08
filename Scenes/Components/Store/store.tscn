@@ -54,15 +54,15 @@ grow_vertical = 2
 [node name="BuyButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Comprar"
+text = "common_buy"
 
 [node name="ConsumeButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
-text = "Consume"
+text = "common_consume"
 
 [node name="CheckSku" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
-text = "Check"
+text = "common_check"
 
 [node name="DownloadPanel" type="PanelContainer" parent="CanvasLayer"]
 visible = false
@@ -88,7 +88,7 @@ theme_override_constants/separation = 6
 
 [node name="Title" type="Label" parent="CanvasLayer/DownloadPanel/Margin/VBox"]
 layout_mode = 2
-text = "Descargando contenido..."
+text = "store_download_panel_title"
 
 [node name="Progress" type="ProgressBar" parent="CanvasLayer/DownloadPanel/Margin/VBox"]
 layout_mode = 2

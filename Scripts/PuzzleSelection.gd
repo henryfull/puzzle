@@ -95,7 +95,7 @@ func load_puzzles():
 	
 	# Actualizar el subtítulo mostrando el nombre del pack
 	if title_subtitle and pack.has("name"):
-		title_subtitle.text = "Pack: " + pack.name
+		title_subtitle.text = TranslationServer.translate("puzzle_selection_pack_title") % TranslationServer.translate(pack.name)
 		print("PuzzleSelection: Subtítulo actualizado: ", title_subtitle.text)
 	
 	# Cargar los puzzles utilizando el componente PuzzleGrid
@@ -204,6 +204,19 @@ func ensure_pack_selected():
 				print("PuzzleSelection: ERROR - No se pudo abrir el archivo JSON de packs")
 	else:
 		print("PuzzleSelection: Ya hay un pack seleccionado: ", GLOBAL.selected_pack.id)
+
+func update_ui_texts():
+	update_selected_pack()
+	load_puzzles()
+
+	if has_node("PreGamePuzzle"):
+		var pre_game = get_node("PreGamePuzzle")
+		if pre_game.has_method("updateLayout"):
+			pre_game.updateLayout()
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
 
 
 

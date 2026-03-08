@@ -106,7 +106,7 @@ func on_flip_button_pressed():
 	elif !is_currently_flipped and current_flips >= max_flips and (puzzle_game.game_state_manager.timer_mode or puzzle_game.game_state_manager.challenge_mode):
 		# Solo bloquear en modos limitados cuando se alcance el límite
 		print("PuzzleUIManager: ❌ Flip bloqueado en modo limitado - límite alcanzado")
-		show_error_message("No puedes realizar más flips (" + str(current_flips) + "/" + str(max_flips) + ")", 2.0)
+		show_error_message(TranslationServer.translate("game_max_flips_reached") % [current_flips, max_flips], 2.0)
 		return
 	
 	puzzle_game.game_state_manager.is_flip = true

@@ -24,6 +24,10 @@ func _ready() -> void:
 	panelInfoGame.visible = false
 	updateLayout()
 
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		updateLayout()
+
 func _check_and_clear_saved_state_if_different():
 	"""Verifica si el estado guardado corresponde al puzzle actual y lo limpia si es diferente"""
 	var puzzle_state_manager = get_node_or_null("/root/PuzzleStateManager")
@@ -64,10 +68,10 @@ func updateLayout(_columns = 0, _rows = 0) -> void:
 
 	title.text = GLOBAL.modes[global_gamemode].name
 	var global_difficult = GLOBAL.current_difficult
-	subtitle.text = tr(GLOBAL.difficulties[global_difficult].name) + " (" + global_size + ")"
-	playButton.text = tr("common_play").to_upper()
+	subtitle.text = TranslationServer.translate(GLOBAL.difficulties[global_difficult].name) + " (" + global_size + ")"
+	playButton.text = TranslationServer.translate("common_play").to_upper()
 	if GLOBAL.selected_puzzle != null:
-		size.text = GLOBAL.selected_puzzle.name
+		size.text = TranslationServer.translate(GLOBAL.selected_puzzle.name)
 	
 	# Actualizar el GoalPuzzle cuando se actualiza el layout
 

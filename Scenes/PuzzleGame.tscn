@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bumaj141kr3bw" path="res://Assets/Images/GUID/backgrounds/bg_pausa.png" id="8_p2qx1"]
 [ext_resource type="FontFile" uid="uid://ds0wa3hdat50g" path="res://Assets/Fonts/Futura-Bold-03.ttf" id="8_tu11h"]
 [ext_resource type="PackedScene" uid="uid://cjqkuy8cigbxx" path="res://Scenes/Components/UI/title/title.tscn" id="9_u0au7"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="10_7aw43"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fxwfr"]
 texture = ExtResource("4_58pa3")
@@ -101,7 +102,17 @@ corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mupxo"]
-bg_color = Color(6.16074e-06, 0.629349, 0.813684, 0.968627)
+bg_color = Color(0.27058825, 0.11372549, 0.6509804, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5jwhx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pqqng"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sr37j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hq32h"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v4hqp"]
 
 [sub_resource type="FontVariation" id="FontVariation_u0au7"]
 
@@ -423,7 +434,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.69411767)
 theme_override_constants/shadow_outline_size = 1
 theme_override_fonts/font = ExtResource("8_tu11h")
 theme_override_font_sizes/font_size = 32
-text = "Puntos: 0"
+text = ""
 vertical_alignment = 1
 
 [node name="Panel" type="Panel" parent="UILayer/ScoreLabel" unique_id=1291113337]
@@ -452,7 +463,7 @@ theme_override_colors/font_color = Color(0.3, 0.9, 0.3, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("8_tu11h")
 theme_override_font_sizes/font_size = 28
-text = "Racha: 0"
+text = ""
 vertical_alignment = 1
 
 [node name="Panel" type="Panel" parent="UILayer/StreakLabel" unique_id=1800932551]
@@ -583,7 +594,65 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mupxo")
 
+[node name="HeaderSection" type="PanelContainer" parent="UILayer/PanelPaused" unique_id=495386190]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 70.0
+offset_bottom = 174.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelSinColor"
+
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/PanelPaused/HeaderSection" unique_id=595599293]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UILayer/PanelPaused/HeaderSection/MarginContainer" unique_id=1235016220]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" parent="UILayer/PanelPaused/HeaderSection/MarginContainer/HBoxContainer" unique_id=873637627 instance=ExtResource("10_7aw43")]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+path = "res://Scenes/PackSelection.tscn"
+
+[node name="TitleLabel" type="Label" parent="UILayer/PanelPaused/HeaderSection/MarginContainer/HBoxContainer" unique_id=1527523874]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleSection"
+text = "common_paused"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="Control" type="Control" parent="UILayer/PanelPaused/HeaderSection/MarginContainer/HBoxContainer" unique_id=356758600]
+visible = false
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="ButtonShowInfo" type="Button" parent="UILayer/PanelPaused/HeaderSection/MarginContainer/HBoxContainer" unique_id=1011792937]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8646751, 0.86467516, 0.8646751, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5jwhx")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_pqqng")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_sr37j")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hq32h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_v4hqp")
+text = "?"
+
 [node name="TextureRect" type="TextureRect" parent="UILayer/PanelPaused" unique_id=1709104288]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -602,6 +671,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.717647)
 
 [node name="BackgroundTitle" parent="UILayer/PanelPaused" unique_id=593803521 instance=ExtResource("9_u0au7")]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -633,18 +703,19 @@ pivot_offset = Vector2(200, 250)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UILayer/PanelPaused/MarginContainer" unique_id=573242445]
 layout_mode = 2
+theme_override_constants/separation = 20
 
 [node name="ButtonContinue" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" unique_id=1217271833]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
-theme_type_variation = &"ButtonBlue"
-text = "Continuar"
+theme_type_variation = &"GoldButton"
+text = "scene_mainmenu_continue"
 
 [node name="ButtonRepeat" type="Button" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" unique_id=750669682]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 theme_type_variation = &"ButtonYellow"
-text = "Repetir"
+text = "common_retry"
 
 [node name="ButtonDifficult" parent="UILayer/PanelPaused/MarginContainer/VBoxContainer" unique_id=1492639647 instance=ExtResource("2_yvnqr")]
 auto_translate_mode = 1
@@ -657,7 +728,7 @@ size_flags_vertical = 8
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 theme_type_variation = &"ButtonRed"
-text = "Salir"
+text = "scene_mainmenu_exit"
 
 [node name="Label" type="Label" parent="UILayer/PanelPaused" unique_id=1041322086]
 visible = false

@@ -44,6 +44,23 @@ func _ready():
 	# Conectar a la señal propia
 	updateColumRows()
 	self.connect("show_difficult", Callable(self, "_on_toggle_difficult"))
+
+func update_ui_texts():
+	_updateProgressiveButton()
+
+	for i in range(min(difficulty_buttons.size(), GLOBAL.difficulties.size())):
+		var diff = GLOBAL.difficulties[i]
+		var button: Button = difficulty_buttons[i]
+		if is_instance_valid(button):
+			button.text = TranslationServer.translate(diff.name) + " (" + str(diff.columns) + "x" + str(diff.rows) + ")"
+			button.tooltip_text = TranslationServer.translate(diff.description)
+
+	_update_button_text()
+	updateColumRows()
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
 	
 func _updateProgressiveButton():
 	if isProgressive:
@@ -71,11 +88,11 @@ func _create_difficulty_buttons():
 	for i in range(GLOBAL.difficulties.size()):
 		var diff = GLOBAL.difficulties[i]
 		var button = Button.new()
-		button.text = tr(diff.name) + " (" + str(diff.columns) + "x" + str(diff.rows) + ")"
+		button.text = TranslationServer.translate(diff.name) + " (" + str(diff.columns) + "x" + str(diff.rows) + ")"
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.mouse_filter = Control.MOUSE_FILTER_PASS
 		button.custom_minimum_size = Vector2(0, 100)
-		button.tooltip_text = tr(diff.description)
+		button.tooltip_text = TranslationServer.translate(diff.description)
 		button.toggle_mode = true
 		button.button_group = difficulty_button_group
 		
@@ -100,8 +117,8 @@ func _update_button_text():
 	for i in range(GLOBAL.difficulties.size()):
 		var diff = GLOBAL.difficulties[i]
 		if diff.columns == GLOBAL.columns and diff.rows == GLOBAL.rows:
-			current_difficulty = tr(diff.name)
-			descriptionLabel.text = tr(diff.description)
+			current_difficulty = TranslationServer.translate(diff.name)
+			descriptionLabel.text = TranslationServer.translate(diff.description)
 			selected_index = i
 			break
 

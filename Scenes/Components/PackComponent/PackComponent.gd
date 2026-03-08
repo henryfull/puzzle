@@ -41,13 +41,21 @@ func _load_texture_from_path(path: String) -> Texture2D:
 func setup(data):
 	pack_data = data
 	# Configurar el título
-	labelPuzzle.text = data.name.to_upper()
+	labelPuzzle.text = TranslationServer.translate(data.name).to_upper()
 	
 	# Cargar la imagen del pack si está disponible
 	_load_pack_image()
 	
 	# Configurar el estado de bloqueo y compra
 	_update_pack_state()
+
+func update_ui_texts():
+	if pack_data and labelPuzzle:
+		labelPuzzle.text = TranslationServer.translate(pack_data.name).to_upper()
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
 
 # Función para cargar la imagen del pack
 func _load_pack_image():

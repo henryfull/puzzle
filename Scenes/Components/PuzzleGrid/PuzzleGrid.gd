@@ -20,7 +20,7 @@ func load_puzzles(pack):
 	# Verificar que haya un pack válido
 	if pack == null or not pack.has("id"):
 		print("PuzzleGrid: ERROR - Pack inválido o sin ID")
-		_show_error_message("Error: Pack inválido o sin ID")
+		_show_error_message(TranslationServer.translate("game_invalid_pack"))
 		return
 		
 	print("PuzzleGrid: Pack seleccionado - ID: ", pack.get("id", "NO ID"), ", Nombre: ", pack.get("name", "NO NAME"))
@@ -32,7 +32,7 @@ func load_puzzles(pack):
 	# Verificar si hay puzzles para mostrar
 	if not pack.has("puzzles") or pack.puzzles.size() == 0:
 		print("PuzzleGrid: ERROR - No hay puzzles en el pack seleccionado")
-		_show_error_message("No hay puzzles disponibles en este pack")
+		_show_error_message(TranslationServer.translate("game_no_puzzles_in_pack"))
 		return
 	
 	# Cargar los puzzles

@@ -67,6 +67,22 @@ func _ready():
 	var image = puzzle_image
 	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	update_ui_texts()
+
+func _translate_name(value: Variant) -> String:
+	if typeof(value) == TYPE_STRING:
+		return TranslationServer.translate(value)
+	return str(value)
+
+func _find_item_index_by_metadata(selector: OptionButton, target_value: String) -> int:
+	if not selector:
+		return -1
+
+	for index in range(selector.item_count):
+		if str(selector.get_item_metadata(index)) == target_value:
+			return index
+
+	return -1
 
 # Llenar el selector de packs (solo los desbloqueados)
 func populate_pack_selector():
@@ -78,7 +94,7 @@ func populate_pack_selector():
 	for pack in packs_data:
 		# Solo añadir packs desbloqueados
 		if pack.has("name") and pack.has("unlocked") and pack.unlocked:
-			pack_selector.add_item(pack.name)
+			pack_selector.add_item(_translate_name(pack.name))
 			pack_selector.set_item_metadata(pack_selector.get_item_count() - 1, pack.id)
 
 # Llenar el selector de puzzles para un pack (solo los desbloqueados)
@@ -100,7 +116,7 @@ func populate_puzzle_selector(pack_id: String):
 		for puzzle in selected_pack.puzzles:
 			# Solo añadir puzzles desbloqueados
 			if puzzle.has("name") and puzzle.has("unlocked") and puzzle.unlocked:
-				puzzle_selector.add_item(puzzle.name)
+				puzzle_selector.add_item(_translate_name(puzzle.name))
 				puzzle_selector.set_item_metadata(puzzle_selector.get_item_count() - 1, puzzle.id)
 				
 		# Seleccionar automáticamente el primer puzzle
@@ -183,7 +199,7 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	stats_table_container.add_child(header_row)
 	
 	# Fila de veces completado
-	var completions_row = create_stat_row(tr("Veces completado"), difficulties, puzzle_stats, 
+	var completions_row = create_stat_row(TranslationServer.translate("stats_completions"), difficulties, puzzle_stats,
 		func(stats): 
 			if stats.has("completions"):
 				return str(int(stats["completions"]))
@@ -192,7 +208,7 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	stats_table_container.add_child(completions_row)
 	
 	# Fila de mejor tiempo
-	var best_time_row = create_stat_row(tr("Mejor tiempo"), difficulties, puzzle_stats, 
+	var best_time_row = create_stat_row(TranslationServer.translate("stats_best_time"), difficulties, puzzle_stats,
 		func(stats):
 			if stats.has("best_time") and stats["best_time"] > 0:
 				var minutes = int(stats["best_time"]) / 60
@@ -203,7 +219,7 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	stats_table_container.add_child(best_time_row)
 	
 	# Fila de fecha mejor tiempo
-	var best_time_date_row = create_stat_row(tr("Fecha"), difficulties, puzzle_stats, 
+	var best_time_date_row = create_stat_row(TranslationServer.translate("common_date"), difficulties, puzzle_stats,
 		func(stats):
 			if stats.has("best_time_date"):
 				return format_date_time(stats["best_time_date"])
@@ -212,7 +228,7 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	stats_table_container.add_child(best_time_date_row)
 	
 	# Fila de mejor movimientos
-	var best_moves_row = create_stat_row(tr("Mejor movimientos"), difficulties, puzzle_stats, 
+	var best_moves_row = create_stat_row(TranslationServer.translate("stats_best_moves"), difficulties, puzzle_stats,
 		func(stats):
 			if stats.has("best_moves") and stats["best_moves"] > 0:
 				return str(int(stats["best_moves"]))
@@ -221,7 +237,7 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	stats_table_container.add_child(best_moves_row)
 	
 	# Fila de mejor flips
-	var best_flips_row = create_stat_row(tr("Menor flips"), difficulties, puzzle_stats, 
+	var best_flips_row = create_stat_row(TranslationServer.translate("stats_less_flips"), difficulties, puzzle_stats,
 		func(stats):
 			if stats.has("best_flips") and stats["best_flips"] < 99999:
 				return str(int(stats["best_flips"]))
@@ -230,7 +246,7 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	stats_table_container.add_child(best_flips_row)
 	
 	# Fila de mejor movimientos con flip
-	var best_flip_moves_row = create_stat_row(tr("Menor mov. flip"), difficulties, puzzle_stats, 
+	var best_flip_moves_row = create_stat_row(TranslationServer.translate("stats_less_flip_moves"), difficulties, puzzle_stats,
 		func(stats):
 			if stats.has("best_flip_moves") and stats["best_flip_moves"] < 99999:
 				return str(int(stats["best_flip_moves"]))
@@ -239,7 +255,7 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	stats_table_container.add_child(best_flip_moves_row)
 	
 	# Fila de mejor puntuación - NUEVA
-	var best_score_row = create_stat_row(tr("Mejor puntuación"), difficulties, puzzle_stats, 
+	var best_score_row = create_stat_row(TranslationServer.translate("stats_best_score"), difficulties, puzzle_stats,
 		func(stats):
 			if stats.has("best_score") and stats["best_score"] > 0:
 				return str(int(stats["best_score"]))
@@ -248,7 +264,7 @@ func create_stats_table(difficulties: Array, puzzle_stats: Dictionary):
 	stats_table_container.add_child(best_score_row)
 	
 	# Fila de fecha mejor puntuación - NUEVA
-	var best_score_date_row = create_stat_row(tr("Fecha"), difficulties, puzzle_stats, 
+	var best_score_date_row = create_stat_row(TranslationServer.translate("common_date"), difficulties, puzzle_stats,
 		func(stats):
 			if stats.has("best_score_date") and stats["best_score_date"] != "":
 				return format_date_time(stats["best_score_date"])
@@ -342,3 +358,35 @@ func _on_back_button_pressed():
 
 func _on_button_expanse_pressed() -> void:
 	$CanvasLayer/ExpanseImage.visible = true
+
+func update_ui_texts():
+	if no_stats_label:
+		no_stats_label.text = TranslationServer.translate("stats_no_previous")
+
+	var selected_pack_id := current_pack_id
+	if pack_selector and pack_selector.item_count > 0 and pack_selector.selected >= 0:
+		selected_pack_id = str(pack_selector.get_item_metadata(pack_selector.selected))
+
+	var selected_puzzle_id := current_puzzle_id
+
+	populate_pack_selector()
+
+	if not pack_selector or pack_selector.item_count == 0:
+		return
+
+	var pack_index := _find_item_index_by_metadata(pack_selector, selected_pack_id)
+	if pack_index < 0:
+		pack_index = 0
+
+	pack_selector.select(pack_index)
+	_on_pack_selected(pack_index)
+
+	if puzzle_selector and puzzle_selector.item_count > 0:
+		var puzzle_index := _find_item_index_by_metadata(puzzle_selector, selected_puzzle_id)
+		if puzzle_index >= 0:
+			puzzle_selector.select(puzzle_index)
+			_on_puzzle_selected(puzzle_index)
+
+func _notification(what):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()

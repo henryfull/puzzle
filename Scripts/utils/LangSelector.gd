@@ -1,12 +1,9 @@
 extends OptionButton
 
-# Diccionario con los idiomas y sus códigos
 var languages = {
 	"Español": "es",
 	"English": "en",
-	"Catala": "ca",	
-	"Français": "fr",
-	"Deutsch": "de"
+	"Catala": "ca"
 }
 
 # Señal para notificar cambios de idioma
@@ -34,69 +31,23 @@ func _on_language_selected(index):
 	var selected_language = get_item_text(index)
 	var locale_code = languages[selected_language]
 	
-	# Actualizar TranslationLoader
 	if has_node("/root/TranslationLoader"):
 		get_node("/root/TranslationLoader").set_language(locale_code)
-	
-	# Actualizar TranslationServer
-	TranslationServer.set_locale(locale_code)
-	
-	# Actualizar configuración global
-	GLOBAL.settings.language = locale_code
-	
-	# Guardar la selección
-	save_language(locale_code)
-	
-	# También guardar en la configuración global
-	if has_node("/root/GLOBAL"):
-		get_node("/root/GLOBAL").save_settings()
+	else:
+		TranslationServer.set_locale(locale_code)
+		GLOBAL.settings.language = locale_code
+		if has_node("/root/GLOBAL"):
+			get_node("/root/GLOBAL").save_settings()
 	
 	# Emitir señal de cambio de idioma
 	emit_signal("language_changed", locale_code)
 	
-	# Notificar a la escena actual para actualizar textos
-	var current_scene = get_tree().current_scene
-	if current_scene and current_scene.has_method("update_ui_texts"):
-		current_scene.update_ui_texts()
-	
 	print("Idioma cambiado a: ", locale_code)
 
-func save_language(locale_code):
-	var config = ConfigFile.new()
-	
-	# Cargar configuración existente para no sobrescribir otros valores
-	var err = config.load("user://settings.cfg")
-	if err != OK and err != ERR_FILE_NOT_FOUND:
-		print("Error al cargar el archivo de configuración: ", err)
-	
-	# Guardar el idioma
-	config.set_value("settings", "language", locale_code)
-	
-	# También guardar los volúmenes para asegurarnos de que no se pierdan
-	config.set_value("audio", "general_volume", GLOBAL.settings.volume.general)
-	config.set_value("audio", "music_volume", GLOBAL.settings.volume.music)
-	config.set_value("audio", "sfx_volume", GLOBAL.settings.volume.sfx)
-	
-	err = config.save("user://settings.cfg")
-	
-	if err != OK:
-		print("Error al guardar la configuración de idioma: ", err)
-	else:
-		print("Configuración de idioma guardada correctamente")
-
 func load_language():
-	var config = ConfigFile.new()
-	var err = config.load("user://settings.cfg")
-	var locale_code = "es"  # Predeterminado: español
-	
-	if err == OK:
-		locale_code = config.get_value("settings", "language", "es")
-	else:
-		# Si no hay configuración, usar el idioma de GLOBAL
-		locale_code = GLOBAL.settings.language
-	
-	# Actualizar TranslationServer
-	TranslationServer.set_locale(locale_code)
+	var locale_code = GLOBAL.settings.language
+	if has_node("/root/TranslationLoader"):
+		locale_code = get_node("/root/TranslationLoader").current_language
 	
 	# Seleccionar el idioma correcto en el menú
 	var found = false

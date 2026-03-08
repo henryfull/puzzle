@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://by6tdey6sc6uw"]
+[gd_scene format=3 uid="uid://by6tdey6sc6uw"]
 
 [ext_resource type="Script" uid="uid://1xbsuwk2flhp" path="res://Scripts/Options.gd" id="1_7s1ry"]
 [ext_resource type="Texture2D" uid="uid://iufixvgu4huh" path="res://Assets/Images/GUID/backgrounds/bg_default-2.jpg" id="2_bdxpv"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bfsv4bnm2nfdr" path="res://Scripts/utils/ResolutionButton.gd" id="4_bdxpv"]
 [ext_resource type="Script" uid="uid://2a11lixfguhu" path="res://Scripts/utils/LangSelector.gd" id="5_bdxpv"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="7_bdxpv"]
+[ext_resource type="PackedScene" uid="uid://bdvvvhltoedcq" path="res://Scenes/Components/BackButton/BackButton.tscn" id="7_cja8r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cja8r"]
 atlas = ExtResource("2_bdxpv")
@@ -22,11 +23,23 @@ region = Rect2(2114, 669, 101, 101)
 atlas = ExtResource("7_bdxpv")
 region = Rect2(150, 473, 102, 101)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_fry7h"]
+atlas = ExtResource("7_bdxpv")
+region = Rect2(1407, 147, 83, 83)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ksf6h"]
+atlas = ExtResource("7_bdxpv")
+region = Rect2(1499, 147, 83, 83)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_kfnrp"]
 atlas = ExtResource("7_bdxpv")
 region = Rect2(272, 474, 101, 101)
 
-[node name="Options" type="Node2D" node_paths=PackedStringArray("sliderVolumeGeneral", "sliderVolumeSFX", "sliderVolumeMusic", "sliderPanSensitivity", "sliderTweenDuration", "checkTweenEffect", "checkHapticEnabled")]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tcskm"]
+atlas = ExtResource("7_bdxpv")
+region = Rect2(1315, 42, 84, 84)
+
+[node name="Options" type="Node2D" unique_id=1738903631 node_paths=PackedStringArray("sliderVolumeGeneral", "sliderVolumeSFX", "sliderVolumeMusic", "sliderPanSensitivity", "sliderTweenDuration", "checkTweenEffect", "checkHapticEnabled")]
 script = ExtResource("1_7s1ry")
 sliderVolumeGeneral = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral/HSlider_Volumen_General")
 sliderVolumeSFX = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX/HSlider_Volumen_VFX")
@@ -36,9 +49,9 @@ sliderTweenDuration = NodePath("CanvasLayer/PanelContainer2/MarginContainer/Scro
 checkTweenEffect = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Tween_Effect")
 checkHapticEnabled = NodePath("CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Haptic_Enabled")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1322195366]
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=2081478767]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -47,7 +60,7 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_cja8r")
 expand_mode = 3
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=399087318]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -55,9 +68,10 @@ offset_top = -1.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.72549, 0.854902, 1, 0.356863)
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
 
-[node name="BackgroundTitle" parent="CanvasLayer" instance=ExtResource("3_6f4k2")]
+[node name="BackgroundTitle" parent="CanvasLayer" unique_id=1986024810 instance=ExtResource("3_6f4k2")]
+visible = false
 z_index = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -71,8 +85,9 @@ offset_bottom = 244.0
 grow_vertical = 1
 title = "scene_mainmenu_options"
 
-[node name="ButtonClose" type="Button" parent="CanvasLayer"]
+[node name="ButtonClose" type="Button" parent="CanvasLayer" unique_id=2098432994]
 unique_name_in_owner = true
+visible = false
 z_index = 1
 clip_contents = true
 custom_minimum_size = Vector2(80, 80)
@@ -89,20 +104,19 @@ grow_horizontal = 2
 size_flags_vertical = 0
 theme_type_variation = &"ButtonClose"
 
-[node name="PanelContainer2" type="PanelContainer" parent="CanvasLayer"]
+[node name="PanelContainer2" type="PanelContainer" parent="CanvasLayer" unique_id=787948420]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -311.0
-offset_top = 229.0
+offset_top = 189.0
 offset_right = 311.0
 offset_bottom = -53.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_type_variation = &"PanelYellow"
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer2" unique_id=544639930]
 custom_minimum_size = Vector2(0, 881)
 layout_mode = 2
 theme_override_constants/margin_left = 20
@@ -110,38 +124,43 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/PanelContainer2/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/PanelContainer2/MarginContainer" unique_id=1712976919]
 custom_minimum_size = Vector2(0, 840)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_bdxpv")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer" unique_id=1611662132]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
-[node name="Label_resolution" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="Label_resolution" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1307624221]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
+theme_type_variation = &"LabelOption"
 text = "Resolución"
 vertical_alignment = 1
 uppercase = true
 language = "es"
 
-[node name="ResolutionButton" type="OptionButton" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="ResolutionButton" type="OptionButton" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=625723436]
+visible = false
 layout_mode = 2
 size_flags_vertical = 4
 allow_reselect = true
 script = ExtResource("4_bdxpv")
 
-[node name="LabelIdioma" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="LabelIdioma" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1471679244]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Idioma"
+text = "common_language"
 uppercase = true
 language = "es"
 
-[node name="LangSelector" type="OptionButton" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="LangSelector" type="OptionButton" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=897231636]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 4
 selected = 0
@@ -156,192 +175,284 @@ popup/item_2/text = "ca"
 popup/item_2/id = 2
 script = ExtResource("5_bdxpv")
 
-[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=646761871]
 layout_mode = 2
 
-[node name="Label_general" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="Label_general" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1961841251]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
-text = "General"
+theme_type_variation = &"LabelOption"
+text = "common_general"
 uppercase = true
 
-[node name="HBoxContainerGeneral" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainerGeneral" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=2090116306]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral" unique_id=2088730035]
 layout_mode = 2
 texture = SubResource("AtlasTexture_pke3u")
 expand_mode = 3
 
-[node name="HSlider_Volumen_General" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral"]
+[node name="HSlider_Volumen_General" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral" unique_id=1420596290]
 custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
 size_flags_vertical = 4
 max_value = 80.0
 value = 80.0
 
-[node name="LabelMusic" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="LabelMusic" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1667108936]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Música"
+theme_type_variation = &"LabelOption"
+text = "common_music"
 uppercase = true
 language = "es"
 
-[node name="HBoxContainerMusic" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainerMusic" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1176620552]
 layout_mode = 2
+theme_override_constants/separation = 20
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic" unique_id=391267060]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = SubResource("AtlasTexture_pke3u")
-expand_mode = 3
+expand_mode = 1
+stretch_mode = 5
 
-[node name="HSlider_Volumen_Musica" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic"]
-custom_minimum_size = Vector2(400, 0)
+[node name="HSlider_Volumen_Musica" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic" unique_id=1424988238]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 step = 2.0
 value = 2.0
 
-[node name="LabelSFX" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="LabelSFX" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1943885422]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Efectos"
+theme_type_variation = &"LabelOption"
+text = "common_sfx"
 uppercase = true
 language = "es"
 
-[node name="HBoxContainerSFX" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainerSFX" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=231382333]
 layout_mode = 2
+theme_override_constants/separation = 20
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX" unique_id=1688363892]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = SubResource("AtlasTexture_bdxpv")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="HSlider_Volumen_VFX" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX"]
-custom_minimum_size = Vector2(400, 0)
+[node name="HSlider_Volumen_VFX" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX" unique_id=2064989539]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 step = 5.0
 
-[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=534519560]
 layout_mode = 2
 
-[node name="LabelPanSensitivity" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="LabelHapticEnabled" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=541777534]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Sensibilidad"
+theme_type_variation = &"LabelOption"
+text = "Vibración"
 uppercase = true
 language = "es"
 
-[node name="HBoxContainerSensitive" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="CheckBox_Haptic_Enabled" type="CheckBox" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=576958633]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_icons/checked = SubResource("AtlasTexture_fry7h")
+theme_override_icons/unchecked = SubResource("AtlasTexture_ksf6h")
+button_pressed = true
+alignment = 1
+
+[node name="HSeparator4" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=474978582]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive"]
+[node name="LabelPanSensitivity" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1312186163]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+text = "options_pan_sensitivity"
+uppercase = true
+language = "es"
+
+[node name="HBoxContainerSensitive" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=340509069]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive" unique_id=1223980852]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = SubResource("AtlasTexture_kfnrp")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="HSlider_Pan_Sensitivity" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive"]
-custom_minimum_size = Vector2(400, 0)
+[node name="HSlider_Pan_Sensitivity" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive" unique_id=1892819708]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 min_value = 0.1
 max_value = 2.0
 step = 0.1
 value = 1.0
 
-[node name="LabelTweenEffect" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="LabelTweenEffect" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=593680750]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"LabelOption"
 text = "Efecto suave"
 uppercase = true
 language = "es"
 
-[node name="CheckBox_Tween_Effect" type="CheckBox" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="CheckBox_Tween_Effect" type="CheckBox" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=849178682]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+size_flags_horizontal = 0
 button_pressed = true
 
-[node name="LabelTweenDuration" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="LabelTweenDuration" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1305713555]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"LabelOption"
 text = "Duración efecto"
 uppercase = true
 language = "es"
 
-[node name="HBoxContainerSensitive2" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainerSensitive2" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=731474364]
 layout_mode = 2
+theme_override_constants/separation = 20
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2" unique_id=306461860]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = SubResource("AtlasTexture_kfnrp")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="HSlider_Tween_Duration" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2"]
-custom_minimum_size = Vector2(400, 0)
+[node name="HSlider_Tween_Duration" type="HSlider" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2" unique_id=1713973371]
+custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 min_value = 0.1
 max_value = 1.0
 step = 0.05
 value = 0.2
 
-[node name="LabelHapticEnabled" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HSeparator3" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=541566031]
+layout_mode = 2
+
+[node name="LabelPlatformConnection" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1124198628]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
-text = "Vibración"
-uppercase = true
-language = "es"
-
-[node name="CheckBox_Haptic_Enabled" type="CheckBox" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-button_pressed = true
-
-[node name="HSeparator3" type="HSeparator" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="LabelPlatformConnection" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
+theme_type_variation = &"LabelOption"
 text = "Plataforma conectada"
 uppercase = true
 language = "es"
 
-[node name="HBoxContainerPlatform" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainerPlatform" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1347796720]
+visible = false
 layout_mode = 2
+theme_override_constants/separation = 20
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerPlatform"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerPlatform" unique_id=42079568]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = SubResource("AtlasTexture_kfnrp")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="TextPlatformStatus" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerPlatform"]
+[node name="TextPlatformStatus" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerPlatform" unique_id=2144162278]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"LabelOption"
 text = "No conectado"
 vertical_alignment = 1
 
-[node name="ButtonPlatformConnect" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerPlatform"]
+[node name="ButtonPlatformConnect" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerPlatform" unique_id=1963182847]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"ButtonRed"
-text = "Conectar"
+text = "common_connect"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer" unique_id=1235474585]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="RestoreButton" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/HBoxContainer"]
+[node name="RestoreButton" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/HBoxContainer" unique_id=1960382451]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 80)
 layout_mode = 2
 size_flags_vertical = 4
-tooltip_text = "Restaurar compras"
+tooltip_text = "options_restore_purchases_tooltip"
 theme_type_variation = &"ButtonYellow"
-text = "Restaurar"
+text = "options_restore_purchases"
+
+[node name="HeaderSection" type="PanelContainer" parent="CanvasLayer" unique_id=1775075255]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 70.0
+offset_bottom = 174.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelSinColor"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HeaderSection" unique_id=1321427878]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HeaderSection/MarginContainer" unique_id=936485757]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonClose" type="TextureButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=1236630910]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_tcskm")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BackButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=873637627 instance=ExtResource("7_cja8r")]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+path = "res://Scenes/PackSelection.tscn"
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=536615455]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleSection"
+text = "common_options"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="Control" type="Control" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=196396417]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
 
 [connection signal="pressed" from="CanvasLayer/ButtonClose" to="." method="_on_button_close_pressed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerGeneral/HSlider_Volumen_General" to="." method="_on_HSlider_Volumen_General_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerMusic/HSlider_Volumen_Musica" to="." method="_on_HSlider_Volumen_Musica_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSFX/HSlider_Volumen_VFX" to="." method="_on_HSlider_Volumen_VFX_value_changed"]
+[connection signal="toggled" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Haptic_Enabled" to="." method="_on_haptic_enabled_toggled"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive/HSlider_Pan_Sensitivity" to="." method="_on_pan_sensitivity_changed"]
 [connection signal="toggled" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Tween_Effect" to="." method="_on_tween_effect_toggled"]
 [connection signal="value_changed" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainerSensitive2/HSlider_Tween_Duration" to="." method="_on_tween_duration_changed"]
-[connection signal="toggled" from="CanvasLayer/PanelContainer2/MarginContainer/ScrollContainer/VBoxContainer/CheckBox_Haptic_Enabled" to="." method="_on_haptic_enabled_toggled"]
 [connection signal="pressed" from="CanvasLayer/PanelContainer2/MarginContainer/HBoxContainer/RestoreButton" to="." method="_on_restore_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer/ButtonClose" to="." method="_on_button_close_pressed"]

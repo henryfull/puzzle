@@ -43,6 +43,8 @@ var loading_puzzle_instance: Node2D
 
 # Control para evitar duplicación de puntos flotantes
 var last_score_shown: int = 0
+var displayed_score: int = 0
+var displayed_streak: int = 0
 
 # Managers
 var input_handler: PuzzleInputHandler
@@ -123,6 +125,7 @@ func _ready():
 	_detect_device_type()
 	_test_audio_nodes()
 	_initialize_managers()
+	reset_score_display()
 	
 	if panelPaused:
 		panelPaused.visible = false
@@ -311,6 +314,21 @@ func _connect_score_ui_signals():
 		score_manager.bonus_applied.connect(_on_bonus_applied)
 		print("PuzzleGame: Señales de puntuación conectadas al UILayer")
 
+func _set_score_label(score: int):
+	displayed_score = score
+	if score_label:
+		score_label.text = TranslationServer.translate("game_score_label") % score
+
+func _set_streak_label(streak: int):
+	displayed_streak = streak
+	if streak_label:
+		streak_label.text = TranslationServer.translate("game_streak_label") % streak
+		_apply_streak_color(streak)
+
+func update_ui_texts():
+	_set_score_label(displayed_score)
+	_set_streak_label(displayed_streak)
+
 func _connect_button_signals():
 	var button_connections = [
 		{button = button_options, method = "_on_button_options_pressed"},
@@ -422,8 +440,7 @@ func _on_score_updated(new_score: int):
 	if game_state_manager and game_state_manager.relax_mode:
 		return
 	
-	if score_label:
-		score_label.text = "Puntos: " + str(new_score)
+	_set_score_label(new_score)
 	
 	if new_score > last_score_shown:
 		var points_gained = new_score - last_score_shown
@@ -436,9 +453,7 @@ func _on_streak_updated(streak_count: int):
 	if game_state_manager and game_state_manager.relax_mode:
 		return
 	
-	if streak_label:
-		streak_label.text = "Racha: " + str(streak_count)
-		_apply_streak_color(streak_count)
+	_set_streak_label(streak_count)
 
 func _apply_streak_color(streak_count: int):
 	"""Aplica el color correspondiente según la racha"""
@@ -454,13 +469,13 @@ func _apply_streak_color(streak_count: int):
 func _on_bonus_applied(bonus_type: String, points: int):
 	"""Muestra mensaje descriptivo cuando se aplica un bonus"""
 	var bonus_messages = {
-		"streak": "¡Bonus racha! +%d",
-		"group_union": "¡Grupos unidos! +%d",
-		"no_errors": "¡Sin errores! +%d",
-		"no_flip": "¡Sin flip! +%d"
+		"streak": "game_bonus_streak",
+		"group_union": "game_bonus_group_union",
+		"no_errors": "game_bonus_no_errors",
+		"no_flip": "game_bonus_no_flip"
 	}
 	
-	var message = bonus_messages.get(bonus_type, "¡Bonus! +%d") % points
+	var message = TranslationServer.translate(bonus_messages.get(bonus_type, "game_bonus_generic")) % points
 	show_floating_points(message, bonus_type)
 	
 	if bonus_type == "group_union" and GLOBAL.is_haptic_enabled():
@@ -470,29 +485,20 @@ func _on_bonus_applied(bonus_type: String, points: int):
 # === FUNCIONES PÚBLICAS PARA GESTIÓN DE PUNTUACIÓN EN EL UILAYER ===
 
 func set_score_display(score: int):
-	if score_label:
-		score_label.text = "Puntos: " + str(score)
+	_set_score_label(score)
 
 func set_streak_display(streak: int):
-	if streak_label:
-		streak_label.text = "Racha: " + str(streak)
-		_apply_streak_color(streak)
+	_set_streak_label(streak)
 
 func update_score_and_streak(score: int, streak: int):
 	set_score_display(score)
 	set_streak_display(streak)
 
 func get_current_displayed_score() -> int:
-	if score_label and score_label.text.begins_with("Puntos: "):
-		var score_text = score_label.text.replace("Puntos: ", "")
-		return int(score_text)
-	return 0
+	return displayed_score
 
 func get_current_displayed_streak() -> int:
-	if streak_label and streak_label.text.begins_with("Racha: "):
-		var streak_text = streak_label.text.replace("Racha: ", "")
-		return int(streak_text)
-	return 0
+	return displayed_streak
 
 func hide_score_ui():
 	if score_label:
@@ -621,24 +627,24 @@ func _show_scale_config_dialog():
 	"""Muestra un diálogo simple para configurar escalas"""
 	var device_data = _get_current_device_data()
 	
-	var message = "Configuración de Escala del Puzzle\n\n"
-	message += "Dispositivo detectado: " + device_data.type + "\n"
-	message += "Escala actual: " + str(device_data.scale) + "\n\n"
-	message += "Escalas recomendadas:\n"
-	message += "• 0.6 - Muy pequeño (máxima visibilidad)\n"
-	message += "• 0.7 - Pequeño (recomendado tablets)\n"
-	message += "• 0.8 - Medio (equilibrado)\n"
-	message += "• 0.9 - Grande (más detalle)\n"
-	message += "• 1.0 - Máximo (pantalla completa)\n\n"
-	message += "¿Qué escala deseas usar? (0.5-1.0)"
+	var message = TranslationServer.translate("game_scale_dialog_title") + "\n\n"
+	message += "%s: %s\n" % [TranslationServer.translate("game_detected_device"), TranslationServer.translate(device_data.type_key)]
+	message += "%s: %s\n\n" % [TranslationServer.translate("game_current_scale"), str(device_data.scale)]
+	message += TranslationServer.translate("game_recommended_scales") + ":\n"
+	message += "• " + TranslationServer.translate("game_scale_option_06") + "\n"
+	message += "• " + TranslationServer.translate("game_scale_option_07") + "\n"
+	message += "• " + TranslationServer.translate("game_scale_option_08") + "\n"
+	message += "• " + TranslationServer.translate("game_scale_option_09") + "\n"
+	message += "• " + TranslationServer.translate("game_scale_option_10") + "\n\n"
+	message += TranslationServer.translate("game_scale_prompt")
 	
 	var dialog = AcceptDialog.new()
-	dialog.title = "Configurar Escala del Puzzle"
+	dialog.title = TranslationServer.translate("game_scale_dialog_title")
 	dialog.dialog_text = message
 	
 	var line_edit = LineEdit.new()
 	line_edit.text = str(device_data.scale)
-	line_edit.placeholder_text = "0.8"
+	line_edit.placeholder_text = TranslationServer.translate("game_scale_placeholder")
 	dialog.add_child(line_edit)
 	
 	add_child(dialog)
@@ -649,9 +655,9 @@ func _show_scale_config_dialog():
 	var new_scale = float(line_edit.text)
 	if new_scale >= 0.5 and new_scale <= 1.0:
 		_set_device_scale(new_scale)
-		show_info_message("Escala configurada a: " + str(new_scale), 2.0)
+		show_info_message(TranslationServer.translate("game_scale_configured") % str(new_scale), 2.0)
 	else:
-		show_info_message("Escala inválida. Usa valores entre 0.5 y 1.0", 3.0)
+		show_info_message(TranslationServer.translate("game_scale_invalid"), 3.0)
 	
 	dialog.queue_free()
 
@@ -665,13 +671,13 @@ func _ensure_dialog_blocker_component() -> void:
 func _get_current_device_data() -> Dictionary:
 	"""Obtiene datos del dispositivo actual"""
 	if is_tablet:
-		return {"type": "Tablet", "scale": GLOBAL.settings.puzzle.get("tablet_scale", 0.8), "key": "tablet_scale"}
+		return {"type": TranslationServer.translate("game_device_tablet"), "type_key": "game_device_tablet", "scale": GLOBAL.settings.puzzle.get("tablet_scale", 0.8), "key": "tablet_scale"}
 	elif is_desktop:
-		return {"type": "Ordenador", "scale": GLOBAL.settings.puzzle.get("desktop_scale", 0.8), "key": "desktop_scale"}
+		return {"type": TranslationServer.translate("game_device_desktop"), "type_key": "game_device_desktop", "scale": GLOBAL.settings.puzzle.get("desktop_scale", 0.8), "key": "desktop_scale"}
 	elif is_mobile:
-		return {"type": "Móvil", "scale": GLOBAL.settings.puzzle.get("mobile_scale", mobile_scale_percentage), "key": "mobile_scale"}
+		return {"type": TranslationServer.translate("game_device_mobile"), "type_key": "game_device_mobile", "scale": GLOBAL.settings.puzzle.get("mobile_scale", mobile_scale_percentage), "key": "mobile_scale"}
 	else:
-		return {"type": "Desconocido", "scale": max_scale_percentage, "key": "default_scale"}
+		return {"type": TranslationServer.translate("game_device_unknown"), "type_key": "game_device_unknown", "scale": max_scale_percentage, "key": "default_scale"}
 
 func _set_device_scale(new_scale: float):
 	"""Establece la escala para el dispositivo actual"""
@@ -742,6 +748,8 @@ func _notification(what):
 		print("PuzzleGame: Detectado cierre de aplicación - Guardando estado de emergencia")
 		_emergency_save_state()
 		get_tree().quit()
+	elif what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui_texts()
 
 # === FUNCIONES DE ACCESO PARA MANAGERS ===
 
@@ -884,7 +892,7 @@ func run_comprehensive_puzzle_check():
 	if final_overlaps_check and final_centering_check:
 		print("PuzzleGame: ✅ VERIFICACIÓN INTEGRAL COMPLETADA - Todo está correcto")
 	else:
-		show_error_message("⚠️ Algunos problemas persisten", 3.0)
+		show_error_message(TranslationServer.translate("game_issues_persist"), 3.0)
 		print("PuzzleGame: ⚠️ VERIFICACIÓN INTEGRAL COMPLETADA - Algunos problemas persisten")
 		if not final_overlaps_check:
 			print("PuzzleGame: - Persisten superposiciones")
@@ -1375,7 +1383,7 @@ func _on_restoration_completed(success: bool):
 
 func _on_restoration_failed(error_message: String):
 	print("PuzzleGame: ❌ Restauración falló: ", error_message)
-	show_error_message("Error al restaurar la partida: " + error_message, 3.0)
+	show_error_message(TranslationServer.translate("game_restore_error") % error_message, 3.0)
 
 func set_auto_centering_enabled(enabled: bool):
 	print("PuzzleGame: Centrado automático ", "activado" if enabled else "desactivado")
@@ -1394,10 +1402,10 @@ func force_synchronize_groups():
 	var problems_fixed = group_synchronizer.force_synchronize_all_groups()
 	
 	if problems_fixed > 0:
-		show_success_message("🔧 " + str(problems_fixed) + " problemas de grupos corregidos", 3.0)
+		show_success_message(TranslationServer.translate("game_groups_fixed") % problems_fixed, 3.0)
 		print("PuzzleGame: ✅ ", problems_fixed, " problemas de sincronización corregidos")
 	else:
-		show_success_message("✅ Todos los grupos están correctos", 2.0)
+		show_success_message(TranslationServer.translate("game_groups_ok"), 2.0)
 		print("PuzzleGame: ✅ No se encontraron problemas")
 	
 	group_synchronizer.queue_free()
@@ -1530,7 +1538,7 @@ func _on_overlap_check_timeout():
 	if not piece_manager.verify_no_overlaps():
 		print("PuzzleGame: 🔧 Detectadas superposiciones durante monitoreo automático - Resolviendo...")
 		piece_manager.resolve_all_overlaps()
-		show_info_message("🔧 Auto-corrección de posiciones", 1.0)
+		show_info_message(TranslationServer.translate("game_autocorrect_positions"), 1.0)
 
 func force_overlap_resolution():
 	"""Función pública para forzar la resolución de superposiciones desde cualquier lugar"""
