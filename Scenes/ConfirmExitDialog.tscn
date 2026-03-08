@@ -18,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.784314)
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
 
 [node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=344138453]
 anchors_preset = 15
@@ -32,13 +32,14 @@ layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/CenterContainer/Panel" unique_id=1548068966]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer/Panel/MarginContainer" unique_id=164978416]
 layout_mode = 2
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="TitleLabel" type="Label" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=577184279]
@@ -70,6 +71,7 @@ text = "Cancelar"
 [node name="ConfirmButton" type="Button" parent="CanvasLayer/CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonsContainer" unique_id=626299393]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
+theme_type_variation = &"GoldButton"
 text = "Salir"
 
 [node name="Panels" type="Panel" parent="CanvasLayer/CenterContainer" unique_id=1201260930]

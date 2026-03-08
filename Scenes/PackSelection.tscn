@@ -9,8 +9,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oq1hd"]
 
-[node name="PackSelection" type="Node2D" unique_id=483176368]
+[node name="PackSelection" type="Node2D" unique_id=483176368 node_paths=PackedStringArray("numPacks", "scroll_container", "packs_container")]
 script = ExtResource("1_wswaw")
+numPacks = NodePath("CanvasLayer/HeaderSection/MarginContainer/HBoxContainer/NumPacks")
+scroll_container = NodePath("CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer")
+packs_container = NodePath("CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/MarginContainer/PacksContainer")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=271724926]
 
@@ -114,7 +117,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="BackButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=1262932951 instance=ExtResource("4_ot00g")]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=1712075849]
@@ -129,5 +132,12 @@ autowrap_mode = 2
 uppercase = true
 
 [node name="Control" type="Control" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=750892106]
+visible = false
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+
+[node name="NumPacks" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=707929056]
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+text = " 20 / 20"
+horizontal_alignment = 2

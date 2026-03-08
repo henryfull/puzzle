@@ -4,14 +4,14 @@ extends Control
 signal puzzle_selected(puzzle_data)
 
 # Variables para almacenar los nodos
-var background_rect: ColorRect
-var frame_rect: Panel
-var image_texture: TextureRect
-var name_label: Label
-var select_button: Button
-var lock_icon: TextureRect
-var completed_icon: TextureRect
-var background_looked: ColorRect
+@export var background_rect: ColorRect
+@export var frame_rect: Panel
+@export var image_texture: TextureRect
+@export var name_label: Label
+@export var select_button: Button
+@export var lock_icon: TextureRect
+@export var completed_icon: TextureRect
+@export var background_looked: ColorRect
 
 # Datos del puzzle
 var puzzle_data = null
@@ -40,16 +40,6 @@ func _load_texture_from_path(path: String) -> Texture2D:
 
 func _ready():
 	print("PuzzleItem: _ready()")
-	
-	# Obtener referencias a los nodos
-	background_rect = $BackgroundRect
-	frame_rect = $BackgroundRect/FrameRect
-	select_button = $BackgroundRect/FrameRect/Button
-	image_texture = $BackgroundRect/FrameRect/Button/TextureRect
-	name_label = $BackgroundRect/NameLabel
-	lock_icon = $BackgroundRect/FrameRect/LockIcon
-	completed_icon = $BackgroundRect/FrameRect/CompletedIcon
-	background_looked = $BackgroundRectLook
 	
 	# Conectar el botón principal
 	var item_button = $ItemButton

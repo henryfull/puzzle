@@ -1,49 +1,48 @@
-[gd_scene load_steps=13 format=3 uid="uid://cwmh6v0v1h55u"]
+[gd_scene format=3 uid="uid://cwmh6v0v1h55u"]
 
 [ext_resource type="Script" uid="uid://chxeswjm6qscv" path="res://Scenes/Components/PackComponent/PackComponent.gd" id="1_ev5bh"]
 [ext_resource type="Texture2D" uid="uid://dthy24qh2pp7r" path="res://Assets/Images/default_image_pack.png" id="2_3llcl"]
 [ext_resource type="Texture2D" uid="uid://cixaoueymw0bn" path="res://Assets/Images/GUID/tile_tikitiki_puzzle.png" id="3_ev5bh"]
+[ext_resource type="FontFile" uid="uid://ds0wa3hdat50g" path="res://Assets/Fonts/Futura-Bold-03.ttf" id="4_3llcl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3llcl"]
-bg_color = Color(0.282353, 0.419608, 1, 1)
-corner_radius_top_left = 40
-corner_radius_top_right = 40
-corner_radius_bottom_right = 40
-corner_radius_bottom_left = 40
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ev5bh"]
-corner_radius_top_left = 40
-corner_radius_top_right = 40
-corner_radius_bottom_right = 40
-corner_radius_bottom_left = 40
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3llcl"]
 atlas = ExtResource("3_ev5bh")
 region = Rect2(1214, 668, 125, 101)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6pgc5"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0xr7k"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ymhho"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ueb6"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2xkka"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ueb6"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ymhho"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0xr7k"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6pgc5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qbtrw"]
-bg_color = Color(0.282353, 0.419608, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.147509, 8.56727e-05, 0.950081, 1)
+bg_color = Color(1, 1, 1, 0.7882353)
+border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
-[node name="PackComponent" type="Control" node_paths=PackedStringArray("imagePuzzle", "labelPuzzle")]
+[node name="PackComponent" type="Control" unique_id=858001638 node_paths=PackedStringArray("imagePuzzle", "labelPuzzle", "numPuzzles")]
 custom_minimum_size = Vector2(480, 350)
 layout_mode = 3
 anchors_preset = 15
@@ -57,8 +56,9 @@ mouse_default_cursor_shape = 2
 script = ExtResource("1_ev5bh")
 imagePuzzle = NodePath("Panel/MarginContainer/Panel/PackImage")
 labelPuzzle = NodePath("TitleBackground/TitleLabel")
+numPuzzles = NodePath("PanelContainer/MarginContainer/NumUnlocks")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=692835354]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,33 +67,33 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3llcl")
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=2102491206]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="Panel" type="PanelContainer" parent="Panel/MarginContainer"]
+[node name="Panel" type="PanelContainer" parent="Panel/MarginContainer" unique_id=122002548]
 clip_children = 1
 clip_contents = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ev5bh")
 
-[node name="PackImage" type="TextureRect" parent="Panel/MarginContainer/Panel"]
+[node name="PackImage" type="TextureRect" parent="Panel/MarginContainer/Panel" unique_id=236805341]
 clip_contents = true
 layout_mode = 2
 texture = ExtResource("2_3llcl")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="LockOverlay" type="PanelContainer" parent="."]
+[node name="LockOverlay" type="PanelContainer" parent="." unique_id=728249163]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -107,7 +107,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"PanelBlue"
 
-[node name="LockIcon" type="TextureRect" parent="LockOverlay"]
+[node name="LockIcon" type="TextureRect" parent="LockOverlay" unique_id=1509551124]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -115,7 +115,7 @@ texture = SubResource("AtlasTexture_3llcl")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." unique_id=1690961864]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -123,30 +123,29 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-theme_override_styles/focus = SubResource("StyleBoxTexture_6pgc5")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_0xr7k")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_ymhho")
-theme_override_styles/pressed_mirrored = SubResource("StyleBoxTexture_2xkka")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_6ueb6")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxTexture_2xkka")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_ymhho")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_0xr7k")
+theme_override_styles/focus = SubResource("StyleBoxTexture_6pgc5")
 flat = true
 
-[node name="TitleBackground" type="Panel" parent="."]
+[node name="TitleBackground" type="Panel" parent="." unique_id=1474791398]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 12
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -195.0
-offset_top = -40.0
-offset_right = 195.0
-offset_bottom = 20.0
+offset_left = 23.0
+offset_top = -72.0
+offset_right = -23.0
+offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_qbtrw")
 
-[node name="TitleLabel" type="Label" parent="TitleBackground"]
+[node name="TitleLabel" type="Label" parent="TitleBackground" unique_id=1132938458]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -155,10 +154,37 @@ offset_top = 8.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.27058825, 0.11372549, 0.6509804, 1)
+theme_override_fonts/font = ExtResource("4_3llcl")
 theme_override_font_sizes/font_size = 32
 text = "FRUTAS"
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=883649070]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -110.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 59.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=214067059]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="NumUnlocks" type="Label" parent="PanelContainer/MarginContainer" unique_id=1895451620]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "1 / 12"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

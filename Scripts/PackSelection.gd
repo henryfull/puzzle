@@ -6,13 +6,13 @@ extends Node2D
 
 signal change_scene(puzzle_data)
 
-
+@export var numPacks: Label 
+@export var scroll_container: ScrollContainer
+@export var packs_container: VBoxContainer
 # Variables para controlar el desplazamiento táctil
 var is_scrolling = false
 var scroll_start_position = Vector2.ZERO
 var scroll_start_time = 0
-var scroll_container
-var packs_container
 var drag_threshold = 10  # Umbral en píxeles para considerar un desplazamiento
 # Referencia a la escena del componente de pack
 var pack_component_scene = preload("res://Scenes/Components/PackComponent/PackComponent.tscn")
@@ -21,10 +21,6 @@ var pack_component_scene = preload("res://Scenes/Components/PackComponent/PackCo
 
 func _ready():
 	print("PackSelection: inicialización de los packs disponibles")
-	
-	scroll_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer
-	packs_container = $CanvasLayer/PanelContainer/ContainerPacks/ScrollContainer/MarginContainer/PacksContainer
-
 	# Ajustar el layout según el tipo de dispositivo
 	# adjust_layout_for_device()
 	
@@ -54,13 +50,20 @@ func load_packs():
 	print("PackSelection: Packs cargados: ", packs.size())
 	
 	# Imprimir detalles de cada pack para diagnóstico
+	var size_puzzles = packs.size()
+	var unlockers = 0
 	for i in range(packs.size()):
 		var pack = packs[i]
+		var unlock = pack.get("unlocked", "N/A")
+		if unlock:
+			unlockers += 1
+		var purcharse = pack.get("purchased", "N/A")
 		print("PackSelection: Pack ", i, " - ID: ", pack.id, ", Name: ", pack.name, 
-			", Unlocked: ", pack.get("unlocked", "N/A"), 
-			", Purchased: ", pack.get("purchased", "N/A"),
+			", Unlocked: ", unlock, 
+			", Purchased: ", purcharse ,
 			", Puzzles: ", pack.puzzles.size() if pack.has("puzzles") else "No puzzles")
 	
+	numPacks.text = "%s / %s" % [unlockers, size_puzzles]
 	if packs.size() == 0:
 		print("PackSelection: ERROR - No se encontraron packs disponibles")
 		print("PackSelection: Intentando leer directamente del archivo JSON")

@@ -4,6 +4,7 @@ extends Control
 
 @export var imagePuzzle = TextureRect
 @export var labelPuzzle = Label
+@export var numPuzzles = Label
 # Señal que se emite cuando se selecciona un pack
 signal pack_selected(pack_data)
 # Señal que se emite cuando se quiere comprar un pack
@@ -48,6 +49,19 @@ func setup(data):
 	
 	# Configurar el estado de bloqueo y compra
 	_update_pack_state()
+	
+	setUnlockPuzzles(data)
+
+func setUnlockPuzzles(pack):
+	var puzzles = pack.puzzles
+	var size = puzzles.size()
+	var unlockeds = 0
+	for i in range(puzzles.size()):
+		var puzzle = puzzles[i]
+		if puzzle.unlocked:
+			unlockeds += 1
+	
+	numPuzzles.text = "%s / %s" % [unlockeds, size]
 
 func update_ui_texts():
 	if pack_data and labelPuzzle:

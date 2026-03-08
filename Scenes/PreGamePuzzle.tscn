@@ -91,9 +91,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -310.0
-offset_top = 167.0
+offset_top = 177.0
 offset_right = 310.0
-offset_bottom = 303.0
+offset_bottom = 345.0
 grow_horizontal = 2
 size_flags_vertical = 0
 
@@ -315,9 +315,9 @@ layout_mode = 2
 alignment = 1
 
 [node name="BackButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=873637627 instance=ExtResource("7_4pyv4")]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
-path = "res://Scenes/PackSelection.tscn"
+path = "res://Scenes/PuzzleSelection.tscn"
 
 [node name="TitleLabel" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=580493811]
 custom_minimum_size = Vector2(0, 40)
@@ -329,6 +329,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 uppercase = true
+max_lines_visible = 1
 
 [node name="Control" type="Control" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=725767093]
 visible = false

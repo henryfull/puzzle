@@ -419,7 +419,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="ButtonClose" type="TextureButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=1236630910]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_tcskm")
 ignore_texture_size = true

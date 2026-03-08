@@ -37,8 +37,6 @@ func _ready():
 	updateColor()
 
 func update_ui_texts():
-	$GameModeLayer/Panel/MarginContainer/VBoxContainer/PlayButton.text = TranslationServer.translate("common_play")
-
 	for i in range(min(difficulty_buttons.size(), GLOBAL.modes.size())):
 		var diff = GLOBAL.modes[i]
 		var button: Button = difficulty_buttons[i]

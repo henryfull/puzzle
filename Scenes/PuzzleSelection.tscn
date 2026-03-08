@@ -8,8 +8,12 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4mmlg"]
 
-[node name="PuzzleSelection" type="Node2D" unique_id=103500428]
+[node name="PuzzleSelection" type="Node2D" unique_id=103500428 node_paths=PackedStringArray("scroll_container", "margin_container", "puzzle_grid", "numPuzzles")]
 script = ExtResource("1_nt7kx")
+scroll_container = NodePath("CanvasLayer/VBoxContainer/ScrollContainer")
+margin_container = NodePath("CanvasLayer/VBoxContainer/ScrollContainer/MarginContainer")
+puzzle_grid = NodePath("CanvasLayer/VBoxContainer/ScrollContainer/MarginContainer/PuzzleGrid")
+numPuzzles = NodePath("CanvasLayer/HeaderSection/MarginContainer/HBoxContainer/NumPuzzles")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=816991789]
 
@@ -123,7 +127,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="BackButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=873637627 instance=ExtResource("6_jmjrx")]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
 path = "res://Scenes/PackSelection.tscn"
 
@@ -139,5 +143,12 @@ autowrap_mode = 2
 uppercase = true
 
 [node name="Control" type="Control" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=716420985]
+visible = false
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+
+[node name="NumPuzzles" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" unique_id=1786740159]
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+text = " 20 / 20"
+horizontal_alignment = 2

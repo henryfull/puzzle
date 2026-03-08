@@ -2,11 +2,12 @@ extends Node2D
 
 # Acceso al singleton ProgressManager
 @onready var progress_manager = get_node("/root/ProgressManager")
+@export	var scroll_container : ScrollContainer
+@export	var margin_container :MarginContainer
+@export var	puzzle_grid : Node
+@export var numPuzzles: Label
 
 var title_subtitle : Label
-var scroll_container : ScrollContainer
-var margin_container : MarginContainer
-var puzzle_grid: Node  # Referencia al componente PuzzleGrid
 
 # Añadir variables para controlar el desplazamiento táctil
 var is_scrolling = false
@@ -21,37 +22,11 @@ func _ready():
 	# Detectar si estamos en un dispositivo táctil
 	is_touch_device = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("ios") or OS.has_feature("android")
 	print("PuzzleSelection: Dispositivo táctil: ", is_touch_device)
-	
-	# Obtener referencias a los nodos existentes en la escena
-	title_subtitle = $CanvasLayer/TitleBanner/Subtitle
-	scroll_container = $CanvasLayer/VBoxContainer/ScrollContainer
-	margin_container = $CanvasLayer/VBoxContainer/ScrollContainer/MarginContainer
-	puzzle_grid = $CanvasLayer/VBoxContainer/ScrollContainer/MarginContainer/PuzzleGrid
-	
-	# Verificar que todos los nodos se hayan encontrado correctamente
-	if title_subtitle and scroll_container and margin_container and puzzle_grid:
-		print("PuzzleSelection: Todos los nodos encontrados correctamente")
 		
-		# Conectar la señal puzzle_selected del PuzzleGrid
-		if not puzzle_grid.is_connected("puzzle_selected", Callable(self, "_on_PuzzleSelected")):
-			puzzle_grid.connect("puzzle_selected", Callable(self, "_on_PuzzleSelected"))
-			print("PuzzleSelection: Señal puzzle_selected conectada desde PuzzleGrid")
-	else:
-		print("ERROR: No se pudieron encontrar todos los nodos necesarios")
-		if not title_subtitle:
-			print("ERROR: No se encontró el nodo title_subtitle")
-		if not scroll_container:
-			print("ERROR: No se encontró el nodo scroll_container")
-		if not margin_container:
-			print("ERROR: No se encontró el nodo margin_container")
-		if not puzzle_grid:
-			print("ERROR: No se encontró el nodo puzzle_grid")
-	
-		
-		# Guardar referencias a los hijos actuales
-		var children = []
-		for child in scroll_container.get_children():
-			children.append(child)
+	# Guardar referencias a los hijos actuales
+	var children = []
+	for child in scroll_container.get_children():
+		children.append(child)
 	
 	# Asegurar que haya un pack seleccionado
 	ensure_pack_selected()
@@ -100,7 +75,17 @@ func load_puzzles():
 	
 	# Cargar los puzzles utilizando el componente PuzzleGrid
 	if puzzle_grid:
+		var puzzles = pack.puzzles
+		var size = puzzles.size()
+		var unlockeds = 0
 		puzzle_grid.load_puzzles(pack)
+		for i in range(puzzles.size()):
+			var puzzle = puzzles[i]
+			if puzzle.unlocked:
+				unlockeds += 1
+		
+		numPuzzles.text = "%s / %s" % [unlockeds, size]
+		
 		# Desplazar automáticamente al último puzzle disponible por desbloquear
 		await get_tree().process_frame
 		scroll_to_last_available_puzzle()
