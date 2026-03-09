@@ -99,7 +99,7 @@ func _update_limits(game_mode: int) -> void:
 
 func _update_puzzle_preview() -> void:
 	var preview_texture := _get_selected_puzzle_texture()
-	var has_preview := _has_played_current_puzzle() and preview_texture != null
+	var has_preview := preview_texture != null
 
 	imagePuzzle.visible = has_preview
 	imagePuzzle.texture = preview_texture if has_preview else null

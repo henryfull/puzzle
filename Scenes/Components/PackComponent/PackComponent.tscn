@@ -20,9 +20,21 @@ corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f53a0"]
+bg_color = Color(0.19215687, 0.078431375, 0.45882353, 1)
+border_width_left = 5
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.19215687, 0.078431375, 0.45882353, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_3llcl"]
 atlas = ExtResource("3_ev5bh")
-region = Rect2(1214, 668, 125, 101)
+region = Rect2(808, 480, 97, 101)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ueb6"]
 
@@ -94,18 +106,13 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="LockOverlay" type="PanelContainer" parent="." unique_id=728249163]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 21.0
-offset_top = 49.0
-offset_right = -18.0
-offset_bottom = -19.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_type_variation = &"PanelBlue"
+theme_override_styles/panel = SubResource("StyleBoxFlat_f53a0")
 
 [node name="LockIcon" type="TextureRect" parent="LockOverlay" unique_id=1509551124]
 layout_mode = 2

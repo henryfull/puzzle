@@ -67,7 +67,7 @@ var puzzle_offset: Vector2
 @export var tablet_scale_percentage: float = 0.8
 @export var desktop_scale_percentage: float = 0.8
 @export var mobile_scale_percentage: float = 1.0
-@export var viewport_scene_path: String = "res://Scenes/TextViewport.tscn"
+@export var viewport_scene_path: String = "res://Scenes/Components/TextViewport/TextViewport.tscn"
 @export var max_extra_rows: int = 5
 
 # Detección de dispositivo
@@ -140,6 +140,7 @@ func _ready():
 	
 	# Configurar puzzle según datos seleccionados o guardados
 	_setup_puzzle_configuration()
+	_apply_pack_music()
 	
 	# Crear contenedor de piezas y configurar puzzle
 	_setup_pieces_container()
@@ -229,12 +230,36 @@ func _check_and_setup_saved_game() -> bool:
 
 func _setup_puzzle_configuration():
 	"""Configura la información del puzzle actual"""
+	if GLOBAL.selected_pack != null and GLOBAL.selected_pack.has("id") and progress_manager:
+		var refreshed_pack: Dictionary = progress_manager.get_pack_with_progress(str(GLOBAL.selected_pack.id))
+		if not refreshed_pack.is_empty():
+			GLOBAL.selected_pack = refreshed_pack
+
+	if GLOBAL.selected_pack != null and GLOBAL.selected_puzzle != null and GLOBAL.selected_puzzle.has("id"):
+		var selected_puzzle_id := str(GLOBAL.selected_puzzle.id)
+		for pack_puzzle in GLOBAL.selected_pack.get("puzzles", []):
+			if typeof(pack_puzzle) != TYPE_DICTIONARY:
+				continue
+			if str(pack_puzzle.get("id", "")) == selected_puzzle_id:
+				GLOBAL.selected_puzzle = pack_puzzle
+				break
+
 	if GLOBAL.selected_puzzle != null:
-		image_path = GLOBAL.selected_puzzle.image
+		var resolved_image_path := str(GLOBAL.selected_puzzle.get("image", ""))
+		if resolved_image_path.strip_edges() == "":
+			resolved_image_path = str(GLOBAL.selected_puzzle.get("image_path", image_path))
+		image_path = resolved_image_path
 		if GLOBAL.selected_pack != null:
-			current_pack_id = GLOBAL.selected_pack.id
+			current_pack_id = str(GLOBAL.selected_pack.id)
 		if GLOBAL.selected_puzzle != null:
-			current_puzzle_id = GLOBAL.selected_puzzle.id
+			current_puzzle_id = str(GLOBAL.selected_puzzle.id)
+
+func _apply_pack_music() -> void:
+	if has_node("/root/AudioManager"):
+		if GLOBAL.selected_pack != null:
+			AudioManager.play_music_for_pack(GLOBAL.selected_pack)
+		else:
+			AudioManager.play_music()
 
 func _detect_device_type():
 	"""Detecta el tipo de dispositivo para aplicar la escala correcta"""
@@ -604,7 +629,43 @@ func _setup_pieces_container():
 		print("PiecesContainer reposicionado a (0, 0) para centrado correcto")
 
 func _setup_puzzle():
-	await piece_manager.load_and_create_pieces(image_path, null)
+	var puzzle_back := await _build_puzzle_back_texture()
+	await piece_manager.load_and_create_pieces(image_path, puzzle_back)
+
+func _build_puzzle_back_texture() -> Texture2D:
+	if viewport_scene_path.strip_edges() == "":
+		return null
+
+	var viewport_scene = load(viewport_scene_path)
+	if viewport_scene == null:
+		push_warning("PuzzleGame: no se pudo cargar la escena de reverso del puzzle: %s" % viewport_scene_path)
+		return null
+
+	var viewport_instance = viewport_scene.instantiate()
+	if viewport_instance == null or not (viewport_instance is SubViewport):
+		push_warning("PuzzleGame: la escena de reverso no es un SubViewport válido")
+		if viewport_instance != null:
+			viewport_instance.queue_free()
+		return null
+
+	if viewport_instance.has_method("set_puzzle_content"):
+		var selected_puzzle: Dictionary = GLOBAL.selected_puzzle if GLOBAL.selected_puzzle != null else {}
+		var selected_pack: Dictionary = GLOBAL.selected_pack if GLOBAL.selected_pack != null else {}
+		viewport_instance.set_puzzle_content(selected_puzzle, selected_pack)
+
+	add_child(viewport_instance)
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	var viewport_texture: Texture2D = viewport_instance.get_texture()
+	var viewport_image: Image = viewport_texture.get_image() if viewport_texture != null else null
+	viewport_instance.queue_free()
+
+	if viewport_image == null or viewport_image.is_empty():
+		push_warning("PuzzleGame: no se pudo generar la textura del reverso del puzzle")
+		return null
+
+	return ImageTexture.create_from_image(viewport_image)
 
 # === FUNCIONES DE ENTRADA ===
 
@@ -980,9 +1041,10 @@ func _on_puzzle_completed():
 		return
 	
 	# Completar puzzle en el score manager
+	var score_summary := {}
 	if score_manager and score_manager.is_scoring_enabled():
 		score_manager.complete_puzzle()
-		var score_summary = score_manager.get_score_summary()
+		score_summary = score_manager.get_score_summary()
 		score_summary["completion_time"] = game_state_manager.elapsed_time
 		
 		if ranking_manager:
@@ -991,6 +1053,21 @@ func _on_puzzle_completed():
 	
 	print("PuzzleGame: Marcando puzzle como completado - Pack: " + current_pack_id + ", Puzzle: " + current_puzzle_id)
 	progress_manager.complete_puzzle(current_pack_id, current_puzzle_id)
+
+	if GLOBAL.selected_pack != null \
+		and bool(GLOBAL.selected_pack.get("is_daily_challenge", false)) \
+		and progress_manager.has_method("record_daily_challenge_completion_from_pack"):
+		var daily_stats := score_summary.duplicate(true)
+		daily_stats["pack_id"] = current_pack_id
+		daily_stats["puzzle_id"] = current_puzzle_id
+		daily_stats["elapsed_time"] = game_state_manager.elapsed_time if game_state_manager else 0.0
+		daily_stats["moves"] = game_state_manager.total_moves if game_state_manager else 0
+		daily_stats["flips"] = game_state_manager.flip_count if game_state_manager else 0
+		daily_stats["flip_moves"] = game_state_manager.flip_move_count if game_state_manager else 0
+		progress_manager.record_daily_challenge_completion_from_pack(GLOBAL.selected_pack, daily_stats)
+		var remote_catalog = get_node_or_null("/root/RemoteCatalogService")
+		if remote_catalog and remote_catalog.has_method("queue_daily_challenge_completion_report"):
+			remote_catalog.queue_daily_challenge_completion_report(GLOBAL.selected_pack, daily_stats)
 	
 	var next_puzzle = progress_manager.get_next_unlocked_puzzle(current_pack_id, current_puzzle_id)
 	if next_puzzle != null:

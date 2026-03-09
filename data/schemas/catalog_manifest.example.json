@@ -1,0 +1,85 @@
+{
+	"schema_version": 1,
+	"catalog_version": "2026.03.01",
+	"generated_at": "2026-03-08T10:00:00Z",
+	"cdn": {
+		"base_url": "https://cdn.example.com/puzzletikitiki"
+	},
+	"free_rotation": {
+		"slot_count": 12,
+		"starts_at": "2026-03-01T00:00:00Z",
+		"ends_at": "2026-04-01T00:00:00Z",
+		"active_pack_ids": [
+			"free-001",
+			"free-002",
+			"free-003",
+			"free-004",
+			"free-005",
+			"free-006",
+			"free-007",
+			"free-008",
+			"free-009",
+			"free-010",
+			"free-011",
+			"free-012"
+		]
+	},
+	"seasonal_events": [
+		{
+			"id": "spring-2026",
+			"tier": "free",
+			"starts_at": "2026-03-20T00:00:00Z",
+			"ends_at": "2026-05-01T00:00:00Z",
+			"pack_ids": [
+				"spring-2026-free"
+			]
+		},
+		{
+			"id": "halloween-2026-premium",
+			"tier": "premium",
+			"starts_at": "2026-10-20T00:00:00Z",
+			"ends_at": "2026-11-10T00:00:00Z",
+			"pack_ids": [
+				"halloween-2026-premium"
+			]
+		}
+	],
+	"packs": [
+		{
+			"id": "free-001",
+			"revision": 3,
+			"tier": "free_rotating",
+			"title": {
+				"es": "Pack Primavera",
+				"en": "Spring Pack"
+			},
+			"description": {
+				"es": "Colección mensual rotatoria.",
+				"en": "Monthly rotating collection."
+			},
+			"manifest_path": "packs/free-001/pack_manifest.v3.json",
+			"thumbnail_path": "packs/free-001/thumb.webp",
+			"music_path": "packs/free-001/spring-theme.ogg",
+			"bytes": 1345820,
+			"sha256": "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccd..."
+		},
+		{
+			"id": "premium-archive-001",
+			"revision": 7,
+			"tier": "premium",
+			"title": {
+				"es": "Archivo Premium",
+				"en": "Premium Archive"
+			},
+			"description": {
+				"es": "Solo para premium.",
+				"en": "Premium only."
+			},
+			"manifest_path": "packs/premium-archive-001/pack_manifest.v7.json",
+			"thumbnail_path": "packs/premium-archive-001/thumb.webp",
+			"music_path": "packs/premium-archive-001/archive-theme.ogg",
+			"bytes": 4821920,
+			"sha256": "f44e64e75f3948e9f73f8dfa94721c4ce8cbb4f265c479..."
+		}
+	]
+}

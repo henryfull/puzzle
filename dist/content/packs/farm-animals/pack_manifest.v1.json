@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "id": "farm-animals",
+  "revision": 1,
+  "title": {
+    "es": "Farm Animals",
+    "en": "Farm Animals"
+  },
+  "description": {
+    "es": "Puzzles inspirados en animales de granja.",
+    "en": "Puzzles inspirados en animales de granja."
+  },
+  "tier": "free_rotating",
+  "thumbnail_path": "packs/farm-animals/thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "farm-animal1",
+      "image_path": "packs/farm-animals/puzzles/image1.jpg",
+      "sha256": "0805fca689cf8ae0abee79dafb0d445fd07ad137e54bdbb4b7528d66ddd111f9",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal2",
+      "image_path": "packs/farm-animals/puzzles/image2.jpg",
+      "sha256": "62f1e19c47bb715a16744572c3d21607c4d68b8ef3d0028f860916348fc46939",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal3",
+      "image_path": "packs/farm-animals/puzzles/image3.jpg",
+      "sha256": "94910646780d78625f9ce1776676d3933f0529db9fc5ad8dbd530110d10a50f9",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal4",
+      "image_path": "packs/farm-animals/puzzles/image4.jpg",
+      "sha256": "683d63b6faecaf8d55fec4e35e0b93f15ce533a0bd4ed3d9bb0ffc5c11ac3948",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal5",
+      "image_path": "packs/farm-animals/puzzles/image5.jpg",
+      "sha256": "108e5d5de04c0a51542c665f311418642a7afb784d289ae856f2bea5c41e40b7",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal6",
+      "image_path": "packs/farm-animals/puzzles/image6.jpg",
+      "sha256": "66123c910d7bf50f4aca5fe5c967be06932937b2debe7f102afa37453b7dde5e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal7",
+      "image_path": "packs/farm-animals/puzzles/image7.jpg",
+      "sha256": "1d194165ae87bdfd9a0d56653df76f310eb6aa7874b88be0e941b5fc5b66d270",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal8",
+      "image_path": "packs/farm-animals/puzzles/image8.jpg",
+      "sha256": "83a35867d7ed2f009757a27395caeb54ce2dc0323c1ae7a8cb41496175b59bd2",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal9",
+      "image_path": "packs/farm-animals/puzzles/image9.jpg",
+      "sha256": "54f86fb80336c85eff4f93241efc3c28f2b77b79712f41d87456a2afd736d60c",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal10",
+      "image_path": "packs/farm-animals/puzzles/image10.jpg",
+      "sha256": "a62e557d8e025219faa493a26498d70eafc5783d498eee5adec9e0baf9a4b6ed",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal11",
+      "image_path": "packs/farm-animals/puzzles/image11.jpg",
+      "sha256": "83450d5e122f7a6134c9c905729bc80c0e1e8e97447dc19705ec67413188eb7d",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal12",
+      "image_path": "packs/farm-animals/puzzles/image12.jpg",
+      "sha256": "9c22bb37b1d30e9090e352b5a207f538c94b62905d2c8955f8b65c5ce53ec302",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal13",
+      "image_path": "packs/farm-animals/puzzles/image13.jpg",
+      "sha256": "358ab8930139668c246f861b529c3649fca60d1a60c8ba644f6c4a08c3350997",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal14",
+      "image_path": "packs/farm-animals/puzzles/image14.jpg",
+      "sha256": "293d7c82967705164b99dcd028950cdbecb69549220c4d66626ab914faf0f912",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal15",
+      "image_path": "packs/farm-animals/puzzles/image15.jpg",
+      "sha256": "f6e1bcd5ad457d38742e8fb704dd49ce9b6467e8cfca49b90b00e5f362564eed",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal16",
+      "image_path": "packs/farm-animals/puzzles/image16.jpg",
+      "sha256": "09fc56c079d256efed014acce77590e4b80bbb9df2bc64a2e552a1af9a0516e6",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal17",
+      "image_path": "packs/farm-animals/puzzles/image17.jpg",
+      "sha256": "38f79809098e54012b2fa7f83977ba21f1e354abc9b76554fbf69d1d2d798dd1",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal18",
+      "image_path": "packs/farm-animals/puzzles/image18.jpg",
+      "sha256": "8d13a7fee7833b05ed1cef66b3c7f932ee5b47af889f6524aaf62e5a256b0c36",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal19",
+      "image_path": "packs/farm-animals/puzzles/image19.jpg",
+      "sha256": "1033888f0c55c50d78e1dd0d0c19414c596124e7958e4960c4d7a22cd79f9dc7",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal20",
+      "image_path": "packs/farm-animals/puzzles/image20.jpg",
+      "sha256": "7fc577515e83a339736dd5850fcc3e30fe3f57ac12387f37101c09917fbe66a3",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    }
+  ]
+}

@@ -738,6 +738,78 @@ func can_place_group_at_position(piece: Piece, target_cell: Vector2) -> bool:
 
 # === FUNCIONES INTERNAS ===
 
+func _get_node_group_id(node: Node) -> int:
+	var group_value = node.get("group_id")
+	if group_value == null:
+		return node.get_instance_id()
+	return int(group_value)
+
+func _collect_blocking_group_leaders(leader: Piece, target_cell: Vector2) -> Array:
+	var blockers = []
+	var seen = {}
+
+	for group_piece in leader.group:
+		var offset = group_piece.original_pos - leader.original_pos
+		var p_target = target_cell + offset
+		var occupant = get_piece_at(p_target)
+
+		if occupant == null or occupant in leader.group:
+			continue
+
+		var occupant_leader = get_group_leader(occupant)
+		var blocker_key = occupant_leader.node.get_instance_id()
+		if seen.has(blocker_key):
+			continue
+
+		seen[blocker_key] = true
+		blockers.append(occupant_leader)
+
+	return blockers
+
+func _can_swap_single_pieces(leader: Piece, target_cell: Vector2) -> bool:
+	if leader.group.size() != 1:
+		return false
+
+	var blockers = _collect_blocking_group_leaders(leader, target_cell)
+	return blockers.size() == 1 and blockers[0].group.size() == 1
+
+func _reset_single_piece_visual_group(piece: Piece) -> void:
+	piece.group = [piece]
+	if piece.node.has_method("set_group_id"):
+		piece.node.set_group_id(piece.node.get_instance_id())
+	if piece.node.has_method("update_pieces_group"):
+		piece.node.update_pieces_group([piece])
+
+func _swap_single_pieces(moving_piece: Piece, target_piece: Piece) -> void:
+	var puzzle_data = puzzle_game.get_puzzle_data()
+	var moving_origin = moving_piece.drag_start_cell
+	var target_cell = target_piece.current_cell
+
+	remove_piece_at(moving_piece.current_cell)
+	remove_piece_at(target_piece.current_cell)
+
+	set_piece_at(target_cell, moving_piece)
+	set_piece_at(moving_origin, target_piece)
+
+	moving_piece.drag_start_cell = target_cell
+	target_piece.drag_start_cell = moving_origin
+
+	_reset_single_piece_visual_group(moving_piece)
+	_reset_single_piece_visual_group(target_piece)
+
+	update_piece_position_state(moving_piece)
+	update_piece_position_state(target_piece)
+
+	var moving_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
+	var target_position = puzzle_data["offset"] + moving_origin * puzzle_data["cell_size"]
+
+	if use_tween_effect:
+		apply_tween_effect(moving_piece.node, moving_position)
+		apply_tween_effect(target_piece.node, target_position)
+	else:
+		moving_piece.node.position = moving_position
+		target_piece.node.position = target_position
+
 func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 	# Indicar que se ha colocado/fusionado una pieza
 	just_placed_piece = true
@@ -749,81 +821,18 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 		if not (p in new_group):
 			new_group.append(p)
 	
-	# Generar un ID único para el grupo basado en la primera pieza
-	var group_id = piece1.node.get_instance_id()
+	var group_id = min(_get_node_group_id(piece1.node), _get_node_group_id(piece2.node))
 	
 	print("PuzzlePieceManager: Fusionando grupos - Tamaño final: ", new_group.size(), " piezas")
-	
-	# NUEVO: Limpiar todas las posiciones del grid primero para evitar conflictos
+
 	for p in new_group:
-		remove_piece_at(p.current_cell)
-	
-	# NUEVO: Crear mapa de posiciones objetivo para evitar superposiciones
-	var target_positions = {}
-	var puzzle_data = puzzle_game.get_puzzle_data()
-	
-	# Calcular posiciones objetivo para todas las piezas sin colocarlas aún
-	for p in new_group:
-		var offset = p.original_pos - piece1.original_pos
-		var target_cell = piece1.current_cell + offset
-		
-		# Asegurarse de que la celda está dentro de los límites
-		target_cell.x = clamp(target_cell.x, 0, current_columns - 1)
-		
-		# Expandir hacia arriba si es necesario
-		var local_rows_added = 0
-		var original_y = target_cell.y
-		while target_cell.y < 0:
-			if not add_extra_row_top():
-				target_cell.y = 0
-				break
-			local_rows_added += 1
-			target_cell.y = original_y + local_rows_added
-		
-		# Expandir hacia abajo si es necesario
-		if target_cell.y >= current_rows:
-			if not add_extra_row():
-				target_cell.y = current_rows - 1
-		
-		# Verificar si ya hay una pieza del grupo en esta posición
-		if target_cell in target_positions:
-			print("PuzzlePieceManager: ¡ERROR! - Dos piezas intentando ocupar la misma celda: ", target_cell)
-			# En caso de conflicto, buscar la celda libre más cercana
-			target_cell = _find_nearest_free_cell(target_cell, target_positions.keys())
-			print("PuzzlePieceManager: Reubicando pieza en conflicto a: ", target_cell)
-		
-		target_positions[target_cell] = p
-		print("PuzzlePieceManager: Pieza ", p.order_number, " asignada a celda ", target_cell)
-	
-	# Ahora colocar todas las piezas en sus posiciones finales
-	for target_cell in target_positions.keys():
-		var p = target_positions[target_cell]
-		
-		# Actualizar el grupo en la pieza
 		p.group = new_group
-		
-		# Colocar en el grid
-		set_piece_at(target_cell, p)
-		
-		# Calcular posición visual objetivo
-		var target_position = puzzle_data["offset"] + target_cell * puzzle_data["cell_size"]
-		
-		# Actualizar el estado de la pieza
-		update_piece_position_state(p)
-		
-		# Actualizar el ID de grupo de la pieza para el sistema de colores
 		if p.node.has_method("set_group_id"):
 			p.node.set_group_id(group_id)
-		
-		# Actualizar el pieces_group en el nodo de la pieza para el sistema de colores
 		if p.node.has_method("update_pieces_group"):
 			p.node.update_pieces_group(new_group)
-		
-		# Aplicar animación (con efecto dorado)
-		if use_tween_effect:
-			apply_tween_effect_with_golden_glow(p.node, target_position)
-		else:
-			p.node.position = target_position
+		update_piece_position_state(p)
+		_apply_golden_glow_effect(p.node)
 	
 	# Actualizar las piezas de borde en el grupo
 	_update_edge_pieces_in_group(new_group)
@@ -842,16 +851,9 @@ func _handle_merge_pieces(piece1: Piece, piece2: Piece):
 		puzzle_game.score_manager.add_groups_connected()
 		print("PuzzlePieceManager: ✨ Puntuación actualizada por conexión de grupos")
 	
-	# 🔧 CRÍTICO: Verificar superposiciones después de fusionar
-	print("PuzzlePieceManager: Verificando superposiciones después de fusionar piezas...")
-	_ensure_no_overlapping_pieces_in_grid()
-	
 	print("PuzzlePieceManager: Piezas fusionadas - nuevo grupo de ", new_group.size(), " piezas")
 
 func _handle_place_group(piece: Piece):
-	# 🔧 CRÍTICO: Verificar y limpiar superposiciones antes de cualquier colocación
-	_ensure_no_overlapping_pieces_in_grid()
-	
 	# Obtener el líder del grupo
 	var leader = get_group_leader(piece)
 	
@@ -880,6 +882,8 @@ func _handle_place_group(piece: Piece):
 			puzzle_game.show_error_message("No se puede colocar fuera del área horizontal", 1.5)
 		elif pieces_outside_vertical:
 			puzzle_game.show_error_message("Se ha alcanzado el límite de expansión vertical", 1.5)
+		elif not _collect_blocking_group_leaders(leader, target_cell).is_empty():
+			puzzle_game.show_error_message("No puedes desplazar un grupo del mismo tamaño o mayor", 1.5)
 		else:
 			puzzle_game.show_error_message("No se puede colocar aquí", 1.5)
 		return
@@ -888,19 +892,23 @@ func _handle_place_group(piece: Piece):
 	# Indicar que se acaba de colocar una pieza o grupo
 	just_placed_piece = true
 	
-	print("PuzzlePieceManager: Colocación válida - procediendo con sistema de onda expansiva")
+	print("PuzzlePieceManager: Colocación válida - resolviendo movimiento determinista")
 	
 	# 🎯 NUEVA FUNCIONALIDAD: Vibración suave cuando se coloca un grupo exitosamente
 	if GLOBAL.is_haptic_enabled() and leader.group.size() > 1:
 		GLOBAL.trigger_haptic_feedback(80)  # Vibración suave de 80ms para colocación de grupos
 		print("PuzzlePieceManager: Vibración suave activada por colocación exitosa de grupo")
 	
-	# NUEVA LÓGICA: Sistema de "onda expansiva"
-	_place_group_with_wave_expansion(leader, target_cell)
-	
-	# 🔧 CRÍTICO: Verificar superposiciones después de colocar grupo
-	print("PuzzlePieceManager: Verificando superposiciones después de colocar grupo...")
-	_ensure_no_overlapping_pieces_in_grid()
+	if _can_swap_single_pieces(leader, target_cell):
+		var target_piece = _collect_blocking_group_leaders(leader, target_cell)[0]
+		var initial_group_size = leader.group.size()
+		_swap_single_pieces(leader, target_piece)
+		check_all_groups()
+		if leader.group.size() == initial_group_size:
+			puzzle_game.play_move_sound()
+	else:
+		# NUEVA LÓGICA: Sistema de "onda expansiva"
+		_place_group_with_wave_expansion(leader, target_cell)
 
 func _handle_check_all_groups():
 	# Recorrer una copia de la lista de piezas
@@ -1571,43 +1579,12 @@ func _find_free_cells(count: int) -> Array:
 # Función para validar si una colocación es permitida
 func _validate_placement(leader: Piece, target_cell: Vector2) -> bool:
 	print("PuzzlePieceManager: Validando colocación para grupo de ", leader.group.size(), " piezas en ", target_cell)
-	
-	# REGLA 1: Piezas individuales NO pueden colocarse sobre grupos existentes
-	if leader.group.size() == 1:
-		# Verificar si hay grupos en el área objetivo
-		for piece in leader.group:
-			var offset = piece.original_pos - leader.original_pos
-			var p_target = target_cell + offset
-			
-			# Verificar límites básicos (solo horizontales)
-			if p_target.x < 0 or p_target.x >= current_columns:
-				print("PuzzlePieceManager: Rechazo por límite horizontal: p_target.x=", p_target.x)
-				return false
-			
-			# Para expansión vertical, solo verificar si estamos en el límite absoluto de expansión
-			if p_target.y >= current_rows and extra_rows_added >= puzzle_game.max_extra_rows:
-				print("PuzzlePieceManager: Rechazo por límite de expansión hacia abajo: p_target.y=", p_target.y, ", current_rows=", current_rows, ", max_extra_rows=", puzzle_game.max_extra_rows)
-				return false
-			if p_target.y < 0 and extra_rows_added >= puzzle_game.max_extra_rows:
-				print("PuzzlePieceManager: Rechazo por límite de expansión hacia arriba: p_target.y=", p_target.y, ", max_extra_rows=", puzzle_game.max_extra_rows)
-				return false
-			
-			# Verificar si hay una pieza ocupando esa posición
-			var occupant = get_piece_at(p_target)
-			if occupant != null and not (occupant in leader.group):
-				var occupant_leader = get_group_leader(occupant)
-				# Si el ocupante es parte de un grupo (más de 1 pieza), rechazar
-				if occupant_leader.group.size() > 1:
-					print("PuzzlePieceManager: Pieza individual no puede colocarse sobre grupo de ", occupant_leader.group.size(), " piezas")
-					return false
-	
-	# REGLA 2: Los grupos pueden colocarse en cualquier lugar (desplazando otros)
-	# Verificar límites básicos para grupos (solo horizontales)
+
+	# Verificar límites básicos para todo el grupo movido
 	for piece in leader.group:
 		var offset = piece.original_pos - leader.original_pos
 		var p_target = target_cell + offset
 		
-		# Verificar límites básicos (solo horizontales)
 		if p_target.x < 0 or p_target.x >= current_columns:
 			print("PuzzlePieceManager: Rechazo grupo por límite horizontal: p_target.x=", p_target.x)
 			return false
@@ -1619,8 +1596,24 @@ func _validate_placement(leader: Piece, target_cell: Vector2) -> bool:
 		if p_target.y < 0 and extra_rows_added >= puzzle_game.max_extra_rows:
 			print("PuzzlePieceManager: Rechazo grupo por límite de expansión hacia arriba: p_target.y=", p_target.y, ", max_extra_rows=", puzzle_game.max_extra_rows)
 			return false
+
+	var blockers = _collect_blocking_group_leaders(leader, target_cell)
+	if blockers.is_empty():
+		print("PuzzlePieceManager: Colocación validada exitosamente")
+		return true
+
+	if _can_swap_single_pieces(leader, target_cell):
+		print("PuzzlePieceManager: Intercambio simple permitido entre dos piezas sueltas")
+		return true
+
+	var moving_group_size = leader.group.size()
+	for blocker_leader in blockers:
+		var blocker_size = blocker_leader.group.size()
+		if blocker_size >= moving_group_size:
+			print("PuzzlePieceManager: Rechazo por prioridad de tamaño. Grupo movido=", moving_group_size, ", bloqueador=", blocker_size)
+			return false
 	
-	print("PuzzlePieceManager: Colocación validada exitosamente")
+	print("PuzzlePieceManager: Colocación validada con desplazamiento por onda")
 	return true
 
 # Función para devolver un grupo a su posición original (rollback)
@@ -1680,7 +1673,6 @@ func _place_group_with_wave_expansion(leader: Piece, target_cell: Vector2):
 	for p in group_copy:
 		var offset = p.original_pos - leader.original_pos
 		var p_target = target_cell + offset
-		p_target.x = clamp(p_target.x, 0, current_columns - 1)
 		initial_targets.append(p_target)
 		print("PuzzlePieceManager: Posición inicial requerida para pieza: ", p_target)
 	
@@ -1772,7 +1764,7 @@ func _place_group_with_wave_expansion(leader: Piece, target_cell: Vector2):
 # Función para colocar un grupo en posiciones específicas
 func _place_group_at_positions(leader: Piece, group_pieces: Array, positions: Array, leader_target: Vector2):
 	var puzzle_data = puzzle_game.get_puzzle_data()
-	var group_id = leader.node.get_instance_id()
+	var group_id = _get_node_group_id(leader.node)
 	
 	for i in range(group_pieces.size()):
 		var p = group_pieces[i]
@@ -1856,14 +1848,6 @@ func _find_contiguous_space_for_group(leader: Piece) -> Vector2:
 		var test_anchor = candidate.pos
 		if _can_place_group_at_anchor_ignore_own_group(leader, test_anchor):
 			print("PuzzlePieceManager: Espacio libre encontrado en: ", test_anchor, " (distancia: ", candidate.distance, ")")
-			return test_anchor
-	
-	# Si no hay espacio libre inmediato, intentar crear espacio empujando
-	for candidate in candidates:
-		var test_anchor = candidate.pos
-		var created_space = _try_create_space_by_pushing(leader, test_anchor)
-		if created_space:
-			print("PuzzlePieceManager: Espacio creado empujando en: ", test_anchor, " (distancia: ", candidate.distance, ")")
 			return test_anchor
 	
 	# Como último recurso, añadir filas y buscar en la zona más cercana a la posición actual
@@ -2050,7 +2034,7 @@ func _place_group_at_anchor_simple(leader: Piece, anchor: Vector2):
 # Función para colocar un grupo manteniendo su estructura relativa
 func _place_group_maintaining_structure(leader: Piece, group_pieces: Array, anchor_position: Vector2):
 	var puzzle_data = puzzle_game.get_puzzle_data()
-	var group_id = leader.node.get_instance_id()
+	var group_id = _get_node_group_id(leader.node)
 	
 	print("PuzzlePieceManager: Colocando grupo en estructura mantenida en: ", anchor_position)
 	
@@ -3618,12 +3602,11 @@ func _ensure_no_overlapping_pieces_in_grid():
 	Versión simplificada para mantener compatibilidad con código existente
 	"""
 	print("PuzzlePieceManager: Ejecutando verificación rápida de superposiciones...")
-	var overlaps = _detect_and_resolve_overlaps()
-	if overlaps > 0:
-		print("PuzzlePieceManager: ⚠️ Se encontraron y resolvieron ", overlaps, " superposiciones")
-		_rebuild_clean_grid()
-	else:
+	if _verify_no_overlaps():
 		print("PuzzlePieceManager: ✅ No se encontraron superposiciones")
+		return
+
+	print("PuzzlePieceManager: ⚠️ Se detectaron superposiciones. Se omite la redistribución automática para no romper grupos.")
 
 # === NUEVAS FUNCIONES PARA MEJORAR LA RESTAURACIÓN ===
 

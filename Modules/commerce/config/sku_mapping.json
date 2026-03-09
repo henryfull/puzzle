@@ -1,9 +1,8 @@
 {
-  "started_pack": [
-    "numbers",
-    "wild-animals",
-    "farm-animals",
-    "artistic-cities",
-    "wild-animals-cartoon"
+  "premium_monthly": [
+    "all_packs"
+  ],
+  "premium_yearly": [
+    "all_packs"
   ]
 }

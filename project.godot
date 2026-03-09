@@ -74,8 +74,8 @@ AudioManager="*res://Scripts/Autoload/AudioManager.gd"
 SettingsService="*res://Modules/core/SettingsService.gd"
 AudioService="*res://Modules/audio/AudioService.gd"
 TranslationLoader="*res://Scripts/Autoload/TranslationLoader.gd"
+RemoteCatalogService="*res://Modules/catalog/RemoteCatalogService.gd"
 AchievementsManager="*res://Scripts/Autoload/AchievementsManager.gd"
-IapService="*res://Modules/dlc/downloadService.gd"
 ProgressManager="*res://Scripts/Autoload/ProgressManager.gd"
 PuzzleStateManager="*res://Scripts/Autoload/PuzzleStateManager.gd"
 BackGestureHandler="*res://Scripts/Autoload/BackGestureHandler.gd"
@@ -83,9 +83,30 @@ IAPService="*res://Modules/commerce/IAPService.gd"
 EntitlementsService="*res://Modules/commerce/EntitlementsService.gd"
 DLCService="*res://Modules/dlc/DLCService.gd"
 
+[catalog]
+
+base_url=""
+api_base_url=""
+local_content_root="res://dist/content"
+dev_entitlements_path="res://dist/content/catalog/dev_entitlements.json"
+cache_dir="user://catalog"
+catalog_manifest_path="catalog/catalog_manifest.json"
+daily_manifest_path_template="catalog/daily/%s.json"
+catalog_endpoint="/v1/catalog"
+daily_endpoint_template="/v1/catalog/daily/%s"
+daily_completion_endpoint="/v1/challenges/daily/complete"
+entitlements_endpoint="/v1/entitlements"
+content_sign_endpoint="/v1/content/sign"
+daily_reward_claim_endpoint="/v1/rewards/daily/claim"
+app_user_id="demo_premium"
+timeout_seconds=15.0
+
 [commerce]
 
 sku_mapping_path="res://Modules/commerce/config/sku_mapping.json"
+store_products_path="res://Modules/commerce/config/store_products.json"
+free_to_play_mode=false
+remote_catalog_sandbox_mode=true
 
 [debug]
 

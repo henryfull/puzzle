@@ -1,0 +1,37 @@
+{
+	"schema_version": 1,
+	"challenge_id": "daily-2026-03-08",
+	"date": "2026-03-08",
+	"tier": "free",
+	"title": {
+		"es": "Desafío diario",
+		"en": "Daily challenge"
+	},
+	"pack_id": "daily-2026-03-08",
+	"pack_manifest_path": "daily/2026-03-08/pack_manifest.json",
+	"image_path": "daily/2026-03-08/hero.webp",
+	"challenge": {
+		"game_mode": 4,
+		"max_moves": 48,
+		"max_time": 240.0,
+		"max_flips": 12,
+		"max_flip_moves": 48
+	},
+	"reward": {
+		"currencies": {
+			"coins": 25
+		},
+		"cosmetics": [
+			{
+				"id": "frame_daily_blossom",
+				"type": "frame",
+				"title": {
+					"es": "Marco floral diario",
+					"en": "Daily blossom frame"
+				}
+			}
+		]
+	},
+	"sha256": "7902699be42c8a8e46fbbb4501726517e86b22c56a189f...",
+	"expires_at": "2026-03-09T00:00:00Z"
+}

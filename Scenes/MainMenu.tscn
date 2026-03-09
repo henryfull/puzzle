@@ -256,6 +256,58 @@ theme_override_fonts/font = ExtResource("7_if7li")
 theme_override_font_sizes/font_size = 32
 text = ">"
 
+[node name="ButtonDailyChallenge" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=183617401]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge" unique_id=198377431]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = -25
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge/MarginContainer" unique_id=136609445]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge/MarginContainer/HBoxContainer" unique_id=87031984]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_fh7cp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge/MarginContainer/HBoxContainer" unique_id=151880021]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="LabelDailyTitle" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge/MarginContainer/HBoxContainer/VBoxContainer" unique_id=83917522]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_fonts/font = ExtResource("7_if7li")
+theme_override_font_sizes/font_size = 16
+text = "DESAFIO DIARIO"
+uppercase = true
+
+[node name="LabelDailySubtitle" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge/MarginContainer/HBoxContainer/VBoxContainer" unique_id=84139834]
+layout_mode = 2
+theme_type_variation = &"Sublabel"
+text = "Nuevo reto cada dia"
+
+[node name="Arrow" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge/MarginContainer/HBoxContainer" unique_id=151302498]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_fonts/font = ExtResource("7_if7li")
+theme_override_font_sizes/font_size = 32
+text = ">"
+
 [node name="Control2" type="Control" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=2111954156]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
@@ -418,6 +470,7 @@ text = "common_download"
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/ButtonColections" to="." method="_on_button_colections_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/ButtonPlay" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge" to="." method="_on_daily_challenge_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_gameoptions" to="." method="_on_show_gameModes"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/BTN_exit" to="." method="_on_btn_exit_pressed"]
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/BTN_stats" to="." method="_on_StatsButton_pressed"]

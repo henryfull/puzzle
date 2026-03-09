@@ -1,0 +1,226 @@
+{
+  "id": "artistic-cities",
+  "revision": 1,
+  "tier": "premium",
+  "title": {
+    "es": "Artistic Cities",
+    "en": "Artistic Cities"
+  },
+  "description": {
+    "es": "Puzzles inspirados en ciudades artísticas del mundo.",
+    "en": "Puzzles inspirados en ciudades artísticas del mundo."
+  },
+  "thumbnailFile": "thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "atlantis",
+      "file": "atlantis.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "bankok",
+      "file": "bankok.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "barcelona",
+      "file": "barcelona.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "cadiz",
+      "file": "cadiz.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "cannes",
+      "file": "cannes.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "cartagena",
+      "file": "cartagena.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "chengde",
+      "file": "chengde.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "dublin",
+      "file": "dublin.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "edinburgh",
+      "file": "edinburgh.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "edinburgh-2",
+      "file": "edinburgh-2.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "gungzhou",
+      "file": "gungzhou.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "helsinki",
+      "file": "helsinki.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "india",
+      "file": "india.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "istanbul",
+      "file": "istanbul.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "new-york-day",
+      "file": "new-york-day.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "new-york-night",
+      "file": "new-york-night.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "pandang",
+      "file": "pandang.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "paris",
+      "file": "paris.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "riga",
+      "file": "riga.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "san-jose",
+      "file": "san-jose.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "sydney",
+      "file": "sydney.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    }
+  ]
+}

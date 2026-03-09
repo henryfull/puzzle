@@ -18,7 +18,10 @@ func _ready():
 
 	if OS.has_feature("ios"):
 		btn_exit.visible = false
-	
+
+	if has_node("/root/AudioManager"):
+		AudioManager.play_music()
+
 	# Mostrar la versión del juego
 	update_version_label()
 	
@@ -67,6 +70,14 @@ func update_ui_texts():
 	if play_subtitle:
 		play_subtitle.text = TranslationServer.translate("mainmenu_play_subtitle")
 
+	var daily_title = get_node_or_null("CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge/MarginContainer/HBoxContainer/VBoxContainer/LabelDailyTitle")
+	if daily_title:
+		daily_title.text = "DESAFIO DIARIO" if _is_spanish_locale() else "DAILY CHALLENGE"
+
+	var daily_subtitle = get_node_or_null("CanvasLayer/MarginContainer/VBoxContainer/ButtonDailyChallenge/MarginContainer/HBoxContainer/VBoxContainer/LabelDailySubtitle")
+	if daily_subtitle:
+		daily_subtitle.text = "Nuevo reto cada dia" if _is_spanish_locale() else "A new challenge every day"
+
 	var download_button = get_node_or_null("CanvasLayer/FalsePurcharseButton")
 	if download_button:
 		download_button.text = TranslationServer.translate("common_download")
@@ -78,6 +89,9 @@ func update_ui_texts():
 	for child in get_children():
 		if child.has_method("update_ui_texts"):
 			child.update_ui_texts()
+
+func _is_spanish_locale() -> bool:
+	return TranslationServer.get_locale().to_lower().begins_with("es")
 
 func _on_PlayButton_pressed():
 	# Si el menú de opciones está visible, ocultarlo primero
@@ -192,3 +206,6 @@ func _on_false_purcharse_button_pressed() -> void:
 
 func _on_button_colections_pressed() -> void:
 	GLOBAL.change_scene_with_loading("res://Scenes/PackSelection.tscn")
+
+func _on_daily_challenge_button_pressed() -> void:
+	GLOBAL.change_scene_with_loading("res://Scenes/DailyChallenge.tscn")

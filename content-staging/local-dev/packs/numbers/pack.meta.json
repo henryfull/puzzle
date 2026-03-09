@@ -1,0 +1,316 @@
+{
+  "id": "numbers",
+  "revision": 1,
+  "tier": "free_rotating",
+  "title": {
+    "es": "Numbers",
+    "en": "Numbers"
+  },
+  "description": {
+    "es": "Puzzles inspirados en números y matemáticas.",
+    "en": "Puzzles inspirados en números y matemáticas."
+  },
+  "thumbnailFile": "thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "number0",
+      "file": "image0.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number1",
+      "file": "image1.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number2",
+      "file": "image2.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number3",
+      "file": "image3.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number4",
+      "file": "image4.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number5",
+      "file": "image5.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number6",
+      "file": "image6.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number7",
+      "file": "image7.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number8",
+      "file": "image8.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number9",
+      "file": "image9.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number10",
+      "file": "image10.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number11",
+      "file": "image11.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number12",
+      "file": "image12.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number13",
+      "file": "image13.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number14",
+      "file": "image14.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number15",
+      "file": "image15.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number16",
+      "file": "image16.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number17",
+      "file": "image17.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number18",
+      "file": "image18.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number19",
+      "file": "image19.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number20",
+      "file": "image20.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number30",
+      "file": "image30.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number40",
+      "file": "image40.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number50",
+      "file": "image50.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number60",
+      "file": "image60.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number70",
+      "file": "image70.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number80",
+      "file": "image80.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number90",
+      "file": "image90.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number100",
+      "file": "image100.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number1000",
+      "file": "image1000.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    }
+  ]
+}

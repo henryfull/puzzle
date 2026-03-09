@@ -1,0 +1,23 @@
+{
+  "users": {
+    "demo_free": {
+      "platform": "test",
+      "premium_active": false,
+      "active_skus": [],
+      "cosmetics": [
+        "starter_frame"
+      ]
+    },
+    "demo_premium": {
+      "platform": "test",
+      "premium_active": true,
+      "active_skus": [
+        "premium_monthly"
+      ],
+      "cosmetics": [
+        "starter_frame",
+        "premium_gold_theme"
+      ]
+    }
+  }
+}

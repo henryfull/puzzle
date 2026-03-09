@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "id": "wild-animals",
+  "revision": 1,
+  "title": {
+    "es": "Wild Animals",
+    "en": "Wild Animals"
+  },
+  "description": {
+    "es": "Puzzles inspirados en animales salvajes.",
+    "en": "Puzzles inspirados en animales salvajes."
+  },
+  "tier": "premium",
+  "thumbnail_path": "packs/wild-animals/thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "wild-animal1",
+      "image_path": "packs/wild-animals/puzzles/image1.jpg",
+      "sha256": "57c57914968f9933c8e1a71c50767159812fb2b570bc4a7acfcf4cf94d7ddf3f",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal2",
+      "image_path": "packs/wild-animals/puzzles/image2.jpg",
+      "sha256": "1df97d54d3d07ec9be254b84220e3b6fff33d3bf7db55fee9736b1879a73fade",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal3",
+      "image_path": "packs/wild-animals/puzzles/image3.jpg",
+      "sha256": "83317639b22c989649e86990c3cc3ba33a081aa5e02fa7e334bf7f0580314695",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal4",
+      "image_path": "packs/wild-animals/puzzles/image4.jpg",
+      "sha256": "da04e5aa15e5432009fde2531925bcfbb28513cf9d7a526e86d6495ded7a21d6",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal5",
+      "image_path": "packs/wild-animals/puzzles/image5.jpg",
+      "sha256": "fa3059487bea5a98fb1044702eea13cd97d51e891f306823c1f491cd48ad6e2c",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal6",
+      "image_path": "packs/wild-animals/puzzles/image6.jpg",
+      "sha256": "535001812b716941897e9eb5ade94e0db3ae3de58b644bad56a12821dc3d51b1",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal7",
+      "image_path": "packs/wild-animals/puzzles/image7.jpg",
+      "sha256": "09f4af4df7938654aca840f23e564ca5db21a66c7b0066c859113f53a5e0be82",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal8",
+      "image_path": "packs/wild-animals/puzzles/image8.jpg",
+      "sha256": "55c5565eee83c6bd6b4163111cbd86450b0d6463192188e4639a3bcafccca050",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal9",
+      "image_path": "packs/wild-animals/puzzles/image9.jpg",
+      "sha256": "2afdd92b16cd60e0f7a6737155f032a6575e35155d0f22b90765026e82fd9d8b",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal10",
+      "image_path": "packs/wild-animals/puzzles/image10.jpg",
+      "sha256": "ef5b88b637039c9bfb4d29099281e200c448bb0f46d778a69a60e0503139cb06",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal11",
+      "image_path": "packs/wild-animals/puzzles/image11.jpg",
+      "sha256": "0a464bc77123c705b56ff2b449a926e04ce5d01388e9cb7151f20841cda4ffe7",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal12",
+      "image_path": "packs/wild-animals/puzzles/image12.jpg",
+      "sha256": "4c510272bd9fd9787b67265ba7e7f240053f7433d8b884912ee7f33c60b7f011",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal13",
+      "image_path": "packs/wild-animals/puzzles/image13.jpg",
+      "sha256": "0bcab6894aa4d39b09dcd8471fcd69b509c78ff203ec1198d7abc1cd7f59173a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal14",
+      "image_path": "packs/wild-animals/puzzles/image14.jpg",
+      "sha256": "e27ae580971fe1da033b96af6ec663bc0531971ce083ade9f64827b9a1e0cca4",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal15",
+      "image_path": "packs/wild-animals/puzzles/image15.jpg",
+      "sha256": "2bc070051f511a6380f0ae111bd122253b2e1b4732c9ba59ecc7f41e4f8a7aec",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal16",
+      "image_path": "packs/wild-animals/puzzles/image16.jpg",
+      "sha256": "0be34b7ad7e3e82a60fe7b452f769069edb8b8afede979db98ebe2972b6997db",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal17",
+      "image_path": "packs/wild-animals/puzzles/image17.jpg",
+      "sha256": "c7e34ada1fd79e3ef0a3b9639a004cecbb5f7bfc87f15eee7984616765e347c7",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal18",
+      "image_path": "packs/wild-animals/puzzles/image18.jpg",
+      "sha256": "266569ddfba73fe89849c736252f52ae0ebcb1612014600c8533bd176057723f",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal19",
+      "image_path": "packs/wild-animals/puzzles/image19.jpg",
+      "sha256": "c4e21998dffcfbc1daa9114a9560a5159e7f83e2f5267f52093c0c81d0711441",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal20",
+      "image_path": "packs/wild-animals/puzzles/image20.jpg",
+      "sha256": "aae9edfc483aaa74b4d56db37b2666c3d7e07a0e04cdac5105a22e3ea7863a5e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal21",
+      "image_path": "packs/wild-animals/puzzles/image21.jpg",
+      "sha256": "1a3b25947bde7b57b74fe225b11b99b1a6e1bf709e1fb2ca586b0afd5879a2ee",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal22",
+      "image_path": "packs/wild-animals/puzzles/image22.jpg",
+      "sha256": "b7b4201b2e73bf8bbe8c25342cf907e1d884ea342415eb4019b4df0f1d56b615",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal23",
+      "image_path": "packs/wild-animals/puzzles/image23.jpg",
+      "sha256": "885dcdef2722e47d50dc70234158490afe15b61dc734c7f2027d539096601c18",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal24",
+      "image_path": "packs/wild-animals/puzzles/image24.jpg",
+      "sha256": "d164a2fbae932481dde92255753e36de1e72a546003bc3b0b79956e086fdf0e1",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal25",
+      "image_path": "packs/wild-animals/puzzles/image25.jpg",
+      "sha256": "9483978362e411fdd59742d0d9a7b3d29c1c923b9adcfe9959c0316a4d77d2cf",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal26",
+      "image_path": "packs/wild-animals/puzzles/image26.jpg",
+      "sha256": "19d164534f23f56c33f8b27d7c210d403e16aaafbef507f05a1c306453e86e54",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal27",
+      "image_path": "packs/wild-animals/puzzles/image27.jpg",
+      "sha256": "5a9d4c699fc4353af712d7728d5415562aa1c792eb628b5ff196e17907cb8e1a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal28",
+      "image_path": "packs/wild-animals/puzzles/image28.jpg",
+      "sha256": "58d653016a5f77301daef60a1bc952a336b6735668dbe731b33eb5c7607ba40f",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal29",
+      "image_path": "packs/wild-animals/puzzles/image29.jpg",
+      "sha256": "a4f062e4fb5d01f1bfa2f30a8c2fe1372de55d26259afe7a7b200a92f949e882",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal30",
+      "image_path": "packs/wild-animals/puzzles/image30.jpg",
+      "sha256": "2168b086d5d9bfc4b8b1ae437aeae3beb9bad8bac0ff1f5d8293cd285310493f",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    }
+  ]
+}

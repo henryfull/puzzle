@@ -1,0 +1,556 @@
+{
+  "schema_version": 1,
+  "id": "wild-animals-cartoon",
+  "revision": 1,
+  "title": {
+    "es": "Wild Animals Cartoon",
+    "en": "Wild Animals Cartoon"
+  },
+  "description": {
+    "es": "Puzzles inspirados en animales salvajes en formato cartoon.",
+    "en": "Puzzles inspirados en animales salvajes en formato cartoon."
+  },
+  "tier": "premium",
+  "thumbnail_path": "packs/wild-animals-cartoon/thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "wild-animal-cartoon-zebra",
+      "image_path": "packs/wild-animals-cartoon/puzzles/zebra.jpg",
+      "sha256": "e2080d3360e5c8cb3d46aa790cfd8d45d173bd83f6bda1a1a7a4d6deda16a21d",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-wolf",
+      "image_path": "packs/wild-animals-cartoon/puzzles/wolf.jpg",
+      "sha256": "eba53ef3edacc9c5698f7a3fd2821f2469d5ac1d96e9e2d92145cc196b61cd20",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-wildebeest",
+      "image_path": "packs/wild-animals-cartoon/puzzles/wildebeest.jpg",
+      "sha256": "c44741cb6b8cc30102b8b051cb7d830c157255d29cadda02a4e8ceb40dcbd823",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-tasmanian",
+      "image_path": "packs/wild-animals-cartoon/puzzles/tasmanian.jpg",
+      "sha256": "44d0eed850b9d0827445baaf41122048dcf98e6d5063fe5c35ecfcd3f6faddec",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-tarsier",
+      "image_path": "packs/wild-animals-cartoon/puzzles/tarsier.jpg",
+      "sha256": "dc334a367a674b3c49e97d8ce7a6efbe280330a6e2365dce921a7eab0139d02e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-tapir",
+      "image_path": "packs/wild-animals-cartoon/puzzles/tapir.jpg",
+      "sha256": "dc438f548b2b75603f9ab68fbd13cf02f4e54d1a215f09d194517643b1eb8562",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-snake",
+      "image_path": "packs/wild-animals-cartoon/puzzles/snake.jpg",
+      "sha256": "be031a504d046600b27867af0d133e8fc67fe011d0ab47124b6b4a9010bf4b78",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-sloth",
+      "image_path": "packs/wild-animals-cartoon/puzzles/sloth.jpg",
+      "sha256": "1bc00fdc933b834cdad35818232f261294893e2c21ece1be35d89c2441e3b5b3",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-rhinoceros",
+      "image_path": "packs/wild-animals-cartoon/puzzles/rhinoceros.jpg",
+      "sha256": "29ea927beacd8f3dee7bfbb7c1fe85064242e2fdce1fbf19a9eccda177827ff7",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-red-panda",
+      "image_path": "packs/wild-animals-cartoon/puzzles/red-panda.jpg",
+      "sha256": "5795ac29a3a4d9d7820a571844416229213c500b1c1a9d99c1648cc821a450b5",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-raccoon",
+      "image_path": "packs/wild-animals-cartoon/puzzles/raccoon.jpg",
+      "sha256": "1ff687a1378dbb3b71051fab826a4928787e56d28096511c42e1189ec348bdf8",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-peacock",
+      "image_path": "packs/wild-animals-cartoon/puzzles/peacock.jpg",
+      "sha256": "6112b1045245b9383f94ba8fbd506f3083b806492998e446c3ba402be2d4af80",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-panda",
+      "image_path": "packs/wild-animals-cartoon/puzzles/panda.jpg",
+      "sha256": "2387c53770f24ca4e3d6354ab869041cc8e18aa43f25f5a24cd97884b321faba",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-owl",
+      "image_path": "packs/wild-animals-cartoon/puzzles/owl.jpg",
+      "sha256": "9c800c154fd4c2cb3c13cff949ffb3b347cc34e0259c62146aeb81b181ad576b",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-otter",
+      "image_path": "packs/wild-animals-cartoon/puzzles/otter.jpg",
+      "sha256": "0cd0ab76323c86ac17dd560ae041feea2169c72b819543f7950231c429554139",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-ostrich",
+      "image_path": "packs/wild-animals-cartoon/puzzles/ostrich.jpg",
+      "sha256": "1f9f168870320df8c53e3dea88d0d2340b8e51e6213d8172b0f9f3ecc22152ec",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-moose",
+      "image_path": "packs/wild-animals-cartoon/puzzles/moose.jpg",
+      "sha256": "3715137a19a059a63499d667899c40430be14623c694a762e91cce7ae6cbec3a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-monkey",
+      "image_path": "packs/wild-animals-cartoon/puzzles/monkey.jpg",
+      "sha256": "be658eee6eb7f2e9a399ecfc26ba67c39f4e2001defa4fe825db5b8873b10c07",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-mongoose",
+      "image_path": "packs/wild-animals-cartoon/puzzles/mongoose.jpg",
+      "sha256": "699de03d64ba498b4ded5706d92eda5482ee953258a73e71c326d881d67a6e23",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-meerkat",
+      "image_path": "packs/wild-animals-cartoon/puzzles/meerkat.jpg",
+      "sha256": "972a1677faed2cbc6b15553e4a5e6a1577c5369aae0ee465fb36d2dcd2617c91",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-lynx",
+      "image_path": "packs/wild-animals-cartoon/puzzles/lynx.jpg",
+      "sha256": "6cbc539588d3f61ee79558a874bad2b58373f9ac482a329e63c179a471909c7a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-lion",
+      "image_path": "packs/wild-animals-cartoon/puzzles/lion.jpg",
+      "sha256": "75d18204dcde5763c355a1f43bf7b98554cfe7795722b3ccf25e53828abc59c1",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-koala",
+      "image_path": "packs/wild-animals-cartoon/puzzles/koala.jpg",
+      "sha256": "91108a66ea2fd495a89de9063c96a7bc460b28451d3934abf68fde6cfb9d1948",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-kangaroo",
+      "image_path": "packs/wild-animals-cartoon/puzzles/kangaroo.jpg",
+      "sha256": "8be0234264c51af0bd053902a30d947c57cc679a83634bd7a4e09e1b190d67ea",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-jaguar",
+      "image_path": "packs/wild-animals-cartoon/puzzles/jaguar.jpg",
+      "sha256": "02cce668c58d20886a8ce3b4b949007d86ac6b3617c084e6526703d22a8505f3",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-ibex",
+      "image_path": "packs/wild-animals-cartoon/puzzles/ibex.jpg",
+      "sha256": "151bb2e1e3e7f3fb8d1f2427d19d1d1baa63def6da9fc8ff78b6bf9a65158fc3",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-hyena",
+      "image_path": "packs/wild-animals-cartoon/puzzles/hyena.jpg",
+      "sha256": "f99187b7854b60f9d7c60d002351149342f6b40e464996eee415bc81a7f9cff3",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-hippopotamus",
+      "image_path": "packs/wild-animals-cartoon/puzzles/hippopotamus.jpg",
+      "sha256": "b37370c1d4c62a29b54febc44f89dd3667dec717561e9638672b5122c3ba9c3d",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-gorilla",
+      "image_path": "packs/wild-animals-cartoon/puzzles/gorilla.jpg",
+      "sha256": "48de41d42ebe5fb0b5a3cd62fdbd2c461f137c46aa1dcc7d27fb324072f9aca4",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-goat",
+      "image_path": "packs/wild-animals-cartoon/puzzles/goat.jpg",
+      "sha256": "8a76f54d62602d08e4c5b3dcd0594e4bd8c9e74852e86fede84dfdd8a5e94afc",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-giraffe",
+      "image_path": "packs/wild-animals-cartoon/puzzles/giraffe.jpg",
+      "sha256": "92405069ab365967f2a0375218cb52572b7183d9f5ceb30c310e03b3bf1cfe66",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-gazelle",
+      "image_path": "packs/wild-animals-cartoon/puzzles/gazelle.jpg",
+      "sha256": "719f13539c49b134463f31060da93c75d1839715a6e0fbada2cf6627855e9a5b",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-fox",
+      "image_path": "packs/wild-animals-cartoon/puzzles/fox.jpg",
+      "sha256": "02fd3365442a96986724a4015ed1bc4b2d3ac77aae38755a850144ea7afafaff",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-echidna",
+      "image_path": "packs/wild-animals-cartoon/puzzles/echidna.jpg",
+      "sha256": "1470ddb133afb61f969f50f7ecf1b31090f01871170cffeb449cb44435a79049",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-eagle",
+      "image_path": "packs/wild-animals-cartoon/puzzles/eagle.jpg",
+      "sha256": "e70a6de1fee6f50b45d3d7e78063befc5b1295f8bd48fc9ad7b79c385fc08a10",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-deer",
+      "image_path": "packs/wild-animals-cartoon/puzzles/deer.jpg",
+      "sha256": "b40be820af1ec88942d276c01a4a2b589e6423d31b8d0a87fbf6827a5fc06c4e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-crocodile",
+      "image_path": "packs/wild-animals-cartoon/puzzles/crocodile.jpg",
+      "sha256": "9a0951b5a56644b5600c3b20d1a3886f98810dbec721d208fcc7150837fa651d",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-coyote",
+      "image_path": "packs/wild-animals-cartoon/puzzles/coyote.jpg",
+      "sha256": "33a5aa13fdb82c710eea7cb86f9f4e34c5625d39cefaa63cd95aa142c4ad55be",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-cougar",
+      "image_path": "packs/wild-animals-cartoon/puzzles/cougar.jpg",
+      "sha256": "b780bc7ce79c82e8a7927d6a8a91f73488f48bf637b9dfebe2f53fc50c30dbbc",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-chimpanzee",
+      "image_path": "packs/wild-animals-cartoon/puzzles/chimpanzee.jpg",
+      "sha256": "ed6405584fd8db5bb701517b003c12b70def67d4c1e9d88183b073d7ae0e7ebd",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-cheetah",
+      "image_path": "packs/wild-animals-cartoon/puzzles/cheetah.jpg",
+      "sha256": "ff63d24984a7c7a0c8bb17916eb239c9b447d7eaf58c6b64fd5111de53ed87b7",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-caracal",
+      "image_path": "packs/wild-animals-cartoon/puzzles/caracal.jpg",
+      "sha256": "ae3e4b4bff6d15c2dbc646f0bc794bf23c76245aa4737c0d6202c29450446815",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-camel",
+      "image_path": "packs/wild-animals-cartoon/puzzles/camel.jpg",
+      "sha256": "41b36dbda342ee068ea333f8b7d74981064a70a80b325988915bc50b6a1a50f1",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-buffalo",
+      "image_path": "packs/wild-animals-cartoon/puzzles/buffalo.jpg",
+      "sha256": "f714329c9dbddf31e81b243bef496e2788f7e3bca54eb6f453b97f046544006c",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-black-wolf",
+      "image_path": "packs/wild-animals-cartoon/puzzles/black-wolf.jpg",
+      "sha256": "cf629c04240f78ed8756e48310a98479925d020d1f8d048d03636937b8fa07d9",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-bison",
+      "image_path": "packs/wild-animals-cartoon/puzzles/bison.jpg",
+      "sha256": "d6d1ba5ae97cf0241e301f3594b2828cc822372cfe735305981e67744ee46769",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-black-bear",
+      "image_path": "packs/wild-animals-cartoon/puzzles/black-bear.jpg",
+      "sha256": "99f5dbaf714fea8f08f8d2befc247bd7323aad0c62078019b6a1864513dfc1b4",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-antelope",
+      "image_path": "packs/wild-animals-cartoon/puzzles/antelope.jpg",
+      "sha256": "73fc7ab4f913cef23631a34c044784e500bdf19baa1eae75dbb3872490e842f9",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-armadillo",
+      "image_path": "packs/wild-animals-cartoon/puzzles/armadillo.jpg",
+      "sha256": "fe53ee981ee5511624c185c09bf7030521a7b4bea726ce0e431858e18fe575df",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    }
+  ]
+}

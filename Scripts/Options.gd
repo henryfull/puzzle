@@ -745,8 +745,8 @@ func _on_restore_button_pressed() -> void:
 				progress.reset_progress() # Intentar reiniciar el progreso como último recurso
 		
 		# Intentar restaurar compras
-		if has_node("/root/IAP"):
-			var iap = get_node("/root/IAP")
+		if has_node("/root/IAPService"):
+			var iap = get_node("/root/IAPService")
 			if iap.has_method("restore_purchases"):
 				iap.restore_purchases()
 		

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "id": "daily-2026-03-08",
+  "revision": 1,
+  "title": {
+    "es": "Daily desde Numbers",
+    "en": "Daily from Numbers"
+  },
+  "description": {
+    "es": "Contenido diario generado desde el sandbox local.",
+    "en": "Daily content generated from the local sandbox."
+  },
+  "tier": "free",
+  "thumbnail_path": "daily/2026-03-08/thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "numbers-daily-01",
+      "image_path": "daily/2026-03-08/puzzles/image0.jpg",
+      "sha256": "982d6922dea8aba196bce49b80dad08bd1b3168afadf72182f6ead7e80651877",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    }
+  ]
+}

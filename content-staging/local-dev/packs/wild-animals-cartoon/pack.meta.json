@@ -1,0 +1,506 @@
+{
+  "id": "wild-animals-cartoon",
+  "revision": 1,
+  "tier": "premium",
+  "title": {
+    "es": "Wild Animals Cartoon",
+    "en": "Wild Animals Cartoon"
+  },
+  "description": {
+    "es": "Puzzles inspirados en animales salvajes en formato cartoon.",
+    "en": "Puzzles inspirados en animales salvajes en formato cartoon."
+  },
+  "thumbnailFile": "thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "wild-animal-cartoon-zebra",
+      "file": "zebra.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-wolf",
+      "file": "wolf.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-wildebeest",
+      "file": "wildebeest.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-tasmanian",
+      "file": "tasmanian.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-tarsier",
+      "file": "tarsier.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-tapir",
+      "file": "tapir.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-snake",
+      "file": "snake.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-sloth",
+      "file": "sloth.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-rhinoceros",
+      "file": "rhinoceros.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-red-panda",
+      "file": "red-panda.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-raccoon",
+      "file": "raccoon.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-peacock",
+      "file": "peacock.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-panda",
+      "file": "panda.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-owl",
+      "file": "owl.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-otter",
+      "file": "otter.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-ostrich",
+      "file": "ostrich.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-moose",
+      "file": "moose.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-monkey",
+      "file": "monkey.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-mongoose",
+      "file": "mongoose.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-meerkat",
+      "file": "meerkat.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-lynx",
+      "file": "lynx.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-lion",
+      "file": "lion.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-koala",
+      "file": "koala.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-kangaroo",
+      "file": "kangaroo.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-jaguar",
+      "file": "jaguar.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-ibex",
+      "file": "ibex.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-hyena",
+      "file": "hyena.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-hippopotamus",
+      "file": "hippopotamus.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-gorilla",
+      "file": "gorilla.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-goat",
+      "file": "goat.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-giraffe",
+      "file": "giraffe.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-gazelle",
+      "file": "gazelle.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-fox",
+      "file": "fox.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-echidna",
+      "file": "echidna.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-eagle",
+      "file": "eagle.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-deer",
+      "file": "deer.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-crocodile",
+      "file": "crocodile.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-coyote",
+      "file": "coyote.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-cougar",
+      "file": "cougar.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-chimpanzee",
+      "file": "chimpanzee.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-cheetah",
+      "file": "cheetah.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-caracal",
+      "file": "caracal.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-camel",
+      "file": "camel.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-buffalo",
+      "file": "buffalo.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-black-wolf",
+      "file": "black-wolf.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-bison",
+      "file": "bison.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-black-bear",
+      "file": "black-bear.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-antelope",
+      "file": "antelope.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "wild-animal-cartoon-armadillo",
+      "file": "armadillo.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    }
+  ]
+}

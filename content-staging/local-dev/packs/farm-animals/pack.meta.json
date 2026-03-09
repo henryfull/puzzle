@@ -1,0 +1,216 @@
+{
+  "id": "farm-animals",
+  "revision": 1,
+  "tier": "free_rotating",
+  "title": {
+    "es": "Farm Animals",
+    "en": "Farm Animals"
+  },
+  "description": {
+    "es": "Puzzles inspirados en animales de granja.",
+    "en": "Puzzles inspirados en animales de granja."
+  },
+  "thumbnailFile": "thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "farm-animal1",
+      "file": "image1.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal2",
+      "file": "image2.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal3",
+      "file": "image3.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal4",
+      "file": "image4.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal5",
+      "file": "image5.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal6",
+      "file": "image6.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal7",
+      "file": "image7.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal8",
+      "file": "image8.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal9",
+      "file": "image9.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal10",
+      "file": "image10.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal11",
+      "file": "image11.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal12",
+      "file": "image12.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal13",
+      "file": "image13.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal14",
+      "file": "image14.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal15",
+      "file": "image15.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal16",
+      "file": "image16.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal17",
+      "file": "image17.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal18",
+      "file": "image18.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal19",
+      "file": "image19.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "farm-animal20",
+      "file": "image20.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    }
+  ]
+}

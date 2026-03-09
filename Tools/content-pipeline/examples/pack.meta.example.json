@@ -1,0 +1,44 @@
+{
+  "id": "free-001",
+  "revision": 3,
+  "tier": "free_rotating",
+  "title": {
+    "es": "Pack Primavera",
+    "en": "Spring Pack",
+    "ca": "Pack Primavera"
+  },
+  "description": {
+    "es": "Colección mensual rotatoria.",
+    "en": "Monthly rotating collection.",
+    "ca": "Col·lecció mensual rotatòria."
+  },
+  "thumbnailFile": "thumb.webp",
+  "musicFile": "spring-theme.ogg",
+  "puzzles": [
+    {
+      "id": "free-001-puzzle-01",
+      "file": "free-001-puzzle-01.webp",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 6
+      },
+      "title": {
+        "es": "Tulipanes al amanecer",
+        "en": "Tulips at dawn",
+        "ca": "Tulipes a l'alba"
+      },
+      "description": {
+        "es": "Una escena floral de primavera.",
+        "en": "A spring floral scene.",
+        "ca": "Una escena floral de primavera."
+      },
+      "story": {
+        "es": "Cada mañana, el jardinero dejaba una carta entre los tulipanes y nadie se atrevía a leerla hasta que salía el sol.",
+        "en": "Every morning, the gardener left a letter among the tulips and nobody dared to read it until sunrise.",
+        "ca": "Cada matí, el jardiner deixava una carta entre les tulipes i ningú no s'atrevia a llegir-la fins que sortia el sol."
+      }
+    }
+  ]
+}

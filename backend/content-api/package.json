@@ -1,0 +1,8 @@
+{
+  "name": "puzzle-content-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs"
+  }
+}

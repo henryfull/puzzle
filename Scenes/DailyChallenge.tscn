@@ -1,0 +1,188 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/DailyChallenge.gd" id="1_daily"]
+[ext_resource type="PackedScene" path="res://Scenes/Components/BackButton/BackButton.tscn" id="2_back"]
+
+[node name="DailyChallenge" type="Node2D" node_paths=PackedStringArray("title_label", "subtitle_label", "status_label", "details_label", "reward_label", "preview_image", "no_image_label", "claim_reward_button", "play_button", "refresh_button")]
+script = ExtResource("1_daily")
+title_label = NodePath("CanvasLayer/HeaderSection/MarginContainer/HBoxContainer/TitleLabel")
+subtitle_label = NodePath("CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/SubTitleLabel")
+status_label = NodePath("CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/StatusLabel")
+details_label = NodePath("CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/DetailsLabel")
+reward_label = NodePath("CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/RewardLabel")
+preview_image = NodePath("CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/PreviewPanel/PreviewImage")
+no_image_label = NodePath("CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/PreviewPanel/NoImageLabel")
+claim_reward_button = NodePath("CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/ClaimRewardButton")
+play_button = NodePath("CanvasLayer/FooterPanel/MarginContainer/HBoxContainer/PlayButton")
+refresh_button = NodePath("CanvasLayer/FooterPanel/MarginContainer/HBoxContainer/RefreshButton")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.27058825, 0.11372549, 0.6509804, 1)
+
+[node name="HeaderSection" type="PanelContainer" parent="CanvasLayer"]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 70.0
+offset_bottom = 174.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PanelSinColor"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HeaderSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HeaderSection/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer" instance=ExtResource("2_back")]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+path = "res://Scenes/MainMenu.tscn"
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleSection"
+text = "DESAFIO DIARIO"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="Control" type="Control" parent="CanvasLayer/HeaderSection/MarginContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="ContentPanel" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -302.0
+offset_top = 180.0
+offset_right = 302.0
+offset_bottom = -128.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"PanelSinColor"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ContentPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ContentPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SubTitleLabel" type="Label" parent="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"LabelOption"
+text = "Cargando reto..."
+horizontal_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="StatusLabel" type="Label" parent="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"Sublabel"
+text = "Conectando con el catalogo..."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="PreviewPanel" type="PanelContainer" parent="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="NoImageLabel" type="Label" parent="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/PreviewPanel"]
+custom_minimum_size = Vector2(460, 460)
+layout_mode = 2
+theme_type_variation = &"TitleSection"
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PreviewImage" type="TextureRect" parent="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/PreviewPanel"]
+visible = false
+custom_minimum_size = Vector2(460, 460)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DetailsLabel" type="Label" parent="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"LabelOption"
+text = ""
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="RewardLabel" type="Label" parent="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_type_variation = &"Sublabel"
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ClaimRewardButton" type="Button" parent="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_type_variation = &"ButtonYellow"
+text = "Reclamar recompensa"
+
+[node name="FooterPanel" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -290.0
+offset_top = -113.0
+offset_right = 290.0
+offset_bottom = -33.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"PanelSinColor"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/FooterPanel"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/FooterPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RefreshButton" type="Button" parent="CanvasLayer/FooterPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(220, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Actualizar"
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/FooterPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(340, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"GoldButton"
+text = "Jugar reto"
+
+[connection signal="pressed" from="CanvasLayer/FooterPanel/MarginContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/ContentPanel/MarginContainer/VBoxContainer/ClaimRewardButton" to="." method="_on_claim_reward_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/FooterPanel/MarginContainer/HBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

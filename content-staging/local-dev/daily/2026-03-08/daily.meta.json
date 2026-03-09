@@ -1,0 +1,58 @@
+{
+  "challengeId": "daily-2026-03-08",
+  "date": "2026-03-08",
+  "tier": "free",
+  "title": {
+    "es": "Desafio diario local",
+    "en": "Local daily challenge"
+  },
+  "expiresAt": "2026-03-09T00:00:00",
+  "challenge": {
+    "game_mode": 4,
+    "max_moves": 48,
+    "max_time": 240,
+    "max_flips": 12,
+    "max_flip_moves": 48
+  },
+  "reward": {
+    "currencies": {
+      "coins": 25
+    },
+    "cosmetics": [
+      {
+        "id": "frame_local_daily",
+        "type": "frame",
+        "title": {
+          "es": "Marco daily local",
+          "en": "Local daily frame"
+        }
+      }
+    ]
+  },
+  "pack": {
+    "id": "daily-2026-03-08",
+    "revision": 1,
+    "tier": "free",
+    "title": {
+      "es": "Daily desde Numbers",
+      "en": "Daily from Numbers"
+    },
+    "description": {
+      "es": "Contenido diario generado desde el sandbox local.",
+      "en": "Daily content generated from the local sandbox."
+    },
+    "thumbnailFile": "thumbnail.jpg",
+    "puzzles": [
+      {
+        "id": "numbers-daily-01",
+        "file": "image0.jpg",
+        "width": 1440,
+        "height": 1440,
+        "grid": {
+          "columns": 4,
+          "rows": 4
+        }
+      }
+    ]
+  }
+}

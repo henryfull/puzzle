@@ -331,25 +331,29 @@ func update_ui_with_puzzle_data():
 	setup_result_panels()
 	
 	# Actualizar la imagen
-	if puzzle_data and puzzle_data.has("image"):
-		var image_texture = load(puzzle_data.image)
+	if puzzle_data:
+		var image_path := str(puzzle_data.get("image", puzzle_data.get("image_path", "")))
+		var image_texture = _load_texture_from_path(image_path)
 		if image_texture:
 			$CanvasLayer/ExpanseImage/PanelContainer/ImageExpanse.texture = image_texture
 			if image_view:
 				image_view.texture = image_texture
 	
 	# Actualizar el nombre del puzzle
-	if puzzle_data and puzzle_data.has("name"):
+	if puzzle_data:
+		var resolved_name := _resolve_localized_content_text(
+			puzzle_data.get("name_localized", null),
+			str(puzzle_data.get("name", ""))
+		).strip_edges()
 		var name_label = labelNamePuzzle
-		if name_label:
-			name_label.text = TranslationServer.translate(puzzle_data.name).to_upper()
+		if name_label and resolved_name != "":
+			name_label.text = resolved_name.to_upper()
 			name_label.visible = true
 	
 	# Actualizar el texto descriptivo
-	if puzzle_data and puzzle_data.has("description") and text_view:
-		var description = puzzle_data.description
-		var localized_description = TranslationServer.translate(description).strip_edges()
-		text_view.text = _format_description_text(localized_description)
+	if puzzle_data and text_view:
+		var localized_story := _get_puzzle_story_text()
+		text_view.text = _format_description_text(localized_story) if localized_story != "" else ""
 	
 	# Verificar si hay un siguiente puzzle disponible
 	var next_button: BaseButton = get_node_or_null("CanvasLayer/Footer/HBoxContainer/PanelNextButton/MarginContainer/TextureButton")
@@ -646,6 +650,53 @@ func _format_description_text(localized_description: String) -> String:
 		formatted_text = formatted_text.replace(scientific_name, "[color=#8B2E2E][i]%s[/i][/color]" % scientific_name)
 
 	return "[font_size=20]%s[/font_size]" % formatted_text
+
+func _get_puzzle_story_text() -> String:
+	if puzzle_data == null:
+		return ""
+	var fallback_description := _resolve_localized_content_text(
+		puzzle_data.get("description_localized", null),
+		str(puzzle_data.get("description", ""))
+	)
+	var story_payload = puzzle_data.get("story_localized", puzzle_data.get("story", fallback_description))
+	return _resolve_localized_content_text(story_payload, fallback_description).strip_edges()
+
+func _resolve_localized_content_text(value, fallback: String) -> String:
+	if typeof(value) == TYPE_DICTIONARY:
+		var language := TranslationServer.get_locale().split("_")[0].to_lower()
+		if value.has(language):
+			return str(value[language])
+		if value.has("es"):
+			return str(value["es"])
+		if value.has("en"):
+			return str(value["en"])
+		for key in value.keys():
+			return str(value[key])
+	elif typeof(value) == TYPE_STRING:
+		var raw_value := str(value)
+		if raw_value == "":
+			return fallback
+		var translated_value := TranslationServer.translate(raw_value)
+		return translated_value if translated_value.strip_edges() != "" else raw_value
+	return fallback
+
+func _load_texture_from_path(path: String) -> Texture2D:
+	if path.is_empty():
+		return null
+
+	if path.begins_with("user://"):
+		if not FileAccess.file_exists(path):
+			return null
+		var image := Image.new()
+		var err := image.load(path)
+		if err != OK:
+			return null
+		return ImageTexture.create_from_image(image)
+
+	if not ResourceLoader.exists(path):
+		return null
+
+	return load(path) as Texture2D
 
 # Funciones existentes para los botones
 func _on_RepeatButton_pressed():

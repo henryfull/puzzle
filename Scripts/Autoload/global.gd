@@ -393,6 +393,19 @@ func setColorMode(panelColor, headerColor):
 
 # Función para cargar los DLCs desde el archivo JSON
 func load_dlcs():
+	var remote_catalog_sandbox_mode := false
+	if ProjectSettings.has_setting("commerce/remote_catalog_sandbox_mode"):
+		remote_catalog_sandbox_mode = bool(ProjectSettings.get_setting("commerce/remote_catalog_sandbox_mode"))
+	var free_to_play_mode := false
+	if ProjectSettings.has_setting("commerce/free_to_play_mode"):
+		free_to_play_mode = bool(ProjectSettings.get_setting("commerce/free_to_play_mode"))
+	if remote_catalog_sandbox_mode:
+		print("GLOBAL: Sandbox remoto activo, se omite la autocarga legacy de DLCs.")
+		dlc_packs = []
+		return
+	if not free_to_play_mode:
+		print("GLOBAL: Modo monetizado activo, se conservan solo los DLCs comprados guardados.")
+		return
 	print("GLOBAL: Cargando DLCs desde PacksData/sample_packs.json")
 	var file = FileAccess.open("res://PacksData/sample_packs.json", FileAccess.READ)
 	if file:

@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "id": "numbers",
+  "revision": 1,
+  "title": {
+    "es": "Numbers",
+    "en": "Numbers"
+  },
+  "description": {
+    "es": "Puzzles inspirados en números y matemáticas.",
+    "en": "Puzzles inspirados en números y matemáticas."
+  },
+  "tier": "free_rotating",
+  "thumbnail_path": "packs/numbers/thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "number0",
+      "image_path": "packs/numbers/puzzles/image0.jpg",
+      "sha256": "982d6922dea8aba196bce49b80dad08bd1b3168afadf72182f6ead7e80651877",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number1",
+      "image_path": "packs/numbers/puzzles/image1.jpg",
+      "sha256": "0138fbb8d8c136e28c2a163b235715ea1a107bcc8f368c587777bd2d44f2bf14",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number2",
+      "image_path": "packs/numbers/puzzles/image2.jpg",
+      "sha256": "bd104fd619fc21e438df0f417a06e3f95942607c45fc853e59023332cac64b7c",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number3",
+      "image_path": "packs/numbers/puzzles/image3.jpg",
+      "sha256": "7e9d2c6f524bd3d9e95fea76a0002e493d819c36e0c18c7070a3a6ee0411cad3",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number4",
+      "image_path": "packs/numbers/puzzles/image4.jpg",
+      "sha256": "1e504249dc87d0683734467efb8acc15318171f08693216cc6b56a61dd7354a2",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number5",
+      "image_path": "packs/numbers/puzzles/image5.jpg",
+      "sha256": "4797d5d9da416f931e31ab9c27c139e25f90c1899c152c57298be2cb9b32b5e8",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number6",
+      "image_path": "packs/numbers/puzzles/image6.jpg",
+      "sha256": "ea5f57b2db2b1fe73332767c1176423e4304e5fbfa76fc41d11a37890f4612ab",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number7",
+      "image_path": "packs/numbers/puzzles/image7.jpg",
+      "sha256": "86acb9d69040a3c1874b9280cd9a0eb6b7c119fb928eb67e2c8d71d19e3b0812",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number8",
+      "image_path": "packs/numbers/puzzles/image8.jpg",
+      "sha256": "8b88f5ddd1a8624c4a617a13e67c8b50486e262eb4c96d4073c8d89d20946c70",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number9",
+      "image_path": "packs/numbers/puzzles/image9.jpg",
+      "sha256": "706711730657bab7b935f3aac729d5545af7badf0b8650ea6c1271fb7ea16e4e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number10",
+      "image_path": "packs/numbers/puzzles/image10.jpg",
+      "sha256": "d2c461fac45da369b54cff0ea2f406dad6a2fb4734a7b1689f253712e01ffc19",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number11",
+      "image_path": "packs/numbers/puzzles/image11.jpg",
+      "sha256": "1bfe2558f0bb09318ac2d9decd180eefa0fcb80b916f0739de8c6abfea3af314",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number12",
+      "image_path": "packs/numbers/puzzles/image12.jpg",
+      "sha256": "03ef6c31111274c1456e95d0c152251d04395da0acd2a16fa2dfd2f414c7226d",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number13",
+      "image_path": "packs/numbers/puzzles/image13.jpg",
+      "sha256": "2287ebf5e879d53fff371e9e2f86cd2b02edf64d0e23da2086f38761b2a3f68a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number14",
+      "image_path": "packs/numbers/puzzles/image14.jpg",
+      "sha256": "c930b4b103820d61651a4b0ea0a7394259abb9712e2e932d68ca845545420ef2",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number15",
+      "image_path": "packs/numbers/puzzles/image15.jpg",
+      "sha256": "5cf148d5caa680a7ef49c20c7d2fec6fdcf9b04de0631a1257dfc063b1907565",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number16",
+      "image_path": "packs/numbers/puzzles/image16.jpg",
+      "sha256": "76a67924ced3e566ceb5ec769db46d2da62e03886ae2bdada1ca4f3706b65b90",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number17",
+      "image_path": "packs/numbers/puzzles/image17.jpg",
+      "sha256": "54f3ab5e45c5332d1a485d6043aec11b91e59d5517b153191480cfd9a1e180dd",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number18",
+      "image_path": "packs/numbers/puzzles/image18.jpg",
+      "sha256": "72c44a6803409d341f39dc947a8ecf9e37cc13fe16ba9b6d506b34bb30995920",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number19",
+      "image_path": "packs/numbers/puzzles/image19.jpg",
+      "sha256": "f2c8554ae086edeed152fb5d48bcc21ebc4861880c3edc536886284a0a4eda17",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number20",
+      "image_path": "packs/numbers/puzzles/image20.jpg",
+      "sha256": "980e1117a9b2b2c35250f3f7fb233603211b296a30412f818863314afbd9c6bf",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number30",
+      "image_path": "packs/numbers/puzzles/image30.jpg",
+      "sha256": "2f19a1116b8d2dbd93b2b182cb53bfb7e882bd4ecdd8e3009e200403ee9bbc32",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number40",
+      "image_path": "packs/numbers/puzzles/image40.jpg",
+      "sha256": "b2d34e68869a9eaba908f12c381034851a9b28641ea97312df780088afaeb4fe",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number50",
+      "image_path": "packs/numbers/puzzles/image50.jpg",
+      "sha256": "22fb54e4a72dec924c9249d860fc52ed32d3176bdcacd598aee5156ebc6f437c",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number60",
+      "image_path": "packs/numbers/puzzles/image60.jpg",
+      "sha256": "91bfe7f1ecc956375aae975724067b009df7f4bf42db49c22912e970f719cceb",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number70",
+      "image_path": "packs/numbers/puzzles/image70.jpg",
+      "sha256": "54c84ee58ad286fcecaa421b4e068db19c37a7a19f82d0e6f6759fdaa098d74e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number80",
+      "image_path": "packs/numbers/puzzles/image80.jpg",
+      "sha256": "e7a3f478299abeef1c7e44fb9c0e9c9a41df50c4d1a5893dd324c49b3e724c4e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number90",
+      "image_path": "packs/numbers/puzzles/image90.jpg",
+      "sha256": "5d7c64861a1dc80a3afc62de211f77d56eb75e8a8773ac9f48fe3c6ff1cf5e7a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number100",
+      "image_path": "packs/numbers/puzzles/image100.jpg",
+      "sha256": "6aaa1179bede9e78e98d2dcfc08e9c628da9cc4f22a286f7218684631c7dd8e9",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    },
+    {
+      "id": "number1000",
+      "image_path": "packs/numbers/puzzles/image1000.jpg",
+      "sha256": "7efdecb9c87dd1fe9b3db767b3d5a51aa63b4ae0cf9773499673dcd0d24a5129",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 4
+      }
+    }
+  ]
+}

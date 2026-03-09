@@ -1,0 +1,35 @@
+{
+  "users": {
+    "demo_free": {
+      "rewards_inventory": {
+        "currencies": {
+          "coins": 40
+        },
+        "cosmetics": {}
+      },
+      "daily_completions": {},
+      "daily_claims": {}
+    },
+    "demo_premium": {
+      "rewards_inventory": {
+        "currencies": {
+          "coins": 120
+        },
+        "cosmetics": {
+          "premium_gold_theme": {
+            "id": "premium_gold_theme",
+            "type": "theme",
+            "title": {
+              "es": "Tema dorado premium",
+              "en": "Premium gold theme"
+            },
+            "owned": true,
+            "source": "premium_subscription"
+          }
+        }
+      },
+      "daily_completions": {},
+      "daily_claims": {}
+    }
+  }
+}

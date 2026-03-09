@@ -1,0 +1,18 @@
+{
+  "premium_monthly": {
+    "product_type": "subs",
+    "base_plan_id": "monthly",
+    "offer_id": "",
+    "grant": "all_packs",
+    "title": "Premium Monthly",
+    "description": "Full catalog access for one month."
+  },
+  "premium_yearly": {
+    "product_type": "subs",
+    "base_plan_id": "yearly",
+    "offer_id": "",
+    "grant": "all_packs",
+    "title": "Premium Yearly",
+    "description": "Full catalog access for one year."
+  }
+}

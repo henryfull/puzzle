@@ -132,8 +132,7 @@ func _resolve_overlaps_if_needed(context: String) -> void:
 		return
 
 	_last_overlap_resolution_ms = now_ms
-	print("PuzzleInputHandler: Resolviendo superposiciones detectadas (", context, ")")
-	piece_manager.resolve_all_overlaps()
+	print("PuzzleInputHandler: ⚠️ Superposiciones detectadas (", context, "). Se omite la autocorrección agresiva para no romper grupos.")
 
 # Función mejorada para verificar si un toque está en una zona segura
 func is_touch_in_safe_zone(position: Vector2) -> bool:

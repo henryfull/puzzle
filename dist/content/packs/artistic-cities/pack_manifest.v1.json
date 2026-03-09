@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "id": "artistic-cities",
+  "revision": 1,
+  "title": {
+    "es": "Artistic Cities",
+    "en": "Artistic Cities"
+  },
+  "description": {
+    "es": "Puzzles inspirados en ciudades artísticas del mundo.",
+    "en": "Puzzles inspirados en ciudades artísticas del mundo."
+  },
+  "tier": "premium",
+  "thumbnail_path": "packs/artistic-cities/thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "atlantis",
+      "image_path": "packs/artistic-cities/puzzles/atlantis.jpg",
+      "sha256": "cdf8b495d8edde42fc6950dca844649e9eccf3308ad20227b2350245e2922a8a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "bankok",
+      "image_path": "packs/artistic-cities/puzzles/bankok.jpg",
+      "sha256": "fe7ab0566406210844f5617eb5ff02c401dd606c999478d678aad818a73bf44e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "barcelona",
+      "image_path": "packs/artistic-cities/puzzles/barcelona.jpg",
+      "sha256": "6ed8752fb2b9008eecb7149d3ec5a1f78e2eff08b546cf8632757cd7fe2504c2",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "cadiz",
+      "image_path": "packs/artistic-cities/puzzles/cadiz.jpg",
+      "sha256": "0a5404dcb1aa9db0b6bb9df073c88a6b243ad3f224caf00ed3efb6c5cb19df86",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "cannes",
+      "image_path": "packs/artistic-cities/puzzles/cannes.jpg",
+      "sha256": "f81e8790b15766f5ee766b622473a8f928c7af4e86d16a7e9607241290061b11",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "cartagena",
+      "image_path": "packs/artistic-cities/puzzles/cartagena.jpg",
+      "sha256": "b10b508b03e79278d3c2ce81285b7cc9c4719d42790e7a7f65ed4148589a6b6f",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "chengde",
+      "image_path": "packs/artistic-cities/puzzles/chengde.jpg",
+      "sha256": "521f856aec8e16b03268874a7b4177703fac9f782a21a625a9cd90ca1e40a5b1",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "dublin",
+      "image_path": "packs/artistic-cities/puzzles/dublin.jpg",
+      "sha256": "8cc775dd84ce9e4c93e1bb0ceacbcc9042c88e777e0425786374cde4ea7372d8",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "edinburgh",
+      "image_path": "packs/artistic-cities/puzzles/edinburgh.jpg",
+      "sha256": "871217f9f0df69d44e3245d9c15d10ef9ef9cf85a9876c9e42157fafb624afce",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "edinburgh-2",
+      "image_path": "packs/artistic-cities/puzzles/edinburgh-2.jpg",
+      "sha256": "3f24172bac8c64a770cbab5ff1d1486c2b6cc74b7cd2f796395735671fb7f071",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "gungzhou",
+      "image_path": "packs/artistic-cities/puzzles/gungzhou.jpg",
+      "sha256": "a16ea0826d8d73bf4edd96851ccbe837cf5aeb16a806dca4dc8cc96c80d8b26a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "helsinki",
+      "image_path": "packs/artistic-cities/puzzles/helsinki.jpg",
+      "sha256": "159d014823b2352bec6178883a342a9052fcffb69206f975f37e06ce2d8a3631",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "india",
+      "image_path": "packs/artistic-cities/puzzles/india.jpg",
+      "sha256": "ed0e29b17ec49e4c612580bc4f9e2697311a4b8646d869166c2c25ef25889a5a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "istanbul",
+      "image_path": "packs/artistic-cities/puzzles/istanbul.jpg",
+      "sha256": "0abb9d37c907e962629b4fdba21cabc8352a101dedee8f0e44a3c87405452f8c",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "new-york-day",
+      "image_path": "packs/artistic-cities/puzzles/new-york-day.jpg",
+      "sha256": "f2679529e65d92138e347de5278da7a44131df6d2cdffe53346db0727a9ff443",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "new-york-night",
+      "image_path": "packs/artistic-cities/puzzles/new-york-night.jpg",
+      "sha256": "c4f30b45c58e2aa862f57ecea8d1eb4226c13750b9489fb48a81f42cbc824eef",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "pandang",
+      "image_path": "packs/artistic-cities/puzzles/pandang.jpg",
+      "sha256": "62f5f9ae67f3f4cefc69b0627f8044cd4cf9d15f7da02ded30796509c4802813",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "paris",
+      "image_path": "packs/artistic-cities/puzzles/paris.jpg",
+      "sha256": "7f2741a8159fee87df5d8f3e5892985674c26c0d50811c60ef5e76f5ec25df33",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "riga",
+      "image_path": "packs/artistic-cities/puzzles/riga.jpg",
+      "sha256": "7874ba65e0e5ae827c483777e7fe503022e6178d0c4c1f7a69ed8aa04b1012b6",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "san-jose",
+      "image_path": "packs/artistic-cities/puzzles/san-jose.jpg",
+      "sha256": "43a838ce7d7731053414fe148363a6f41f08eefffe8fde75fa710832e8bb04f7",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "sydney",
+      "image_path": "packs/artistic-cities/puzzles/sydney.jpg",
+      "sha256": "136ae8aba47295358021e26fe092dfb30fc871c1885ed7b92e509d5320186d81",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    }
+  ]
+}

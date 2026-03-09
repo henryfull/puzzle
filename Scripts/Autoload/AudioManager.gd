@@ -129,10 +129,42 @@ func play_music(music_path: String = "") -> void:
 	var path_to_load = music_path
 	if path_to_load == "":
 		path_to_load = DEFAULT_MUSIC_PATH
-	var new_stream = load(path_to_load)
+	var new_stream = _load_music_stream(path_to_load)
 	if new_stream != null:
+		_configure_music_stream_loop(new_stream)
 		music_player.stream = new_stream
 		music_player.play()
+
+func play_music_for_pack(pack_data: Dictionary) -> void:
+	if typeof(pack_data) != TYPE_DICTIONARY:
+		play_music()
+		return
+	var pack_music_path := str(pack_data.get("music_path", "")).strip_edges()
+	play_music(pack_music_path)
+
+func _load_music_stream(path_to_load: String) -> AudioStream:
+	if path_to_load == "":
+		return null
+	if path_to_load.begins_with("user://"):
+		var extension := path_to_load.get_extension().to_lower()
+		match extension:
+			"ogg", "oga":
+				return AudioStreamOggVorbis.load_from_file(path_to_load)
+			"mp3":
+				return AudioStreamMP3.load_from_file(path_to_load)
+			_:
+				push_warning("AudioManager: formato de música no soportado desde user://: %s" % path_to_load)
+				return null
+	if not ResourceLoader.exists(path_to_load):
+		push_warning("AudioManager: no se encontró la música: %s" % path_to_load)
+		return null
+	return load(path_to_load)
+
+func _configure_music_stream_loop(stream: AudioStream) -> void:
+	if stream is AudioStreamOggVorbis:
+		(stream as AudioStreamOggVorbis).loop = true
+	elif stream is AudioStreamMP3:
+		(stream as AudioStreamMP3).loop = true
 
 # Métodos para ajustar el volumen y guardar la configuración
 func set_general_volume(value: float) -> void:

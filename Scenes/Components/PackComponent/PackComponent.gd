@@ -15,6 +15,7 @@ signal pack_purchase_requested(pack_data)
 var pack_data = null
 var is_locked = false
 var requires_purchase = false
+var _thumbnail_request_in_flight := false
 
 # Añadir referencia al nodo parent para comprobar si está haciendo scroll
 var parent_node
@@ -77,9 +78,59 @@ func _load_pack_image():
 		var image = _load_texture_from_path(pack_data.image_path)
 		if image:
 			imagePuzzle.texture = image
-	else:
-		# Intentar encontrar una imagen basada en el ID o nombre
+			return
+
+	if pack_data.has("thumbnail_path") and str(pack_data.thumbnail_path) != "":
+		call_deferred("_load_remote_pack_thumbnail")
+		return
+
+	# Intentar encontrar una imagen basada en el ID o nombre
+	_find_and_set_pack_image()
+
+func _load_remote_pack_thumbnail() -> void:
+	if _thumbnail_request_in_flight or pack_data == null:
+		return
+
+	var thumbnail_path := str(pack_data.get("thumbnail_path", ""))
+	if thumbnail_path == "":
 		_find_and_set_pack_image()
+		return
+
+	var cached_path := _get_catalog_cache_path(thumbnail_path)
+	var cached_texture := _load_texture_from_path(cached_path)
+	if cached_texture:
+		imagePuzzle.texture = cached_texture
+		pack_data.image_path = cached_path
+		return
+
+	var remote_catalog = get_node_or_null("/root/RemoteCatalogService")
+	if remote_catalog == null or not remote_catalog.has_remote_catalog():
+		_find_and_set_pack_image()
+		return
+
+	_thumbnail_request_in_flight = true
+	var download_result = await remote_catalog.download_asset(thumbnail_path)
+	_thumbnail_request_in_flight = false
+
+	if not is_inside_tree():
+		return
+
+	if download_result.get("ok", false):
+		var local_path := str(download_result.get("path", ""))
+		var texture := _load_texture_from_path(local_path)
+		if texture:
+			imagePuzzle.texture = texture
+			pack_data.image_path = local_path
+			return
+
+	_find_and_set_pack_image()
+
+func _get_catalog_cache_path(relative_path: String) -> String:
+	var remote_catalog = get_node_or_null("/root/RemoteCatalogService")
+	var cache_dir := "user://catalog"
+	if remote_catalog != null and str(remote_catalog.cache_dir) != "":
+		cache_dir = str(remote_catalog.cache_dir)
+	return cache_dir.path_join("assets").path_join(relative_path.trim_prefix("/"))
 
 # Busca una imagen apropiada para el pack y la establece
 func _find_and_set_pack_image():
@@ -146,7 +197,7 @@ func _on_button_pressed():
 	if is_locked:
 		# Si está bloqueado, mostrar mensaje o animación
 		print("PackComponent: Pack bloqueado: ", pack_data.name)
-		if pack_data.demo:
+		if bool(pack_data.get("demo", false)):
 			emit_signal("pack_purchase_requested")
 			
 		_show_locked_feedback()

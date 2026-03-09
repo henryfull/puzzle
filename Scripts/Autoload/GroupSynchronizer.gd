@@ -127,8 +127,7 @@ func _fix_group_synchronization(group: Array):
 	var group_is_contiguous = _verify_group_contiguity(group)
 	
 	if not group_is_contiguous:
-		print("GroupSynchronizer: ⚠️ Grupo no es contiguo, reagrupando...")
-		_regroup_scattered_pieces(group)
+		print("GroupSynchronizer: ⚠️ Grupo no es contiguo. No se altera la lógica del puzzle; solo se sincronizará la vista.")
 	
 	# Paso 3: Sincronizar posiciones visuales con current_cell
 	_sync_visual_positions_to_cells(group)
@@ -229,7 +228,8 @@ func _update_group_visuals(group: Array):
 	"""Actualiza los efectos visuales del grupo después de la sincronización"""
 	print("GroupSynchronizer: 🎨 Actualizando visuales de grupo...")
 	
-	var group_id = group[0].node.get_instance_id()
+	var group_id_value = group[0].node.get("group_id")
+	var group_id = int(group_id_value) if group_id_value != null else group[0].node.get_instance_id()
 	
 	for piece in group:
 		# Actualizar ID de grupo
@@ -259,4 +259,4 @@ func force_synchronize_all_groups():
 	else:
 		print("GroupSynchronizer: ✅ Todos los grupos están correctamente sincronizados")
 	
-	return problems_fixed 
+	return problems_fixed

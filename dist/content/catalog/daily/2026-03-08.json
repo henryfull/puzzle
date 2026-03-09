@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "challenge_id": "daily-2026-03-08",
+  "date": "2026-03-08",
+  "tier": "free",
+  "title": {
+    "es": "Desafio diario local",
+    "en": "Local daily challenge"
+  },
+  "pack_id": "daily-2026-03-08",
+  "pack_manifest_path": "daily/2026-03-08/pack_manifest.json",
+  "image_path": "daily/2026-03-08/thumbnail.jpg",
+  "challenge": {
+    "game_mode": 4,
+    "max_moves": 48,
+    "max_time": 240,
+    "max_flips": 12,
+    "max_flip_moves": 48
+  },
+  "reward": {
+    "currencies": {
+      "coins": 25
+    },
+    "cosmetics": [
+      {
+        "id": "frame_local_daily",
+        "type": "frame",
+        "title": {
+          "es": "Marco daily local",
+          "en": "Local daily frame"
+        }
+      }
+    ]
+  },
+  "sha256": "ad63fc6958acb404ec74307431bcface082e32af35c285fa260bcd3cbb2a8ec6",
+  "expires_at": "2026-03-09T00:00:00"
+}

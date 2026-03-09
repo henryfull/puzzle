@@ -23,9 +23,19 @@ func _ready():
 	print("PackSelection: inicialización de los packs disponibles")
 	# Ajustar el layout según el tipo de dispositivo
 	# adjust_layout_for_device()
+	if progress_manager and not progress_manager.packs_refreshed.is_connected(_on_packs_refreshed):
+		progress_manager.packs_refreshed.connect(_on_packs_refreshed)
 	
 	# Cargar los packs
 	load_packs()
+
+func _exit_tree():
+	if progress_manager and progress_manager.packs_refreshed.is_connected(_on_packs_refreshed):
+		progress_manager.packs_refreshed.disconnect(_on_packs_refreshed)
+
+func _on_packs_refreshed() -> void:
+	if is_node_ready():
+		load_packs()
 
 # Función para ajustar el layout según el tipo de dispositivo
 func adjust_layout_for_device():
@@ -109,8 +119,10 @@ func load_packs():
 		packs_container.add_child(pack_component)
 		print("Componente añadido para pack: ", pack.name)
 	
-	if (GLOBAL.dlc_packs.size() == 0 and not progress_manager.is_free_to_play_mode()):
-		addNoPack()
+		if (GLOBAL.dlc_packs.size() == 0
+			and not progress_manager.is_free_to_play_mode()
+			and not progress_manager.is_remote_catalog_sandbox_mode()):
+			addNoPack()
 	# Desplazar automáticamente al último pack disponible por desbloquear
 	await get_tree().process_frame
 	scroll_to_last_available_pack()

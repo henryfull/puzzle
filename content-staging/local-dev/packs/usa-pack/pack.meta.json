@@ -1,0 +1,326 @@
+{
+  "id": "usa-pack",
+  "revision": 1,
+  "tier": "premium",
+  "title": {
+    "es": "USA Pack",
+    "en": "USA Pack"
+  },
+  "description": {
+    "es": "Puzzles inspirados en la cultura, lugares y símbolos icónicos de Estados Unidos.",
+    "en": "Puzzles inspirados en la cultura, lugares y símbolos icónicos de Estados Unidos."
+  },
+  "thumbnailFile": "thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "bandera-usa",
+      "file": "bandera usa.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "gran-canon",
+      "file": "usa_gran_canon.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "route-66",
+      "file": "route 66.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "estatua-libertad",
+      "file": "usa_estatua_libertad.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "golden-gate",
+      "file": "usa_golden_gate.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "times-square",
+      "file": "usa_times_square.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "empire-state",
+      "file": "usa_empire_state.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "magic-kingdom",
+      "file": "usa_magic_kingdom.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "las-vegas",
+      "file": "usa_las_vegas.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "broadway",
+      "file": "usa_broadway.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "coachella",
+      "file": "usa_coachella.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "auroras-boreales",
+      "file": "usa_auroras_boreales.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "aguila-calva",
+      "file": "usa_aguila_calva.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "aguila-calva-2",
+      "file": "usa_aguila_calva2.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "aguila-calva-jpeg",
+      "file": "usa_aguila_calva.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "bisonte",
+      "file": "usa_bisonte.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "oso",
+      "file": "usa_oso.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nfl",
+      "file": "usa_nfl.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nba",
+      "file": "usa_nba.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nhl",
+      "file": "usa_nhl.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "world-series",
+      "file": "usa_world_series.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nascar",
+      "file": "usa_nascar.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nascar-2",
+      "file": "usa_nascar2.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "hamburguesas-papas",
+      "file": "usa_hamburguesas_papas.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "hamburguesas-papas-jpeg",
+      "file": "usa_hamburguesas_papas.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "bbq-ribs",
+      "file": "usa_bbq_ribs.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "philly-cheesesteak",
+      "file": "usa_philly_cheesesteak.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "mac-cheese",
+      "file": "usa_mac_cheese.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "smores",
+      "file": "usa_smores.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "chocolate-chip-cookies",
+      "file": "usa_chocolate_chip_cookies.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "bagels-cream-cheese",
+      "file": "usa_bagels_cream_cheese.jpg",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    }
+  ]
+}

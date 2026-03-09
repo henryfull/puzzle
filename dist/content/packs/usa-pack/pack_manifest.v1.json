@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "id": "usa-pack",
+  "revision": 1,
+  "title": {
+    "es": "USA Pack",
+    "en": "USA Pack"
+  },
+  "description": {
+    "es": "Puzzles inspirados en la cultura, lugares y símbolos icónicos de Estados Unidos.",
+    "en": "Puzzles inspirados en la cultura, lugares y símbolos icónicos de Estados Unidos."
+  },
+  "tier": "premium",
+  "thumbnail_path": "packs/usa-pack/thumbnail.jpg",
+  "puzzles": [
+    {
+      "id": "bandera-usa",
+      "image_path": "packs/usa-pack/puzzles/bandera usa.jpg",
+      "sha256": "b54fc99190ebcbf9dd361eed4b61e6a6d2570deaef853c6476c8bd13579cd5b6",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "gran-canon",
+      "image_path": "packs/usa-pack/puzzles/usa_gran_canon.jpg",
+      "sha256": "6476a0df09854215d4ee9a36a80d0e1e47c47ba97c0515f6b615decf26cf5e3e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "route-66",
+      "image_path": "packs/usa-pack/puzzles/route 66.jpg",
+      "sha256": "3d11dc27bc2f98aa173d6c7eb0fd03e72a1871f15c40df94203ed780b77bd8f1",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "estatua-libertad",
+      "image_path": "packs/usa-pack/puzzles/usa_estatua_libertad.jpg",
+      "sha256": "ac17c2575f29a0e32980832f7bebe51924f747a9dabd387e01013c93bce49e2e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "golden-gate",
+      "image_path": "packs/usa-pack/puzzles/usa_golden_gate.jpg",
+      "sha256": "18fe1f3c92aa0ed339d77c0bf1212c76d092ee8e7d0cf7cc7c78601fa5a12d8c",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "times-square",
+      "image_path": "packs/usa-pack/puzzles/usa_times_square.jpg",
+      "sha256": "0d6136f5f2b295e8cb72e3e5b9df2b4000ad809747dc6920f2472fe10ed47d7f",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "empire-state",
+      "image_path": "packs/usa-pack/puzzles/usa_empire_state.jpg",
+      "sha256": "6a36231594be62ba05b1c5178ccdad21723382a2aeaa6648b3b6882bac017589",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "magic-kingdom",
+      "image_path": "packs/usa-pack/puzzles/usa_magic_kingdom.jpg",
+      "sha256": "e63d47eeb067d6366d542d2d47c934ece352f76574832dabca1429beaf1f5e6e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "las-vegas",
+      "image_path": "packs/usa-pack/puzzles/usa_las_vegas.jpg",
+      "sha256": "4b31158aedab8ef61f34d4ec3d3339872a4a96f47c07d379b371137c3e0b9266",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "broadway",
+      "image_path": "packs/usa-pack/puzzles/usa_broadway.jpg",
+      "sha256": "9c92f041d2e1dbc7187f603c115cd8376f42507bb22cc67375742baf7313e45d",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "coachella",
+      "image_path": "packs/usa-pack/puzzles/usa_coachella.jpg",
+      "sha256": "860c880fd0d23ca8f38a1038a7ee8d367640b1c016825e644f64e0f778237ea4",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "auroras-boreales",
+      "image_path": "packs/usa-pack/puzzles/usa_auroras_boreales.jpg",
+      "sha256": "dd1c6bb1d4940c88409412a5f2dcc2346848322d064d72d245a014945f01d452",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "aguila-calva",
+      "image_path": "packs/usa-pack/puzzles/usa_aguila_calva.jpg",
+      "sha256": "6316e51f9c2cb7a24893e7c9e99c8019119f634a9d3e8253d713f59031a02ebf",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "aguila-calva-2",
+      "image_path": "packs/usa-pack/puzzles/usa_aguila_calva2.jpg",
+      "sha256": "68cc1e4014c3faec1ac4606fc824a89bdbc4fda3176391e88c0f4a3d55305233",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "aguila-calva-jpeg",
+      "image_path": "packs/usa-pack/puzzles/usa_aguila_calva.jpg",
+      "sha256": "6316e51f9c2cb7a24893e7c9e99c8019119f634a9d3e8253d713f59031a02ebf",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "bisonte",
+      "image_path": "packs/usa-pack/puzzles/usa_bisonte.jpg",
+      "sha256": "0205c958ac71405f7630bf03fef14b0d773179079a1696ea67cf08a5e3a85dd8",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "oso",
+      "image_path": "packs/usa-pack/puzzles/usa_oso.jpg",
+      "sha256": "8a1d56c7b2b117a6a291515ded8a0f71a1f05d16339eec058f8ad42d973cb6c6",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nfl",
+      "image_path": "packs/usa-pack/puzzles/usa_nfl.jpg",
+      "sha256": "df3b841e8f6f6d2b73226d528ae0fcbb53f1bc8bcfdc8684c6fceed54943d861",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nba",
+      "image_path": "packs/usa-pack/puzzles/usa_nba.jpg",
+      "sha256": "fcf3ebc5c5e6ebc8e85e7e789b6b3c9ac3ea1f2be65e5d36f4a88593e263dbad",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nhl",
+      "image_path": "packs/usa-pack/puzzles/usa_nhl.jpg",
+      "sha256": "92d975cd494fe3193b33fd3ba7a646d7caca7a52ea3f0036d1ddfe1de1d4661a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "world-series",
+      "image_path": "packs/usa-pack/puzzles/usa_world_series.jpg",
+      "sha256": "2155804812af49b74d1806687961a29dffcde26727b7107cbd09c4fc3d975c70",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nascar",
+      "image_path": "packs/usa-pack/puzzles/usa_nascar.jpg",
+      "sha256": "9ef6ff2ae19ed6f690346a5578cff961059a6d735f2900b94111211c05f28273",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "nascar-2",
+      "image_path": "packs/usa-pack/puzzles/usa_nascar2.jpg",
+      "sha256": "5830d9686fa1dec1e02c295bcbf588b8cc7692702dcd700aae3d69fb42104f08",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "hamburguesas-papas",
+      "image_path": "packs/usa-pack/puzzles/usa_hamburguesas_papas.jpg",
+      "sha256": "9f7975f9a7b3c60e3b762894d29f7832256be9be8ba322de8038809afc0932d5",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "hamburguesas-papas-jpeg",
+      "image_path": "packs/usa-pack/puzzles/usa_hamburguesas_papas.jpg",
+      "sha256": "9f7975f9a7b3c60e3b762894d29f7832256be9be8ba322de8038809afc0932d5",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "bbq-ribs",
+      "image_path": "packs/usa-pack/puzzles/usa_bbq_ribs.jpg",
+      "sha256": "4e5da9a23a45669ce076df45533f01478a415e82c0b2d988fc9f259cddd12719",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "philly-cheesesteak",
+      "image_path": "packs/usa-pack/puzzles/usa_philly_cheesesteak.jpg",
+      "sha256": "a1d4c6767babf5095a59f388894887dd6ceec81a6819a10f4ab790a77baf880b",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "mac-cheese",
+      "image_path": "packs/usa-pack/puzzles/usa_mac_cheese.jpg",
+      "sha256": "2f44cf7ee0fe18db9a17f7a9b6f7d4dc69aeb29146ec37886093be238e6f93a1",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "smores",
+      "image_path": "packs/usa-pack/puzzles/usa_smores.jpg",
+      "sha256": "8a27d4beb7f8cb059a53fbd2d0e832ccf2bbc0f43fecfb40b48c16dd3b336d39",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "chocolate-chip-cookies",
+      "image_path": "packs/usa-pack/puzzles/usa_chocolate_chip_cookies.jpg",
+      "sha256": "e1b70534227f75f7c404149a942c8fc35d7e0f90c113073ff83a23237ffa758e",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    },
+    {
+      "id": "bagels-cream-cheese",
+      "image_path": "packs/usa-pack/puzzles/usa_bagels_cream_cheese.jpg",
+      "sha256": "9b530f2f6af8981127bc28ef95edeed711bb8f3c44d42d4a04dddf046febf38a",
+      "width": 1440,
+      "height": 1440,
+      "grid": {
+        "columns": 4,
+        "rows": 5
+      }
+    }
+  ]
+}

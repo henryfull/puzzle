@@ -1,0 +1,52 @@
+{
+	"schema_version": 1,
+	"id": "free-001",
+	"revision": 3,
+	"title": {
+		"es": "Pack Primavera",
+		"en": "Spring Pack"
+	},
+	"description": {
+		"es": "Colección mensual rotatoria.",
+		"en": "Monthly rotating collection."
+	},
+	"tier": "free_rotating",
+	"thumbnail_path": "packs/free-001/thumb.webp",
+	"music_path": "packs/free-001/spring-theme.ogg",
+	"puzzles": [
+		{
+			"id": "free-001-puzzle-01",
+			"image_path": "packs/free-001/puzzles/free-001-puzzle-01.webp",
+			"sha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328c...",
+			"width": 1440,
+			"height": 1440,
+			"grid": {
+				"columns": 4,
+				"rows": 6
+			},
+			"title": {
+				"es": "Tulipanes al amanecer",
+				"en": "Tulips at dawn"
+			},
+			"story": {
+				"es": "Cada mañana, el jardinero dejaba una carta entre los tulipanes...",
+				"en": "Every morning, the gardener left a letter among the tulips..."
+			}
+		},
+		{
+			"id": "free-001-puzzle-02",
+			"image_path": "packs/free-001/puzzles/free-001-puzzle-02.webp",
+			"sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebb...",
+			"width": 1440,
+			"height": 1440,
+			"grid": {
+				"columns": 5,
+				"rows": 7
+			},
+			"description": {
+				"es": "Escena primaveral secundaria.",
+				"en": "Secondary spring scene."
+			}
+		}
+	]
+}

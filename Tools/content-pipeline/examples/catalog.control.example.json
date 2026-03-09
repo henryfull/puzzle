@@ -1,0 +1,31 @@
+{
+  "catalogVersion": "2026.03.01",
+  "generatedAt": "2026-03-08T10:00:00Z",
+  "cdnBaseUrl": "https://cdn.example.com/puzzletikitiki",
+  "freeRotation": {
+    "slot_count": 12,
+    "starts_at": "2026-03-01T00:00:00Z",
+    "ends_at": "2026-04-01T00:00:00Z",
+    "active_pack_ids": [
+      "free-001"
+    ]
+  },
+  "seasonalEvents": [
+    {
+      "id": "spring-2026",
+      "tier": "free",
+      "starts_at": "2026-03-20T00:00:00Z",
+      "ends_at": "2026-05-01T00:00:00Z",
+      "pack_ids": [
+        "spring-2026-free"
+      ]
+    }
+  ],
+  "packs": [
+    "free-001",
+    "premium-archive-001"
+  ],
+  "dailyChallenges": [
+    "2026-03-08"
+  ]
+}

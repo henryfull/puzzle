@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "catalog_version": "local-dev-2026-03-08",
+  "generated_at": "2026-03-08T17:00:52.212Z",
+  "cdn": {
+    "base_url": ""
+  },
+  "free_rotation": {
+    "slot_count": 12,
+    "starts_at": "2026-03-08T00:00:00",
+    "ends_at": null,
+    "active_pack_ids": [
+      "numbers",
+      "farm-animals"
+    ]
+  },
+  "seasonal_events": [],
+  "packs": [
+    {
+      "id": "numbers",
+      "revision": 1,
+      "tier": "free_rotating",
+      "title": {
+        "es": "Numbers",
+        "en": "Numbers"
+      },
+      "description": {
+        "es": "Puzzles inspirados en números y matemáticas.",
+        "en": "Puzzles inspirados en números y matemáticas."
+      },
+      "manifest_path": "packs/numbers/pack_manifest.v1.json",
+      "thumbnail_path": "packs/numbers/thumbnail.jpg",
+      "bytes": 4275797,
+      "sha256": "1bce2ef15091937cf24660159312b706e04efb325dee41334df9738fec6eb057"
+    },
+    {
+      "id": "farm-animals",
+      "revision": 1,
+      "tier": "free_rotating",
+      "title": {
+        "es": "Farm Animals",
+        "en": "Farm Animals"
+      },
+      "description": {
+        "es": "Puzzles inspirados en animales de granja.",
+        "en": "Puzzles inspirados en animales de granja."
+      },
+      "manifest_path": "packs/farm-animals/pack_manifest.v1.json",
+      "thumbnail_path": "packs/farm-animals/thumbnail.jpg",
+      "bytes": 3791016,
+      "sha256": "6e274aac330a4194c365e18f0458f53bd480395c542dbfde48adde47bdc1d451"
+    },
+    {
+      "id": "artistic-cities",
+      "revision": 1,
+      "tier": "premium",
+      "title": {
+        "es": "Artistic Cities",
+        "en": "Artistic Cities"
+      },
+      "description": {
+        "es": "Puzzles inspirados en ciudades artísticas del mundo.",
+        "en": "Puzzles inspirados en ciudades artísticas del mundo."
+      },
+      "manifest_path": "packs/artistic-cities/pack_manifest.v1.json",
+      "thumbnail_path": "packs/artistic-cities/thumbnail.jpg",
+      "bytes": 8325792,
+      "sha256": "1964c2cc8c49ca3539e1953add592b92c880fc18c77e9521ebf2328765ed28b2"
+    },
+    {
+      "id": "wild-animals",
+      "revision": 1,
+      "tier": "premium",
+      "title": {
+        "es": "Wild Animals",
+        "en": "Wild Animals"
+      },
+      "description": {
+        "es": "Puzzles inspirados en animales salvajes.",
+        "en": "Puzzles inspirados en animales salvajes."
+      },
+      "manifest_path": "packs/wild-animals/pack_manifest.v1.json",
+      "thumbnail_path": "packs/wild-animals/thumbnail.jpg",
+      "bytes": 5655157,
+      "sha256": "d94a32e31c631b91f519382fb37c307e9fde18a0814f171424e39ffe08f65773"
+    },
+    {
+      "id": "usa-pack",
+      "revision": 1,
+      "tier": "premium",
+      "title": {
+        "es": "USA Pack",
+        "en": "USA Pack"
+      },
+      "description": {
+        "es": "Puzzles inspirados en la cultura, lugares y símbolos icónicos de Estados Unidos.",
+        "en": "Puzzles inspirados en la cultura, lugares y símbolos icónicos de Estados Unidos."
+      },
+      "manifest_path": "packs/usa-pack/pack_manifest.v1.json",
+      "thumbnail_path": "packs/usa-pack/thumbnail.jpg",
+      "bytes": 12894387,
+      "sha256": "08352861e7dd85006e80150475a3cf226e4e9ddb1b55cf6f6103205ab570542e"
+    },
+    {
+      "id": "wild-animals-cartoon",
+      "revision": 1,
+      "tier": "premium",
+      "title": {
+        "es": "Wild Animals Cartoon",
+        "en": "Wild Animals Cartoon"
+      },
+      "description": {
+        "es": "Puzzles inspirados en animales salvajes en formato cartoon.",
+        "en": "Puzzles inspirados en animales salvajes en formato cartoon."
+      },
+      "manifest_path": "packs/wild-animals-cartoon/pack_manifest.v1.json",
+      "thumbnail_path": "packs/wild-animals-cartoon/thumbnail.jpg",
+      "bytes": 14884879,
+      "sha256": "4eccb393c29e7f6da4ad9b291a74f99392f55a3f006262cb6f7c780ffbcc64ae"
+    }
+  ]
+}

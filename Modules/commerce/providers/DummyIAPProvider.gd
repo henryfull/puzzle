@@ -9,7 +9,7 @@ signal connect_error(code: int, message: String)
 signal purchase_acknowledged(token: String)
 signal query_purchases_result(result: Dictionary)
 
-var default_product_type: String = "inapp"
+var default_product_type: String = "subs"
 var owned: Array = []
 
 func set_default_product_type(t: String) -> void:
@@ -40,7 +40,7 @@ func query_purchases(_product_type: String = default_product_type):
     query_purchases_result.emit(result)
     purchases_updated.emit(owned)
 
-func purchase(sku: String) -> void:
+func purchase(sku: String, _product_meta: Dictionary = {}) -> void:
     var token = "dummy_"+sku+"_"+str(Time.get_ticks_msec())
     var p = {"sku": sku, "purchase_token": token, "is_acknowledged": false}
     owned.append(p)
@@ -49,4 +49,10 @@ func purchase(sku: String) -> void:
     purchase_acknowledged.emit(token)
 
 func acknowledge(_token: String) -> void:
+    pass
+
+func restore_purchases() -> void:
+    query_purchases()
+
+func open_subscriptions_page(_sku: String = "") -> void:
     pass
